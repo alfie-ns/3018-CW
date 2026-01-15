@@ -1,4 +1,4 @@
 #!/bin/bash
 git add .
 git commit -m 'update'
-git push origin mian
+git push origin main
