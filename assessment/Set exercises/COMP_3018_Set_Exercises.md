@@ -29,20 +29,13 @@ header-includes:
         showstringspaces=false
       }
 ---
-
 - [ ] peer-reviewed or conference papers
-
+- [ ] uses 3003-report feedback??
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
-
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
-
 - [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
-
 - [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
-
 - [ ] TODO.md
-
-
 
 # 1. Task (1): Cultural Differences and HRI Design (1750*1.1-word)
 
