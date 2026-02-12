@@ -1,5 +1,6 @@
 ---
 title: "COMP3018: Set Exercises Human-Robot Interaction (HRI)"
+subtitle: "Cultural Differences and Probabilistic Modelling in Human-Robot Interaction"
 header-includes:
   - \usepackage{graphicx}
   - \usepackage{caption}
