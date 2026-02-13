@@ -1,0 +1,260 @@
+Interaction or spatial interaction.
+Is this a word to correct like this?
+Does it make sense?
+When I say special, what does it mean?
+What does it mean?
+Special environment.
+Yeah, Space not special.
+Okay, Spatial interaction.
+So spatial interaction.
+I understand.
+When I speak about spatial interaction, I speak certainly about something relates to space.
+Easy to proceed.
+Are these lectures finish quickly unlike machine learning?
+This time these guys suffered with me in long lectures, but they all did well.
+So your turn next semester.
+So special interaction, we understand it is interaction related to space.
+The robots actually supposed to coexist with human inhabitants in a place they should be among us.
+So how should they move?
+So if you are, let's say two of you are sitting together, speaking, having a meeting, I will or a human will avoid.
+I see that you are speaking.
+So it will be impolite or abnormal to come and pass in between you, for example.
+But it would be very normal that I turn around and avoid you.
+So this is interaction in space.
+How robots can consider space during interaction.
+And this takes us to the concept of proxemics.
+The personal zone that robots should be aware of that can differ according to culture.
+Remember I told you before, in Spain, for example, or Mediterranean countries, you find the people can approach you very closely, for example, and put their shoulder on your hands.
+On your hands, on your shoulders, for example, despite they might not you.
+They might not know you.
+Naturally it's like that.
+But however, if you go to north of Europe sometimes, you might still, for example, not being very normal to do the people probably can have some more distance.
+In Japan it's very considered impolite.
+For example, if you break the personal distance or space and try to touch somebody by any means.
+So even don't shake hands.
+Japanese people, they don't shake hands.
+Okay, so it might.
+You might find very.
+If you go to Japan, might find that you try check hand high.
+But people understand that western are shaking hands.
+This is normal.
+But you might expand your hand.
+But you find the other person is not replying to you and not taking your hand back to shake hands.
+So you might find that this is why they don't like me or something.
+No, it's like that.
+So every country and each culture has their own concept of proxemics.
+And this is something that we need to transfer towards the spatial placement is important in social interaction.
+So we understand avoid over behavior that is rude, that is inappropriate, that make a user feel uncomfortable.
+Imagine like if we are having this person flying with this little drone, okay?
+If like we have such kind of small space between them, the person might not feel comfortable like you feel anyone might not feel very comfortable having a machine above your head.
+You know, from this small distance following you, chasing you.
+So take into account people.
+People's preference and take into into account social norms.
+Social norms.
+So, social norms, how people.
+This is exactly what I was just saying.
+Now between countries in Japan, in south of Europe, in north of Europe, how the people actually can differ in dealing with, you know, concept of space.
+So how they deal with each other and how do we transfer this to the world?
+So proximity is a study of how people take up space into relation to others and how spatial position influence attitude, behavior and interpersonal interaction.
+So if you are somebody approaching you too much in some countries, you probably need to.
+You probably would consider that this is an attack and you need to take a defensive attitude.
+However, in the wiser Persona is very close to me and putting, for example, the hand of the children.
+A Japanese person probably consider that this is an attack and they take a defensive position.
+However, in.
+In some other countries it's normal.
+So this kind of coins can be, you know, considered by the spatial positioning.
+So imagine like you have this bus and the bus is empty, exactly the same thing.
+And instead of choosing where to sit down, you go to sit down with that person.
+Why the bus is empty, okay?
+The person, as a normal reaction would say, why you're sitting down beside me is enough space, for example, and also if you have this table or like this setup here, where you will come to sit down, where you come sit down in part one here or part two, or where simply you will choose this area where you have more free space.
+This intuitively what we do.
+So in trying to identify these areas more clearly, we had the part neck defined in 2020.
+We said, okay, let's say we have different kind of distances.
+Intimate, personal, social and the public.
+So the intimate and the personal.
+Intimate is like between two close persons and also equivalent to the personal one.
+Personal distance.
+So the person like Parthenay identified it between 0 and 0.5 meter.
+And for the social distance it will be between 1.2 and 3.7 meters.
+And the public distance is 3.7 meters and infinity.
+So social distance, like for example, it can be like distance between us here, okay, this one meter, okay?
+But if I am a little bit zero, between 0.5, like very close.
+Okay?
+So this is actually distances that depend on culture, depend on age and depend on culture.
+So this is more work in the western cultures, not, for example, in Asiatic communities, for example, there might be changes.
+So imagine, imagine how Difficult.
+It is like if we are thinking about robots, you know, that need to adapt to humans and robots behavior or perception or people behavior as well can differ according to culture.
+It means like a robot in Japan dealing with Japanese people.
+People will not do the same behavior.
+Like robot in Spain with Spanish people, robot in France with French people.
+So we have this kind of differences that might vary some people if you heard about the cloud computing, so they say, okay, instead of having cloud computing is based like to create all knowledge and make a cloud for wizard knowledge.
+So it means like, okay, why should I try to turn, like learn from scratch?
+Why don't we?
+Let's say a robot in Plymouth is learning something and another robot in Japan is learning something and they share their knowledge so that the robot of Japan use knowledge of robot of Plymouth and vice versa very well.
+But these are, this is something probably in people who are working in cloud robotics.
+They use the cloud to make kind of share the shared community.
+How they can share the norms.
+These are social norms.
+So probably, you know, like robots, if they can be connected across unified cloud, hopefully one day or not, hopefully, according to your perception, they can share.
+Okay, the robot in Japan will know and say that I can approach people until some limits people, people in Spain, for example, say I can approach people to other different limits.
+So if the people of the robot of Japan traveled to Spain, the robot can adapt or vice versa.
+You know, like something similar to what you see in the sci fi.
+Robots are all connected and they can share knowledge, etc.
+So this depends on age and the culture.
+So distance matters, but so does placement.
+So relative positioning and orientation.
+So people who sit next to each other are more cooperative.
+People who sit opposite to each other are more competitive.
+And during conversation people usually position themselves at an angle.
+So this is if you are sitting in front of me, it's different than if you're sitting beside.
+So like this, different shapes of position.
+You can be like this L shape or face to face, or side by side, different positioning.
+Okay, so in whichever space or whichever shape, we have different spaces.
+Like the O space, the P space, the R space.
+Like for example here, the O space.
+O space is the area, the space between people to which they have equal, direct, exclusive access.
+Like this area.
+So where you are, I was speaking about two persons, like one person here and one person here speaking to each other.
+And I come to violate their own space.
+Okay, this can stop the interaction.
+We have also P space.
+P space is this area around.
+So this is a space occupied by people themselves.
+And we have the R space, the space surrounding the people.
+So if I will be passing finding two persons speaking like this, I should avoid the O space and P space.
+O space because it will be interrupt the discussion P space because I will collide with them.
+So I would like to avoid Jean Pepper.
+Like you don't turn around them.
+So if I don't, for example, go a little bit further, I can collide with one of the persons, okay?
+And the outer space is a area where I should be moving around.
+So simply, robots need to be aware of these spaces so that they don't invade.
+Like here, for example, they don't come and invade this whole space, okay?
+And even there is enough space to pass between people, even if there is enough space to pass between people, the robot should avoid.
+So this proximity takes us to another concept that we can discuss, which is localization and navigation.
+So localization is determining a mobile robot position the possibility.
+So how can I actually define the rooms are moving, right?
+And can I identify where the robot is?
+Cuz actually they have wings and these wheels there is something called odometry.
+The odometry determine position by sensing rotation of wheels.
+So I can leave the robot that has wheels and it can go, go, go through the rotation of wheels.
+I can have odometry.
+So I can sense the place of the robot with respect to rotation of wheels.
+And certainly during as long as I can determine the position, I can compute distance traveled and change orientation.
+The slam, which is another concept is simultaneous localization mapping.
+So this constructs a map as a robot moves and localizes.
+So I construct a map and I use audiometry to localize myself inside this place.
+So I know like you can here have we will see a video for this map for the place.
+So I constructed by laser sensor construct a map like this.
+And in this map I can identify the robot can identify itself saying I am for example, in this blue point or in the red point in the location.
+And effectively you look at the robot, you find that it is in the blue point.
+So it detects itself with respect in the map.
+Where do I locate in the map?
+And it locates itself in the map, okay?
+So also identify type of space of the robot.
+So for example, if the robot is in classroom, living room, bathroom, all this actually localization can tell us where the robot is with respect to a specific landmark.
+So we have here actually example, like if we have setup for the naval.
+So some of your colleagues, for example, when they were making the project with Nan robot, they were using camera.
+I provide them Camera or sometimes they provide themselves camera and say, okay, I'm making experiment with the robot and I show card game.
+For example, the robot card and robot recognize the card and make kind of story around it.
+The robot has group of the Kinect sensor, okay?
+For those who like to work with.
+This is 3D sensor, okay?
+And it can create depth image.
+There are also 2D like the robot camera.
+Like any 2D camera, there is long range sensors like that LIDAR laser range finders.
+And there is actually this is all these sensors are used to detect people and avoid colliding sensor.
+The same like the bumpers that you have tried.
+The robot has some sensors in head that you were playing with.
+When you touch his head and say, you touched my head or you touched my foot.
+These are also similar sensors.
+This actually can show you example of what I mean.
+Here.
+It.
+So the robots creating here navigating.
+This is the robot will be the typical robot for audiometry.
+Okay.
+So the robot navigates sequentially and it can observe.
+Okay, I have a bed here.
+And this is a depth image that you can and through the depth image you can identify the object in 3D.
+This is a sofa for example.
+And this is a tv.
+And make object detection from a depth image.
+And then when it comes to create.
+So for example, here is using the laser and the robot is saying where I am with respect to what it sees.
+So it goes with the laser, it creates a map for the place.
+So say there is a corridor, okay.
+There is another area I'm passing in.
+And it creates exactly where it's moving a map for the space.
+So if it continues like this, okay.
+And it can identify blocks of objects, there is wall, there is etc.
+You'll find identical map for the space where it is.
+So if we have this robot and the laser sensor and it goes around, it will create a model of this room.
+So it locates itself by odometry where I am with respect to the environment and creates itself example of the environment.
+Okay, so navigation.
+We are moving to a go location.
+So possibly crowded environment.
+Okay.
+We might have the strategies when we are trying to make navigation proper navigation is that we avoid obstacle.
+So if we are passing and we avoid obstacles, certainly and we make pass planning.
+So if for example, we have to start from here and we have an obstacle person here, we have to turn around until we reach the goal as we have made here.
+So move from waypoint to waypoint, avoid obstacles and maintain social distance.
+So this means like you don't pass close to the person Give the person the social distance.
+So I want to pass like this, but a little bit.
+I come a little bit from here and pass, okay?
+So that also we try to avoid.
+And if the person is here, certainly, for example, you cannot secure enough social distance because like if you will pass from here or from here, it will be small distance.
+So what you should do is like to turn around, come from here and come here.
+You see?
+Okay.
+It's okay, it's.
+Are you okay?
+Yeah, because you are typing with your hand.
+I just don't.
+I observed you are not following, so I just follow.
+Okay.
+So we try to turn around so that we avoid the person.
+Okay, good.
+So socially appropriate position.
+Normally humans yield to.
+Each other when approaching.
+So to avoid entering each other's personal space, okay.
+And also using nonverbal signals.
+So a robot that doesn't do this may appear aggressive.
+So the robot should not enter in personal space or else it will be aggressive behavior.
+This is our social norms.
+So the robot should be also able to avoid this.
+So most mapping techniques consider people as obstacles.
+They don't provide information about the direction of people they're facing.
+What.
+So for example, this is a point if I'm reading a critique, this is important, or a paper, this is an important critique that most mapping techniques consider people as obstacles, okay?
+And they should avoid.
+But most of the techniques, the direction of people they are facing are other people are speaking like this while the robot is approaching from here or they are facing the robot.
+Where is the direction of the people and what they are doing?
+Are they converging or just standing close together?
+So HRI maps need more human aware representation.
+So they consider humans as obstacle.
+But we need to know more details in the current techniques.
+We need to know more details about the behavior, what they are doing.
+So they need to consider.
+Consider more human aware representation while we are representing the space and the past.
+Okay, so how to close, how close to a robot do people prefer to stand?
+Social distancing, personal distancing, intimate distancing.
+You know, this is actually one study found that people prefer personal or social, but some prefer closer.
+Most of people prefer the personal or social distance.
+So how closer?
+How close is rude or inappropriate if a robot actually violates this?
+So there's actually studies and these studies are performed over a group of people over time.
+So certainly doesn't mean that it is performing over, you know, every.
+Everyone.
+So might as if we increase like 100% if we made it over, you know, like larger group of people, the different the result might be.
+Different.
+But you know, as I said, the spacing and the proximity can be different from person, from culture to culture and person to person.
+So this is for our social interaction to special interaction.
+Sorry.
+And we speak next time about on Wednesday about ethics for robotics and AI.
+And we can add probably another lecture to.
+Because ethics is not big slides, not large number of slides.
+So we can also add two of them together.
+So do you have questions so far for today?
+Okay, this is like.
+We are progressing well, so I will give you the code.

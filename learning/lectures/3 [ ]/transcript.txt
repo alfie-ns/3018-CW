@@ -1,0 +1,370 @@
+Reading critic.
+Okay.
+And.
+So reading critique, being very careful about it, you have to choose a paper and the papers that you will choose for the reading critique should be different.
+So which means, tell me first, which paper did you choose?
+Different between the three of us, of course.
+Yeah, you should.
+We have a lot of papers and we don't need to have like an overlap.
+Okay.
+So you have six papers.
+You have to choose one of them to present.
+Okay.
+This time I made it easier.
+Before there was a presentation process, but this time there is no presentation.
+But be very careful about writing this, how you will criticize and what you will criticize.
+So you have to understand you have basics now in your life.
+Use these basics to look at what is the problem that for example, the paper is like any paper has for example, some limitations or not limitations.
+So you have to find your put your hand on those limitations.
+It's not a writing thing.
+The questions there is a question about write about X topic or Y topic.
+This is a critique.
+So you have to make critique about the X paper or Y papers that you choose.
+So choose a paper that you can find critics about.
+Okay.
+So you will find what are the questions?
+Okay.
+Or points.
+Of confusion about the paper.
+So you might say I disagree or agree about this point and why.
+So critique is like it easy to understand how critique should be written.
+Okay.
+It's unusual task.
+Yeah.
+How the critique should be written.
+Imagine yourself so imagine somebody wrote a paper and I'm giving it to you to evaluate it.
+So imagine yourself a reviewer.
+So when you read the paper, read it with the eye from the lens of review.
+Okay.
+Reviewer.
+It's not a reader reviewer.
+So imagine yourself a reviewer who should say the paper accept or not to accept paper to accept or not to accept those eyes of a reviewer.
+So you should find.
+Okay, the reviewer says, this paper, for example, has these limitations etc or these procedures are not legal stuff like that.
+This is what you should clarify in your.
+So this is for the masters.
+I think the other task is also.
+We will come to it so this individual task.
+So as I understand, so all the set exercise is individual task.
+When we come to the report, for both groups, there will be group work on the robot.
+Okay.
+For those who attend here.
+For those who don't attend, okay.
+They will not work on okay.
+Those who don't work with robots in workshops, they will not work on robots and the person work.
+Okay.
+So we will be speaking later about this.
+I think you have plenty of time for these two tasks.
+So I. I suppose there is no problem.
+And if you have any questions please.
+I assume the programming is the group and another lecturer has to be done individual work for the undergrad.
+If you need a whole, if you make it separately.
+Yeah, it's like those who are not attending the workshop, they will work individual ones.
+Those who are working with robot.
+We are limited in logistics.
+Effective computing.
+So what's effective?
+When I say effective, what does it refer to?
+We're not professionals of AI of interaction.
+What does it mean?
+Effective effect.
+Hello, Emotions.
+Emotions.
+Effective computing is a computing or computational models that are related to emotional intelligence.
+So in other words I can say emotional intelligence.
+As we understand each other by emotions and understand the emotions of each other, we infer this, this is indirect, inferred.
+So again use, get familiar to the word inferred.
+Inferred is like something or something intrinsically unobservable.
+So I cannot.
+Your emotion is inside you.
+So that's why it's not something like I can see by my eyes.
+That's why I infer it.
+Infer it through your facial expressions, your speech, etc.
+So some people call this emotional intelligence.
+Emotional intelligence is also how to have like ability to understand others emotions.
+And because this is actually capabilities that all humans have at different levels, robots also should have this kind of, or machines in general should have this kind of capability.
+So effective computing is, is a subset of artificial intelligence that measures, understands, simulates and reacts to human emotions.
+It's also known as artificial emotional intelligence.
+So effective computing is the study and development of systems and devices that can recognize their, interpret, process and simulate human effects.
+So it's ant sibling repeats finding computer science psychology.
+So you'll find people, for example, it's psychology working with the same area, trying to see for example from psychological side how people, for example perception of emotions between people can differ.
+So as we said, it's multi disseminated area.
+Multi disseminative area means like we expect to have this span of disciplines between people.
+So we try to recognize and understand emotion and use this awareness to manage yourself and relationship with others.
+And certainly the ability to, the ability to handle emotions can differ from a person to person.
+Like this guy, he represents all of us at some point.
+How many of us do this?
+Sometimes it can refer to weak management of emotional state.
+So this can actually refer to a state.
+We are emotion and emotion sophisticated things that related to different mental states in general.
+So some of us can react like this guy in some situations and be more, you know, patient with some situations.
+And that actually was reflected in his behavior when he was hitting the keyboard.
+Sometimes we all do this.
+So certainly if we look at his face, we found that looking at his face only we find that the guy is very angry or showing some kind of irritated reaction.
+This also can be inferred through the way that he is hitting the keyboard, hitting the PC.
+So this old behavior reaction can refer to his emotion state.
+So as we are speaking about the affective state only on the facial expressions.
+So we would like to deliver more about emotions to discuss actually.
+To discuss more about what are what are the categories of emotions and the classifications of emotions.
+So emotions we understand their mental states brought by neurophysiological changes variously associated with thoughts, feelings, behavioral responses.
+And that's what I was referring to.
+Emotions is not one parameter.
+Several parameters that can relate to this emotion.
+Thoughts, feelings, behavioral responses, many things and the degree of pleasure and discomfort.
+So several models.
+Actually scientists have been trying to create models that can represent emotion.
+One of these persons is.
+So Ekman identified seven basic emotions.
+This actually decades ago.
+So this is very not recent thing, this very long time ago, the 1950s or something like this, or maybe before.
+So he proposed seven basic emotions like anger, surprise, disgust, enjoyment, fear, sadness and content.
+But simply we said that emotions are not the basic thing.
+This was the critics.
+For example, if you read a paper about emotion, this is a really critic that emotions are not basic emotions separately existing emotions are something more composite.
+So we can have emotions that evolve with time.
+So they are actually function of time.
+They can change.
+If we represent this, they evolve over time with whichever representation we find.
+And this actually was the idea that Placzek have proposed or used to identify his.
+So he said I propose a different model and they call this PLAC Wheel Pl.
+So the PL said sorry, I identified eight basic emotions, not seven primary emotions.
+So acceptance, fear, surprise, sadness, disgust, anger, anticipation, point zero.
+And he said these are primary emotions.
+And when they and he identified besides the primary emotions, a group of secondary emotions.
+So these are the primary emotions.
+And he identified a group of secondary emotions.
+And on each line, for example here the degrees of the level of the color refers to the intensity of the emotion, so range.
+So he said anger is a primary emotion.
+But he identified in other circles other emotions, okay, that are related to anger but with different intensities.
+Rage is higher level than anger, okay.
+And he considered group of primary and the group of secondary mortal emotions.
+And he said between the primary and secondary emotions we can have.
+Combination.
+So for example joy and trust.
+So this is primary and primary.
+So so we have joy and Trust, for example, between primary and the primary, this can evolve to love.
+And when we have joy and anger, for example, joy and anger, so this is between two adjacent branches.
+If we have.
+So this is between these two, for example, it can give love as a secondary composite emotion.
+And when we speak about joy and anger, okay, we have a bride emotion.
+So the bride emotion is something that's not existing in this wheel.
+Should be covering all of them, should be covering all this area, the bright, okay, so the bright should be covering all this area, okay?
+So that's why the idea here is like we can have composition of emotional primary and secondary that can lead to different level of other emotions, which means that the emotion itself is a primary entity and it can evolve with other emotions, okay, all alone and generate something different.
+So this was one of the basic models that existed.
+It's called blood cheek.
+We have also another model that called Russell Russell model suggested a circumplex model, bipolar dimensions, where all emotions are arranged in a circle controlled by two independent dimensions.
+Hedonic, which is the pleasure, displeasure and arousal, activation, pleasant, unpleasant and activation deactivation.
+So through the two axis, okay, we have several quarters of emotion.
+So between surprise and happiness, this is a quarter of surprise and happiness.
+You start by being alert, excited, elated, happy.
+So this is a quarter of surprising happiness.
+And between, for example, surprise and unpleasant, start by being tense, start by being nervous or fear and stressed or anger, and then upset or disgust, unpleasant and so on and so forth.
+So this is both a way to make also a model of emotion in this so effective computing.
+I replied to this before, which one is more intelligent?
+Certainly it's a dog, you know, there's a dog at least emotional intelligence, the dog wants to be sad.
+The dog can tell you that I'm sad.
+The machine is still, you know, whatever.
+Even away from the emotional intelligence, the machine intelligence away from the emotional one is certainly less than the smartest man.
+Machine is less smart than a dog.
+Okay?
+So computers will keep showing you the same data whether you look like this or like this, the first phase or same phase or the second phase.
+So the question is not whether intelligent machines can have any motion, but whether machines can be intelligent without any motion.
+Can the machines being intelligent, they don't, they don't express emotions, but they should be able to understand emotions, okay, so understand the emotions and take necessary action.
+Okay?
+So this is a part for it.
+And we will speak about emotion, perception and synthesis.
+In general, we speak about different information that we can have.
+Like for example, the auditory and the visual.
+And we extract from the auditory and the visual some features and we take them to for example recognition or to synthesizer or whatever.
+So the person speaks, we analyze, we take the recognition and from the recognition we go to the synthesizer.
+So, which means like I say I'm so sad and my face is sad and my speech is sad.
+I go, the system recognizes that I'm sad.
+And then it goes to the PC and the PC can chatgpt whichever can tell me I'm so sorry that you are sad.
+Secondly, when we start taking, making like recognition of emotion or recognition of speech, we need a look.
+We understand from machine learning that we don't put the machine learning speech signal directly unless you are dealing with deep learning or facial expression directly, unless you're dealing with deep learning that can extract features immediately from raw data.
+But instead if you use normal machine learning that's not deep, you need to take the signal that is raw and extract features, engineer the features, the most representative features.
+Okay, so when I say an apple, what are the most representative features?
+Does that represent an apple?
+Spherical.
+You, you both said correct.
+So sphere, the shape, the color and.
+Or somebody might say it's a test.
+Okay, so in, so I understand if I like to represent the apple, what do I need to do is like I need to extract represent all these features.
+So I have to create what do we give to machine lear to machine learning model?
+Characteristic vector.
+Okay, characteristic vector, you know, from machine learning, I hope you didn't forget and for the master as a group, characteristic vector.
+So you take the features, you put them in Features means characteristics, you put them in a vector.
+This called characteristic vector.
+In machine learning language, this machine learn, the characteristic vector is what you give to the machine learning model.
+Okay, so you take the characteristic vector, you give to the machine learning model that characteristic, the characteristic vector should have information about the shape for the apple, for the color.
+So our point here, our attention here is how can we represent the shape, how can we represent the color?
+And thanks to colleagues in computer vision community, there are what's called.
+Remind me please, machine learning.
+What do we use to describe shape or color in machine learning language?
+Comp 3003, there was a clear word that we have been using always or saying always about each time in machine learning language.
+Remember like I'm always encouraging you to use these words because these words say, if I hear these words, if I'm interviewing you for a job, if I use these words, okay, like inferring, for example, like characteristic vector, I will understand that this guy Is speaking machine language machine learning.
+So you can speak English, you can speak French, you can speak Spanish and you can speak machine learning.
+Machine learning.
+So you should understand that words of machine learning to speak machine learning.
+So what's called the words that represent the features of a shape or color?
+Descriptor.
+Descriptor in machine learning language.
+So we need to find the best descriptor to represent the shape or the color that we will use to create characteristic vector.
+And thanks to our colleagues in computer vision, they developed these descriptors for us.
+So you find people saying, for example, we have X vector like x, e.g.
+descriptor like viewpoint feature histogram.
+Okay?
+This is one of the descriptors that I use to describe shape.
+Other people say we have X descriptor, Y descriptor.
+So there are many, many, many, many descriptors, okay?
+And each aims to find the best way to describe an object.
+So for speech now we need to have system that is that can smart and can be smart enough to recognize emotion from speech.
+So we have here a person making signal.
+And we go from this to step to step signal processing.
+And from the processing we extract features the same like any machine learning by applying and we make classification.
+So we understand the person mental state is sad or happy or whichever.
+And we try to show an emotion corresponding to this that goes to the ruby.
+So if I'm sad, I said, for example, I, for example, I feel tired.
+The robot understands from this and should tell me I'm so sorry that if you die, something like that.
+So in order to we understood from facial expressions that we use some kind of facial like when we speak about how can we characterize a face, what do we characterize our facial details?
+Like eyes, for example, eyebrows, how they move.
+So if I'm sad, for example, I might be having like remember back we had these faces look at the points how the mouse was here and become changing here or become like this or become like this in ancient motions.
+So if I put, for example, try to put points props here to characterize the mouse here or the mouse here.
+Certainly this is the different in here, okay.
+Or different in here.
+Or the eyebrows here is different in here.
+So with these features of the.
+This is how we can characterize facial expression with respect to the facial another facial expression, which is exactly what you would do in the class in the workshop after your robotic.
+Now for speech, for speech we have descriptors.
+And these descriptors are for example, what's called MIL frequency sepastrum coefficients.
+It's called MFCC So Mel frequency Sebester coefficients are one of the descriptors that certainly has a lot of theory behind that allows you to capture basic information about speech so that you can understand the emotional state in speech.
+If the person sad or happy or whichever having whichever emotion you can understand.
+From mfcc, there is also the zero crossing points.
+Zero crossing points is in one signal.
+We understand that this is like no signal going up and down, up and down, up and down, up and down.
+So it passes passes by the horizontal line.
+Zero crossing point is how many times or like the points that the signal when it's going up and down it passes by the zero because it goes from positive to negative.
+Okay, so the zero crossing points can characterize this change that happening to the signal from the positive to negative.
+So if I am for example having excited so I'll be speaking so fast I made it and it was working and it's great.
+Spoke so fast or faster than if I'm Sadly I tried to do it, but it didn't work.
+The frequency of the zero crossing points in one emotion is different than another emotion.
+The VP which is voicing probability.
+It's probability that the part is voiced and or unvoiced.
+What is the difference between voice and unvoiced?
+Yes.
+Is it like the consonants like the harder sounds like the compared to like a like touch here the larynx and you see how it vibrates the vocal cords like some vocal cords like vibrate.
+Okay, like or P didn't vibrate.
+Okay, so this is a vocal cords.
+How do you operate rate?
+So is it voiced or non voiced.
+And the F0P frequency.
+And the P frequency is very important.
+Very important.
+The picture frequency can tell us is the person man or woman.
+Because the picture frequency of the man is different than the pitch frequency of the woman.
+Okay.
+You might find the voice of men is more, you know, more tough higher frequencies than women than children.
+Okay, so this is a descriptor is a candle.
+As this is man, woman, child.
+Also the emotional state.
+So what do we do is like we prepare all these characteristic and put them together.
+But with time and advance happening, progress happening in this area.
+When I was young, for example in the university, I was creating like calculating this alone and this alone and this alone, this alone.
+And I was concatenating creating very big vector.
+But now you have already some nice people who created descriptor ready that encapsulate all this.
+So simply speaking, you import this from Python library and just automatically and you have the descriptor ready to go.
+And this is exactly what awards say about acoustic features of fundamental frequency.
+So it provides cues for the speaker's identity.
+Men, for example, the fundamental frequency is 100 hertz for women's 2, 200 hertz for children, 300 hertz.
+So you find always the voice of men is like more tougher and more.
+And then it goes sharp for women, for children, for crying babies, 500 hertz.
+So it's like that lower is a voice of men about the fundamental frequency.
+So there are actually several algorithms that we can use to extract the fundamental frequencies at the yet another algorithm of pitch tracking.
+And it's called like this.
+So I don't know, you might find yet strange here, but it's called yapt, yet another algorithm for pitch tracking.
+That's a famous algorithm that used to calculate pitch frequency.
+Like here you have seen this before.
+I told you, this is frequency domain.
+And why frequency domain?
+Because calculating pitch frequency in frequency domain is easier for recognizing speech than time domain.
+So we have frequency domain modes, we have time frequency demand is more stable calculating feature.
+So this is saying, okay, here is fundamental frequencies that I mark it blue.
+Okay?
+Here there is another fundamental frequency, another potential fundamental frequency.
+So it's all related to probably here it's not very clear.
+But when I have bigger you find within this black black areas you find small lines.
+So here for example, you find it black.
+And inside this black you find like some.
+Some lines going like this black small lines within the black.
+So when it's pink you can see it.
+Okay, so when we say pitch tracking because tries within this black areas try to track this pitch silence.
+Okay, within this globally black ones to say out here there is a pitch fundamental frequency.
+Fundamental frequency, fundamental frequency.
+So it becomes like this.
+So if you extract fundamental frequency by this algorithm, you will have these small lines connected connected, connected, connected.
+So this will be your curve that represents the pitch frequency for this signal.
+Okay, so mil frequency sequestrant coefficients MFCC describe the overall shape of aspect of envelopes.
+It describes a whole shape.
+In general, the sequestrum is derived by taking the log of the frequency sequester of an audio signal.
+Afterwards we take the cosine transform.
+So this is the mathematical modeling of how we calculated cosine transform of the list of mill log powers.
+So a lot of calculation involve load calculation based.
+And with this transformation we can calculate the mfcc.
+The zero crossing points is also where the wave crosses the axis.
+Intensity and duration also important features.
+So when you are angry, your intensity goes high.
+When you are sad, the intensity is low and the duration is are you speaking within 3 seconds or 15 seconds?
+So this also important features to consider.
+So coming back for the expressions, facial expressions.
+We have different facial expressions and in your lab you'll be working with something similar.
+So what you're supposed to be defined face and define these blue points, marker points that can characterize each facial vision.
+The eyes, the eyebrows, the nose, the mouth, etc.
+Okay, so faces extracted from the background.
+So number one, for any artificial system, the face should be extracted from the background.
+Okay, so if we have multiple faces, each face should be defined by a rectangle.
+So that's why you find in AI applications you can find a camera and this camera is observing people in the street.
+And the H1 has a rectangle around the face, something similar.
+And then we calculate the facial geometry, we estimate it, and then we identify important points.
+Okay, so from there we can have a face and we detect what is for example, the important points around the mouse, for example, or around the eye.
+And we try to build something similar to the shape here that represents the face model.
+This face model is what tells the computational model that this is sad face or angry face.
+We train it.
+We train it.
+We need a data set in order to make a model able to understand this.
+We need a data set.
+So we train it.
+And like for example, we can have a data set for anger, emotion or for sad emotion.
+So we have plenty of data sets like this and we learn why do I need to characterize it with points?
+Because as long as you're able to characterize those points, it means that you understand the location of these points in xyz.
+So, so if I know the location of the mouse in XYZ so I can or hear, so I can understand when I'm smiling or where I'm for example, closing my mouse.
+So this is the ability to characterize how the mouse can move left and right and for the eyes also open and close.
+This is the example that you will be working on.
+So you'll be having a transition train the model in the workshop and you will be having this lady speaking and you will be trying to characterize having these points.
+And for example, you will be show, will be showing you when she is smiling, how its emotion is when she is angry, what is the emotion.
+And when you test it by yourself.
+Okay, the mother will not trained to some to some level when you test it.
+So you might test it with saying by the time, by the way, but this is still just coming, coming at some point, but it would be good to test it.
+We need a camera.
+So if it doesn't hurt if you can test it.
+If you.
+If you would like to test it by yourself to connect to the camera of your PC.
+Okay.
+Of laptop.
+So you just.
+It's very light model, just run it and it can recognize when you are sad.
+So for example, you try to make a sad face and it can say the person is sad or the person is angry.
+Something like this.
+So this is something you will do in your desk.
+Applications of effective computing are certainly major.
+You know the E learning, marketing, training and tracking, robotics, health care, vehicle driving.
+So something very simple can work anywhere with it.
+So you can work in any company of this with something very simple.
+The idea of AI is like AI.
+Certainly you can work anywhere with AI.
+Okay, so this is part one of the lecture.
+We can start part two.
+One thing I told you about, I didn't receive a lot of reply from you about the lecture.
+Replacing the lecture next time to be on Friday to be on Wednesday exceptionally next time.
+So I received some replies, but I didn't receive all replies.
+I think some of you replied to me, said yes.
+So is this all problem that we take the lecture as I sent in the email.
