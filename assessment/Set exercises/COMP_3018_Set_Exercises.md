@@ -1,7 +1,6 @@
 ---
 title: "COMP3018: Set Exercises — Human-Robot Interaction (HRI)"
 subtitle: "Cultural Differences and Probabilistic Modelling in Human-Robot Interaction"
-author: "Participant: 14331092"
 header-includes:
   - \usepackage{graphicx}
   - \usepackage{caption}
@@ -35,17 +34,21 @@ header-includes:
 ---
 # 1- Task (1): Cultural Differences and HRI Design
 
-<!-- ~1,750 words | 40% weighting | Questions 1.1–1.4 -->
+<!-- ~1,750 words | 40% weighting | Questions 1.1-1.4 -->
 
 ## 1.1 Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
 
-Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in the observation that "**culture affects the way technology is perceived** and, in a reciprocal manner, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e., the cultural, theological, and literary narratives of each region shape the societal meta-layer *(the underlying philosophical and theological frameworks governing technological integration)* that underpins robotic acceptance.
+Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in the observation that "**culture affects the way technology is perceived** and, in a reciprocal manner, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological (narrative) frameworks of each region indeed shape the societal meta-layer *(the underlying philosophical-and-theological frameworks governing technological integration)* that underpins robot acceptance.
 
-**Western Society (The Frankenstein Syndrome).** Western culture's creation of human-like entities has chronically been regarded suspiciously: Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 475). This anxiety is indeed traceable to the Judeo-Christian tradition, which posits "no place for hybrids" between divine creator and human creation (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames the humanoid robot as "something else, something that should not exist" (p. 476) — a transgression against the natural order. Consequently, Western societies have historically channelled robotic development toward industrial, non-anthropomorphic applications wherein the machine remains a visible *tool* rather than a would-be social entity. Kaplan further notes the concept of "narcissistic shields" *(the psychological defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners utilise psychological distancing to manage the discomfort of encountering machines that blur the boundary between human and artefact.
+**Western Society (The Frankenstein Syndrome).** Western culture has persistently viewed the creation of human-like entities with suspicion. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 11). 
 
-**Eastern Society (Technology Taming and Animism).** Japanese culture, by contrast, exhibits a fundamentally different ontological stance. Kaplan (2004) traces this to the Shinto tradition of *animism*, wherein "every entity, including objects and natural elements, possesses a spirit" (pp. 467–468). This worldview dissolves the rigid Western boundary between animate and inanimate, and thus humanoid robots are not perceived as transgressions but rather as natural extensions of an already-animate material world. Moreover, Kaplan highlights the cultural mechanism of "technology taming" — a recurring historical pattern wherein initially foreign technologies (e.g., firearms, writing systems) are domesticated via integration into existing cultural frameworks such as the *kata* tradition of formalised practice (p. 470). The popular Astro Boy manga franchise (p. 466) exemplifies this domestication at the narrative level: the humanoid robot is cast not as a Frankensteinian threat but as a heroic, emotionally resonant companion. Kaplan references the Amaterasu myth (p. 469) to argue that Japanese cosmology fundamentally lacks the creator-versus-creation antagonism that underpins Western technophobia.
+This anxiety is traceable to the Western distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 6). The Western cultural narrative therefore frames the humanoid robot as a challenge to the human-"something else" (p. 12) thus a transgression against the natural order. Consequently, Western societies have historically channelled robotic development toward industrial, non-anthropomorphic () applications wherein the machine remains a *tool* rather than a would-be social entity. Kaplan notes further the concept of "narcissistic shields" *(the psychological defence mechanisms protecting human exceptionalism)* (p. 14), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
 
-**Implications for HRI Design.** These divergent cultural framings have direct consequences for interaction design. Whilst Western users may prefer robots that maintain clear machine-identity markers — thereby preserving the "narcissistic shield" — Eastern users may indeed welcome anthropomorphic features that align with animistic expectations. As Lecture 4 emphasised, "every country and each culture has their own concept of proxemics" (Lecture 4), and therefore a robot's spatial behaviour must adapt accordingly: Japanese norms demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Lecture 4). The watchword herein is cultural relativism — no universal design policy can accommodate these fundamentally different ontological commitments.
+- [ ] **Eastern Society (Technology Taming and Animism).** Japanese culture, by contrast, exhibits a fundamentally different ontological stance. Kaplan (2004) traces this to the Shinto tradition, wherein the rigid Western boundary between animate, and inanimate, is dissolved in favour of a "continuous network of beings" (p. 6). In this view, humanoid robots are not perceived as transgressions but instead as natural extensions of an already-spirited world. 
+
+Furthermore, Kaplan discusses the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 3). This ethos aligns with the *kata* tradition of formalised practice, wherein repetition leads to "maximum stability" (p. 6). The popular *Astro Boy* manga franchise (p. 2) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 2). Kaplan references the Amaterasu myth (p. 5) to argue that Japanese cosmology fundamentally lacks the creator-versus-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 12).
+
+- [ ] **Implications for HRI Design.** These divergent cultural framings have direct consequences for interaction design. Whilst Western users may prefer robots that maintain clear machine-identity markers — thereby preserving the "narcissistic shield" — Eastern users may indeed welcome anthropomorphic features that align with animistic expectations. As Lecture 4 emphasised, "every country and each culture has their own concept of proxemics" (Lecture 4), and therefore a robot's spatial behaviour must adapt accordingly: Japanese norms demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Lecture 4). The watchword herein is cultural relativism — no universal design policy can accommodate these fundamentally different ontological commitments.
 
 ## 1.2 African Cultural Factors Influencing HRI
 
@@ -63,11 +66,11 @@ Whilst Kaplan's (2004) analysis is confined to the East-West axis, a complete ac
 
 The cultural factors identified above dictate distinct morphological and behavioural traits to maximise acceptance.
 
-**The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form, the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group — hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone (0.5–1.2m).
+**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form, the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group — hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone (0.5–1.2m).
 
-**The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like aesthetic markers (e.g., visible joints, metallic chassis) to clearly signal their artificiality, thereby preventing descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit extreme transparency, explicitly stating their operational reasoning to alleviate fears of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
+**(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like aesthetic markers (e.g., visible joints, metallic chassis) to clearly signal their artificiality, thereby preventing descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit extreme transparency, explicitly stating their operational reasoning to alleviate fears of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
 
-**Africa.** Informed by Ubuntu and high Power Distance (Hofstede, 2001), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic, utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Vansina, 1985). Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels — *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject) — become critical design considerations.
+**(c) Africa.** Informed by Ubuntu and high Power Distance (Hofstede, 2001), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic, utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Vansina, 1985). Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels — *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject) — become critical design considerations.
 
 ## 1.4 Adapting Design Patterns for Sociality (Kahn et al., 2008)
 
@@ -75,21 +78,21 @@ Kahn et al. (2008) identify eight "psychological benchmarks" for social robots, 
 
 **Pattern 1: Initial Introduction (Kahn et al., 2008, p. 100).**
 
-- *East:* Rather than tactile handshakes, the robot must initiate interaction with a calibrated bow, as "in Japan it's very considered impolite if you break the personal distance or space and try to touch somebody" (Lecture 4). The bow angle should parametrically encode social hierarchy recognition.
-- *West:* The *Initial Introduction* can incorporate the handshake as a tactile greeting, albeit with sensitivity to the Mediterranean (closer) versus Northern European (distant) proxemic distinctions (Lecture 4).
-- *Africa:* Reflecting Ubuntu's communal orientation, the introduction must address groups rather than individuals. Encoding Power Distance norms, the robot must always greet the eldest or most-senior member first (Hofstede, 2001).
+- *(a) East:* Rather than tactile handshakes, the robot must initiate interaction with a calibrated bow, as "in Japan it's very considered impolite if you break the personal distance or space and try to touch somebody" (Lecture 4). The bow angle should parametrically encode social hierarchy recognition.
+- *(b) West:* The *Initial Introduction* can incorporate the handshake as a tactile greeting, albeit with sensitivity to the Mediterranean (closer) versus Northern European (distant) proxemic distinctions (Lecture 4).
+- *(c) Africa:* Reflecting Ubuntu's communal orientation, the introduction must address groups rather than individuals. Encoding Power Distance norms, the robot must always greet the eldest or most-senior member first (Hofstede, 2001).
 
 **Pattern 2: Personal Interests (Kahn et al., 2008, p. 101).**
 
-- *East:* The robot's backstory can be elaborate, integrating seamlessly into the animistic expectation of objects possessing a "spirit" or character (Kaplan, 2004).
-- *West:* Self-disclosure must be transparently mechanical, framing its "interests" around its programmed purpose to reinforce the user's ontological comfort — supporting Theory of Mind mechanisms (Lecture 1) whereby the robot must infer the user's mental state.
-- *Africa:* This pattern should be realised via storytelling and voice-based dialogue. The robot must establish *joint attention* (the ability of multiple agents to focus on a shared reference point) via structured eye gaze to maintain narrative authority (Lecture 2; Lecture 3).
+- *(a) East:* The robot's backstory can be elaborate, integrating seamlessly into the animistic expectation of objects possessing a "spirit" or character (Kaplan, 2004).
+- *(b) West:* Self-disclosure must be transparently mechanical, framing its "interests" around its programmed purpose to reinforce the user's ontological comfort — supporting Theory of Mind mechanisms (Lecture 1) whereby the robot must infer the user's mental state.
+- *(c) Africa:* This pattern should be realised via storytelling and voice-based dialogue. The robot must establish *joint attention* (the ability of multiple agents to focus on a shared reference point) via structured eye gaze to maintain narrative authority (Lecture 2; Lecture 3).
 
 **Pattern 3: Recovering From Mistakes (Kahn et al., 2008, p. 102).**
 
-- *East:* The robot should employ indirect acknowledgement strategies that preserve social harmony, avoiding direct self-criticism that may cause discomfort via loss of face.
-- *West:* The robot should explicitly explain its error and how it will correct it, prioritising transparency to mitigate underlying technophobia.
-- *Africa:* Error recovery must be strictly calibrated to social rank. An unacknowledged robot error affecting an elder constitutes a severe social violation; recovery must involve a disproportionately deferential apology to seniors, leveraging posture and movement (Lecture 2) to express contrition, thereby protecting the user's social face within the community.
+- *(a) East:* The robot should employ indirect acknowledgement strategies that preserve social harmony, avoiding direct self-criticism that may cause discomfort via loss of face.
+- *(b) West:* The robot should explicitly explain its error and how it will correct it, prioritising transparency to mitigate underlying technophobia.
+- *(c) Africa:* Error recovery must be strictly calibrated to social rank. An unacknowledged robot error affecting an elder constitutes a severe social violation; recovery must involve a disproportionately deferential apology to seniors, leveraging posture and movement (Lecture 2) to express contrition, thereby protecting the user's social face within the community.
 
 ## 1.5 Summary of Cultural Design Implications
 
@@ -134,7 +137,7 @@ $$
 b'(s') = \eta \cdot O(s', a, o) \sum_{s \in S} T(s, a, s') \cdot b(s)
 $$
 
-where $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new — and potentially contradictory — evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process wherein each observation incrementally refines the robot's understanding.
+ $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new — and potentially contradictory — evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process wherein each observation incrementally refines the robot's understanding.
 
 The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history — it compresses all past actions and observations into a single probability vector, enabling decision-making without storing the full trajectory (Kaelbling, Littman and Cassandra, 1998). This is indeed analogous to how a social robot must infer a human's emotional state from noisy multimodal cues (facial expressions, vocal prosody, posture) rather than accessing the "ground truth" of their feelings directly (Lecture 1; Lecture 3).
 
@@ -210,27 +213,38 @@ The deployment of POMDPs in HRI raises profound ethical concerns. By mathematica
 
 # References
 
-- [ ] **COMPLETE 'AVAILABLE AT:...'**
+## Task (1)'s
 
-## Task (1)
+- [ ] fetch exact wording fron paper to earn second tick
 
-- Hofstede, G. (2001) *Culture's Consequences: Comparing Values, Behaviors, Institutions and Organizations Across Nations*. 2nd edn. Thousand Oaks: Sage Publications.
-- Kahn, P.H., Freier, N.G., Friedman, B., Severson, R.L. and Feldman, E.N. (2008) 'Design patterns for sociality in human-robot interaction', in *Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97–104.
-- Kaplan, F. (2004) 'Who is afraid of the humanoid? Investigating cultural differences in the acceptance of robots', *International Journal of Humanoid Robotics*, 1(3), pp. 465–480.
-- Metz, T. (2007) 'Toward an African moral theory', *Journal of Political Philosophy*, 15(3), pp. 321–341.
-- Mori, M. (1970) 'The uncanny valley', *Energy*, 7(4), pp. 33–35. Translated by MacDorman, K.F. and Kageki, N. (2012) *IEEE Robotics and Automation Magazine*, 19(2), pp. 98–100.
-- Vansina, J. (1985) *Oral Tradition as History*. Madison: University of Wisconsin Press.
-- Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320–333.
 
-## Task (2)
+- [ ] [ ] Hofstede, G. (2001) *Culture's Consequences: Comparing Values, Behaviors, Institutions and Organizations Across Nations*. 2nd edn. Thousand Oaks: Sage Publications.
 
-- Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-aware decision making for human-robot collaboration: model learning and planning', *ACM Transactions on Human-Robot Interaction*, 9(2), Article 9.
-- Kaelbling, L.P., Littman, M.L. and Cassandra, A.R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1–2), pp. 99–134.
-- Papadimitriou, C.H. and Tsitsiklis, J.N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441–450.
-- Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: an anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*. Acapulco: Morgan Kaufmann, pp. 1025–1030.
-- Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems 23 (NeurIPS 2010)*. Vancouver: Curran Associates, pp. 2164–2172.
+- [ ] [ ] Kahn, P.H., Freier, N.G., Kanda, T., Ishiguro, H., MacDorman, K.F., Severson, R.L. and Friedman, B. (2008) 'Design patterns for sociality in human-robot interaction', in *Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97-104. Available at: https://dl.acm.org/doi/10.1145/1349822.1349836 (Accessed: 15 February 2026).
 
-\newpage
+- [ ] [ ] Kaplan, F. (2004) 'Who is afraid of the humanoid? Investigating cultural differences in the acceptance of robots', *International Journal of Humanoid Robotics*, 1(3), pp. 465–480. Available at: https://doi.org/10.1142/S0219843604000289 (Accessed: 15 February 2026).
+
+- [ ] [ ] Metz, T. (2007) 'Toward an African moral theory', *Journal of Political Philosophy*, 15(3), pp. 321–341. Available at: https://doi.org/10.1111/j.1467-9760.2007.00280.x (Accessed: 15 February 2026).
+
+- [ ] [ ] Mori, M. (1970) 'The uncanny valley', *Energy*, 7(4), pp. 33–35. Translated by MacDorman, K.F. and Kageki, N. (2012) *IEEE Robotics and Automation Magazine*, 19(2), pp. 98–100. Available at: https://doi.org/10.1109/MRA.2012.2192811 (Accessed: 15 February 2026).
+
+- [ ] [ ] Vansina, J. (1985) *Oral Tradition as History*. Madison: University of Wisconsin Press.
+
+- [ ] [ ] Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320–333. Available at: https://doi.org/10.1080/02681102.2015.1048184 (Accessed: 15 February 2026).
+
+## Task (2)'s
+
+- [ ] fetch exact wording fron paper to earn second tick
+
+- [X] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-aware decision making for human-robot collaboration: model learning and planning', *ACM Transactions on Human-Robot Interaction*, 9(2), Article 9. Available at: [https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf](https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf) (Accessed: 15 February 2026).
+
+- [X] [ ] Kaelbling, L.P., Littman, M.L. and Cassandra, A.R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: [https://doi.org/10.1016/S0004-3702(98)00023-X](https://doi.org/10.1016/S0004-3702(98)00023-X) (Accessed: 15 February 2026).
+
+- [X] [ ] Papadimitriou, C.H. and Tsitsiklis, J.N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: [https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf](https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf) (Accessed: 15 February 2026).
+
+- [X] [ ] Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: an anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*. Acapulco: Morgan Kaufmann, pp. 1025-1030. Available at: [https://www.ijcai.org/Proceedings/03/Papers/147.pdf](https://www.ijcai.org/Proceedings/03/Papers/147.pdf)(Accessed: 15 February 2026).
+
+- [X] [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems 23 (NeurIPS 2010)*. Vancouver: Curran Associates, pp. 2164-2172. Available at: https://papers.nips.cc/paper/2010/hash/edfbe1afcf9246bb0d40eb4d8027d90f-Abstract.html (Accessed: 15 February 2026).
 
 # Appendices
 
