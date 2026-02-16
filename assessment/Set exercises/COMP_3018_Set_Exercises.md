@@ -32,23 +32,81 @@ header-includes:
         showstringspaces=false
       }
 ---
+# Words-To-Use:
+
+- [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
+- [ ] most-{something} {something}
+- [ ] would-be
+- [ ] despite
+- [ ] contravened
+  — [ ] humanlike
+- [ ] watchword
+- [ ] e.g. `1-` , `2-`, ...
+- [ ] despite x something y
+- [ ] and indeed, the robot will...
+- [ ] and `therefore, `x ` thus {does, e.g. *feeds*` `y` continuously throughout the process `wherein`...
+- [ ] `as now-{something} the x thus does y continously throughout the process wherein it does z`
+- [ ] `Whilst`: only used at the start of a sentence
+- [ ] `Whilst this is true, x may be inclinded to {x} based on...`
+- [ ] `and thus *x* therefore...`
+- [ ] `is indeed...`
+- [ ] `and indeed...`
+- [ ] `however, insofar as`
+- [ ] `thereof`: of the thing just mentioned
+- [ ] `herein`: in this document
+- [ ] Note
+- [ ] Approach
+- [ ] within
+- [ ] `wherein`: in which
+- [ ] `regarding, in regard to`, etc
+- [ ] `likelihood`
+- [ ] `thereof`:
+- [ ] `infer`: conclude from reasoning
+- [ ] `init`: initialise
+- [ ] `use`: use
+- [ ] `via`: through
+- [ ] `wherein`: in which
+- [ ] `indeed`: in fact
+
+# TODO:
+
+- [ ] hit word-count*0.1 limit allowance across report
+
+- [ ] utilise lecture teachings in lec 5-6 etc
+- [ ] review papers: pros or limitations
+- [ ] indeed 10% word-count allowance
+- [ ] peer-reviewed or conference papers
+- [ ] very good LaTeX visualisations
+- [ ] uses 3003-report feedback??
+- [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
+- [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
+- [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
+- [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
+- [ ] TODO.md
+
 # 1- Task (1): Cultural Differences and HRI Design
 
-<!-- ~1,750 words | 40% weighting | Questions 1.1-1.4 -->
+~1,750-word $\vert$ 40% weighting $\vert$ Questions 1.1-1.5
 
-## 1.1 Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
+## 1.1. Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
 
-Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in the observation that "**culture affects the way technology is perceived** and, in a reciprocal manner, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological (narrative) frameworks of each region indeed shape the societal meta-layer *(the underlying philosophical-and-theological frameworks governing technological integration)* that underpins robot acceptance.
+Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in the observation that "**culture affects the way technology is perceived** and, in a reciprocal manner, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological narratives of each region indeed shape the societal meta-layer *(the underlying philosophical-and-theological frameworks governing robotic integration)* that underpins robot acceptance.
 
-**Western Society (The Frankenstein Syndrome).** Western culture has persistently viewed the creation of human-like entities with suspicion. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 11). 
+### 1.1.1 Western Society (The Frankenstein Syndrome)
+ 
+Western culture persistently has viewed the creation of human-like (humanoid) entities with suspicion. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 11). 
 
-This anxiety is traceable to the Western distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 6). The Western cultural narrative therefore frames the humanoid robot as a challenge to the human-"something else" (p. 12) thus a transgression against the natural order. Consequently, Western societies have historically channelled robotic development toward industrial, non-anthropomorphic () applications wherein the machine remains a *tool* rather than a would-be social entity. Kaplan notes further the concept of "narcissistic shields" *(the psychological defence mechanisms protecting human exceptionalism)* (p. 14), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
+This anxiety is traceable to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 6). The Western cultural narrative therefore frames the humanoid robot as a challenge to human specificity (p. 12), and thus, a transgression against the natural order; consequently, Western societies have historically envisioned robotic development towards industrial, non-anthropomorphic (instrumentalist) applications wherein the machine remains a *tool* rather than a would-be social entity. Kaplan further notes the concept of "narcissistic shields" *(the psychological defence mechanisms protecting human exceptionalism)* (p. 14), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
 
-- [ ] **Eastern Society (Technology Taming and Animism).** Japanese culture, by contrast, exhibits a fundamentally different ontological stance. Kaplan (2004) traces this to the Shinto tradition, wherein the rigid Western boundary between animate, and inanimate, is dissolved in favour of a "continuous network of beings" (p. 6). In this view, humanoid robots are not perceived as transgressions but instead as natural extensions of an already-spirited world. 
+### 1.1.2 Eastern Society (Technology Taming and Animism)
 
-Furthermore, Kaplan discusses the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 3). This ethos aligns with the *kata* tradition of formalised practice, wherein repetition leads to "maximum stability" (p. 6). The popular *Astro Boy* manga franchise (p. 2) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 2). Kaplan references the Amaterasu myth (p. 5) to argue that Japanese cosmology fundamentally lacks the creator-versus-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 12).
+Japanese culture, by contrast, exhibits a fundamentally different ontological *(the definition of what counts as a 'being')* stance. Kaplan (2004) traces this to the Shinto tradition, wherein the rigid Western boundary between animate and inanimate is dissolved in favour of a "continuous network of beings" (p. 6). In this view, humanoid robots are not perceived as transgressions but instead as natural extensions of an already-spirited world.
 
-- [ ] **Implications for HRI Design.** These divergent cultural framings have direct consequences for interaction design. Whilst Western users may prefer robots that maintain clear machine-identity markers — thereby preserving the "narcissistic shield" — Eastern users may indeed welcome anthropomorphic features that align with animistic expectations. As Lecture 4 emphasised, "every country and each culture has their own concept of proxemics" (Lecture 4), and therefore a robot's spatial behaviour must adapt accordingly: Japanese norms demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Lecture 4). The watchword herein is cultural relativism — no universal design policy can accommodate these fundamentally different ontological commitments.
+Furthermore, Kaplan discusses the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 3). This ethos aligns with the *kata* tradition of formalised practice, wherein repetition leads to "maximum stability" (p. 6). The popular *Astro Boy* manga franchise (p. 2) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 2). Kaplan references the Amaterasu myth (p. 5) to argue that Japanese cosmology fundamentally lacks the creator-vs-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 12).
+
+### 1.1.3 Implications for HRI Design.
+
+- [ ] These diverged cultural framings consequentially shape interaction design in profound ways. Whilst Western users predominantly prefer robots that maintain clear machine-identity markers, thereby preserving the ‘narcissistic shield’, Eastern users instead welcome anthropomorphic features (imitating human behaviour) that align with animistic expectations. However, insofar as Western designers may be inclined to impose universal proxemic standards based on their own cultural norms, this approach is fundamentally flawed. As Lecture 4 emphasised, ‘every country and each culture has their own concept of proxemics’, and therefore a robot’s spatial behaviour must adapt accordingly: Japanese norms demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances. The watchword herein is cultural relativism—no universal design policy can accommodate these fundamentally different ontological commitments.
 
 ## 1.2 African Cultural Factors Influencing HRI
 
@@ -84,7 +142,7 @@ Kahn et al. (2008) identify eight "psychological benchmarks" for social robots, 
 
 **Pattern 2: Personal Interests (Kahn et al., 2008, p. 101).**
 
-- *(a) East:* The robot's backstory can be elaborate, integrating seamlessly into the animistic expectation of objects possessing a "spirit" or character (Kaplan, 2004).
+- *(a) East:* The robot's backstory elaborately integrates seamlessly into the animistic expectation of objects possessing a "spirit" or character (Kaplan, 2004).
 - *(b) West:* Self-disclosure must be transparently mechanical, framing its "interests" around its programmed purpose to reinforce the user's ontological comfort — supporting Theory of Mind mechanisms (Lecture 1) whereby the robot must infer the user's mental state.
 - *(c) Africa:* This pattern should be realised via storytelling and voice-based dialogue. The robot must establish *joint attention* (the ability of multiple agents to focus on a shared reference point) via structured eye gaze to maintain narrative authority (Lecture 2; Lecture 3).
 
@@ -121,7 +179,7 @@ As Kahn et al. (2008) conclude, effective HRI must be "compelling as a lived exp
 
 # 2- Task (2): POMDPs in Human-Robot Interaction
 
-<!-- ~1,650 words | 60% weighting | Questions 2.1–2.5 -->
+- [ ] this needs to change as I am going to incorporate an AI API into the robot’s system 
 
 ## 2.1 The Role of POMDPs in Trust, Cooperation, Coordination, and Collaboration
 
@@ -145,7 +203,7 @@ The belief state $b$ therefore serves as a **sufficient statistic** for the enti
 
 Trust is a latent psychological variable — it cannot be directly measured, only inferred from observable behavioural indicators. Three core challenges arise. First, **the measurement problem**: observations such as task compliance rate, response latency, gaze direction (Lecture 2), and verbal affirmations are noisy proxies — a user may comply with a robot's suggestion despite low trust (e.g., due to time pressure), or indeed refuse despite high trust (e.g., due to task complexity). Second, **temporal dynamics**: trust evolves non-linearly — it builds slowly through consistent performance but degrades rapidly after errors. The *Recovering From Mistakes* pattern (Kahn et al., 2008, p. 102) is therefore critical: a robot that acknowledges and corrects errors can arrest trust decay, whereas one that ignores failures risks appearing "aggressive" (Lecture 4). Third, **computational intractability**: solving POMDPs exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987), as the belief simplex is continuous even with finite $|S|$. Practical HRI applications therefore utilise approximate solvers — point-based methods such as PBVI (Pineau, Gordon and Thrun, 2003) or online Monte Carlo tree search such as POMCP (Silver and Veness, 2010) — to achieve tractable real-time planning.
 
-The POMDP addresses these challenges by encoding trust as a hidden state variable, observations as probabilistic signals thereof, and actions as trust-modulating strategies (Chen et al., 2020). The belief state thereby provides the robot with a principled estimate of trust that is continuously refined, rather than a brittle threshold-based heuristic.
+The POMDP addresses these challenges by encoding trust as a hidden state variable, observations as probabilistic signals thereof, and actions as trust-modulating strategies (Chen et al., 2020), and thus *trust* therefore cannot be treated as a static binary variable but must be modelled as a continuously-evolving distribution. The belief state thus provides the robot with a principled estimate of trust that is continuously refined, rather than a brittle threshold-based heuristic (??)
 
 ## 2.4 Proposed POMDP Model: Medication-Assistance Robot
 
@@ -267,9 +325,9 @@ I declare that I've used the AI tools listed below whilst preparing this assessm
 \hline
 \textbf{AI Tool Used} & \textbf{Purpose of Use} & \textbf{Extent of Use} \\
 \hline
-ChatGPT & Finding relevant pages to read in the paper \textbf{(A4)} & Few times if the paper is too long \\
+ChatGPT & Finding relevant pages to read in the paper \textbf{(A4)} & if take paper takes too long to consume efficiently \\
 \hline
-ChatGPT & General conversations via web-search AI about prevalent papers to read about how the topics relates to others' studies \textbf{(A4)} & Few times at the end \\
+ChatGPT & General conversations via web-search AI about topic-related relates to others' studies \textbf{(A4)} & Few times at the end \\
 \hline
 \end{tabular}
 
