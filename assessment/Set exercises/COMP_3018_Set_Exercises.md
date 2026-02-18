@@ -37,7 +37,12 @@ header-includes:
 ---
 # Words-To-Use:
 
+- [ ] Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
 - [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
+- [ ] 3018-CW/learning/lectures/5 [ ] - utilise/lecture.md (**Task 1 insight!!**)
+- [ ] 3018-CW/learning/lectures/6 [ ] - utilise/lecture.md (**General cw insight**)
+- [ ] use `whom`
+- [ ] talk about nolvety effect in lecture 6
 - [ ] most-{something} {something}
 - [ ] would-be
 - [ ] despite
@@ -131,15 +136,15 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    robot/.style={rectangle, rounded corners=3pt, draw=black!70, thick, 
+    robot/.style={rectangle, rounded corners=3pt, draw=black!70, thick,
                   minimum width=0.9cm, minimum height=1.4cm, fill=#1!15,
                   font=\scriptsize\sffamily\bfseries},
-    human/.style={circle, draw=black!60, very thick, minimum size=0.8cm, 
+    human/.style={circle, draw=black!60, very thick, minimum size=0.8cm,
                   fill=white, font=\scriptsize\sffamily\bfseries},
     zonelabel/.style={font=\tiny\sffamily, text=#1!80!black},
-    regiontitle/.style={font=\small\sffamily\bfseries, 
+    regiontitle/.style={font=\small\sffamily\bfseries,
                         text=#1!80!black},
-    traitbox/.style={rectangle, rounded corners=2pt, draw=#1!60, 
+    traitbox/.style={rectangle, rounded corners=2pt, draw=#1!60,
                      fill=#1!5, text width=3.8cm, font=\tiny\sffamily,
                      inner sep=4pt, align=left},
     >=Stealth
@@ -154,7 +159,7 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
     \node[zonelabel=eastcol] at (0, 1.7) {Personal ($0.5$--$1.2$m)};
     \node[human] (hE) at (0, 0) {H};
     \node[robot=eastcol] (rE) at (2.1, 0.3) {R};
-    \draw[->, eastcol, thick, dashed] (rE.west) -- +(-0.5, 0) 
+    \draw[->, eastcol, thick, dashed] (rE.west) -- +(-0.5, 0)
         node[midway, above, font=\tiny\sffamily\itshape, text=eastcol!80] {bow};
     \node[traitbox=eastcol] at (0, -3.8) {%
         \textbf{Morphology:} Anthropomorphic, fluid\\
@@ -175,7 +180,7 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
     \node[zonelabel=westcol] at (0, 1.7) {Personal ($0.5$--$1.2$m)};
     \node[human] (hW) at (0, 0) {H};
     \node[robot=westcol] (rW) at (1.3, 0) {R};
-    \draw[<->, westcol, thick] (hW.east) -- (rW.west) 
+    \draw[<->, westcol, thick] (hW.east) -- (rW.west)
         node[midway, above, font=\tiny\sffamily\itshape, text=westcol!80] {handshake};
     \node[traitbox=westcol] at (0, -3.8) {%
         \textbf{Morphology:} Machine-identity markers\\
@@ -197,9 +202,9 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
     \node[human, minimum size=0.7cm] (hA1) at (-0.5, 0.5) {E};
     \node[human, minimum size=0.7cm, font=\tiny\sffamily\bfseries] (hA2) at (0.5, 0.5) {H};
     \node[human, minimum size=0.7cm, font=\tiny\sffamily\bfseries] (hA3) at (0, -0.4) {H};
-    \node[robot=africacol, minimum height=1.1cm, minimum width=0.7cm] 
+    \node[robot=africacol, minimum height=1.1cm, minimum width=0.7cm]
         (rA) at (2.1, -0.1) {R};
-    \draw[->, africacol, thick, dashed] (rA.north west) -- (hA1.east) 
+    \draw[->, africacol, thick, dashed] (rA.north west) -- (hA1.east)
         node[midway, above, font=\tiny\sffamily\itshape, text=africacol!80, yshift=1pt] {elder first};
     \node[traitbox=africacol] at (0, -3.8) {%
         \textbf{Morphology:} Modest stature;
@@ -214,13 +219,13 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
 
 % ===== Legend =====
 \node[font=\tiny\sffamily, text=black!60, align=center] at (6.5, -5.5) {%
-    Proxemic zones adapted from Hall (1966): 
-    Intimate ($<$0.5m) $\vert$ 
-    Personal (0.5--1.2m) $\vert$ 
-    Social (1.2--3.7m) $\vert$ 
+    Proxemic zones adapted from Hall (1966):
+    Intimate ($<$0.5m) $\vert$
+    Personal (0.5--1.2m) $\vert$
+    Social (1.2--3.7m) $\vert$
     Public ($>$3.7m).
     \\
-    \textbf{H} = Human \quad \textbf{E} = Elder \quad \textbf{R} = Robot \quad 
+    \textbf{H} = Human \quad \textbf{E} = Elder \quad \textbf{R} = Robot \quad
     Dashed circles = culturally-calibrated approach boundaries.
 };
 
@@ -229,7 +234,6 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
 The robot's spatial positioning, greeting modality, and morphological design are calibrated to the cultural frameworks identified in Sections 1.1--1.2 (Hall, 1966; Kaplan, 2004; Hofstede, 2001).}
 \label{fig:proxemic-comparison}
 \end{figure}
-
 
 **(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form, the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group — hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone (0.5–1.2m).
 
@@ -382,10 +386,9 @@ The deployment of POMDPs in HRI raises profound ethical concerns. By mathematica
 ## Task (1)'s
 
 - [ ] make alphabetical
-
 - [ ] fetch exact wording fron paper to earn second tick
 
-Hall, E.T. (1966) The Hidden Dimension. Garden City, NY: Doubleday.​​​​​​​​​​​​​​​​ Available at: “TODO”
+Hall, E.T. (1966) The Hidden Dimension. Garden City, NY: Doubleday. Available at: “TODO”
 
 - [ ] [ ] Hofstede, G. (2001) *Culture's Consequences: Comparing Values, Behaviors, Institutions and Organizations Across Nations*. 2nd edn. Thousand Oaks: Sage Publications.
 - [ ] [ ] Kahn, P.H., Freier, N.G., Kanda, T., Ishiguro, H., MacDorman, K.F., Severson, R.L. and Friedman, B. (2008) 'Design patterns for sociality in human-robot interaction', in *Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97-104. Available at: https://dl.acm.org/doi/10.1145/1349822.1349836 (Accessed: 15 February 2026).
@@ -398,9 +401,7 @@ Hall, E.T. (1966) The Hidden Dimension. Garden City, NY: Doubleday.​​​​�
 ## Task (2)'s
 
 - [ ] fetch exact wording fron paper to earn second tick
-
-- [ ] make alphabetical 
-
+- [ ] make alphabetical
 - [X] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-aware decision making for human-robot collaboration: model learning and planning', *ACM Transactions on Human-Robot Interaction*, 9(2), Article 9. Available at: [https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf](https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf) (Accessed: 15 February 2026).
 - [X] [ ] Desai, M., Kaniarasu, P., Medber, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', in *Proceedings of the 8th ACM/IEEE International Conference on Human-Robot Interaction (HRI '13)*. Tokyo: IEEE Press, pp. 251-258. Available at: https://doi.org/10.1109/HRI.2013.6483596 (Accessed: 16 February 2026).
 - [X] [ ] Hancock, P.A., Billings, D.R., Schaefer, K.E., Chen, J.Y.C., de Visser, E.J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: https://doi.org/10.1177/0018720811417254 (Accessed: 16 February 2026).

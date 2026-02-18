@@ -1,0 +1,639 @@
+3018-5
+
+Transcript
+
+Speaker 1:
+
+Not to remember. Did you hear anything about what Martin had about the master of the project?
+
+Speaker 2:
+
+Not yet.
+
+Speaker 1:
+
+No, not yet.
+
+Speaker 2:
+
+It seems from what they were saying in one of our project sessions this week, they're going to try and align like giving us the list with one of the lectures.
+
+Speaker 1:
+
+I'll put some. Some topics of mine as well, so if you are interested.
+
+Speaker 2:
+
+What was that, sir?
+
+Speaker 1:
+
+I put some of my mine as well, so if you are interested.
+
+Speaker 3:
+
+Yeah, maybe focused on robotics topics. We sort of have been focused on robotics or it's.
+
+Speaker 1:
+
+So. No, no, there are. There are two focused on robotics, but the rest are focused on healthcare and AI.
+
+And some of them have stone cooperating teams. So it will not be one person alone searching for it.
+
+It will be a group of people as we're working on something together.
+
+So it aims to have a publication out of it. So it will be good to have. One time a student of undergraduate student was like a courageous guy.
+
+Like he didn't fear to work on a topic, you know, trying to accomplish something.
+
+And he picked the ambitious project and we worked together with a collaborating team and he.
+
+The outcome was published in Eclinical Medicine.
+
+This is a journal e Clinical Medicine. So this was led by undergraduate students and in clinical medicine, this is the highest of any other journal.
+
+This is impact. So we had with this student the press release, university press release and then we come to media and he was with us for like last year like 13 or 14 times on this topic only.
+
+So, so what I wanted to say, don't feel afraid if you find ambitious project.
+
+So it is possible to do it. Okay, so what we need is. Okay, so today a new session where about different important aspect of AI robotics, which is the ethics of AI and robotics.
+
+So we certainly understand the ethics something that appear in the fronts, in the major fronts nowadays considering, you know, how they are.
+
+AI is evolving rapidly and the influence of AI in life and the strengths that AI can do.
+
+So we'd like to understand what are, what are the strengths that we have.
+
+I understand that now we have. So your mobile phone for example, is an AI tool that can be a spying tool, for example, without, you know, your PC can be a spying tool without, you know, the cameras of your PC can be running and operating and recording without, you know, your phone can be transferring your data and your.
+
+The camera of the phone or the mic can be getting data from you without, you know, a lot of problems that appear.
+
+So we understand edits everywhere. So you have in office, you have in finance, transport, in health care, military Applications.
+
+So it's all related to data. So when we use AI now, are we allowed to use AI in the absolute way without any restrictions or governmental or from funding agencies that fund research?
+
+Or are we restricted still or to some extent for some direction that we cannot go restrict?
+
+What do you think? Are we free or not free?
+
+Speaker 2:
+
+It has to be safeguard.
+
+Speaker 1:
+
+And who applies or who regulates this, in your opinion?
+
+So we have here backgrounds, different backgrounds and different countries.
+
+So probably it's opportunity to listen different opinions.
+
+So who should regulate this? I guess the government level.
+
+Speaker 2:
+
+Yeah, the police, the law. Companies should probably regulate themselves as well.
+
+Because obviously the law can't do somewhere.
+
+Speaker 1:
+
+That's interesting. That's interesting. I remember when I wasn't a master's and I was studying by the time in the Sorbonne in France and professor spoke about the same thing and then I told him like I raised my hand, I told him my opinion.
+
+In science or in AI there is nothing called ethics.
+
+You know, if there is money, profit, people will go and produce whichever it is arguable.
+
+And how many times after this in robotics conferences and arguments and panel discussions.
+
+I have been leading discussions about these things several times and we come to stop about these things.
+
+Would really regulations be strong enough to resist or stop any other consideration for technology advance and consequences of this or not?
+
+I was like a little bit enthusiast and I expressed my sharp opinion and he told me not like.
+
+Not exactly like that. And when I grew up and I started to be for example involved in research, I understood my.
+
+It's not like as I was thinking, there is actually restrictions.
+
+So when I do something related to healthcare research now if I'd like to have let's say approvals, there is multi level approvals, university approval for example or NHS approval.
+
+Sometimes I need to wait six months to get approval.
+
+So it is. There are restrictions more than I thought. Robotics probably is always, you know, don't have the same restrictions as in healthcare for example.
+
+But yeah, like there are always restrictions when you approach something.
+
+So yeah, it should be more toward protected. Protected by the government in any way. Because you have like government, like you have companies that create research and by own money, by their own money and they don't follow any criteria maybe so there should be somehow governmental supervision which is.
+
+So it's all about data. Data can be, you know, like used buying and certainly with the use of data we can have some issues at trade from the use of technology.
+
+So there's a problem for regulation. Okay, due to nature of new technologies. What about AI like Algorithm code, smartech, etc, how autonomous intelligent should be the decision.
+
+So we understand that if we are dealing with all this information, all this information can be not protected with our own malicious purposes like hacking or through, you know, like any other consideration that can make use of information that sensors can get about us or about the environment.
+
+But also one of the controversial issues, how autonomous and intelligent should be with the machines.
+
+So now we are speaking about robotics, robots. How autonomous or intelligent visa machine. Would you let you. Would you let your children. Who is supporting the idea, for example nanny robot.
+
+Would you let your child, for example, with a nanny robot, if you are busy so would you feel okay or would you still have considerations who is okay and who is not okay?
+
+Okay, okay. Supposed to be a robot that may able to make basic behaviors and basic interaction.
+
+So if it's supposed to be able to do this, the basic interaction, understand the child, probably make some kind of games or like play a little bit, etc.
+
+So would you feel fine under your supervision, it's okay.
+
+But if it's not under your supervision, for example.
+
+Speaker 3:
+
+Yeah, I was about to say to some extent under supervision.
+
+Speaker 2:
+
+Yes.
+
+Speaker 1:
+
+I don't think I would like a robot for like alone. Yeah. Who is a courageous and can take this decision to leave.
+
+Speaker 3:
+
+I think depends on the capability of what the like.
+
+If I'm fully aware of what the robot is capable of doing and what it can't do, for example, I know that it cannot harm the child, then I'm completely comfortable with.
+
+With leaving the robot completely on its. I mean the child and the robot on their own. For example, if just it's robot that you say that it's just interacting and it's not going to, let's say to make any drastic movements that can harm the child, then I would be happy to let the child interact with the robot and experiment and play on their own with those op.
+
+Speaker 2:
+
+I was going to say something along the same line. Like as long as it has gone through all the safeguards and like the security to make sure nothing happens to.
+
+And also it'd be if there was a way you could monitor the child through the night.
+
+If it is.
+
+Speaker 1:
+
+If you can monitor, but if you cannot monitor. Well, because we are speaking about autonomous versus semi autonomy versus no autonomy.
+
+So one opinion. No.
+
+Speaker 4:
+
+Maybe it's because we're not in that advanced like stage yet.
+
+So we're still thinking from like a futuristic point of view.
+
+But at the like just the idea of it is like I understand that there's obviously like safety regulations, whatever and it can be great, but there's always a chance that it will malfunction.
+
+There's always, you know, I just feel like it's too risky.
+
+It also depends on how young a child is. I mean, if it was like a robot and it's like your 14 year old teenager, that's different because they can still handle themselves.
+
+But if we're comparing it to like a one year old or a two year old, I could never like never without supervision again.
+
+Speaker 1:
+
+So now we have cultural issues here in Japan. They are fine to leave people more robots or probably less sensitive to risks that might appear from robots to some extent than Wisto.
+
+But one of the things that you don't know is like, okay, the robot can do something, but technology can be hacked.
+
+So what the robot is watching or saying okay can be at any moment influenced by external, you know, external ways or algorithms that can change this.
+
+So you never know. You never know the same thing. For example, when we speak about, let's say away from social robots, from surgery.
+
+So surgery, there are some robot surgeons who can make operations and their hand will not shake and make it precisely to which extent you'll feel comfortable to be operated by a robot.
+
+Very famous argument about this is like driving car.
+
+Let's speak about this example, autonomous car.
+
+I mean, so there is a person, autonomous car, and it was running normally and in the street, suddenly there is one guy who passed the street wrong way.
+
+So now the car has three options. So the guy was passing the street and there were all other guys waiting in the correct place to cross the street.
+
+So now the car operated by AI will have the option that it crashes a person that is passing the street wrongly or try to avoid the person and they crash others who are waiting on the side of the street to cross the street and they are in the correct place or to crash in the wall or anywhere and kill the driver, not to hurt people.
+
+So this is, for example, famous AI argument. When you are in such a situation, what should you do, what option should you do?
+
+And what if, for example, the situation become harder and instead of having one person crossing wrongly and one person waiting in the safe area, we have multiple persons crossing wrongly or multiple persons waiting in the safe area.
+
+So the risk of the AI algorithm, what it calculates it, it multiplies by the number of people who might be hurted.
+
+But then, okay, this is, would it say, okay, I crashed the person, I make actually with the person who passed, who passed the street wrongly because it is his mistake.
+
+Or, and if for Example, for example, try to avoid and they might crush the person on the innocent person on the side of the street.
+
+Okay. And let's say if there are three or four passing the street wrongly and one innocent guy waiting on the side of the street.
+
+Should I say say I will crash a person innocent on the side of the street?
+
+Because there are three persons on a state of affecting one, instead of affecting three, I affect for example, one person only.
+
+You know, So a lot of considerations like this. Most importantly, if AI took wrong decision, I would be responsible for this.
+
+You know, like sometimes you find a situation even between people might find a situation that you are unable to detect responsibility on people.
+
+But now even is AI who would be responsible for the act done by AI who should be criminalized if there is an A crime?
+
+So a lot of issues appearing. And before having such decisions, there are always yeah, before for example, having autonomous car, there should be kind of, you know, safeguards taken and for example, measures about how safe is the road and how the road is prepared for such kind of cars.
+
+A lot of issues that should be validated first before we say that this car can be used.
+
+But even if the car can be used, there's always risk of something to happen.
+
+So that's actually the ethics here is about to put the framework that can consider for all this.
+
+But also the privacy, security and surveillance.
+
+You know, AI records what you. What you do and transfers data to whom? To companies third party. So if your data should your data be transferred to third party some of your data, for example, you might be able, for example, when you're using Facebook, you might find Facebook opened a window and without reading just because you'd like to log in, you say agree.
+
+So in this window, okay, very long going to have the logo might be speaking about third party and transferring data to whichever third party we don't verify.
+
+Because even if you don't say if you don't. If. If you don't agree, it will not open the application for you.
+
+So, you know, a lot of us say agree directly how many times we do this and a lot.
+
+So there is actually concerns about how data is used.
+
+And certainly we have kind of you might find for example technology like Facebook or some kind of recommendation systems.
+
+You might find find you are working in Xi City and the technology detected that you are in the Ex city and you find op.
+
+You find recommendation for restaurants, for example, near your area.
+
+So how the technology observes that you are in this area, they are observing or for example, they learn from your preference and they Give you some more customized products that can fit you.
+
+So they learned from this. And when we hear about European Union is making actions against Facebook, for example, is because they violated some kind of like, ethical frameworks regarding the use of data and many things like that.
+
+So. And they probably give it to third parties and so on.
+
+So what if the robots get hacked, you know, So a lot of things that can be considered here.
+
+Okay, we understand that robots can be replacement, okay.
+
+And it can be used for alternative loss of agency.
+
+Okay, but if we understand, for example, if we have a robot like this robot, what is the degree of altern?
+
+Okay, you know, so how should I lead the robot totally have decision about Xing or should I become the final person who give?
+
+Okay, and this is almost when we say autonomous machines.
+
+Autonomous machines take action completely or take action, you know, but after, like come to me first, for example, Peppa, okay, autonomous take action completely.
+
+Because I know like paper will not make, you know, huge harm maybe.
+
+But if I have cooker hand, for example, that can one hit from the coca hand can destroy the wall, for example, if I have operation robot making surgery and I have something like that, for example.
+
+So probably I would prefer to have some kind of control to not avoid having the machine doing some harms.
+
+So also the definition of what should be autonomous, what should not be autonomous.
+
+This is part of the ethics framework. So when we speak about the coming back to the example of driving, okay, is AI or robot as moral agents is autonomous car.
+
+If the an accident happened by AI, should AI be arrested or would be, you know, the technology, the companies that made the technology, or, you know, we don't have prisons for algorithms, for example.
+
+So what would be happening in this case? You know, so there are always this kind of legal questions that are arriving for the use of technology.
+
+So for the moral and the legal responsibility, for example, that like autonomous car drives into group of children.
+
+AI causes crashes in financial market. Imagine this happens. Millions billions lost machine harm workers in the factory car.
+
+A K robot gives their own mitigation. Can a robot kill civilians? You know what? However, you know, like, yeah, like a child gets too attached to an educational robot.
+
+This also can happen and can have impact that it's attached to an educational robot and then is not able to probably it's like using mobile phone too much.
+
+Children who use, for example, iPad or phone to watch things too much.
+
+So this is something similar. So a lot of issues that need to be considered here.
+
+So the examples autonomous car drives into group of children.
+
+The action is classification Made by Society of automotive engineers for 611 of self driving.
+
+So level number zero is monitoring and warning. Level number one, adaptive cruise control. Automated parking. Level number three, automated driving. But the driver must be alert and be able to take over any time.
+
+Number five, no human prevention is needed. Okay. So they set several levels that can tell the driver, okay, when you should take control or when you should not take control.
+
+This is an example for a car that automate operated by drivers.
+
+But any moment can be automated by itself by AI. But there are other machines that are operated by themselves and they don't need even human existence.
+
+So this situation will be more difficult. The future of work, you know, as societal implications of AI.
+
+I listen like you probably to Elon Musk speaking like every single period based by AI in the coming few years, even lawyers, even all accountants, social works, all this will be replaced by AI and automated stuff like that.
+
+We hear all this. So it's probably good for us that we, we are in the AI side.
+
+So no one will risk our jobs. But what about replacement? Okay, working conditions and experience of work.
+
+So what are your expectations about it? Probably it's good to hear from you. Do you agree with Elon Musk or you don't agree with Elon Musk?
+
+Do you think like people would be unemployed? A lot of people be unemployed because of AI. Because they are already unemployed.
+
+Speaker 2:
+
+I was going to say it's not already happening. Hasn't Amazon done a bunch of like layouts because of AI?
+
+Speaker 1:
+
+Okay, so then AI is killer of jobs.
+
+Speaker 2:
+
+Is it your view change the landscape? I think change the landscape won't necessarily.
+
+Well, it'll get rid of jobs, but it'll create jobs.
+
+But where the balance is, I guess.
+
+Speaker 1:
+
+We don't know at the moment. Yeah, I think it'll just push like everyone up in the hierarchy and the people at the bottom will get replaced by AI.
+
+This is all correct views. When I was moving Pepa one time, several times in the campus, you know, like normal people who are working state, people who are working on University cars, etc.
+
+They're always, you know, you know, their comment always like, ah, this machine is gonna take my job.
+
+This is, you know, typical view that it is a job killer.
+
+It's true, like change it. It's still like job killer, but it's redefined the job market.
+
+Okay, so it created a lot of jobs. When in one of the reports coming from European Union years ago when they were considering this point, they find that it killed many jobs, but it created too many other Jobs because like AI needs maintenance, AI machines need maintenance, needs, coding needs, you know, a lot of things related to the work itself.
+
+So what are the skills that do you have? So standard skills now or standard definition of jobs was evolving is a little bit disappearing, disappearing, disappearing, disappearing.
+
+AI always existed probably, you know, in the 20 years started the curve to increase, increase, increase.
+
+But at this moment really you find intensity of focus of AI, you know, in universities, in the government, in, in, in any, in everything, you know.
+
+So certainly we just need to be on top of what's happening.
+
+And also this doesn't mean that our study or our relationship with AI ends or depend only on what we are studying here.
+
+Because AI after five years would be largely different from the AI of today.
+
+So we need always to adapt ourselves, even we are studying AI or we will find ourselves, you know, similar to what's called the good old fashioned artificial intelligence.
+
+So we'll find like history of artificial intelligence.
+
+And if we need to go from one job to one job, we find that, oh, we didn't update our, you know, update our knowledge about things.
+
+So we need always to consider our knowledge as well, to be able to be on top of things, read and update.
+
+So that's true that it can create some effects. They are like I, I recall colleagues in the Faculty of Arts who work in illustrations.
+
+They were so worried and they came to me one time to speak about this point.
+
+Like I have illustration. I ask one guy, can you make illustration for me? And he tells me, or she tells me, come after several days.
+
+But with AI tools you can generate illustration 5 minutes, 1 minute, 2 minutes, you know, so a lot of job markets will be affected certainly.
+
+So this is one concern. So that's why there is, you know, the European Union.
+
+There are a lot of research papers are trying to study this future of employment.
+
+How susceptible are jobs to computerization? You know, and they try also European Union trial or other, you know, formal organizations try to create documents and make warnings about what is going on.
+
+So this is one thing. One of the societal implications of AI also is the biased algorithms.
+
+So bias algorithms are problem in machine learning.
+
+This is known like AI bias. So find AI trains on data set that may contain bias.
+
+For example, like favors young white men. And one of the issues that already happened in one of the, of one of the systems that it was making, you know, without giving story about what happened, but it was like in kind of racist way.
+
+It's not racist way, because it wanted to be racist, but it was, for example, you gave a data Set that was containing about recognizing people faces.
+
+So it was having unintentionally majority of white people, for example white men with respect to white persons.
+
+So this created bias in judgment. So that's why when you train and when you deal with data, when you try to use machine learning, we always speak about bias.
+
+Okay? The same thing I was telling to my PhD student, for example, don't try to give, for example, try to make some balance between data.
+
+If you give data, for example for one category, you know, 1 million data point and the other category 100, certainly there will be some bias.
+
+Okay? So try to balance your data when you are preparing.
+
+So it's a problem to fight against biased algorithms as target from the very beginning of the pipeline from the data preparation of data.
+
+So this is one thing that might happen problem of algorithms that all society imposes.
+
+How do we deal with this? So this is something that can be considered discriminative, for example, that we should be considering.
+
+So is bias, for example affordable? This exists, but we can try to take, you know, measures that we can measure, as I said, for example, to consider the data construction of data that we are dealing with and try to avoid it and try to analyze bias, for example to mitigate the effect of bias if happened.
+
+So bias itself, you know, bias. This is something called bias. And the fairness API, you probably heard about it.
+
+Fairness in AI is affected by bias. So they are all related to each other. So to have fairness in judgment in anything, we have to avoid bias.
+
+Okay, so this is itself is some research area with people working on it.
+
+Okay? Non transparent algorithms, non transparent algorithms.
+
+And we have a lot of them problems understand new approaches to AI decision, AI algorithm black box.
+
+So like I'm affected by a decision, but don't know how it came to its decision.
+
+You have been subject to using probably machine deep learning to some extent.
+
+And you understand that one of major issues is that it's a black box.
+
+So that's why there is something called explainable AI.
+
+Explainable AI. It's like a trying to have an interpretation for why the algorithms came to this decision or how it came to this decision.
+
+So that when we take the approach, let's say in healthcare example, I'm saying I'm providing X technology or Y technology.
+
+A clinician will not understand this. So whichever away from the T like the black boxes that it can be black box for technical people.
+
+It can be. If I speak about somebody who's not technical, everything technical is a black box itself.
+
+So the person clinician saying, oh, Your algorithms is able to help in this kind of for example diagnostic thing, diagnostic pattern by X precision or Y precision.
+
+Why? So should the clinician trust what you are giving us judgment?
+
+Should the clinician try to have search for? Because if the person trusts what we are giving and if it's wrong, it's responsibility on the clinician or might be wasting resources.
+
+So in this case it's important to try to have some kind of understanding for why or how the decision came like that, or why where.
+
+Where the decision come from. So this is actually one of the things and if we understand that AI is intervening in everything, so the problem of non transparent algorithms is becoming, having societal implication.
+
+That's great. Okay, so these are group of points. So the AI and ethics regulations are, are needed.
+
+Legal frameworks are needed. We understand that we need to not leave everything.
+
+AI is like, is like something if you don't control, will get out of control.
+
+You know, so people think about like Hollywood style, this robot that can refuse human to obey humans and they become, you know, like stronger, stronger machines that you know, make whichever thing with humans.
+
+You know, all things like this. You know a lot of thoughts that if we don't put regulations, you never know what will happen.
+
+But AI can then certainly do whatever it wants. And this is certainly something that we need to make regulation because AI is able to learn.
+
+AI is able to, you know, evolve. One time they wanted to give algorithms to learn from what is in the social media.
+
+So just like for example, like GPT, like large language model, but large language model we give a dedicated amount of, kind of specific amount of knowledge.
+
+But the machine, when they let the algorithm learn from, without constraints from the social media.
+
+One of the things that you was used basically without constraints is insults.
+
+So the AI algorithm is giving insults, insults because people in social media saying something about insults in a way or another more frequently.
+
+So that become kind of become like it's probably okay that people are using it, learning from people.
+
+So we have to have kind of regulation to not leave things totally uncontrolled.
+
+So ethics is a branch of philosophy that deals with the moral principles and the values that guide human knowledge.
+
+So ethics is concerned with what's right and what's wrong, good and bad and what ought to be done.
+
+So in the context of AI and robotics, ethics refer to the principles and values that should guide development, deployment and use of these technologies.
+
+This is not something that's totally free to anyone.
+
+There should be restrictions to which extent this restriction will be applied and not be affected by Political decision.
+
+This is something certainly to. So there are different kind of ethics, meta ethics.
+
+So the meta ethics is like higher umbrella of ethics.
+
+Studying where our ethics come from. Are they derived from human nature, society, religion, cultural norms or something universal and objective.
+
+The normative ethics is generating moral standards for right versus wrong, okay.
+
+The consequences of our behaviors on others, for example.
+
+And applied ethics examining specific controversial issues.
+
+Nuclear war, animal rights, etc. Animal rights. One of the funding like in any funding that we apply to to get money for research, you find always a there for example grant will be used to.
+
+Or this research will be conducted in any human samples or anything related to tissues, human tissues or animal tissues or you know, involving animals.
+
+If yes, if we take yes, certainly there will be very specific procedures to be done to avoid or to make sure that it will be conducted in the most suitable way.
+
+So some examples of scientific research in which ethics play large roles like the stem cell research, as I was saying, cloning, genetically modified food, nuclear technology, animal rights, medical trials, disease research.
+
+These are all ethics are very strict. So that's why I was telling you as well like in research, even to healthcare, general healthcare, if we need higher level of approval on the NHS level, we need six months and interviews and the committee panel not easy things.
+
+So new technologies have unintended negative side effects.
+
+So science and engineer must think about how they should act on the job.
+
+What projects should or should not be done and how they should be handled.
+
+So we have for the ethics different approaches considering the ethics and AI.
+
+The bottom up or proactive. The bottom up approach is like we start from experience practices and then we use that to form or inform the ethical legal theory and the principles.
+
+And there is another approach is like try to be proactive.
+
+So which means like in the first approach we have experience first and use experience to inform regulations.
+
+Okay, but this actually something that if we like try to think about having the experience first.
+
+So this might lead to things like Volkswagen the scandal explained PPC NEWS VOLKSWAGEN Executive pleads GUILTY in ADMISSION SCANDAL Thousands of drivers suffer a lot of power following VW emission fix so it can lead to situation like that.
+
+So the proactive activity side regulations are needed.
+
+But it's always too late. So you don't need to let the experience happen first.
+
+So we need to put in advance some proactive expectations for what could be the problems.
+
+And try to put in advance so we don't leave anything blank.
+
+We start anything, we leave anything for user experience.
+
+And when a problem happen, we will think about this is not the Approach to deal with it.
+
+The approach we did is like to think about proactively.
+
+So in science, we try to put in advance the regulations and some certifications and put some standards of ieee, for example, on other organizations in advance and then update them after this if something happens, not to leave everything to work without any framework.
+
+So there are certainly non governmental actors that give regulation recommendations for the governmental organizations.
+
+So they say the machine should behave in this or that way.
+
+The machine should have permission from this. And that way they try to put a framework for all the considerations that should be, that should be accounted for in advance, not to wait until the moment where the problem happens.
+
+Okay. And this is a proactive approach. So policy needed, everyone is affected, and we need vision and the policy for ethics because things can be evolving, changing, and the more AI is more powerful, the more the considerations will be more serious.
+
+All new considerations or new issues might appear.
+
+So do you have any questions about this part? Okay, we can move to second part. Would you like to take a short break? Okay. Until 10 minutes. Okay.
+
+Speaker 3:
+
+I have a question of what we talked about. For example, the same this example you gave. There's some people on the road, one person for three people who are on the wrong side.
+
+And one person is like on the right rightful position.
+
+So some of the things in my mind, I'm thinking of this for human, there's a lot of feeling and emotion on the decision that we make.
+
+Speaker 1:
+
+A lot of what?
+
+Speaker 3:
+
+Like we have feelings and we also have like a lot of emotion, like as human being.
+
+So meaning that for decision I'll make, I'll probably consider like, even though I might go back to that situation, I might say, instead of running down the three people, let me say the three people, let's say, run downtown, Paso.
+
+So as a human being, maybe I'll do that. But as a robot, I think since it's rule based, you might think that I'm on the right track and I'll follow these rules so there's no feelings involved.
+
+Speaker 1:
+
+Okay. And then what if five persons are passing in the wrong way and one person is waiting?
+
+So I should kill five persons or. Or I should kill one person even it's innocent. A lot of things that might be confusing because AI also is responsible for not hurting people or reducing human loss in this way.
+
+So a lot of confusion that might happen might affect the certainty of the decision made.
+
+So that's actually things that if we are humans, we might have, you know, like this kind of confusion.
+
+What about the machines? If you exist, you know, So I.
+
+Speaker 2:
+
+Suppose another point to mention is if the AI made the decision to crash the car, you'd think who would want to buy an AI or buy something that would choose to kill you over?
+
+Speaker 3:
+
+That's what I think. People are more crucible. People are more crucial call and less forgiving when, when the AI makes a mistake.
+
+Speaker 1:
+
+Yeah.
+
+Speaker 3:
+
+So, for example, if a Tesla does like a simple error, people, a lot of people inject like, even, even if human driver would have done the same mistake.
+
+Speaker 2:
+
+Yeah.
+
+Speaker 3:
+
+So, yeah, maybe there's a lot of, like, a lot of considerations, but I think I use a sample.
+
+So I'm thinking, let's say.
+
+Speaker 1:
+
+The, for.
+
+Speaker 3:
+
+The doorway and I'm late. So if it's a human being, I can explain my situation.
+
+Speaker 1:
+
+Into. Okay, so let's proceed, Which is about the evaluation approaches and.
+
+Made with Genio Notes

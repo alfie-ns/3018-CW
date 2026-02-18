@@ -1,0 +1,689 @@
+3018-6
+
+Transcript
+
+Speaker 1:
+
+About hri because this is kind of critical part to consider.
+
+If we made an. HRI paper, when we are reading an HRI paper, how can we understand the evaluation done?
+
+What are the metrics that can be used? If you think like we made a study, try related how such kind of studies can be evaluated.
+
+If you are making any choice, tell me an example of HRI study that might come to your idea or your mind.
+
+From what we have learned up to now, any basic example, Any basic example inspired by workshop instructions?
+
+By anything. Any basic example, anything is correct. What about.
+
+Speaker 2:
+
+What about the distancing between the robot and the person?
+
+Speaker 1:
+
+What about understanding emotion? So if you think like let's say example about understanding emotion.
+
+If I'd like to make a study about how do you think I can.
+
+If I'm telling you, take a robot and let's. Let's think about making a study about understanding emotion.
+
+How do you think robot understanding emotion? So how do you think we should conduct this? Speak about really lay summary or lay language like, you know, like doesn't need to be scientific.
+
+It's a very basic. There is nothing wrong. It's also open to anyone question what we'll do.
+
+Speaker 2:
+
+Test subject, maybe do the experiment, say with a group of test subjects and then have the right robot, for example, try to one robot to be more expressive in terms of trying to make the connection with the human.
+
+In terms of connection with the human.
+
+Speaker 1:
+
+So able to recognize, right? Yeah.
+
+Speaker 2:
+
+And then maybe the other ones to be, let's say distant from the person.
+
+Speaker 1:
+
+No, we speak about. Speak about emotion, not distance now.
+
+Speaker 2:
+
+No, I mean what I mean distant like not to express any.
+
+Speaker 1:
+
+Okay, not able to recognize. Very easy, very easy to train a robot some emotions and put the robot in front of human.
+
+You make emotion and see the robot will recognize it or not.
+
+Very easy. Now how you will evaluate it? Somebody else, how you will evaluate it? Undergrad group if like now I give you this task, how you think would be evaluating it?
+
+Anything that there is no wrong answer.
+
+Speaker 3:
+
+Would it not be to just compare what the emotion being displayed by the person is to what the robot guesses it to be?
+
+Speaker 1:
+
+Very good. Now if I'm speaking about that. Very good. So now you had kind of more objective measures. But let's say we had a situation, let's say a different experiment when we are trying to see, to say to discover how robot is accepted between communities.
+
+So what do you think we will conduct? How do you think we will conduct this? With the same principle, same logic between communities.
+
+Like for example Western and eastern. We bring a group of eastern, group of western and we make the robot do some task and then try to see how it's accepted.
+
+How can we measure this? Reader measure? This is objective measure. But is it possible to make subjective.
+
+Speaker 3:
+
+Measure how involved the robot is in the task.
+
+Speaker 1:
+
+But this is also from robot side. But I mean subjective side. Subjectively, yes, to do a questionnaire or something.
+
+So this is we ask the human simply to try to see how they accept the robot.
+
+And in order to do this we go through questionnaires.
+
+So there is two ways to evaluate your work in hri Subjectively or objectively.
+
+Objectively, as you said, from how many times, for example, the robot recognizes the emotion.
+
+How many times I try to measure from the robot. If you are using machine learning, try to evolve some kind of measures from the machine learning side to see how did the robot respond to this?
+
+All subjectively having the human's opinion. So we are focusing on this part. So we have question collected data, test hypothesis and conclusion very easily.
+
+This is a problem and in order to search the pro have like kind of the problem that we will search.
+
+We need to make literature review. Can be like if it's available to make literature review, to know what is the problem that we need to solve or to have open questions left unanswered by previous researchers.
+
+Okay, so you might find a question, previous researchers considered it open question and still unsolved.
+
+And you need to solve it, for example. So that gives us some idea to create an experiment.
+
+So the research problem is like we define research problem.
+
+This help us to formulate research hypothesis which is tested against the null hypothesis.
+
+What is the null hypothesis? So the research hypothesis is a statement created by researchers when they speculate about an outcome of research and experiment.
+
+So this starts by speculations and the hypothesis is like the null hypothesis like statement which the researcher tries to disprove or reject.
+
+So we have hypothesis and we have the null hypothesis.
+
+Something we need to prove, something we need to reject.
+
+Okay, so in that paper you chosen that was made 13 years ago, thank you for choosing this paper.
+
+He I think it was speaking about personality matching or something like this.
+
+So a very old paper of mine 13 years ago about personality matching.
+
+So this was idea is like what what is the hypothesis is?
+
+The hypothesis says that there is something called personality matching, similarity and complementarity matching.
+
+So for example, introverts try to for example whether the complementarity attract get attracted to extroverts or introverts get attracted to introverts, similarity, attraction There is some theory in the psychology about that.
+
+So the point how to which extent this is valid in human robot interaction.
+
+If the human is introvert and the robot is introvert, how this kind of similarity attraction can help.
+
+And if the human is extrovert and robot is extrovert, you know how this can be helpful as well.
+
+So, so do we accept like the high. The hypothesis is the similarity attraction, the null hypothesis that it is not valid and complementarity attraction is a null hypothesis here the hypothesis is that similarity attraction, I'm speaking from the similarity attraction side that it's not valid and the complementarity attraction is the valid one.
+
+Okay, so this is a null hypothesis. So I try what to do, I decide what to do. Like create groups where the robot will be introverted, where the robot will be extroverted.
+
+And I try to see which hypothesis is valid, the similarity or the complementarity.
+
+Okay, so the theory in psychology say for example for friendship, for example, the similarity is useful.
+
+However, for, for example marital relationship, it is complementarity more, you know, more proven or something like that.
+
+So how this is in terms of relation between human robot interaction can be valid.
+
+So this was hypothesis that I hypothesized the similarity attraction is valid for human robot interaction.
+
+And the null hypothesis was a complementary the opposite that I'm trying to validate against origins.
+
+So, data collection. We start collecting data, okay? And we make them testable data. So make your hypothesis testable. Testable. You know the same thing in machine learning, we say make your data testable.
+
+How can we make our data real world data testable, Transform them to or learnable, let's say learnable with a more context of machine learning.
+
+It's like we put them in vectorized form, remember?
+
+So don't take data from the real world like this. As I always say, machine learning and try to put it.
+
+Consider that you will put it in machine learning directly try to vectorize them.
+
+Unless you are using deep learning where you can algorithms can learn from robot data directly.
+
+Design your study, conduct experiment or observation.
+
+Coming back to the same example I was just giving, now we design the study.
+
+So I say I will use one group and another group. Introvert and extrovert and design the design. I say designers, how many persons will be involved?
+
+How many persons will be involved in the other group?
+
+Okay? And I try to conduct what will be the behavior, what will be the robotics processing, okay, what will be the setup, what will be the tools used?
+
+Etc, etc, etc. And then I take observations and make validation for the Study.
+
+So testing hypothesis, we organize the data, we analyze the results, and we check if the results support your hypothesis or not.
+
+Okay? And then we draw conclusion, look for other possible explanations.
+
+So in my case, if the similarity attraction was not verifiable or not approved, I would say then I conclude that based on our setting, we could not verify or we cannot approve the similarity attraction principle.
+
+Human robot interaction. And then we argue that complementary attraction is, for example, more defendable or more arguable for human robot relationship, for example, social human robot relationship, something like that.
+
+So I try to draw my conclusion and especially if I try to base this on findings from the literature.
+
+And this will be your task. When you argue, you are reviewer. Remember, when you critique means you are a reviewer, okay?
+
+So do not argue. A reviewer. Like, you can certainly express your point of view that the research was clear or not clear.
+
+In this point, you can express your point of view, but when you make judgment, you should support it from the literature.
+
+Okay? Support it from the literature. Not to say like, you know, it is defendable point of view.
+
+Okay. It's not like something like general point of view or my personal opinion.
+
+It is scientific and scientific. You have to have kind of evidence from the literature and suggestion for future great research.
+
+So the evaluation metric that we can have, many possible metrics are existing here, like percentage of the task successfully completed.
+
+This is exactly similar to how many times the robot recognized the emotion.
+
+Accuracy. If you have accuracy, how many emotions were recognized correctly.
+
+Coming to the example of recognizing emotions, time required for completion, number of errors, deviation from blind routes in whichever case, you know, operator response time.
+
+Many kind of metrics that can be used to. Can be used to evaluate a situation. Okay, good. So when we come to the subjective measures, the subjective measures as Lorcan.
+
+Lorcan, right. Yeah. So we said Likert scale. Likert scale. Likert is a scale that I think you're always friendly with.
+
+You use it with a five or seven point Likert scale.
+
+Like strongly agree, disagree, undecided or neutral agree, strongly agree.
+
+Can you try to change this? If I ask one of you Change this to 7 point Likert scale.
+
+What you want the same thing? I will ask you to Change it to 7 point Likert scale.
+
+How it will be slightly agree, slightly agree. That's why, that's why seven point Likert scale is not really.
+
+It's not really, you know, A little bit not really.
+
+I would say not really recommended, let's say directly, because what is.
+
+When I say, okay, agree, slightly agree, strongly agree, you know, you Make a lot of intermediate steps.
+
+What does it mean slightly agree with respect. To agree with respect to strongly agree. You add another stop, another station in between.
+
+You know, you know like this is for example agrees to which level agree.
+
+I understand Agree and strongly agree. With agree slightly agree or like slightly agree a little bit or like slightly agree, medium agree, stronger agree.
+
+It's like a little bit make it a little bit difficult to draw conclusion.
+
+So when we draw conclusion, I can say agree. For example, 30% agreed and 10% strongly agreed.
+
+Okay, but if you say 10% agreed and 20% slightly agreed, what is something that we can learn from here?
+
+So we try to make draw conclusions that can help in informing others.
+
+Unfortunately, this was for example one of one despite like people are using it.
+
+Probably in new papers you'll find a lot of seven point liker scales.
+
+Probably I used it myself, I don't remember. Okay, so people are using it normally. But if you tell me after experience of years, I tell you five point Likert score skills.
+
+There is for other subjective measures. There are certainly for other cases some other subjective measures like task workload.
+
+Like for example, there is NASA TLX is a subjective workload assessment tool that allows developers to perform subjective workload assessment on operators.
+
+By the way, that these are. It's not like something prepared randomly. These are psychologists and psychiatrists preparing this and a specialist in particular area.
+
+So it's not random like this. So to have something like I say for task like at scale is for generic for anything but for workload or for trust or for anxiety.
+
+You know, these are very specific ones so that when we use them, okay, we can say that it is trustable and credible questions.
+
+Otherwise it will be probably biased questions.
+
+And this is one of the things that people as well do not pay attention to when you prepare Likert skill despite it is very generic, but it can be a little bit biased or trying to push the person to certain answer.
+
+Like for example, how was a robot? Do you think that the robot was new? Was for example, if I ask you was the robot behavior was neutral, smooth and friendly.
+
+Or for example I can try like it's like this seems to be some people consider that I'm trying to push you to some direction that consider this point, this point, this point rather than asking a very neutral way.
+
+Okay, the question without pushing you in some directive way.
+
+So who or the way that you prepare question for Likert scale can be very tricky.
+
+Can be very tricky and you can be making without your field biased questions.
+
+Biased questions that can generate Questionnaire but because the questions are biased, the answers will be biased.
+
+And then when you say I made this study with for example questions that I designed myself so reviewers will say who reviewed it yourself, you prepared it yourself or did you use some for example more credible one.
+
+It's totally different. If you say I used NASA TLX or nars. It's certainly we understand automatically that those prepared by a committee of people.
+
+So we will not really, you know, hesitate or think about that.
+
+This is for example biased or anything. But so you know, like you have to have kind of clear case.
+
+You know, as I said, trust, trust, task workload, anxiety, etc.
+
+Something clearly used for task workload. We use NASA TLX so it's very specific. When we have an example, we have the negative attitudes toward Robotic scale.
+
+NARS has been put forward as a tool for measuring people anxiety towards robot and also the trust there is work Alliance Inventory is a questionnaire commonly used.
+
+So we have very specialized ones. Okay, good. When we try to perform experimental research. Coming back to the example of personality, we spoke about curating groups determine the sampling route study.
+
+So there is one control group and other groups are used to test experimental conditions.
+
+So in healthcare we say this group for non autism case and autism case or ADHD and non ADHD or people with tuberculosis and non tuberculosis.
+
+For example, people who are introvert and people who are not introvert.
+
+You know, like you have to have something to compare to determine experimental design that I was speaking about.
+
+And conduct pilot study. Conduct a pilot study. Just small scale test of the study to ensure that you are getting the data you need just to make sure that your system work well and then conduct the experiments.
+
+And this is actually very one of the like always very difficult.
+
+Very difficult like bringing people. It requires effort to conduct research like that.
+
+Especially it requires you to prepare setup to prepare robot, to prepare environment, prepare cameras, prepare everything and bring people.
+
+How many persons have you to to bring. How can you bring here in your. In your third year dissertation if you find me as a second marker.
+
+And they will ask you how many person your subjective subjective analysis where you are evaluating your product with.
+
+With. With human persons. So some answers. I will ask you about this question in advance. So you have to know if you find me. I will ask you this question. So some of you will tell me I made it with four persons.
+
+I made it with five persons or two persons or none or my friend one person.
+
+So it is always important to know what is the amount acceptable amount of people to do experiments with okay, because if we have like one or two or three, the typical question is this credible?
+
+So that any kind of findings you are or like you get at the end will be something generalizable to others.
+
+Okay. Because like if I made my test was one or two or three.
+
+This is something, you know, can touch credibility even in the papers that you have.
+
+You are studying in that paper. If I remember, I used 20, 22 persons, but 20, 22 persons for experiments that take, I don't know, a very long time.
+
+Okay. And quite difficult to recruit people in general.
+
+So imagine you need to make 30, 40, 60. You know, we say always that we are evaluating with a sample of people, considering the complexity of the setting or setup, like equivalent to 20 or 30 or 40.
+
+Certainly we cannot say it's different. We cannot say we tested with 1,000. There is no one test, so it was 1,000. And this is always a problem in human normal interaction.
+
+Like whichever findings you are trying to find to trying to get at the end or you get at the end is still measured for a sample of people.
+
+On a sample of people. Is it generalizable or not generalizable? The findings present only this sample or not. So this is complicated. Okay. So always the participation is important, you know, but to tell you how important it is, like, I remember I was like, I was by the time sleeping in the lab and because I wanted to have like a group of persons interacting with the robot, which was hard.
+
+So, you know, I was even into making a kind of interaction.
+
+Some of the people who interacted in that study was the building guardians.
+
+It was difficult. So like building gardens, you guys, I will come to test with you after midnight, 2am or 3am or something like this.
+
+So this was some of the experiments and was focusing on more joinable people to make the test because like it needs preparation, it needs telling the people what the robot is about.
+
+And not everyone is able to do this. And I will show you when we try to do the groups of people, how it can be very difficult because we can use, let's say introvert, let's say I have robot condition.
+
+Introvert and extrovert. And you need people to judge both. How many groups would you say would you use? Would you use the same group of people and pass all conditions, or would you?
+
+So let's say you get 30%, you put 30 person for the introvert and they evaluate it.
+
+And they go to the extrovert and evaluate it. Or we use here 30 and here 30. If you use the setup, for example, it becomes 60 persons.
+
+Okay. And that's actually too much for something like that.
+
+It is totally different if you are making kind of experiment online, let's say and you can just share the link, you know, online.
+
+And sometimes I did this and. And they got 100 participation. Now some kind of evaluation online. 100, 140, something like this. So totally difficult when you have physical robots.
+
+So subjective way is hard. Subjective way is hard. So we have the option is like we have like baseline against one group or for example, we have multi groups, multi conditions against baseline.
+
+Or we have factorial. The factorial is like novice and expert, for example versus baseline and any other condition we are testing against.
+
+So this is what I was calling the between subjects design and within subject design.
+
+So the between subjects design, The between subject is designed is like you are having four conditions.
+
+A, four condition B, separate group of people, 30 and 30.
+
+For the within subjects design, you use the one group of people for all conditions.
+
+Can you tell me what is advantage of each with respect to disadvantage or disadvantages?
+
+In your opinion, if you are making experiment like this, would you use the same group of people to all conditions or for each condition one group of people.
+
+Speaker 3:
+
+Having the same group of people do the different tests?
+
+At least you then you get quite a baseline. But you get different reactions to things. Whereas different people have different reactions.
+
+Speaker 1:
+
+So you have your length. So you said. Sorry, you said different groups for each group.
+
+You have different group of people.
+
+Speaker 3:
+
+Same group do the different things.
+
+Speaker 1:
+
+Same group doing the same different things within subjects design.
+
+Who advocates for between subjects design?
+
+Speaker 3:
+
+Yes, if you're doing the between subject design, then it means whatever you're testing for, that's the first experience the subject will have.
+
+And if you're doing the within subject, they would have already had some sort of experience with it from the previous two.
+
+Speaker 1:
+
+Very good, very good. And in one word, what you said in one word, it's called bias in one word.
+
+So both are available. So bias is available. But in this group within subject you will avoid the hassle of having group of group of, you know, instead of recruiting 60 or recruit 30 only.
+
+So each one of them have advantages and disadvantages.
+
+And certainly this is something that you need to admit if you can do the ideal thing is if you can do between subjects design, you know, And a lot of people, you can bring a lot of people certainly do between subjects.
+
+If it's very difficult, within subjects can be okay.
+
+But if you are having within subject design, should you say, okay, I started to evaluate condition number one, who Told you that your evaluation because you saw it before for the first evaluation for first group, then for a Wednesday or second one, which means it's still not wrong.
+
+Because we try always to mitigate this by preparing the persons involved in the test so that they are aware.
+
+Like, you know, just for example, try to evaluate, for example, specific thing.
+
+And we ask them to write, for example, remarks. So say, for example, you may be able to write remarks on the behavior.
+
+So they write also some kind of make remarks about written remarks.
+
+So it's not only just complete bias by just using Likert scale and try to get by automatically or unconsciously get biased with respect to previous.
+
+Previous evaluation. So there is something. Certainly we. So there is nothing called wrong here. These are both used. But what is the, you know, kind of constraints. Experimental constraint is something that should be considered here.
+
+Okay, so the study variables. The goal of good experimental design is the values of interest such that we can draw concrete conclusions.
+
+So there is independent variables and there are also dependent variables, something similar.
+
+If you say the first step in designing a study is to formulate hypothesis.
+
+In order to decide what independent and independent variables are necessary, I can say I expect that changing and then you insert independent variable will have an impact on, for example, insert a dependent variable.
+
+So, for example, if I say robot speed, I expect that changing robot speed, for example, and gesture speed and the speech speed, these are all independent variables will have an impact on perception.
+
+Human perception to the robot as introvert, extrovert.
+
+This is a dependent one. Sorry, this independent one. So independent one and the dependent. Okay, so the final one is. That is a. No, no. Excuse me, I got confused. I got confused. The dependent one. So when I say in regression, Y is equal to AX plus B.
+
+Okay. A and X. A and B are the independent ones. Y is a dependent one. So if I say here insert independent variable like speed or something, these are independent and the global perception here, because it depends on them.
+
+So this is the bend. Also there is novelty effect. Novelty effect can be particularly strong in hr.
+
+So many participants have never seen or interacted with robot before.
+
+Very new. So you find people and this is something that already considered in the studies or these kind of studies that already.
+
+Wow. And that's why actually anything the robot does for them is impressive.
+
+So I would like you, for example, to be kind of making subjective evaluation about specific point.
+
+And be, for example, be specific or like precise about evaluation.
+
+But you know, like some people, because they are.
+
+I've never dealt with robots. Once a robot makes a hand like this for example, it's for them fascination.
+
+So they can give instead of being saying, okay, should I give this as for example, in terms of specific criteria like smoothness of movement or naturalness, I should give for example score 5 or 6 over 10.
+
+No, this is for them phenomenal 10 over 10. Okay. So in order to avoid novelty effect, it is good always you can make robots like this, social robotics.
+
+And this is meant to be robotics for people. So we are trying to use this for people. So having some subjects who doesn't have or who don't have background, normal person is good.
+
+But in order to avoid this novelty effect, we should have given them kind of like, you know, practical practice, practice sessions with the robot as a part of your study.
+
+So like a little bit try to give them kind of one session before a little bit to get familiar with the robot so that the next time when they make the test they will be less impressed or more naturalistic in their judgment when the idea was old.
+
+Okay. Okay, good. So the types of studies. Also one of the things that we need to highlight is the case study.
+
+The case study is a depth in depth study of particular situation rather than sweeping statistical study.
+
+So instead of making general study about just situation in general, I have to make a case study about very particular case that you define.
+
+So for example, I can make a case study about how, for example, influence of, for example, let's say, I'm just saying hypothetically, anything like, you know, Devon and the Cornwall culture on robot acceptance, two points.
+
+Case study Plymouth. So I really made kind of very specific case study in Plymouth about this very specific narrow, you know, narrow window.
+
+Objective is to study something about Cornwall and Devon, particularly not very generic, you know, don't just speak about human perception or the influence of the culture of devil and Cornell.
+
+I'm just saying, you know, like any messy title, but just to give you an idea, just case study in general, like this.
+
+So certainly it becomes case study. So you cannot generalize it. So certainly it become already dependent on the case that you have.
+
+And there is longitudinal study and this is studies that you perform over a period of time.
+
+So if it's psychology, for example, you need years, years like psychology.
+
+People, for example, deal with people will sometimes make experiments with people with autism for years and for robotics weeks, you know.
+
+So one time I took, I tried to make experiments with, to see how robots can help children with autism to make social interaction more spontaneous.
+
+So for example, children with autism have, for social communication, they have some difficulties and they have also, you know, like they don't give complete attention or focus to the therapist.
+
+However, they can do this with robots. So we were trying to use instead of having human therapist, robot therapist.
+
+Okay, so this is autism therapy using robots. Autism therapy using. So it's for the robotics one in one experiment that I have conducted.
+
+So I took the robots by the time it was now still new and we went to center of research in Romania and we kept experiment really for like three or four weeks to try to see the influence of daily communication on children's autism and have this.
+
+And how could this improve their interaction? Okay, so this can take weeks. This was a longitudinal study. In some other cases you might find, you know, like, something you might tell me is weeks.
+
+Like, it can be considered that weeks is enough duration to have this.
+
+This is certainly something that we should consider the weeks, the period.
+
+Is it enough or not enough if I learn from you some kind of skills over the weeks?
+
+Is it something that it will be as a person or a child able to generalize it, or do we need to make it for longer periods instead of weeks to a longer period of time?
+
+Okay, and this is always certainly valid argument, but we understand that it also when we speak about robots that require transferring robots, sitting set up, bringing interaction people to interact with.
+
+So it's not easy always solution. But it's, you know, like we say weeks can give at least some kind of inspiring results.
+
+Also we have the surveys. So these are as a type of study participants recruited on campus online.
+
+And say we give them kind of questions like your scale, open answer, multiple choice.
+
+Okay. And they can answer it. Okay. There is also some of you might find this, Some of the studies that have this one word, wizard of O. Wizard of O is like when you have laboratory, when you have like kind of difficult to create a prototype, real prototype.
+
+So you can you create laboratory study of simulated system.
+
+So let's say, for example, if you are making robot, like the robot is supposed to do, you react in some way and the robot is supposed to do one behavior.
+
+This is okay, okay. Spend like kind of interaction, normal interaction, autonomous interaction, let's call it.
+
+But in wizard of Oz, okay, you will find somebody controlling the robot from behind the scene.
+
+So giving the robot the answers. Wizard of oh, like instead the robot like listen to your cheating a little bit, like listening to what you said and giving an answer.
+
+Okay. So instead the person is listening and robot is giving the answer on the ground.
+
+That's why don't be surprised or fascinated when you find, you know, like, I don't Know what is this name of the robot Hanson Robotics that made this robot that got Saudi Arabian citizenship.
+
+Sophia, the robot Sophia, if you hear about it. So Sophia robot. This was actually robot came to media, went to travel to countries and was speaking to people, etc.
+
+Very well. But there was a guy behind the scene making wizard of Horse.
+
+They will not, they will not take the risk that the robot, for example, let's say if I'm speaking, you know, with whichever accent, according to, you know, like any single husband, the robot is not able to distinguish my accent or unable to, you know, like for example, somebody from Scotland not able to distinguish the Scottish accent, for example, not trained on this.
+
+And it doesn't. As a result, the robot will not be able to understand what the person is saying.
+
+They cannot take for example a robot in front of the media.
+
+Anything can happen. Example when I was in 30 years, when I was doing experiments in Romania.
+
+So there was actually we were invited to Romanian TV and you know, I was testing the robot and everything was fine.
+
+Everything was fine. The robot was supposed to greet people, hi people, something like this.
+
+And then everything was fine. Two, three minutes before, before being live. And it was live, it was not like recorded. Some kind of problem happened to the elbow. So the robot was not able to bend its arm. So making its arm like that. So like that was like they're saying live and coming to like after two minutes or something.
+
+And there is no way to avoid. And I'm saying what happened, what happened, stressed and stuff like that.
+
+So as a result, when it was live and I was in front of the camera and the guy coming to greet me, etc, and it was clearly that visible that I'm stressed.
+
+The robot certainly made the arm instead of killing people high mid arm like this only.
+
+Okay, but. But it was. People didn't observe. But people who knows me, how do I look when I'm stressed?
+
+They were aware that I'm stressed during this moment.
+
+But it went well. So we will not make a robot like for example, that Sophia go online, go to, you know, like go to media and speak in front of people and make all this for any mistake of dialect recognition or anything happens.
+
+So there was somebody with behind doing this, you know, I also know this because I have people working in Hanson Robotics telling me about what is happening behind the scene, you know, so this is wizard of Oz.
+
+You are not ready with a prototype or you can have a prototype, but a catastrophe might happen or very sensitive.
+
+So you try to make it something like already prepared something like that.
+
+So very expensive to prototype or current technologies do not enable yet.
+
+So for the qualitative analysis. Sorry, quantitative analysis. So when we do quantitative analysis, we have the option to create supposed to finish soon.
+
+We have like create groups. So we say, for example, introverted people, extraverted people.
+
+So we can create one group, two groups or three groups.
+
+And in one group you can create. Certainly you can have the variants known or not known.
+
+And based on it, you can choose some test to apply.
+
+The most famous test that we use always is ANOVA test.
+
+What does it mean? And when I say variance, why do we need variance? When I say, for example that the robot who was introverted or similarity attraction was more valid than complementarity attraction, what happened?
+
+I made hypothesis group for the similarity like introverted and extroverted versus non hypothesis.
+
+But in order to evaluate it. How can I evaluate it? Should I just take if all of the people have made Likert scale.
+
+So the Likert scale, replied to the likert scale and for example, reply to the questions 5 over 3 over 5, 4 over 5, 5 over 5.
+
+You have group of answers for particular questions and a group of answers for other questions, each made by one group.
+
+The analysis of variance like ANOVA or T test. T test is similar to ANOVA but for two groups instead of three.
+
+What is the essence of this? Simply speaking, is if we have. I can, I think use here it. Okay, so let's say I made for particular question I answered and how the robot behavior was natural.
+
+So for the first group, I got an average of like, you know, people, 20%.
+
+Everyone said 1 over 5, 2 over 5, 3 over 5, 4 over 5. I took the average and it becomes like this. So let's say three over five and the other group made another histogram like this.
+
+For example, five over five. Let's say it happens that you find an error bar. Sometimes, right? So this actually aims to say. Or when we make also the anova, it's like, how is the variance between people who answered?
+
+What does it mean? Did they all reply? As for example, for those who got 3 over 5. So did they all reply? For example, 3 over 5, 2 over 5, 4 over 5? Something like this, 3 over 5, 4 over 5, 5. Or is there big variance between them, like 0 over 5, 1 over 5.
+
+So it requires to see the variance and we have coherent group of 14.
+
+Or marking so that all of them are around the average mark more or less.
+
+So I can consider this as credible. Or do we have big variance? You can have the average still same saying 4 over 5 or 3 over 5.
+
+But because there is variance, you never know. So you never know if you have like they are not all average.
+
+So you have like 0 over 5, 0 over 5 and 5 over 5, 5 over 5.
+
+Okay, so if you sum all it can give you 2 over 5, 2.5.
+
+But this 2.5, the average will be different if you have it something like 3 over 5 and 2 over 5.
+
+The average will be different because the variance is big.
+
+So you will not really know when the variance is small.
+
+You understand that everyone really have the same evaluation.
+
+And for example, they already like the robot doing this behavior.
+
+But when the variance is big, you're not certain because like there is considerable amount of people who said 0 over 5.
+
+So you are not certain really. Is it because when I say do people love the robot? And you have a lot of people got 0 over 5, 0 over 5 and other people got 5 over 5.
+
+So the mark you get, you are not certain. Is it because of this variance or people really like or dislike the robot?
+
+So to measure this and to say that the hypothesis is valid or not, we make the anomaly ANOVA test.
+
+So the ANOVA test tell us analysis of variance. The variance here was a small. Then your hypothesis, congratulations, your hypothesis is valid.
+
+Or the variance is big and your hypothesis is valid as well if it's 10 or your hypothesis is not valid.
+
+So this is actually what ANOVA is about. We have also kind of according to data, when we have choosing test of survey data, we have categorical, ordinal, continuous.
+
+So we have different kind of tests that we can do. All aim to have the same validation like she squared test, Mann Whitney Wilkinson test and T test.
+
+So just an idea. The chi square test, this is four category accounts.
+
+Okay, so it just weather distributed like this is for category accounts.
+
+So it's not continuous data. For Matt Whitney Wilkinson test is for ordinary data.
+
+Likert scale, you use it for T test is for continuous data.
+
+Okay, like anomalous one. But ANOVA we understand the difference between ANOVA and T test is like ANOVA is for three groups.
+
+So in order to say that the test succeeded or didn't succeed is to have the P value.
+
+The p value is 0.05. Okay, so if the p value is less than 0.05, then we reject the null hypothesis and accept the experiment hypothesis rejects a null hypothesis, meaning we validate the mean hypothesis we are trying to test.
+
+And if it's bigger, it means the main hypothesis that you are trying to test is invalid.
+
+And then the opposite null hypothesis is valid. So this is called the P value. The more it is, the less it is, the better it will be.
+
+Okay, some just in two slides. Final two slides. Legal issues. Coming back to legal issues. Okay, so all human subjects study require approval from in the United States, for example something called institutional review board irb.
+
+So the IRB evaluates proposal in terms of privacy, protection for minors and vulnerable adults.
+
+Mental emotional stress and humiliation, physical safety.
+
+So all US government funded projects involve human subjects require IRB review.
+
+Okay, so this is similar here in the UK as well. We have this kind of review for any like you know, as I said, animals, data protection, people, minors, anything like this.
+
+So that should be noted. And then people try to review it to take that suitable measures.
+
+The motivation for the IRB in case of United States is one case called Milgram study.
+
+So this was in 1960 and this was a psychological study series of psychological, social psychological experiments connected to Yale University psychologists Stanley Milgram, which measured the willingness of the study participants to obey an authority figure who instructed them to perform acts that conflicted with their personal conscience or consciousness conscience.
+
+So the problem is that like there was psychological stress and deception used.
+
+So there was no informal consent. So the studies from now and on you find that we should have influence about any influences that might happen.
+
+But also it should not cause people any psychological stress that might happen.
+
+So that's why this was an example of struggling this state.
+
+And all the ethical studies, all the ethical constellations, regulations try to avoid this kind of influences.
+
+And this also finishes the lecture of today.
