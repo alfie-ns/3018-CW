@@ -77,7 +77,7 @@ header-includes:
 - [ ] `indeed`: in fact
 
 # TODO:
-
+- [ ] verify page numbers are correct
 - [ ] hit word-count*0.1 limit allowance across report
 - [ ] utilise lecture teachings in lec 5-6 etc
 - [ ] review papers: pros or limitations
@@ -97,7 +97,7 @@ header-includes:
 
 ## 1.1. Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
 
-Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in this observation: "**culture affects the way technology is perceived** and, reciprocally, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological narratives of each region indeed shape the societal meta-layer *(the underlying philosophical-and-theological frameworks governing robotic integration)* that underpins robot acceptance.
+Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in this observation: "**culture affects the way technology is perceived** and, reciprocally, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological narratives of each region shapes the societal meta-layer *(the underlying philosophical-and-theological frameworks governing robotic integration)* that underpins robot acceptance.
 
 ### 1.1.1 Western Society (The Frankenstein Syndrome)
 
@@ -121,7 +121,7 @@ Whilst Kaplan's (2004) analysis is confined to the East-West axis, a complete ac
 
 **Ubuntu Philosophy and Communal Identity:** The most prominent cultural factor is *Ubuntu* — the Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design typically foregrounds individual user experience, Ubuntu-informed design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access (Metz, 2007). This stands in stark contrast to the individualised personal-assistant paradigm prevalent in Western HRI.
 
-**Power Distance and Hierarchical Norms.** Hofstede's (2001) cultural dimensions framework identifies many African societies as exhibiting high Power Distance — a societal acceptance of hierarchical authority structures. In regard to HRI, this suggests that robots interacting with users across different social strata must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (Hofstede, 2001). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
+**Power Distance and Hierarchical Norms.** Hofstede's (2001) cultural dimensions framework identifies many African societies as exhibiting high Power Distance: a societal acceptance of hierarchical authority structures. In regard to HRI, this suggests that robots interacting with users across different social strata must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (Hofstede, 2001). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
 
 **Oral Tradition and Multimodal Communication.** African cultures have historically privileged oral knowledge transmission over written documentation (Vansina, 1985). This has direct implications for interaction modality: voice-driven, narrative-based interfaces — utilising speech processing and prosodic features such as pitch and MFCCs (Lecture 3) — may achieve higher engagement than text-heavy GUI paradigms. Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
 
@@ -385,7 +385,7 @@ To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (
 \label{fig:neuro-symbolic-arch}
 \end{figure}
 
-**The Neuro-Symbolic Architecture:** The system operates as follows. The Neo robot's onboard sensors (RGB camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user. This data is transmitted to the OpenAI multimodal API, which serves as the **observation function** ($O$): the API processes the high-dimensional sensory stream — analysing facial action units via computer vision, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics — to output a structured observation $o \in \Omega$. And indeed, the API provides not merely a categorical label but a probability distribution over possible observations, thereby preserving the epistemic uncertainty that the POMDP requires. As now-integrated within the neuro-symbolic pipeline, the observation function thus feeds structured probabilistic assessments continuously throughout the interaction process wherein the POMDP's Bayesian update incrementally refines its model of the user.
+**The Neuro-Symbolic Architecture:** The system operates as follows. The Neo robot's onboard sensors (RGB camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user. This data is transmitted to the OpenAI multimodal API, which serves as the **observation function** ($O$): the API processes the high-dimensional sensory stream — analysing facial action units via computer vision, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics — to output a structured observation $o \in \Omega$. And indeed, the API provides not just a categorical label but a probability distribution over possible observations, thereby preserving the epistemic uncertainty that the POMDP requires. As now-integrated within the neuro-symbolic pipeline, the observation function thus feeds structured probabilistic assessments continuously throughout the interaction process wherein the POMDP's Bayesian update incrementally refines its model of the user.
 
 **Formal Specification:**
 
