@@ -37,7 +37,7 @@ header-includes:
 ---
 # Words-To-Use:
 
-- [ ] Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
+- [ ] **Lecturer's Top Insight:** Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
 - [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
 - [ ] 3018-CW/learning/lectures/5 [ ] - utilise/lecture.md (**Task 1 insight!!**)
 - [ ] 3018-CW/learning/lectures/6 [ ] - utilise/lecture.md (**General cw insight**)
@@ -89,7 +89,7 @@ header-includes:
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
 - [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
 - [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
-- [ ] TODO.md
+- [ ] TODO.mdg
 
 # 1- Task (1): Cultural Differences and HRI Design
 
