@@ -109,17 +109,17 @@ This anxiety traces to the West's distinction between nature and culture, which 
 
 Japanese culture, by contrast, exhibits a fundamentally different ontological *(the definition of what counts as a 'being')* stance. Kaplan (2004) traces this to the Shinto tradition, wherein the rigid Western boundary between animate and inanimate is dissolved in favour of a "continuous network of beings" (p. 470). In this view, humanoid robots are not perceived as transgressions but instead as natural extensions of an already-spirited world.
 
-Furthermore, Kaplan discusses the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 467). This ethos aligns with the *kata* tradition of formalised practice, wherein repetition leads to "maximum stability" (p. 470). The popular *Astro Boy* manga franchise (p. 466) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 466). Kaplan references the Amaterasu myth (p. 469) to argue that Japanese cosmology fundamentally lacks the creator-vs-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 476).
+Furthermore, Kaplan discusses the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 467). This ethos aligns with the *kata* tradition of formalised practice, wherein repetition leads to "maximum stability" (p. 470). The popular *Astro Boy* manga franchise (p. 466) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 466). Kaplan references the Amaterasu myth (p. 469) to argue that Japanese cosmology fundamentally lacks the creator-vs-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 476). This cultural openness persists into the contemporary era; as the lecturer observed, Japanese society remains "fine to leave people more with robots" and is "probably less sensitive to risks that might appear from robots" than the West (Lecture 5).
 
 ### 1.1.3 Implications for HRI Design.
 
-- [ ] These divergent cultural framings consequentially shape interaction design profoundly. Whilst Western users predominantly prefer robots that maintain clear machine-identity markers, thereby preserving the ‘narcissistic shield’, Eastern users instead welcome anthropomorphic features (human-like appearance/behaviour) that align with animistic expectations. However, insofar as Western designers may be inclined to impose universal proxemic standards based on their own cultural norms, this approach is fundamentally flawed. As Lecture 4 emphasised, ‘every country and each culture has their own concept of proxemics’, and therefore a robot’s spatial behaviour must adapt accordingly: Japanese norms demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances. The watchword herein is cultural relativism—no universal design policy can accommodate these fundamentally different ontological commitments.
+- [ ] These divergent cultural framings consequentially shape interaction design profoundly. Whilst Western users predominantly prefer robots that maintain clear machine-identity markers, thereby preserving the 'narcissistic shield', Eastern users instead welcome anthropomorphic features (human-like appearance/behaviour) that align with animistic expectations. However, insofar as Western designers may be inclined to impose universal proxemic standards based on their own cultural norms, this approach is fundamentally flawed. As Lecture 4 emphasised, 'every country and each culture has their own concept of proxemics', and therefore a robot's spatial behaviour must adapt accordingly: Japanese norms demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances. Note, however, that designers must also account for the novelty effect (Lecture 6) — the well-documented phenomenon wherein users for whom the robot represents an entirely novel stimulus inflate their acceptance ratings regardless of cultural background, increasing the likelihood of confounding genuine cultural preference with mere unfamiliarity. The watchword herein is therefore cultural relativism — no universal design policy can accommodate these fundamentally different ontological commitments, nor can initial acceptance data be trusted without controlling for novelty-driven inflation.
 
 ## 1.2 African Cultural Factors Influencing HRI
 
 Whilst Kaplan's (2004) analysis is confined to the East-West axis, a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape technology acceptance.
 
-**Ubuntu Philosophy and Communal Identity.** The most prominent cultural factor is *Ubuntu* — the Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design typically foregrounds individual user experience, Ubuntu-informed design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access (Metz, 2007). This stands in stark contrast to the individualised personal-assistant paradigm prevalent in Western HRI.
+**Ubuntu Philosophy and Communal Identity:** The most prominent cultural factor is *Ubuntu* — the Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design typically foregrounds individual user experience, Ubuntu-informed design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access (Metz, 2007). This stands in stark contrast to the individualised personal-assistant paradigm prevalent in Western HRI.
 
 **Power Distance and Hierarchical Norms.** Hofstede's (2001) cultural dimensions framework identifies many African societies as exhibiting high Power Distance — a societal acceptance of hierarchical authority structures. In regard to HRI, this suggests that robots interacting with users across different social strata must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (Hofstede, 2001). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
 
@@ -136,7 +136,7 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    robot/.style={rectangle, rounded corners=3pt, draw=black!70, thick,
+    robot/.style args={#1}{rectangle, rounded corners=3pt, draw=black!70, thick,
                   minimum width=0.9cm, minimum height=1.4cm, fill=#1!15,
                   font=\scriptsize\sffamily\bfseries},
     human/.style={circle, draw=black!60, very thick, minimum size=0.8cm,
@@ -144,7 +144,7 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
     zonelabel/.style={font=\tiny\sffamily, text=#1!80!black},
     regiontitle/.style={font=\small\sffamily\bfseries,
                         text=#1!80!black},
-    traitbox/.style={rectangle, rounded corners=2pt, draw=#1!60,
+    traitbox/.style args={#1}{rectangle, rounded corners=2pt, draw=#1!60,
                      fill=#1!5, text width=3.8cm, font=\tiny\sffamily,
                      inner sep=4pt, align=left},
     >=Stealth
@@ -235,9 +235,9 @@ The robot's spatial positioning, greeting modality, and morphological design are
 \label{fig:proxemic-comparison}
 \end{figure}
 
-**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form, the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group — hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone (0.5–1.2m).
+**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form, the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Lecture 4). Whilst this is true, a designer trained within Western conventions may be inclined to calibrate these buffers using Western proxemic data, which would systematically underestimate the spatial sensitivity of Japanese users. As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group — hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone (0.5–1.2m).
 
-**(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like aesthetic markers (e.g., visible joints, metallic chassis) to clearly signal their artificiality, thereby preventing descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit extreme transparency, explicitly stating their operational reasoning to alleviate fears of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
+**(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like rather than overtly humanlike aesthetic markers (e.g., visible joints, metallic chassis) to clearly signal their artificiality, thereby preventing descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit extreme transparency, explicitly stating their operational reasoning to alleviate fears of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
 
 **(c) Africa.** Informed by Ubuntu and high Power Distance (Hofstede, 2001), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic, utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Vansina, 1985). Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels — *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject) — become critical design considerations.
 
@@ -290,7 +290,7 @@ As Kahn et al. (2008) conclude, effective HRI must be "compelling as a lived exp
 
 # 2- Task (2): POMDPs in Human-Robot Interaction
 
-- [ ] this needs to change as I am going to incorporate an AI API into the robot’s system
+- [ ] this needs to change as I am going to incorporate an AI API into the robot's system
 
 ## 2.1 The Role of POMDPs in Trust, Cooperation, Coordination, and Collaboration
 
@@ -316,68 +316,93 @@ Trust is a latent psychological variable — it cannot be directly measured, onl
 
 The POMDP addresses these challenges by encoding trust as a hidden state variable, observations as probabilistic signals thereof, and actions as trust-modulating strategies (Chen et al., 2020), and thus *trust* cannot be treated as a static binary variable but must be modelled as a continuously-evolving distribution. The belief state thus provides the robot with a principled estimate of trust that is continuously refined, rather than a brittle threshold-based heuristic (a rigid binary switch wherein the subtle fluctuations of trust are ignored).
 
-## 2.4 Proposed POMDP Model: Medication-Assistance Robot
+## 2.4 Proposed Neuro-Symbolic POMDP Model: Neo Robot with OpenAI Cognitive Architecture
 
-To concretise this framework, I propose a POMDP model for an assistive robot supporting elderly users with medication adherence. The robot must remind the user, offer physical assistance, and calibrate its interaction based on inferred trust.
+To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (Pepper) humanoid robot augmented with an OpenAI multimodal API, deployed as an elderly medication-adherence assistant. The fundamental insight is this: large language models (LLMs) and vision-language models (VLMs) are powerful observation extractors — capable of parsing the once-prohibitive complexity of unstructured human behaviour into structured probabilistic assessments. However, LLMs are inherently stateless; each API call is independent, with no temporal memory of prior interactions. They are also stochastic and prone to hallucination — generating plausible but factually incorrect inferences (Ji et al., 2023). Wrapping the OpenAI API inside a POMDP belief state $b(s)$ therefore provides the mathematically rigorous temporal scaffold that the LLM alone lacks: a continuously-updated probabilistic model of the human's latent states (Trust, Cognitive Load) that persists across the full interaction history. This neuro-symbolic paradigm — wherein a neural subsystem handles perception whilst a symbolic subsystem governs reasoning — represents what Garcez and Lamb (2023, p. 12389) term the 'third wave' of AI. In the robotics domain specifically, Ahn et al. (2022) demonstrated via their SayCan framework that LLMs can ground abstract language commands in physical robotic affordances, establishing the feasibility of LLM-directed action selection. However, their architecture lacks the temporal belief maintenance that a POMDP provides — a gap this model directly addresses.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    node distance=1.8cm and 2.5cm,
-    state/.style={circle, draw, thick, minimum size=1.2cm, fill=blue!10, font=\small},
-    obs/.style={rectangle, draw, dashed, thick, minimum size=1.0cm, fill=orange!15, font=\small},
-    action/.style={rectangle, rounded corners, draw, thick, minimum size=1.0cm, fill=green!15, font=\small},
-    reward/.style={diamond, draw, thick, minimum size=0.8cm, fill=yellow!15, font=\scriptsize},
-    >=Stealth,
-    every edge/.style={draw, thick, ->}
+    node distance=1.5cm and 2.0cm,
+    block/.style args={#1}{rectangle, rounded corners=3pt, draw=black!70, thick,
+                  minimum width=2.5cm, minimum height=1.0cm, fill=#1,
+                  font=\scriptsize\sffamily, align=center},
+    human/.style={circle, draw=black!60, very thick, minimum size=0.9cm,
+                  fill=white, font=\small\sffamily\bfseries},
+    >=Stealth
 ]
-% Time t
-\node[state] (st) {$S_t$};
-\node[obs, below=of st] (ot) {$O_t$};
-\node[action, above=of st] (at) {$A_t$};
-\node[reward, right=1.2cm of at] (rt) {$R_t$};
 
-% Time t+1
-\node[state, right=3cm of st] (st1) {$S_{t+1}$};
-\node[obs, below=of st1] (ot1) {$O_{t+1}$};
-\node[action, above=of st1] (at1) {$A_{t+1}$};
+% Bottom row: Neural perception pathway
+\node[human] (H) at (0, 0) {H};
+\node[below=0.15cm of H, font=\tiny\sffamily\itshape] {Elderly User};
 
-% Edges
-\draw[->] (st) -- (ot) node[midway, left, font=\scriptsize] {$O$};
-\draw[->] (st) -- (st1) node[midway, above, font=\scriptsize] {$T$};
-\draw[->] (at) -- (st1);
-\draw[->] (at) -- (rt);
-\draw[->] (st) -- (rt);
-\draw[->] (st1) -- (ot1) node[midway, left, font=\scriptsize] {$O$};
-\draw[->] (at) -- (ot1) node[midway, above right, font=\scriptsize] {};
+\node[block=purple!20, text width=2.0cm] (neo) at (3.5, 0)
+    {Neo Sensors\\{\tiny Camera, Mic,}\\{\tiny Touch}};
 
-% Labels indicating hidden vs observable
-\node[above=0.3cm of st, text=gray, font=\footnotesize\itshape, xshift=-1.5cm] {Latent States};
-\node[below=0.3cm of ot, text=gray, font=\footnotesize\itshape, xshift=-1.5cm] {Observable Data};
+\node[block=teal!20, text width=2.8cm, minimum height=1.2cm] (api) at (7.5, 0)
+    {\textbf{OpenAI API}\\{\tiny Multimodal LLM}\\{\tiny (Vision + Speech)}};
+\node[below=0.15cm of api, font=\tiny\sffamily\itshape, text=teal!70] {$O(s', a, o)$};
 
-% Descriptive text
-\node[left=0.3cm of st, font=\footnotesize, text=blue!80!black, align=right] {Trust\\Task};
-\node[left=0.3cm of ot, font=\footnotesize, text=orange!80!black, align=right] {Comply\\Hesitate};
+\node[block=orange!20, text width=1.8cm] (obs) at (11.5, 0)
+    {$o \in \Omega$\\{\tiny Comply,}\\{\tiny Hesitate, \ldots}};
+
+% Top row: Symbolic reasoning pathway
+\node[block=blue!20, text width=3.0cm, minimum height=1.2cm] (belief) at (11.5, 3)
+    {\textbf{Belief Update}\\{\tiny $b'(s') = \eta \cdot O \cdot \sum T \cdot b$}};
+\node[above=0.1cm of belief, font=\tiny\sffamily\itshape, text=blue!70] {POMDP Temporal Engine};
+
+\node[block=green!20, text width=2.2cm] (policy) at (7.5, 3)
+    {$\pi^*(b)$\\{\tiny Optimal}\\{\tiny Policy}};
+
+\node[block=red!20, text width=2.2cm] (exec) at (3.5, 3)
+    {Execution\\{\tiny NLG + Gesture}\\{\tiny via OpenAI}};
+
+% Arrows: perception pathway
+\draw[->, thick] (H) -- (neo);
+\draw[->, thick] (neo) -- (api) node[midway, above, font=\tiny\sffamily\itshape] {raw data};
+\draw[->, thick] (api) -- (obs) node[midway, above, font=\tiny\sffamily\itshape] {$P(o|s',a)$};
+
+% Arrows: up to POMDP
+\draw[->, thick] (obs) -- (belief);
+
+% Arrows: reasoning pathway
+\draw[->, thick] (belief) -- (policy) node[midway, above, font=\tiny\sffamily\itshape] {$b$};
+\draw[->, thick] (policy) -- (exec) node[midway, above, font=\tiny\sffamily\itshape] {$a \in A$};
+
+% Arrow: back to human
+\draw[->, thick] (exec) -- (H) node[midway, left, font=\tiny\sffamily\itshape, align=center] {speech +\\gesture};
+
+\node[block=blue, text width=1.6cm, minimum height=0.7cm, font=\tiny\sffamily] (states) at (14.5, 3)
+    {$S$: Trust\\$\times$ Cog.\ Load};
+\draw[->, dashed, draw=blue!40] (states.west) -- (belief.east);
+
+% Subsystem labels
+\node[font=\scriptsize\sffamily\bfseries, text=purple!50] at (5.5, -1.2) {\textit{Neural Subsystem} (Perception)};
+\node[font=\scriptsize\sffamily\bfseries, text=blue!50] at (7.5, 4.3) {\textit{Symbolic Subsystem} (Reasoning)};
+
 \end{tikzpicture}
-\caption{Dynamic Bayesian Network (DBN) representation of the proposed Trust-POMDP over time ($t \to t+1$). The robot's action ($A_t$) and the user's hidden trust state ($S_t$) probabilistically determine the next trust state ($S_{t+1}$) via the transition function $T$, the reward ($R_t$), and the noisy behavioural observation ($O_{t+1}$) via the observation function $O$.}
+\caption{Neuro-symbolic architecture of the proposed OpenAI-POMDP medication-adherence system. The \textit{neural subsystem} (bottom) utilises the OpenAI multimodal API as the observation function ($O$), parsing high-dimensional sensory data into discrete probabilistic observations. The \textit{symbolic subsystem} (top) maintains the POMDP belief state and optimal policy $\pi^*(b)$, providing temporal memory via Bayesian filtering. Actions are translated back through the API into natural language and gestures for the Neo robot (Garcez and Lamb, 2023; Ahn et al., 2022).}
+\label{fig:neuro-symbolic-arch}
 \end{figure}
+
+**The Neuro-Symbolic Architecture:** The system operates as follows. The Neo robot's onboard sensors (RGB camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user. This data is transmitted to the OpenAI multimodal API, which serves as the **observation function** ($O$): the API processes the high-dimensional sensory stream — analysing facial action units via computer vision, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics — to output a structured observation $o \in \Omega$. And indeed, the API provides not merely a categorical label but a probability distribution over possible observations, thereby preserving the epistemic uncertainty that the POMDP requires. As now-integrated within the neuro-symbolic pipeline, the observation function thus feeds structured probabilistic assessments continuously throughout the interaction process wherein the POMDP's Bayesian update incrementally refines its model of the user.
 
 **Formal Specification:**
 
-- **State Space** ($S$): Trust $\in \{$Low, Medium, High$\}$ $\times$ Task $\in \{$Pending, Taken, Refused$\}$, yielding $|S| = 9$.
-- **Action Space** ($A$): $\{$Verbal\_Remind, Explain\_Benefits, Offer\_Physical\_Assist, Increase\_Autonomy, Disengage$\}$.
-- **Observation Space** ($\Omega$): $\{$Comply, Hesitate, Verbal\_Refuse, Ignore, Gaze\_Avert$\}$.
-- **Transition Function** ($T$): Models trust dynamics parametrically. If the true state is Medium Trust and the robot performs Offer\_Physical\_Assist when unneeded — thereby violating personal proxemics (Lecture 4) — trust degrades: $P(\text{Low} \mid \text{Med}, \text{Assist}) = 0.6$, $P(\text{Med} \mid \text{Med}, \text{Assist}) = 0.4$ (summing rigorously to 1.0).
+- **State Space** ($S$): Trust $\in \{$Low, Medium, High$\}$ $\times$ Cognitive Load $\in \{$Low, High$\}$, yielding $|S| = 6$.
+- **Action Space** ($A$): $\{$Verbal\_Remind, Explain\_Benefits, Offer\_Physical\_Assist, Increase\_Autonomy, Disengage$\}$. The POMDP selects the abstract policy action; the OpenAI API then translates this into culturally-calibrated natural language and physical gestures executed via the Neo robot's 25 degrees of freedom.
+- **Observation Space** ($\Omega$): $\{$Comply, Hesitate, Verbal\_Refuse, Ignore, Gaze\_Avert$\}$ — extracted by the OpenAI API from the raw multimodal stream.
+- **Observation Function** ($O$): $P(o \mid s', a)$ is parametrically estimated by the API's multimodal inference. For instance, if the true state is (High Trust, Low Cognitive Load) and the robot has performed Verbal\_Remind, the API's analysis of the user's relaxed facial configuration and compliant vocal tone yields $P(\text{Comply} \mid \text{High, Low}, \text{Remind}) = 0.8$.
+- **Transition Function** ($T$): Models trust and cognitive-load dynamics parametrically. If the true state is (Medium Trust, High Cognitive Load) and the robot performs Offer\_Physical\_Assist when unneeded — thereby violating personal proxemics (Lecture 4) — trust degrades: $P(\text{Low} \mid \text{Med}, \text{Assist}) = 0.6$, $P(\text{Med} \mid \text{Med}, \text{Assist}) = 0.4$. Conversely, a well-timed Explain\_Benefits yields $P(\text{High} \mid \text{Med}, \text{Explain}) = 0.5$, $P(\text{Med} \mid \text{Med}, \text{Explain}) = 0.5$.
+- **Reward Function** ($R$): Successful medication adherence yields $R = +10$; preserving user autonomy (choosing Increase\_Autonomy when trust is High) yields $R = +3$; unwanted physical assistance incurs $R = -5$, reflecting the social cost of proxemic violation.
 
-Conversely, a well-timed Explain_Benefits action yields $P(\text{High} \mid \text{Med}, \text{Explain}) = 0.5$, $P(\text{Med} \mid \text{Med}, \text{Explain}) = 0.5$ (with $P(\text{Low} \mid \text{Med}, \text{Explain}) = 0.0$, summing exactly to 1.0 across the state space).
-
-- **Reward Function** ($R$): Successful medication adherence yields $R = +10$; preserving user autonomy (choosing Increase\_Autonomy when trust is High) yields a bonus $R = +3$; unwanted physical assistance incurs a penalty $R = -5$, reflecting the social cost of proxemic violation.
-
-**Benefits and Limitations.** The model's strength lies in its principled handling of the trust-autonomy trade-off: the belief state $b$ herein represents the robot's probabilistic estimate of trust, continuously refined via Bayesian filtering throughout the interaction wherein each observation shifts the distribution. However, the discretisation of trust into three levels introduces information loss, and calibrating the transition probabilities from real behavioural data remains a significant empirical challenge. Furthermore, the model assumes the Markov property — that trust depends only on the current state — whereas in practice, trust dynamics may depend on long interaction histories.
+**Benefits and Limitations.** The model's strength lies in its neuro-symbolic complementarity: the OpenAI API overcomes the once-intractable barrier of parsing unstructured multimodal reality into discrete observations, whilst the POMDP provides the temporal cognitive engine — the belief state $b$ — that the stateless LLM fundamentally cannot. Once initialised with a uniform prior across all six states, the belief state herein compresses all past actions and observations into a single probability vector, continuously refined via Bayesian filtering throughout the interaction wherein each observation incrementally shifts the distribution. However, the architecture introduces several limitations: 1- API latency (typically 200--800ms per inference call) may disrupt the real-time proxemic responsiveness that Lecture 4 identifies as critical; 2- the LLM's stochastic nature means identical multimodal inputs may yield different observation distributions across calls, introducing unmodelled noise into the Bayesian update; 3- the observation model may inherit biases from the LLM's training data — if the model was predominantly trained on younger demographics, its ability to infer emotional states from elderly facial configurations or speech patterns may be systematically degraded (Lecture 5); and 4- the discretisation of Cognitive Load into binary levels represents an information loss that future work could address via continuous-state POMDP approximations.
 
 ## 2.5 Ethical and Social Implications
 
-The deployment of POMDPs in HRI raises profound ethical concerns. By mathematically operationalising trust, the POMDP framework transforms a once-theoretical psychological concept into a now-computable metric. However, insofar as the reward function solely prioritises task compliance, the optimal policy may learn to *exploit* the user's trust — timing medication requests when inferred cognitive load is highest to force compliance. Therefore, the once-prohibitive computational barrier (now mitigated by approximate solvers) demands that designers explicitly encode user autonomy and informed consent into the reward structure, lest assistance erode into manipulation. Sharkey (2014, p. 64) frames this via the Capability Approach: the robot must preserve the user's capability to function independently, and thus the R = +3 autonomy bonus in our model is not merely a design preference but an ethical imperative — encoding the principle that dignity requires the preservation of choice. Moreover, the observation function raises surveillance concerns: continuously monitoring gaze, speech prosody, and physiological signals to infer trust constitutes pervasive behavioural tracking — what Sharkey and Sharkey (2012, p. 35) term "surveillance by design," wherein ostensibly beneficial monitoring infrastructure becomes indistinguishable from institutional control — which must be balanced against the user's right to privacy (Lecture 1). The ethical watchword is thus transparency — the robot must not merely *model* trust but actively *earn* it through explainable behaviour.
+The deployment of an LLM-augmented POMDP in HRI raises profound and now-amplified ethical concerns. By mathematically operationalising trust, the POMDP framework transforms a once-theoretical psychological concept into a now-computable metric. However, insofar as the reward function solely prioritises task compliance, the optimal policy may learn to *exploit* the user's trust — timing medication requests when inferred cognitive load is highest to force compliance. Designers must therefore explicitly encode user autonomy and informed consent into the reward structure, lest assistance erode into manipulation. Sharkey (2014, p. 64) frames this via the Capability Approach: the robot must preserve the user's capability to function independently, and thus the $R = +3$ autonomy bonus in our model is not merely a design preference but an ethical imperative — encoding the principle that dignity requires the preservation of choice.
+
+The integration of the OpenAI API introduces three additional ethical dimensions. First, **hallucination risk**: LLMs generate plausible but factually incorrect outputs (Ji et al., 2023), and in a medication-adherence context, a hallucinated observation — misclassifying a user's confused hesitation as willing compliance — could trigger an inappropriate action with direct health consequences. As the lecturer argued, "should the clinician trust what you are giving as judgment?" (Lecture 5); for a stochastic LLM, the answer is: not without rigorous validation, and thus Explainable AI (Lecture 5) becomes a non-negotiable requirement — the POMDP must justify *why* it selected a particular action, tracing the decision back through the belief state to the specific observations the API extracted. Second, **cloud data sovereignty**: the continuous multimodal processing of an elderly user's facial expressions, vocal prosody, and physical behaviour — transmitted to a third-party API server — constitutes what Sharkey and Sharkey (2012, p. 35) term "surveillance by design," now compounded by the risk of "transferring data to whichever third party we don't verify" (Lecture 5). The ethical implications thereof are severe: the user's most vulnerable moments are streamed to external servers whose data-handling policies cannot be meaningfully audited. Third, **API latency and proxemic violation**: if the observation function introduces response delays during a time-critical proxemic approach, the robot may freeze mid-interaction or fail to yield — behaviour that Lecture 4 identifies as "aggressive." The ethical watchword is therefore proactive regulation (Lecture 5) — designers must not adopt a bottom-up approach of learning from harm after deployment, but must encode transparent, auditable constraints *ex ante* into both the reward function and the API pipeline, ensuring that the robot does not merely *model* trust but actively *earns* it through explainable, privacy-preserving behaviour.
 
 \newpage
 
@@ -387,9 +412,7 @@ The deployment of POMDPs in HRI raises profound ethical concerns. By mathematica
 
 - [ ] make alphabetical
 - [ ] fetch exact wording fron paper to earn second tick
-
-Hall, E.T. (1966) The Hidden Dimension. Garden City, NY: Doubleday. Available at: “TODO”
-
+- [ ] [ ] Hall, E.T. (1966) *The Hidden Dimension*. Garden City, NY: Doubleday.
 - [ ] [ ] Hofstede, G. (2001) *Culture's Consequences: Comparing Values, Behaviors, Institutions and Organizations Across Nations*. 2nd edn. Thousand Oaks: Sage Publications.
 - [ ] [ ] Kahn, P.H., Freier, N.G., Kanda, T., Ishiguro, H., MacDorman, K.F., Severson, R.L. and Friedman, B. (2008) 'Design patterns for sociality in human-robot interaction', in *Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97-104. Available at: https://dl.acm.org/doi/10.1145/1349822.1349836 (Accessed: 15 February 2026).
 - [ ] [ ] Kaplan, F. (2004) 'Who is afraid of the humanoid? Investigating cultural differences in the acceptance of robots', *International Journal of Humanoid Robotics*, 1(3), pp. 465–480. Available at: https://doi.org/10.1142/S0219843604000289 (Accessed: 15 February 2026).
@@ -402,9 +425,12 @@ Hall, E.T. (1966) The Hidden Dimension. Garden City, NY: Doubleday. Available at
 
 - [ ] fetch exact wording fron paper to earn second tick
 - [ ] make alphabetical
+- [X] [ ] Ahn, M., Brohan, A., Brown, N. et al. (2022) 'Do As I Can, Not As I Say: Grounding Language in Robotic Affordances', in *Proceedings of the 6th Conference on Robot Learning (CoRL 2022)*. Auckland: PMLR, pp. 287-318. Available at: https://arxiv.org/abs/2204.01691 (Accessed: 18 February 2026).
 - [X] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-aware decision making for human-robot collaboration: model learning and planning', *ACM Transactions on Human-Robot Interaction*, 9(2), Article 9. Available at: [https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf](https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf) (Accessed: 15 February 2026).
 - [X] [ ] Desai, M., Kaniarasu, P., Medber, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', in *Proceedings of the 8th ACM/IEEE International Conference on Human-Robot Interaction (HRI '13)*. Tokyo: IEEE Press, pp. 251-258. Available at: https://doi.org/10.1109/HRI.2013.6483596 (Accessed: 16 February 2026).
+- [X] [ ] Garcez, A.d'A. and Lamb, L.C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56(11), pp. 12387-12406. Available at: https://doi.org/10.1007/s10462-023-10448-w (Accessed: 18 February 2026).
 - [X] [ ] Hancock, P.A., Billings, D.R., Schaefer, K.E., Chen, J.Y.C., de Visser, E.J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: https://doi.org/10.1177/0018720811417254 (Accessed: 16 February 2026).
+- [X] [ ] Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y.J., Madotto, A. and Fung, P. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), Article 248. Available at: https://doi.org/10.1145/3571730 (Accessed: 18 February 2026).
 - [X] [ ] Kaelbling, L.P., Littman, M.L. and Cassandra, A.R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: [https://doi.org/10.1016/S0004-3702(98)00023-X](https://doi.org/10.1016/S0004-3702(98)00023-X) (Accessed: 15 February 2026).
 - [X] [ ] Lee, J.D. and See, K.A. (2004) 'Trust in automation: designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: https://doi.org/10.1518/hfes.46.1.50.30392 (Accessed: 16 February 2026).
 - [X] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: models and experiments', *International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://doi.org/10.1177/0278364917690593 (Accessed: 16 February 2026).
