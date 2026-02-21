@@ -113,24 +113,35 @@ Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e.
 
 ### 1.1.3 Implications for HRI Design.
 
-- [ ] ensure correct page numbers in inline citations
-- [ ] The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerners predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome humanlike anthropomorphic features that align with animistic expectations (expectations wherein all entities, including artificial ones, are regarded as being a spiritual essence); indeed, Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like (humanoid) companion robots; US participants instead preferred machine-like functional agents.
+The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerners predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome humanlike anthropomorphic features that align with animistic expectations (expectations wherein all entities, including artificial ones, are regarded as being a spiritual essence); indeed, Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like (humanoid) companion robots; US participants instead preferred machine-like functional agents.
 
-- [ ] Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (standards within culturally-defined personal-space boundaries) based on their own cultural norms; however, the approach is fundamentally flawed as people from different cultures have demonstrably different preferences with respect to proxemics, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1). Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries continuously throughout the process wherein it calculates approach vectors, as failing to respect these bounds means user expectations are contravened, effectively alienating the would-be companion.
+Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (standards within culturally-defined personal-space boundaries) based on their own cultural norms; however, the approach is fundamentally flawed as people from different cultures have demonstrably different preferences with respect to proxemics, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1). Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries continuously throughout the process wherein it calculates approach vectors, as failing to respect these bounds means user expectations are contravened, effectively alienating the would-be companion.
 
-- [ ] Nonetheless, designers must also account for the novelty effect (Lecture 6); the most-prominent factor wherein users for whom the robot represents, an entirely novel stimulus inflates acceptance ratings. Despite the robot representing something novel, initial engagement masks genuine preferences, and indeed, the novelty effect functions as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As now-established, the novelty effect will thus feed skewed data continuously throughout the process wherein it inflates initial ratings, increasing the likelihood of confounding true cultural preference, with mere unfamiliarity thereof. The watchword herein is indeed cultural relativism: e.g. 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels; and 2) no universal design policy can accommodate these fundamentally different ontological commitments. Researchers cannot infer permanent acceptance from early data; instead, the system must evaluate engagement over time.
+Designers must also account for the novelty effect (Lecture 6); the most-prominent factor wherein users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. Despite the robot representing something novel (fictional), initial engagement masks genuine preferences, and indeed, the novelty effect has conventionally been framed as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As now-established, the novelty effect will thus feed skewed data continuously throughout the process wherein it inflates initial ratings, increasing the likelihood of confounding true cultural preference, with slight unfamiliarity thereof. The watchword herein is indeed cultural relativism: e.g. 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels; and 2) no universal design policy can accommodate these fundamentally different ontological (real-being) commitments. Researchers cannot infer permanent acceptance from early data and instead, the system must evaluate engagement over time.
 
-## 1.2 African Cultural Factors Influencing HRI
+## 1.2. African Cultural Factors Influencing HRI
 
-Whilst Kaplan's (2004) analysis is confined to the East-West axis, a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape technology acceptance.
+- [ ] DONE?
 
-**Ubuntu Philosophy and Communal Identity:** The most prominent cultural factor is *Ubuntu* — the Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design typically foregrounds individual user experience, Ubuntu-informed design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access (Metz, 2007). This stands in stark contrast to the individualised personal-assistant paradigm prevalent in Western HRI.
+Kaplan's (2004) Abstract confines the analysis to the East-West axis, framed explicitly as an inquiry into whether robots are ``perceived in the same manner in the West and in Japan'', however a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape the robot's relational acceptance. 
 
-**Power Distance and Hierarchical Norms.** Hofstede's (2001) cultural dimensions framework identifies many African societies as exhibiting high Power Distance: a societal acceptance of hierarchical authority structures. In regard to HRI, this suggests that robots interacting with users across different social strata must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (Hofstede, 2001). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
+The following factors are well-established in African countries, and thus likely should be integrated into the design of HRI systems deployed therein:
 
-**Oral Tradition and Multimodal Communication.** African cultures have historically privileged oral knowledge transmission over written documentation (Vansina, 1985). This directly implicates interaction modality, i.e. voice-driven, narrative-based interfaces using speech processing and prosodic features such as pitch and MFCCs (Lecture 3) — may achieve higher engagement than text-heavy GUI paradigms. Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
+### 1.2.1 Ubuntu Philosophy and Communal Identity:
 
-**Infrastructure and Access Constraints.** Despite rapid technological growth, many African regions face infrastructure limitations including intermittent connectivity and limited access to high-specification hardware (Wyche and Steinfield, 2016). HRI systems deployed in these contexts must therefore be robust to connectivity loss, operable on low-power devices, and designed for shared rather than personal ownership — aligning with the communal ethos of Ubuntu.
+*Ubuntu*: a Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design typically foregrounds individual user experience, Ubuntu-driven design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access (Metz, 2007, p. 324). This contrasts with the individualised personal-assistant paradigm prevalent in Western HRI.
+
+### 1.2.2 Power Distance and Hierarchical Norms: 
+
+- [ ] removed book's (2001) cultural dimensions framework identifies many African societies as exhibiting high Power Distance: a societal acceptance of hierarchical authority structures. In regard to HRI, this suggests that robots interacting with users across different social strata must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (removed book, 2001). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
+
+### 1.2.3 Oral Tradition and Multimodal Communication:
+
+- [ ] African cultures have historically privileged oral knowledge transmission over written documentation (Vansina, 1985). This directly implicates interaction modality, i.e. voice-driven, narrative-based interfaces using speech processing and prosodic features such as pitch and MFCCs (Lecture 3) — may achieve higher engagement than text-heavy GUI paradigms. Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
+
+### 1.2.4 Infrastructure and Access Constraints:
+
+- [ ] Despite rapid technological growth, many African regions face infrastructure limitations including intermittent connectivity and limited access to high-specification hardware (Wyche and Steinfield, 2016). HRI systems deployed in these contexts must therefore be robust to connectivity loss, operable on low-power devices, and designed for shared rather than personal ownership — aligning with the communal ethos of Ubuntu.
 
 ## 1.3 Regional Design Traits (Appearance and Behaviour)
 
@@ -236,7 +247,7 @@ Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks distinctly
 
 \end{tikzpicture}
 \caption{Culturally-adapted proxemic zones and robot approach strategies across three regional paradigms.
-The robot's spatial positioning, greeting modality, and morphological design are calibrated to the cultural frameworks identified in Sections 1.1--1.2 (Hall, 1966; Kaplan, 2004; Hofstede, 2001).}
+The robot's spatial positioning, greeting modality, and morphological design are calibrated to the cultural frameworks identified in Sections 1.1--1.2 (Hall, 1966; Kaplan, 2004; removed book, 2001).}
 \label{fig:proxemic-comparison}
 \end{figure}
 
@@ -244,7 +255,7 @@ The robot's spatial positioning, greeting modality, and morphological design are
 
 **(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like rather than overtly humanlike aesthetic markers (e.g., visible joints, metallic chassis) to clearly signal their artificiality, thereby preventing descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit extreme transparency, explicitly stating their operational reasoning to alleviate fears of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
 
-**(c) Africa.** Informed by Ubuntu and high Power Distance (Hofstede, 2001), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic, utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Vansina, 1985). Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels — *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject) — become critical design considerations.
+**(c) Africa.** Informed by Ubuntu and high Power Distance (removed book, 2001), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic, utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Vansina, 1985). Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels — *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject) — become critical design considerations.
 
 ## 1.4 Adapting Design Patterns for Sociality (Kahn et al., 2008)
 
@@ -254,7 +265,7 @@ Kahn et al. (2008) identify eight "psychological benchmarks" for social robots, 
 
 - *(a) East:* Rather than tactile handshakes, the robot must initiate interaction with a calibrated bow, as "in Japan it's very considered impolite if you break the personal distance or space and try to touch somebody" (Lecture 4). The bow angle should parametrically encode social hierarchy recognition.
 - *(b) West:* The *Initial Introduction* can incorporate the handshake as a tactile greeting, albeit with sensitivity to the Mediterranean (closer) versus Northern European (distant) proxemic distinctions (Lecture 4).
-- *(c) Africa:* Reflecting Ubuntu's communal orientation, the introduction must address groups rather than individuals. Encoding Power Distance norms, the robot must always greet the eldest or most-senior member first (Hofstede, 2001).
+- *(c) Africa:* Reflecting Ubuntu's communal orientation, the introduction must address groups rather than individuals. Encoding Power Distance norms, the robot must always greet the eldest or most-senior member first (removed book, 2001).
 
 **Pattern 2: Personal Interests (Kahn et al., 2008, p. 101).**
 
@@ -411,14 +422,14 @@ The integration of the OpenAI API introduces three additional ethical dimensions
 
 \newpage
 
-# References
+# References 
+
+- [ ] PEER-REVIEWED OR CONFERENCE SOURCES ONLY
 
 ## Task (1)'s
 
 - [ ] make alphabetical
 - [ ] fetch exact wording fron paper to earn second tick
-- [ ] [ ] Hall, E.T. (1966) *The Hidden Dimension*. Garden City, NY: Doubleday.
-- [ ] [ ] Hofstede, G. (2001) *Culture's Consequences: Comparing Values, Behaviors, Institutions and Organizations Across Nations*. 2nd edn. Thousand Oaks: Sage Publications. Available at: [https://www.sciencedirect.com/science/article/abs/pii/S0005796702001845?via%3Dihub](https://www.sciencedirect.com/science/article/abs/pii/S0005796702001845?via%3Dihub) (Accessed: 15 February 2026).
 - [ ] [ ] Joosse, M., Lohse, M. and Evers, V. (2014) 'Lost in proxemics: spatial behavior for cross-cultural HRI', in Proceedings of the 2014 ACM/IEEE International Conference on Human-Robot Interaction (HRI '14). Bielefeld: ACM/IEEE, pp. 1-6. Available at: [https://doi.org/10.1145/2559636.2559661](https://doi.org/10.1145/2559636.2559661) (Accessed: 19 February 2026).
 - [X] [ ] Lim, V., Rooksby, M. and Cross, E.S. (2021) 'Social robots on a global stage: establishing a role for culture during human-robot interaction', International Journal of Social Robotics, 13(6), pp. 1307-1333. Available at: [https://doi.org/10.1007/s12369-020-00710-4](https://doi.org/10.1007/s12369-020-00710-4) (Accessed: 19 February 2026).
 - [X] [ ] Smedegaard, C.V. (2019) 'Reframing the role of novelty within social HRI: from noise to information', in Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19). Daegu: IEEE Press, pp. 411-420. Available at: [https://doi.org/10.1109/HRI.2019.8673167](https://doi.org/10.1109/HRI.2019.8673167) (Accessed: 19 February 2026).
@@ -426,7 +437,6 @@ The integration of the OpenAI API introduces three additional ethical dimensions
 - [ ] [ ] Kaplan, F. (2004) 'Who is afraid of the humanoid? Investigating cultural differences in the acceptance of robots', *International Journal of Humanoid Robotics*, 1(3), pp. 465-480. Available at: [https://doi.org/10.1142/S0219843604000289](https://doi.org/10.1142/S0219843604000289) (Accessed: 15 February 2026).
 - [ ] [ ] Metz, T. (2007) 'Toward an African moral theory', *Journal of Political Philosophy*, 15(3), pp. 321-341. Available at: [https://doi.org/10.1111/j.1467-9760.2007.00280.x](https://doi.org/10.1111/j.1467-9760.2007.00280.x) (Accessed: 15 February 2026).
 - [ ] [ ] Mori, M. (1970) 'The uncanny valley', *Energy*, 7(4), pp. 33-35. Translated by MacDorman, K.F. and Kageki, N. (2012) *IEEE Robotics and Automation Magazine*, 19(2), pp. 98-100. Available at: [https://doi.org/10.1109/MRA.2012.2192811](https://doi.org/10.1109/MRA.2012.2192811) (Accessed: 15 February 2026).
-- [ ] [ ] Vansina, J. (1985) *Oral Tradition as History*. Madison: University of Wisconsin Press. A
 - [ ] [ ] Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320-333. Available at: [https://doi.org/10.1080/02681102.2015.1048184](https://doi.org/10.1080/02681102.2015.1048184) (Accessed: 15 February 2026).
 
 ## Task (2)'s
