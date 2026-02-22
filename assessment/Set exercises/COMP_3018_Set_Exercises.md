@@ -35,6 +35,14 @@ header-includes:
         showstringspaces=false
       }
 ---
+
+
+
+- [ ] do ALL TODOs throughout the inline text of the draft itself
+
+
+
+
 # Words-To-Use:
 
 - [ ] **Lecturer's Top Insight:** Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
@@ -93,17 +101,17 @@ header-includes:
 
 # 1- Task (1): Cultural Differences and HRI Design
 
-~1,750-word $\vert$ 40% weighting $\vert$ Questions 1.1-1.5
+~1,750-word $\vert $ 40% weighting $\vert$ Questions 1.1-1.5
 
 ## 1.1. Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
 
-Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in observation as follows: "**culture affects the way technology is perceived** and, reciprocally, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological narrative of each region shapes the societal meta-layer *(the underlying philosophical-and-theological framework controlling robot integration for each culture)*; this underpins robot acceptance.
+Kaplan's 2004 identification of East-West fundamental societal divergence is rooted in observation as follows: "**culture affects the way technology is perceived** and, reciprocally, **technological evolution shapes culture in particular ways**" (Kaplan, 2004, p. 465); i.e. the cultural (habits), theological (religious), and mythological narrative of each region shapes the societal meta-layer *(the underlying philosophical-and-theological frameworks controlling robot integration for each culture underpinning robot acceptance)*.  
 
 ### 1.1.1 Western Society (The Frankenstein Syndrome)
 
-Western culture persistently has viewed the creation of human-like (humanoid) entities slightly suspiciously. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 475).
+Western culture persistently viewed the creation of human-like (humanoid) entities with slight suspiciously. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 475).
 
-This anxiety traces to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames the humanoid robot as a challenge to human specificity (p. 476), and thus, a transgression against the natural order; as a result, Western societies have historically envisioned robotic development towards industrial, non-anthropomorphic (instrumentalist, TODO EXPAND) applications wherein the machine remains a *tool* rather than a would-be social entity. Kaplan further notes the concept of "narcissistic shields" *(the psychological defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
+This anxiety traces to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames humanoid robot as a challenge to human specificity (p. 476), and thus, a transgression against the natural order; as a result, Western societies have historically envisioned robotic development towards industrial, non-anthropomorphic (instrumentalist, TODO EXPAND) applications wherein the machine remains a *tool* rather than a would-be social entity (CITATION TODO) Kaplan further notes the concept of "narcissistic shields" *(the psychological defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
 
 ### 1.1.2 Eastern Society (Technology Taming and Animism)
 
@@ -115,7 +123,9 @@ Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e.
 
 The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerners predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome humanlike anthropomorphic features that align with animistic expectations (expectations wherein all entities, including artificial ones, are regarded as being a spiritual essence); indeed, Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like (humanoid) companion robots; US participants instead preferred machine-like functional agents.
 
-Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (standards within culturally-defined personal-space boundaries) based on their own cultural norms; however, the approach is fundamentally flawed as people from different cultures have demonstrably different preferences with respect to proxemics, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1). Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries continuously throughout the process whereby it calculates approach vectors, as failing to respect these bounds means user expectations are contravened, effectively alienating the would-be companion.
+Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards, i.e. standards within culturally-defined personal-space boundaries based on their own cultural norms, when developing a robot. However, they'd find the approach is fundamentally flawed as people from different cultures demonstrably differ ik terms of preferences with respect to proxemics (, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1).
+
+Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries continuously throughout the process whereby it calculates approach vectors, as failing to respect these bounds means user expectations are contravened, effectively alienating the would-be companion.
 
 Designers must also account for the novelty effect (Lecture 6); the most-prominent factor wherein users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. Despite the robot representing something novel (fictional), initial engagement masks genuine preferences, and indeed, the novelty effect has conventionally been framed as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As now-established, the novelty effect will thus feed skewed data continuously throughout the process as it inflates initial ratings, increasing the likelihood of confounding true cultural preference, with slight unfamiliarity thereof. The watchword herein is indeed cultural relativism: e.g. 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels; and 2) no universal design policy can accommodate these fundamentally different ontological (real-being) commitments. Researchers cannot infer permanent acceptance from early data and instead, the system must evaluate engagement over time.
 
