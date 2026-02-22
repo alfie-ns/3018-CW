@@ -109,17 +109,17 @@ This anxiety traces to the West's distinction between nature and culture, which 
 
 Japanese culture: exhibits a fundamentally different ontological *(the definition of what counts as a 'being')* stance. Kaplan (2004) traces this to the Shinto tradition, wherein the rigid Western boundary between animate and inanimate is dissolved in favour of a "continuous network of beings" (p. 470). In this view, humanoid robots are not perceived as transgressions but instead as natural extensions.
 
-Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 467). This ethos aligns with the *kata* tradition of formalised practice, wherein repetition leads to "maximum stability" (p. 470). The popular *Astro Boy* manga franchise (p. 466) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 466). Kaplan references the Amaterasu myth (p. 469) to argue that Japanese cosmology fundamentally lacks the creator-vs-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 476). This cultural openness persists into the contemporary era; as the lecturer observed, Japanese society remains "fine to leave people more with robots" and is "probably less sensitive to risks that might appear from robots" than the West (Lecture 5).
+Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 467). This ethos aligns with the *kata* tradition of formalised practice, where repetition leads to "maximum stability" (p. 470). The popular *Astro Boy* manga franchise (p. 466) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 466). Kaplan references the Amaterasu myth (p. 469) to argue that Japanese cosmology fundamentally lacks the creator-vs-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 476). This cultural openness persists into the contemporary era; as the lecturer observed, Japanese society remains "fine to leave people more with robots" and is "probably less sensitive to risks that might appear from robots" than the West (Lecture 5).
 
 ### 1.1.3 Implications for HRI Design.
 
 The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerners predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome humanlike anthropomorphic features that align with animistic expectations (expectations wherein all entities, including artificial ones, are regarded as being a spiritual essence); indeed, Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like (humanoid) companion robots; US participants instead preferred machine-like functional agents.
 
-Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (standards within culturally-defined personal-space boundaries) based on their own cultural norms; however, the approach is fundamentally flawed as people from different cultures have demonstrably different preferences with respect to proxemics, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1). Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries continuously throughout the process wherein it calculates approach vectors, as failing to respect these bounds means user expectations are contravened, effectively alienating the would-be companion.
+Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (standards within culturally-defined personal-space boundaries) based on their own cultural norms; however, the approach is fundamentally flawed as people from different cultures have demonstrably different preferences with respect to proxemics, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1). Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries continuously throughout the process whereby it calculates approach vectors, as failing to respect these bounds means user expectations are contravened, effectively alienating the would-be companion.
 
-Designers must also account for the novelty effect (Lecture 6); the most-prominent factor wherein users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. Despite the robot representing something novel (fictional), initial engagement masks genuine preferences, and indeed, the novelty effect has conventionally been framed as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As now-established, the novelty effect will thus feed skewed data continuously throughout the process wherein it inflates initial ratings, increasing the likelihood of confounding true cultural preference, with slight unfamiliarity thereof. The watchword herein is indeed cultural relativism: e.g. 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels; and 2) no universal design policy can accommodate these fundamentally different ontological (real-being) commitments. Researchers cannot infer permanent acceptance from early data and instead, the system must evaluate engagement over time.
+Designers must also account for the novelty effect (Lecture 6); the most-prominent factor wherein users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. Despite the robot representing something novel (fictional), initial engagement masks genuine preferences, and indeed, the novelty effect has conventionally been framed as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As now-established, the novelty effect will thus feed skewed data continuously throughout the process as it inflates initial ratings, increasing the likelihood of confounding true cultural preference, with slight unfamiliarity thereof. The watchword herein is indeed cultural relativism: e.g. 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels; and 2) no universal design policy can accommodate these fundamentally different ontological (real-being) commitments. Researchers cannot infer permanent acceptance from early data and instead, the system must evaluate engagement over time.
 
-## 1.2. African Cultural Factors Influencing HRI
+## 1.2. African Cultural Factors Influencing HRI Design
 
 - [ ] DONE?
 
@@ -133,7 +133,9 @@ The following factors are well-established in African countries, and thus likely
 
 ### 1.2.2 Power Distance and Hierarchical Norms: 
 
-- [ ] Cirasa and Conti's (2025) scoping review of cultural dimensions in HRI identifies Power Distance as a key factor shaping robot interaction norms; many African societies exhibit high Power Distance: a societal acceptance of hierarchical authority structures. In regard to HRI, this suggests that robots interacting with users across different social strata must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (Cirasa and Conti, 2025). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
+- [ ] Cirasa and Conti's (2025, p.7) scoping review identifies Power Distance i.e. a dimension of Hofstede's cultural dimensions framework (a foundational but non-peer-reviewed model just discussed): a key factor shaping robot interaction norms in HRI, many African societies score high on this dimension, wherein hierarchical authority structures govern social interaction. 
+
+In regards to HRI this suggests that robots interacting with users across different social strata () must modulate their behaviour accordingly: deferential language and posture when addressing elders or authority figures, and indeed a more directive interaction style when assisting in contexts where the robot is perceived as an institutional representative (Cirasa and Conti, 2025, p.7). Failing to encode these hierarchical norms risks contravening deeply held social expectations, thereby undermining trust.
 
 ### 1.2.3 Oral Tradition and Multimodal Communication:
 
@@ -302,11 +304,19 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 \end{tabular}
 \end{table}
 
-As Kahn et al. (2008) conclude, effective HRI must be "compelling as a lived experience" (p. 104) — and what constitutes a compelling experience is, as demonstrated above, inseparable from the cultural context thereof.
+- [ ] Kahn et al. (2008) concludes: effective HRI must be "compelling as a lived experience" (p. 104) and thus what constitutes a compelling experience is, as demonstrated above, inseparable from the cultural context thereof.
 
 \newpage
 
 # 2- Task (2): POMDPs in Human-Robot Interaction
+
+- [X] define POMDPs
+
+- [ ] work out word count*0.1 allowance
+
+
+
+- [ ] FIND PEER-REVIEWED CITATIONS: POMDPs (Partially Observable Markov Decision Processes): a mathematical framework for modelling decision-making problems where the agent has incomplete information about the environment state. They extend MDPs by incorporating uncertainty in state observation, making them particularly suitable for HRI scenarios wherein the robot must infer human mental states (§trust, intent, etc) from noisy sensory data. A POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is the set of states, $A$ the set of actions, $T$ the transition function, $R$ the reward function, $\Omega$ the set of observations, $O$ the observation function, and $\gamma$ the discount factor.
 
 - [ ] this needs to change as I am going to incorporate an AI API into the robot's system
 
@@ -318,13 +328,13 @@ To understand the POMDP's utility, one must strictly differentiate interaction p
 
 ## 2.2 Uncertainty, Belief States, and Decision-Making
 
-Because the true state is hidden, the POMDP agent maintains a **belief state** $b$: a probability distribution over all possible states $S$, where $b(s)$ represents the agent's subjective probability that the environment is in state $s$, such that $\sum_{s \in S} b(s) = 1$. After taking action $a$ and receiving observation $o$, the belief state is updated via **Bayesian filtering**:
+Because the true state is hidden, the `POMDP` () agent maintains a **belief state** $b$: a probability distribution over all possible states $S$, where $b(s)$ represents the agent's subjective probability that the environment is in state $s$, such that $\sum_{s \in S} b(s) = 1$. After taking action $a$ and receiving observation $o$, the belief state is updated via **Bayesian filtering**:
 
 $$
 b'(s') = \eta \cdot O(s', a, o) \sum_{s \in S} T(s, a, s') \cdot b(s)
 $$
 
- $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new — and potentially contradictory — evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process wherein each observation incrementally refines the robot's understanding.
+ $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process whereby each observation incrementally refines the robot's understanding.
 
 The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history — it compresses all past actions and observations into a single probability vector, enabling decision-making without storing the full trajectory (Kaelbling, Littman and Cassandra, 1998). This is indeed analogous to how a social robot must infer a human's emotional state from noisy multimodal cues (facial expressions, vocal prosody, posture) rather than accessing the "ground truth" of their feelings directly (Lecture 1; Lecture 3).
 
