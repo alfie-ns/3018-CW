@@ -19,6 +19,5 @@ done
 
 echo ""
 echo "All lecture PDFs gathered in: $DEST"
-echo "Cmd+A to select all, then drag into Claude web."
 
 open "$DEST"
