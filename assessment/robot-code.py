@@ -1,7 +1,9 @@
 “””
-NAO + OpenAI Conversation Loop
-Run on your laptop. Requires: pip install paramiko openai python-dotenv
-Create a .env file with: OPENAI_API_KEY=sk-your-key-here
+TODO
+
+- [ ] get connected to openai api
+- [ ] make web-search capabilities
+- [ ] make vision capabilities  
 “””
 
 import os
