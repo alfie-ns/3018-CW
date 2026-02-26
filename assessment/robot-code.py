@@ -4,6 +4,7 @@ TODO
 - [ ] get connected to openai api
 - [ ] make web-search capabilities
 - [ ] make vision capabilities  
+- [ ] Capability to fetch time and date if the AI determines its useful, encode this into system prompt 
 """
 
 import os
@@ -15,7 +16,7 @@ from openai import OpenAI
 
 load_dotenv()
 
-NAO_IP = "IP ADDRESS"  
+NAO_IP = "ROBOT's IP ADDRESS"  
 NAO_USER = "nao"
 NAO_PASS = "nao"
 RECORD_SECS = 5 # record for 5 seconds
