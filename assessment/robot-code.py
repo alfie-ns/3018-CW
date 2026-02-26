@@ -4,7 +4,7 @@ TODO
 - [ ] get connected to openai api
 - [ ] make web-search capabilities
 - [ ] make vision capabilities  
-- [ ] Capability to fetch time and date if the AI determines its useful, encode this into system prompt 
+- [ ] capability to fetch time and date if the AI determines its useful, encode this ability into system prompt 
 """
 
 import os
