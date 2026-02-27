@@ -46,6 +46,9 @@ header-includes:
 
 # Words-To-Use:
 
+- [ ] infer
+- [ ] belief
+
 - [ ] **Lecturer's Top Insight:** Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
 - [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
 - [ ] 3018-CW/learning/lectures/5 [ ] - utilise/lecture.md (**Task 1 insight!!**)

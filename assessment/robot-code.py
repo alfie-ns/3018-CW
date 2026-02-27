@@ -29,6 +29,9 @@ messages = [{"role": "system", "content": "You are a NAO robot. You are an assis
 
 
 def ssh_connect():
+    """
+    SSH into the NAO robot. Returns an active SSH connection.
+    """
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(NAO_IP, username=NAO_USER, password=NAO_PASS)
@@ -36,12 +39,18 @@ def ssh_connect():
 
 
 def nao_run(ssh, code):
+    """
+    Run the script via SSH on the NAO robot. Takes in the SSH connection and the code to run as a string. Returns the output of the command.
+    """
     escaped = code.replace("'", "'\\''")
     _, out, err = ssh.exec_command(f"python -c '{escaped}'", timeout=30)
     return out.read().decode().strip()
 
 
 def nao_record(ssh):
+    """
+    Record audio on the NAO robot. Uses the ALAudioRecorder module to record from the microphones and saves the file to a temporary location. Then, use SFTP to transfer the recorded file back to this machine for transcription.
+    """
     nao_run(ssh, f"""
 from naoqi import ALProxy
 import time
@@ -57,6 +66,9 @@ r.stopMicrophonesRecording()
 
 
 def nao_say(ssh, text):
+    """
+    Make the NAO robot speak. Takes in the SSH connection and the text to say. Uses the ALTextToSpeech module to 'speak' the text.
+    """
     safe = json.dumps(text)
     nao_run(ssh, f"""
 from naoqi import ALProxy
@@ -65,11 +77,17 @@ ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
 
 
 def transcribe():
+    """
+    Transcribe the recorded audio using OpenAI's Whisper model.
+    """
     with open(LOCAL_WAV, "rb") as f:
         return client.audio.transcriptions.create(model="whisper-1", file=f).text.strip()
 
 
-def ask_gpt(text): # prompt GPT with conversation history and append reply to convo
+def ask_gpt(text):
+    """
+    Prompt GPT with the conversation history and append the reply to the convo.
+    """
     messages.append({"role": "user", "content": text})
     reply = client.chat.completions.create(model="gpt-4.1", messages=messages).choices[0].message.content
     messages.append({"role": "assistant", "content": reply})
@@ -78,7 +96,7 @@ def ask_gpt(text): # prompt GPT with conversation history and append reply to co
 # MAIN EXECUTION -----
 
 def main():
-    ssh = ssh_connect()
+    ssh = ssh_connect() # init SSH connection
     print(f"Connected to NAO at {NAO_IP}\n")
 
     try:
@@ -91,7 +109,7 @@ def main():
 
             if not text:
                 continue
-            if "goodbye" in text.lower():
+            if "goodbye" in text.lower() or "bye" in text.lower():
                 nao_say(ssh, "Goodbye!")
                 break
 
