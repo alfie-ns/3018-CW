@@ -1,10 +1,22 @@
 """
 TODO
 
+- [ ] thershold for when to respond like if its loud enough
+- [ ] can be interrupted 
 - [ ] get connected to openai api
 - [ ] make web-search capabilities
 - [ ] make vision capabilities  
 - [ ] capability to fetch time and date if the AI determines its useful, encode this ability into system prompt 
+- [ ] eye contact when it speak, face recognition 
+- [ ] move hand to wave
+- [ ] make remember what someone likes 
+- [ ] allow to be cut off when spoken 
+- [ ] fix the timeout issue
+- [ ] stop talking for 0.5 sec if go onto new line 
+- [ ] utilise code for lights, animations, etc from Choerograph
+- [ ] only turn off just googbye is said or said first, if it speaking and hears goodbye it stops speaking 
+- [ ] configure to be able to change nake based on what tge user says it is
+- [ ] when you say it's name it looks like you
 """
 
 import os
@@ -25,7 +37,7 @@ LOCAL_WAV = os.path.join(tempfile.gettempdir(), "nao_input.wav") # location on t
 
 client = OpenAI() # init OpenAI API client
 
-messages = [{"role": "system", "content": "You are a NAO robot. You are an assistive humanoid robot"}]
+messages = [{"role": "system", "content": "You are a NAO robot. You are an assistive humanoid robot. Respond conciesly in 5 words max. only reply if you here your name first"}]
 
 def ssh_connect():
     """
