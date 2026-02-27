@@ -46,7 +46,9 @@ header-includes:
 
 # Words-To-Use:
 
-- [ ] infer
+
+
+- [ ] persons
 - [ ] belief
 
 - [ ] **Lecturer's Top Insight:** Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
@@ -347,7 +349,7 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 ## 2.1 The Role of POMDPs in Trust, Cooperation, Coordination, and Collaboration
 
-A Partially Observable Markov Decision Process (POMDP) extends the standard Markov Decision Process (MDP) — as studied in COMP3003 — by relaxing the assumption of full state observability. Whilst an MDP assumes the agent has direct access to the true environment state, a POMDP acknowledges that in most real-world HRI scenarios, the robot can only *infer* the true state via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the 7-tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
+A Partially Observable Markov Decision Process (POMDP) extends the standard Markov Decision Process (MDP) — as studied in COMP3003 (Lecture 7) — by relaxing the assumption of full state observability. Whilst an MDP assumes the agent has direct access to the true environment state, a POMDP acknowledges that in most real-world HRI scenarios, the robot can only *infer* the true state via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the 7-tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
 
 To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1. **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states — trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration. The POMDP therefore provides the principled mathematical framework for modelling trust, coordinating joint actions under uncertainty, and enabling genuinely collaborative human-robot teams (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, p. 619) demonstrate this empirically via a "Bounded-Memory Adaptation Model" wherein the robot maintains a POMDP over the human's latent type and adapts its policy accordingly — showing that mutual adaptation via belief-space planning significantly outperforms fixed interaction strategies.
 
