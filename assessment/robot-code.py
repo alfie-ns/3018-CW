@@ -27,7 +27,6 @@ client = OpenAI() # init OpenAI API client
 
 messages = [{"role": "system", "content": "You are a NAO robot. You are an assistive humanoid robot"}]
 
-
 def ssh_connect():
     """
     SSH into the NAO robot. Returns an active SSH connection.
