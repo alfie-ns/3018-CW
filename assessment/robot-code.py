@@ -68,7 +68,7 @@ def nao_say(ssh, text):
     """
     Make the NAO robot speak. Takes in the SSH connection and the text to say. Uses the ALTextToSpeech module to 'speak' the text.
     """
-    safe = json.dumps(text) # safely escape the text to be passed in the command line
+    safe = json.dumps(text) # wraps text as a safe Python string literal for the remote script
     nao_run(ssh, f"""
 from naoqi import ALProxy
 ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
