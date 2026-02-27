@@ -20,8 +20,8 @@ NAO_IP = "ROBOT's IP ADDRESS"
 NAO_USER = "nao"
 NAO_PASS = "nao"
 RECORD_SECS = 5 # record for 5 seconds
-REMOTE_WAV = "/var/persistent/home/nao/input.wav"
-LOCAL_WAV = os.path.join(tempfile.gettempdir(), "nao_input.wav")
+REMOTE_WAV = "/var/persistent/home/nao/input.wav" # location on the NAO robot where the audio will be temporarily saved
+LOCAL_WAV = os.path.join(tempfile.gettempdir(), "nao_input.wav") # location on the local machine wherein the audio will be temporarily saved
 
 client = OpenAI() # init OpenAI API client
 
@@ -68,7 +68,7 @@ def nao_say(ssh, text):
     """
     Make the NAO robot speak. Takes in the SSH connection and the text to say. Uses the ALTextToSpeech module to 'speak' the text.
     """
-    safe = json.dumps(text)
+    safe = json.dumps(text) # safely escape the text to be passed in the command line
     nao_run(ssh, f"""
 from naoqi import ALProxy
 ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
