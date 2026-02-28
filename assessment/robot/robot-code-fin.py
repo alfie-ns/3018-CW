@@ -14,7 +14,7 @@ TODO
 - [X] fix the timeout issue
 - [X] stop talking for 0.5 sec if go onto new line 
 - [X] utilise code for lights, animations, etc from Choerograph
-- [X] only turn off just googbye is said or said first, if it speaking and hears goodbye it stops speaking 
+- [X] only turn off just if googbye is said or said first 
 - [X] configure to be able to change nake based on what tge user says it is
 - [X] when you say it's name it looks like you
 """
