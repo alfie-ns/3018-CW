@@ -1,22 +1,24 @@
 """
-NAO robot interactive assistant
+TODO
 
-features:
-- connected to openai api (gpt-4.1 + whisper)
-- web search via openai function calling
-- vision via nao camera + gpt-4 vision
-- time and date as a callable tool
-- eye contact via face tracking (altracker + alfacedetection)
-- wave gesture using almotion
-- persistent memory for user preferences (json file)
-- volume threshold for filtering background noise
-- interruptible speech (robot can be cut off mid-sentence)
-- 0.5s pause on newlines during speech
-- led animations using alleds
-- goodbye only exits when said as the first word
-- robot name configurable via voice command
-- graceful fallbacks – no feature crash kills the loop
+- [X] thershold for when to respond like if its loud enough
+- [X] can be interrupted 
+- [X] get connected to openai api
+- [X] make web-search capabilities
+- [X] make vision capabilities  
+- [X] capability to fetch time and date if the AI determines its useful, encode this ability into system prompt 
+- [X] eye contact when it speak, face recognition 
+- [X] move hand to wave
+- [X] make remember what someone likes 
+- [X] allow to be cut off when spoken 
+- [X] fix the timeout issue
+- [X] stop talking for 0.5 sec if go onto new line 
+- [X] utilise code for lights, animations, etc from Choerograph
+- [X] only turn off just googbye is said or said first, if it speaking and hears goodbye it stops speaking 
+- [X] configure to be able to change nake based on what tge user says it is
+- [X] when you say it's name it looks like you
 """
+
 
 import os
 import json
@@ -33,7 +35,7 @@ from openai import OpenAI
 
 load_dotenv()
 
-# ── configuration ──────────────────────────────────────────────────────────────
+## Configuration ##
 
 NAO_IP       = os.getenv("NAO_IP", "ROBOT's IP ADDRESS")
 NAO_USER     = "nao"
