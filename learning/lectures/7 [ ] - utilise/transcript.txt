@@ -1,0 +1,656 @@
+Year.
+It is the reinforcement learning.
+So it is not reinforcement learning in some sense.
+And new coursework is not.
+Doesn't have any reinforcement learning algorithmic sense.
+But yeah, just to remind you, some equations.
+But just to give you an idea about what it is, this section, this lecture next week.
+And for the masters you will see reinforcement learning next semester.
+These models are able to understand this person's emotion.
+So I can see that you are, for example, feel tired.
+How can I see this?
+Through your facial expressions.
+Did you tell me I am tired?
+Not necessarily.
+But through your facial expressions I can infer.
+Infer.
+Get used to this word a lot.
+Infer.
+Inferred means something not directly observable, but you try to infer it through other cues, other signals like facial expressions, like speech prosecutor, for example, and so on and so forth.
+So we'd like to create models that can allow collaboration.
+But what kind of models that we can involve it.
+Let's try to set, you know, the general paradigm.
+We have a robot interacting with a human, right?
+Okay.
+And the robot should be interacting in a way like I might be like.
+Like I'm a human now, let's say I don't.
+I'm coming to you.
+I'm from different background, different culture, different don't speak English or something like this.
+I don't.
+And then I'm coming to interact with you.
+I might say something.
+And then I observe that some of you got, for example, happy or unhappy.
+Then I observe.
+I observe in you.
+And then your reaction for me is a motivation or a signal for me to adapt as a behavior.
+So I don't.
+If I see something that made you happy, I can next time stress on it to make you more happy.
+Or if I found something that made you sad, I can try to understand it, to change it.
+Like I'm trying to formulate, you know, in line language, the problem.
+Okay, so this is number one.
+So this is similar to reinforcement learning.
+We are observing there is a reward.
+This reward is your reaction, happy, not happy.
+That makes me adapt to the behavior.
+So I'm speaking about something.
+A model that can be used for human robot cooperation can be something related to reinforcement learning.
+We have reward and we have observation from the environment.
+Okay.
+And this reward can be verbal and non verbal, anything.
+Okay, so you might, for example, a robot hit an object, for example, and learn that it should not hit an object to break it.
+So learn it.
+That should avoid making such behavior next time or orally.
+Okay, so we speak that there is a system in the context of reinforcement learning that can be used for collaboration.
+Okay, that's good thing.
+So today we will introduce the partial partially observable mark of decision process and describe.
+We would like to describe, highlight the differences between MTP and the pr.
+Good.
+So for machine learning, we understand that this is familiar for undergraduates and postgraduates are not familiar yet with reinforcement learning.
+So Reinforcement learning.
+As I said, problems involving an agent interacting with an environment which provides numeric reward signal.
+So if I made you happy, I got a positive one cookie.
+They give me the cookie.
+So I know that, okay, this is the behavior.
+If I make it again, I will be the cookie.
+If you become sad, I will take the negative, the non cookie.
+So I will understand that I should, if there is a problem, I should avoid so that I can get the cookie.
+So learn how to take actions in order to maximize the reward.
+This reward can be positive 1 or negative 1.
+So positive 1, positive 1, like positive 1, positive 2, positive 3, positive 4, 5, 10.
+Positive 10.
+Okay, so this is.
+We maximize the reward this way.
+The same thing.
+If I tell you I would like to find you a way to go, for example, the shortest way.
+We have something called the policy.
+In machine learning, the policy is the way approach that you take to do the action.
+So if I'm saying your policy, I'm trying to learn that policy to go from Smeaton from my place to outside.
+Okay?
+The shortest way, best policy or best approach is to go one step forward and turn around and then walk, walk, walk, walk until I go to the door.
+This is one policy.
+Another policy is I go 100 times ago and come from this screen to this screen, screen, and then I go out.
+Another policy, I go 15 times like this.
+My weights until I go out.
+These are all approaches.
+Best policy is the shortest one that takes you to the objective in less number of steps.
+So each step you do makes you lose a reward, so it becomes minus one.
+So the less number of steps, the less number of rewards you have.
+So if I went from here to there, for example, in 10 steps, okay, I become minus 10, my reward.
+However, if I went there 100 times and then went out, my reward would be minus 100.
+So minus 10 is larger than minus 100.
+The same thing when we say I'd like from here to go to Smeaton.
+So one guy can go to Smeaton directly.
+Another guy can go to Exeter and then to Smith to Smeaton Tower as a whole.
+From Smeaton to the Tower as a whole.
+Let's say.
+So one guy can go directly in five minutes.
+Another guy can go to Exeter and then go there.
+Another guy can go to Japan and then go to London again, and then go to Plymouth and then go to Smith directly.
+Okay?
+So different approaches, different strategies.
+Each strategy has its own route.
+Okay, so we have different routes in this sense.
+So the strategy is or the policy, how the agent that the agent will adopt to make the action.
+So it's a scenario.
+We have agent, we have environment.
+Agent means human.
+I'm an agent or a robot, okay?
+And the robot is observing the environment.
+So you are from ISA environment.
+So I'm taking images.
+Taking images.
+Taking images, Taking images.
+I am capturing the environment, stillness.
+So I am observing, you know, observing the state sd.
+So I'm taking.
+So I understand now you are all static and you are all static in your place.
+And if you are moving, I will understand that you are in a moving dynamic environment.
+Everyone is moving from going from place to place.
+And then I will, for example, paint office.
+I will do an action, okay?
+I will do whatever action to change the environment.
+Use a chair.
+Then I will take another state sample.
+This is called in machine learning language, I will sample.
+Why did I say I will sample another state or observation.
+So you sample through observation.
+Because like I'm observing the environment, I'm taking observations.
+Observations like camera, okay?
+So when I say sample sample, it means like you put your hand inside something and take a sample.
+Okay?
+So it's simply like when I say take an observation and tries to sample from the environment.
+An observation means like I'm putting my hand inside the, you know, like the environment and taking a sample.
+It's like I'm taking an image just to understand how the environment is.
+So you are taking image @t +1.
+At t as in you are taking at each time step, you are taking another image, another image, another image, this representation, the observation, okay?
+So you understanding the state of the environment at time T, you are all static at time t +1.
+You are only static at time t +2.
+You started to move from place to place.
+You are not static and so on.
+Then I make another action and I observe the reward.
+So I might make another action.
+Then, for example, action like now I'd like to push this chair and I, I put this chair strongly and I made cup of tea fall down.
+And then I observed your reaction.
+So reaction of the gentleman, for example, coming say, why did you do that?
+For example.
+So I observe as a robot the reaction because the observation, observation I'm taking from the environment that someone got angry from the consequences of the action.
+So I understand that I should not repeat this behavior again when I'm doing next action.
+So when I'm doing next action, if it was because I pushed the chair until the T fall down, I will try to push it a little bit away or to push it a little bit less than I made before.
+So that it is, it doesn't make anything fall down, you know.
+So simply speaking, we learn how to take actions in order to maximize the report.
+So there is a difference between Markov decision process and.
+Partially observable Markov decision process.
+What is the difference between them?
+A partially observable Markov decision process is really just an MTP in machine learning.
+What did we study?
+Mdp.
+Here we are speaking about something different.
+Pomdp, partial.
+So what's the difference?
+So mdp, Markov decision process is all Markov decision process, but the one that we speak about here is partial.
+So we understand that we have set of states, set of actions, transitions and immediate.
+The actions effects on the state in PODP are exactly the same as in adp.
+They are similar in everything.
+Get familiar with the language we are speaking about states, okay?
+Because I'm moving from a state to state.
+So like, remember, like we hear, we will speak about state of the world.
+So these are the states and we take another state, ST +1.
+So this is second state of the world, okay?
+So we speak states and the group of actions and the group of rewards and the transition from one state to the other state.
+So these are the very basic building blocks of mdp.
+It's exactly the same thing.
+The only difference is in whether or not we can observe the current state of the process.
+So let's try to see the difference.
+The difference is simply there is a robot that is environment, okay?
+So if it's fully observable, it means like you are for me, fully observable as humans.
+Okay?
+This is the mdp.
+So I understand that you are sitting on the chairs and you are doing whichever action you are doing.
+You this understandable to me as mark of mdp.
+Fully observable, partially observable is what your emotions, your intents, your goals.
+So I'm not speaking about your presence, I'm speaking about something that I need.
+Your presence is directly, can be understood directly or measured directly because you occupy some vacuum, some part of the vacuum.
+So you understand you are present, but your intents are intrinsically unobservable.
+So I need to infer them, infer them through your, for example, facial expressions, your speech paucity, so on and so forth.
+That's why in human robot interaction, a very common model to use is that pomdp, because we are dealing with emotions, we are dealing with intents, we are dealing with goals that we need to infer because they are unclear.
+The same way that you are able to understand each other, you are able X person can understand that white person is tired, one person is ill or whatever by inferring this.
+So in machine learning we dealt with mdp.
+Okay.
+In human normal interaction we deal with P or mdp, but not in algorithmic way.
+We are just highlighting the very basics of it.
+Okay, Good.
+So in terms of uncertainty then we have uncertainty about action outcome and uncertainty about world state due to imperfect partial approach.
+So we speak about in general case of uncertainty, uncertainty, action outcome or uncertainty about the world state due to imperfect or partial information.
+Okay, Mark, partially observable.
+Partially observable.
+Why?
+Because action outcome, I'm not sure what action outcome could be or the world state due to imperfect or partial information.
+Like your emotions, your emotions for me are partial information.
+Okay.
+Or because you don't know the action outcome.
+So might say ah, like uncertainty here.
+If I do this action, this person might react this way or that way.
+You don't know.
+So action, you don't know what action can make, what reaction or lead to what reaction.
+You don't know.
+Okay, so these are variables or there are in part there are like a kind of imperfect partial information.
+Partial information.
+So for the.
+Partially observable Markov decision process, So we have here the fully observable mdp.
+As usual, the representation involves some states moving from a state to state, some actions and some rewards.
+Some state is like simply when I try to myself, I am here, I'm at state S0.
+Okay?
+Now if I'm trying to go to the door, if I move from state A to 0, this becomes state S1, this becomes state S2, this becomes state S3, S4, S5.
+So these are the Ss.
+And for each action I might have an action and the reward.
+Reward is like is it for example, each step I make, I can lose one, minus one or positive one according to the reward particular rewards that they will have.
+So this is the only mark of decision process that we have got.
+We don't have something different than this one.
+Similar to what you have got in machine learning.
+It was shape or similar.
+Okay, so you understand that the S1 is connected to S2 and so error.
+This is your S1 and S1 has arrows coming from action so that the action, previous action and the previous action here gives you some insight about useful information about what should you do in S2.
+Okay.
+And this contributes to the action that you would do a one and so on.
+Okay, good.
+So we understand this was about in.
+Let's recall some important statement here for Markov decision process.
+So just a.
+It is mark like Mathematical formulation of reinforcement learning problem.
+And we have something called Markov property.
+Markov property.
+Why it's called Markov?
+Marov.
+Marov.
+Don't look at screen machine learning.
+Why Markov's called Markov?
+Is it the name of the person that invented it?
+Maybe this is one, one, one direct reason.
+What is the indirect reason?
+Markov.
+That was a very important slide, guys, because of the Markov property.
+So the guy is not only attributed it to himself, you know, like a mark of proper, like, like a hidden mark of process or hidden mark of models, whichever.
+Now he said I would propose a property.
+And he called this Markov property a state.
+ST is Markov F. And only if the next state depend only on the present state, it doesn't need the history.
+Which means the present state captures all relevant information from the history.
+So in order to have information from probability transition from S to conditioned on S1, you know, or ST plus one conditioned on ST, you need to know information only about the present.
+You don't need to.
+The ST only encodes the ST itself decodes all the information about the past.
+So you don't need to make something like this.
+Just say st. ST encodes all the information about the past.
+That's why you find here each state is connected to the past.
+So S2, S1 connected to S0, S2 connected to S1.
+So S2 depends on S1 only.
+But I don't need to say S1 and S0.
+You don't find a connection between S0 and S2, only connection from state to state.
+Okay, so each state encodes all the previous information about the other states.
+Okay, so this is a Markov property we speak about from state ST&1 and ST.
+So by definition here we speak about.
+Set of possible states as a mathematical formulation.
+S and A is set of possible actions and R distribution of reward given state action pair and the transition probability and the discount factor.
+Okay, so for scale scaling rewards, can you remind me what is the scaling factor?
+Isn't it where like the further the state is, the less the reward matters.
+Oh, sorry.
+The less the reward matters, the further or like the later state it is in more direct way, let's say you're thinking about your next step, next future step.
+So you might say, ah, I will try to make a plan for my 5 years career and think about what I will do.
+Okay, If I do masters, I might get specialized.
+My salary can jump by a few hundreds of pounds.
+And then if I do go, I have to routes.
+If I work in academia, I Can have this benefit.
+If I work in industry, I can have that benefit.
+And then if I continue in each route, for example, in the industry I can become, if I do XYZ study about marketing as well, this can increase my salary in the sector where I would like to work.
+So that after five years or six years or seven or 10 years, I become regional manager.
+So you put for yourself a plan for five, 10 years.
+But you might think some people, we have this kind of people who make long term plan and some other people make one year plan or few months plan, short term plan.
+So this is a discount factor.
+The discount factor, if it's equal to zero, it's a factor from zero and one.
+It's telling the robot focus on the immediate reward or the near reward, the reward that happening in the next months or next, you know, days or one year or something.
+However, when you say reward equal to one, it means like look at the rewards that are coming on the long term, okay, Similar to us.
+So it's something, when you are designing the problem, you are, this is a factor between 0 and 1 and you are saying to which extent should I scale rewards?
+Should I focus on the direct benefit or should I focus on the long term benefit?
+So on you see the point.
+Okay, so this is, we understand that this is the part of Markov decision process.
+Oh, looks complicated.
+We have here some difference.
+The difference is in the umbrella that we have here.
+Umbrella of connections between an action to an action, okay?
+From action E0 to A1 and from A1 to A2 and from observation, each observation, okay, to the action after.
+So a zero, a one going to a two and a one and a two and a one going to a two and O2 going to O3.
+Kind of connection between each action and observation and the next states.
+Otherwise we have observation.
+So this was not present here.
+So we have here no observation because it's intrinsically observable.
+It's totally observable.
+The NDP is observable.
+So the observation itself, there is nothing itself it introduces.
+But because here it is intrinsically unobservable, the observation counts because the observation is like I'm trying to infer your emotions.
+So the observation of your facial expressions or your proceeding counts here.
+So I have the observations, I have the action, I have the states, I have the words and they have the connection between them as we can see.
+So the connection between actions and observation at time T to future actions in the graphical model for PRGP represents the dependencies, mutual decisions on past actions and observations.
+The Decision making process at any time point in a PODP takes into account the entire history.
+The entire history.
+The decision making process at any time point in PMDP takes into account the entire history.
+How did I know?
+Because you are connected here to all observations and all actions from previous states.
+The entire history.
+So at the direct impression here when I say this, I tell you is it Markov or not Markov?
+You depend on history or not history.
+Is it Markov or not Markov?
+The PMDP mark of property or not mark of property.
+Not mark of property.
+Not mark of property.
+Because it depends on history.
+Okay, let's put this on the shelf a little.
+Okay, so here to continue which includes past actions and observations as you form the belief about the current state.
+A new word we have to learn the belief.
+Okay, so when I say what is your belief about?
+Okay, so in bian term, if you remember, remember the bias theorem.
+The belief is a posterior distribution, okay?
+Of you know, have like, you know, like prior posterior likelihood.
+I still.
+So the posterior distribution of a variable is a belief.
+Belief is like the amount of information you have about something.
+Okay, so when you say, for example, like my belief about the current situation is this is according to what you think about the current situation belief.
+Okay, so this called the belief.
+So get used to this.
+So say which includes past actions and observations as the inform the belief about the current state and influence on future decisions.
+Good.
+So P on DP we apply the very same same idea as in immediate pay.
+Since the state is not observable, the agent has to make decisions based on its based on the belief state which is a posterior distribution over states posterior distribution.
+Not familiar with the B yet?
+Yeah, I'm not heard about it.
+Okay, so bistery which was to have evidence about, you know, probability of an event happen conditional on another event and you can think about the commodity.
+So if I have two events.
+It's.
+So the posterior is like I'm trying to tell you I have action A and action B event A and event.
+I'm telling, trying to tell you what is the probability of event A given conditional on given event.
+What is for example the likelihood of what is the probability that for example this computer falls down if there is an earthquake?
+Action and action.
+Okay, so this is called a conditional on B.
+The likelihood is something similar you translate it on.
+So I say what is the probability of a given B action A given B.
+Now when you translate the likelihood you translate it using the language given, given, given the action B will have happen.
+What is the probability that action A will happen.
+This is like what.
+Let's say there is a tube.
+I'm not good in inventing the last time, my last math example, I.
+But let's say I have a tube and you are looking from here, From this side and here B.
+So if you are looking from this side, okay?
+So you are calculating probability A given B. I can tell you that let's say if it is in this unit, in this huge.
+In this tube, I have put different kind of balls.
+Basketball, football, volleyball and handleball.
+Okay?
+So I can tell you if you are looking from the A side, from external, what is the probability, the posterior probability that you will have the output of this two.
+The event that will be output from two, from this two is a basketball.
+Fine.
+And you will understand, okay?
+Given that you have like, what is the output that.
+What is the probability that the output will be basketball?
+Given that you have put a lot of balls in the tube, okay?
+So you will think, okay, what kind of of boards I put in the tube?
+So that you calculate the probability that I will have only basketball.
+Okay?
+Now if you look at the likelihood, you look from the side.
+So you start translating it by saying given, given I put in the tube, for example, group of basketballs, what is the likelihood or group of balls?
+Let's say given that I put in this part of the the other side, in this part of the.
+This part of the two group of balls, what is the probability that the output and the output you will have a basketball?
+Okay, so this is like how you are looking for the problem, how to translate it, because people say it's too.
+Likelihood.
+You look from the other side and it can be translated using the word given.
+Okay?
+The prayer is the prior information.
+Okay?
+So when I tell you for example, that you have the analysis against Covid and it has for example, success rate 88%, this is your priority, the information that you have, okay?
+Over the evidence.
+So this is called biased theory.
+So what should we.
+What do we understand here?
+Since the state is not observable, the agent has to make a decision based on belief, okay?
+And which is a posterior distribution over state.
+So we understand that we have ST represents states.
+As we have seen in mdp, we have a capital represents all actions.
+We have probability of going from state transition model from state to another state, okay?
+Conditional on previous state.
+So going to a new state, conditional previous state and action.
+Okay?
+And we have seen this from the phase trigger going to another state, condition on the previous state and action.
+All are giving arrows here.
+Okay?
+So this is transition probability going to a new state condition on previous state and action.
+Okay, we have also seen reward model.
+We have seen discount factor.
+Okay, we have seen start state and set of possible evidence observations.
+So in Bayes theorem, Remember here I was saying this is the evidence, the denominator.
+This is the evidence denominator.
+To translate it to the language of our model, we say E set of possible evidence observations.
+So observations is the denominator of the Bayes theorem.
+Okay, and what do we try to calculate?
+We try to calculate, you know, the probability of E given the state.
+Okay, so the observation given by the state.
+So we start from here speaking a little bit few mathematical steps.
+So.
+So let's take five minutes break.
+Okay.
+Always related by or like named as we call it by.
+So this is a standard unified language.
+We will find by this is means a policy.
+It maps states to action.
+Okay?
+So if I'm at this state, the policy tells me in order to go to the door, okay, I have action take one step forward.
+So it's connecting between my state, which was where I am standing, to the action I should do one step forward, okay?
+And then I take another action which is going to this direction.
+It acts on my current state.
+So this is Markovian, because we don't depend on the history, we depend on the state current state per se.
+But the state is unknown in pmtp.
+The state is unknown in pmdp, you understand?
+In pomdp your state in mdp your state is physically, you physically occupy part of the volume PC I can understand.
+But in pmdp, the state here is your emotion.
+So it is unknown.
+I need to infer it.
+So in order to represent it, I need to replace the state by other thing.
+What is this other thing?
+Simply the history and the initial belief.
+So in PODP policies we replace the state by initial belief B.
+Okay?
+And the history and this what maps to the action.
+So the V capital O is the space of initial beliefs.
+Initial beliefs.
+You have initial belief about anything.
+Your initial belief about any action anything is initial initial information.
+Okay?
+And the HT is the space of history, of observations, space of histories.
+So it means the HT in definition of action observation, action observation, action observation.
+So what we are happen happening here we having included instead.
+I don't have the space S I need to infer it.
+So in order to do this in pmdp, I include the action observations, action observations, observations, actions, observations.
+Okay.
+The history of all action observation and my initial belief people.
+Okay, so that what makes it non Markovian policy.
+Please differentiate now.
+Non Markovian policy.
+Yes, but it is a Markovian model.
+We will see at the end.
+The PMDP can be considered as Markovian Markovian model, but non Markovian policy.
+And this is the most confusing part, that belief is history dependent.
+Yes, Depends on history for computation.
+But once you computed it, when you update it is Markovian.
+And we will see how it is updated in a Markovian way.
+Updated in a Markovian way means like when we update it, we don't need has.
+So you need history to just make calculation of the belief at the very beginning part.
+But after that when you update your belief, you will not need any information at the beginning.
+When I say, when I say in mdp, I moved from this state to this state.
+So I'm updating my belief that I'm not at state essential, I'm at state S1.
+When I interact with the environment.
+When I interact with the environment.
+When I interact with the environment, that particular action I will do certainly have also some updates.
+My belief about it, because it's kind of belief is a kind of information.
+So if you give me information about anything, you update my belief.
+I have initial information, for example, that this guy is expert in chemical engineering.
+My belief is 8 over 10.
+Then when I interact with the person, my belief whether goes stay at the test or goes up or go down during interaction.
+So that belief is updated.
+So we'll see how the belief is updated in prt.
+That's fine.
+So when we think about policy training, okay, so we understand that in POGP we speak about initial belief, we speak about history, and this maps to action.
+So consider single initial belief B.
+So single initial belief B.
+So the policy can be represented by a tree composed of.
+So we have action and observation.
+This is a way, This is a way to represent a tree of actions and observations.
+So we can move for example from like it is a decision tree.
+Like I move from one action, I can have observation O1 or 2 and O1 can take me, for example, the observation can take me to the same action or action one or action two.
+And then through different observations you can make a jury over actions, okay?
+And overloads, which can be as simple as this or can be, for example, when you speak about policy and you speak about the policy has a tree of actions, okay?
+Like it's like what when I say I was in action one, action one tells me go one step forward.
+This is, I'm speaking about mdp, okay, so then another actions takes me to another state.
+But in pmdp, okay, when you have like something like let's say you are playing chess, okay, so that you can define that action one is going forward, let's say, and action two is going backward, okay?
+So from action one I made action one, I move the chess piece, I can go to another action with another move forward or move backwards according to observations.
+And then you can continue from the according to observations, once you step forward, can step another one time forward or go back series of actions like this, the same things that you can represent over group of actions, okay?
+And a group of observations in this way.
+So this is kind of mathematical or kind of graphical representation or trace for the policy.
+So coming back to belief, we understand the belief about status distribution over state entity, okay?
+So I Say the belief that state is probability over state time.
+So the belief about underlying state based on history.
+Okay.
+In pmdp, so the belief is similar to the main equation but we say conditional on, as we said before, initial belief and history.
+So we just said that belief about state is probably distribution, honesty distribution, probability distribution.
+What's my belief about, for example income in Plymouth?
+So I say for example probability distribution for salaries that are for example higher than excess ratio, lower than excess ratio or something like that.
+So it's probability.
+The probability distribution itself represent a curve.
+This curve represents information and this information is what I'm saying you would believe about something.
+Okay, so the probability or the belief is a distribution over states.
+Now the belief about underlying state based on history, this podp.
+So we say that belief is equal to the probability of the state conditional on hypothesis, conditional on history and initiative.
+So what happened?
+Just I said conditional, okay, because I, I need to know the history and I need to know the initial belief.
+So just playing with what we have good.
+Before it's a little bit complicated.
+We don't need to worry about this slide a lot.
+But just as an idea, how did we formulate that?
+When we speak about the update, what happens?
+Okay, I count the initial belief and then end history.
+I need to update.
+Update means like from BT to PT plus 1 to PT plus 2.
+So believe, update from BT BT plus 1 PT plus 2 BT plus 3 and so on and so forth.
+So in order to update to BT plus one, for example, we need to know about PT and we need to know about the action and we need to know about the observation at T +1.
+This is how you update your belief.
+Okay, how did I, how did I. I went here, I came here to interact with somebody in chemical engineering and I had my belief about him 8 over 10 that he's expert.
+Then I observed how he was working with chemical compound electric components.
+I had my observation about him and then when I entered I was at T high high.
+Then I found him making some kind of Mess at time t +1.
+And he made for example in some kind of sophisticated experiment he made very nice step or not nice steps that can give me idea about his performance.
+So this is the observations I got from him at plus one.
+Is he clever or not clever?
+And I also observed his action when he was dealing with the first at the beginning the experience he had made some actions and the output of this action he made.
+He put X component was Y component underneath some kind of new interaction, chemical interaction.
+But this together led to this was Action led to burning the laboratory.
+So this is the observation that I have got at T +1 as a result of the action at 80.
+So what happens?
+I updated my belief at T +1 that is consequent to my previous belief.
+So instead of giving him 8 over 10, I give him 6 over 10, 5 over 10.
+Okay, so this is just very easy narrative to make you understand what does is updating here.
+So simply speaking, let's come back again to our equation.
+We say just to replace.
+This is the same equation from here, but we just replace t by t plus one.
+So T plus one is equivalent to rep plus one, okay?
+And conditional on HT plus one and the po.
+Okay, now that's very well.
+Now let's speak about the probability of say probability.
+We try to decompose it.
+So let's say HT plus one the hypothesis at T plus Sorry, the.
+The history at t plus one is equivalent to the history at t plus action at t plus observations.
+So the history at t plus what next?
+History.
+The history at t plus one at T is equivalent to everything before it.
+At T plus one is equivalent to the old history plus the action and observation.
+Not difficult.
+History is like from here to here.
+This is all the history.
+Now I made an action, I burned the laboratory, I made components and burned the laboratory, for example.
+So the action, I put some components together and the result is there was a fire.
+Okay, so there was action and observation.
+And always the observation is after the action because you made the action and then you waited to see the observation what will happen as a result.
+Okay, and then you come to HT plus one.
+So HT plus one is equivalent to HT plus the observation plus the action.
+Something like this.
+So what happened?
+I replaced this with these components here.
+And then when we come again to the bt, So this is we replace it po ot plus 180 and H. Okay, good.
+Okay.
+And then when we come to also we try to say like this is equivalent to.
+So this is the same parameter.
+This is the same parameter.
+Okay, this is the same parameter.
+So we see HTPO and bt.
+So we see that the current belief is equivalent to the old belief and the history.
+So old belief and history.
+So this is equivalent to.
+I can merge them to become current belief.
+I'm just playing those parameters.
+So now this is a posterior probability.
+Remember the posterior probability of bias that I have put here.
+Now we can use the same explanation of bias theory and I can express it as posterior probability like you see here.
+So this is like this is like probability of A.
+And this is like probability of B.
+So I put this equivalent to probability of B given A.
+Okay, Multiplied by this probability and divided by the probability of likelihood.
+This is more or less like by step.
+And then without getting in detail, we apply chain rule and we apply belief definition.
+So a lot of mathematical steps and we come to a final definition for the belief update.
+So the belief update, if you'd like to have the belief update, that belief at time t 1 is something equivalent to probability of observation given ST 1 and AT and sum of all, you know, probability of all the states given state and a multiplied by the initial the belief at 20.
+Or this was a very primary explanation here.
+It ended by this kind of large explanation.
+So as update when we come to the update.
+So when we come to the update, actually.
+What do we observe here?
+Here you used history.
+Here you used history right here.
+Did you use history as a final explanation?
+There's no history.
+So this means what?
+When it updates the PODP initially it has history.
+Just for the initial definition.
+Okay, initial definition, it has history.
+But with a belief updates it doesn't have history.
+So we can understand still that the partially observable Markov decision process is initially at the belief definition at the beginning is non Markovian, but at the belief of it, it is Markovian.
+So this is what we can say.
+So PMDP can be viewed as belief state mdp.
+Okay, if belief is ticked, because it depends on the state.
+So let's see here.
+It depends on the state, no history.
+It depends on the state, state, state, no history.
+So that's why I called the belief state mdp.
+Okay, so we have group of states, actions and transitions.
+Okay, so we have group of transition from like belief to another belief and rewards.
+So the belief state MDP is fully observable and continuous belief space.
+If we try to think about how it could be the pmdp.
+So we see that, okay, the MDP is fully observable, the pomdp.
+We try to consider it as continuous space, belief in DP continuous space.
+So it means like remember the very first definition when we try to have something like this.
+So we have this continuation here.
+Everything is connected to everything.
+Okay, so it is.
+If we try to formulate the difference between MDP and pmdp, we can consider it as continuous space, belief mdp.
+So at the beginning it's not Markovian.
+But when we update the belief, we don't depend on H anymore in history, we depend only on the state value itself.
+Okay, so it can be seen as Continuous space belief mdp as the agent's belief is encoded, so continuous belief states.
+So we may solve the mdp.
+Okay.
+Like using value iteration algorithm and same for the Pure DP.
+So this is just last slide 4.
+And we will go quickly through this part next time.
+Like we have proposed MDP different algorithms to solve it.
+I formulated it.
+I formulated it.
+But I need a machine learning model to find the best policy.
+Like in mdp.
+I said like there are different policies.
+The policy number one is to go to the door directly like this and go here or go several times and go out.
+Or go several times like this and go out.
+We have different policies.
+So which policy valuation, which policy is the winner?
+Policy you need to make policy evaluation.
+So policy evaluation.
+Okay, what we do simply we try to make expected sum of rewards the same thing that the policy that takes me to the door.
+I will calculate each step I do, I take minus one, so from here to here minus 10.
+And then if I consider I go this way and that way I will have minus 100.
+If I will go this way and this way I will go minus 500.
+For example, so sum of rewards always it's about rewards.
+So sum of rewards.
+Okay.
+And we have Bellman equation and some kind of similar expression explanation to what happened in machine learning which we can also highlight next time.
+So the purpose of this is not to give you machine learning purpose.
+We are not dealing with algorithmic machine learning.
+Your PMDP as well question and the coursework is very simple.
+Okay.
+Depends on your general understanding.
+It's not like a machine learning.
+When you come to machine learning, we will deal more about the algorithmic side of it.
+Okay.
+But just to give you highlights about just to give you a little understanding, we have different policies and the idea here is that we to find the policy, but we evaluate the policy.
+And when we evaluate the policy, it's in terms of reward.
+Like your policy is to make masters, for example and go to make another masters and from the mother master become regional manager or make academia.
+And from academia you make X work and become professor.
+And, and, and so you have different policies.
+And each policy you have rewards you can calculate.
+No, this is for example have more rewards for me than this.
+And then you can calculate your rewards here and there.
+And then you can choose which policy should I take.
+Which policy means which approach should I take.
+Okay, you have questions for this part.
+Okay, so we will follow next time about this part works.
+And yeah, like I will see you in the lab.
+Okay, thank you so much.
+R. It.
