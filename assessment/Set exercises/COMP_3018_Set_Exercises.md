@@ -41,6 +41,8 @@ header-includes:
 <!--
 - [ ] do ALL TODOs throughout the inline text of the draft itself
 
+- [ ] verify all lecture references are correct with deeper review of lecture materials 
+
 
 
 
@@ -118,7 +120,7 @@ Kaplan's 2004 identification of East-West fundamental societal divergence is roo
 
 Western culture has persistently viewed the creation of human-like (humanoid) entities slightly suspiciously. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against its creator" (p. 475).
 
-This anxiety traces to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames humanoid robot as a challenge to human specificity (p. 476), and thus, a transgression (??) against the natural order; as result, Western societies have historically envisioned robotic development towards industrial, non-anthropomorphic (instrumentalist, TODO EXPAND) applications wherein the machine remains a *tool* rather than a would-be social entity (CITATION TODO) Kaplan further notes the concept of "narcissistic shields" *(the psychological-defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
+This anxiety traces to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames humanoid robot as a challenge to human specificity (p. 476), and thus, a transgression *(a violation of the boundary between what humans create and what humans are)* against the natural order; as result, Western societies have historically envisioned robotic development towards industrial, non-anthropomorphic *(instrumentalist, i.e. designed purely for functional utility rather than social engagement)* applications wherein the machine remains a *tool* rather than a would-be social entity (Kaplan, 2004, p. 476). Kaplan further notes the concept of "narcissistic shields" *(the psychological-defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners psychologically distance themselves to manage the discomfort of encountering machines that erode the human-robot distinction.
 
 ### 1.1.2 Eastern Society (Technology Taming and Animism)
 
@@ -130,17 +132,31 @@ Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e.
 
 The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerners predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome humanlike anthropomorphic features that align with animistic expectations (expectations that all entities, including artificial ones, are regarded as being a spiritual essence); Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like (humanoid) companion robots; US participants instead preferred machine-like functional agents.
 
-Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards, i.e. standards within culturally-defined personal-space boundaries based on their own cultural norms, when developing a robot. However, they'd find the approach is fundamentally flawed as people from different cultures demonstrably differ ik terms of preferences with respect to proxemics (, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1).
+Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards, i.e. standards within culturally-defined personal-space boundaries based on their own cultural norms, when developing a robot. However, they'd find the approach is fundamentally flawed as people from different cultures demonstrably differ in terms of preferences with respect to proxemics, such that what is normal for one may constitute a violation for another (Joosse, Lohse and Evers, 2014, p. 1).
 
 Regarding specific regions, Japanese normally demand larger personal-space buffers and non-tactile greeting protocols, whereas Mediterranean cultures tolerate closer approach distances (Joosse, Lohse and Evers, 2014, p. 2); therefore: a culturally-calibrated model feeds local boundaries into its approach-vector calculations, as failing to respect these bounds means user expectations are contravened, effectively alienating the companion.
 
-Designers must also account for the novelty effect (Lecture 6); the most-prominent factor: users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. Despite the robot representing something novel (fictional), initial engagement masks genuine preferences, the novelty effect has *conventionally* been framed as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As established, the novelty effect will thus feed skewed data as it continuously inflates initial ratings, increasing the likelihood of confounding true cultural preference with transient unfamiliarity. The operative principle is cultural relativism: two things; 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels, and 2) no universal design policy can accommodate these fundamentally different ontological (real-being) commitments. Researchers cannot infer permanent acceptance from early data and instead, the system must evaluate engagement over time.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture4-proxemic-zones.png}
+\caption{Lecture-4 slide illustrating Hall's four proxemic distance zones and their cultural dependence --- noting the distinction between ``high-contact'' and ``low-contact'' cultures (Bartneck et al., 2020).}
+\label{fig:lecture4-proxemic-zones}
+\end{figure}
+
+Designers must also account for the novelty effect (Figure~\ref{fig:lecture6-novelty-effect}); the most-prominent factor: users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. Despite the robot representing something novel (fictional), initial engagement masks genuine preferences, the novelty effect has *conventionally* been framed as a source of noise wherein inflated initial ratings obscure the user's authentic response (Smedegaard, 2019, p. 412). As established, the novelty effect will thus feed skewed data as it continuously inflates initial ratings, increasing the likelihood of confounding true cultural preference with transient unfamiliarity. The operative principle is cultural relativism: two things; 1) designers must use culturally-calibrated models to init interaction protocols via appropriate channels, and 2) no universal design policy can accommodate these fundamentally different ontological (real-being) commitments. Researchers cannot infer permanent acceptance from early data and instead, the system must evaluate engagement over time.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture6-novelty-effect.png}
+\caption{Lecture-6 slide defining the novelty effect in HRI and its mitigation via practice sessions.}
+\label{fig:lecture6-novelty-effect}
+\end{figure}
 
 ## 1.2. African Cultural Factors Influencing HRI Design
 
 <!-- - [ ] DONE? -->
 
-Kaplan's (2004, Abstract) abstract confines the analysis to the East-West axis, framed explicitly as an inquiry into whether robots are "perceived in the same manner in the West and in Japan"; however, a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape the robot's relational acceptance. 
+Kaplan's (2004, Abstract) abstract *confines* the analysis to the East-West axis, framed explicitly as an inquiry into whether robots are "perceived in the same manner in the West and in Japan"; however, a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape the robot's relational acceptance. 
 
 The following factors are well-established in African countries, and thus likely should be integrated into the design of HRI systems deployed therein:
 
@@ -166,7 +182,21 @@ In regards to HRI, this suggests that robots interacting with users across diffe
 
 ### 1.2.3 Oral Tradition and Multimodal Communication:
 
-- [ ] African cultures historically have preferred oral knowledge transmission over written documentation (Winschiers-Theophilus and Bidwell, 2013). This directly implicates interaction modality, i.e. voice-driven, narrative-based interfaces using speech processing and *prosodic* (rhythmically patterned) features such as pitch and MFCCs (Lecture 3) — may achieve higher engagement than text-heavy GUI paradigms. Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
+- [ ] African cultures historically have preferred oral knowledge transmission over written documentation (Winschiers-Theophilus and Bidwell, 2013, p.21). This implicates interaction modality, i.e. voice-driven, narrative-based interfaces using speech processing and *prosodic* (rhythmically patterned) features such as pitch and MFCCs (Figure~\ref{fig:lecture3-speech-features}), may achieve higher engagement than text-heavy GUI paradigms. Furthermore, as Lecture 2 (Figure~\ref{fig:peter-quote}) established that 65% of daily-life communication is nonverbal, thus, gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/peter-quote.png}
+\caption{Lecture-2 slide illustrating the prominence of non-verbal communication in daily life.}
+\label{fig:peter-quote}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture3-speech-features.png}
+\caption{Lecture-3 slide listing speech acoustic features, including fundamental frequency (F0) and MFCCs.}
+\label{fig:lecture3-speech-features}
+\end{figure}
 
 ### 1.2.4 Infrastructure and Access Constraints:
 
@@ -174,7 +204,7 @@ In regards to HRI, this suggests that robots interacting with users across diffe
 
 ## 1.3 Regional Design Traits (Appearance and Behaviour)
 
-- [ ] DONE?
+<!-- - [ ] DONE? -->
 
 The cultural factors have been identified above and dictate distinct morphological and behavioural traits to maximise acceptance in the respective regions.
 
@@ -343,15 +373,24 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 
 
+<!--
 - [ ] FIND PEER-REVIEWED CITATIONS: POMDPs (Partially Observable Markov Decision Processes): a mathematical framework for modelling decision-making problems where the agent has incomplete information about the environment state. They extend MDPs by incorporating uncertainty in state observation, making them particularly suitable for HRI scenarios wherein the robot must infer human mental states (§trust, intent, etc) from noisy sensory data. A POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is the set of states, $A$ the set of actions, $T$ the transition function, $R$ the reward function, $\Omega$ the set of observations, $O$ the observation function, and $\gamma$ the discount factor.
 
 - [ ] this needs to change as I am going to incorporate an AI API into the robot's system
+-->
 
 ## 2.1 The Role of POMDPs in Trust, Cooperation, Coordination, and Collaboration
 
 A Partially Observable Markov Decision Process (POMDP) extends the standard Markov Decision Process (MDP) — as studied in COMP3003 (Lecture 7) — by relaxing the assumption of full state observability. Whilst an MDP assumes the agent has direct access to the true environment state, a POMDP acknowledges that in most real-world HRI scenarios, the robot can only *infer* the true state via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the 7-tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
 
-To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1. **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states — trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration. The POMDP therefore provides the principled mathematical framework for modelling trust, coordinating joint actions under uncertainty, and enabling genuinely collaborative human-robot teams (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, p. 619) demonstrate this empirically via a "Bounded-Memory Adaptation Model" wherein the robot maintains a POMDP over the human's latent type and adapts its policy accordingly — showing that mutual adaptation via belief-space planning significantly outperforms fixed interaction strategies.
+To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states — trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration. The POMDP therefore provides the principled mathematical framework for modelling trust, coordinating joint actions under uncertainty, and enabling genuinely collaborative human-robot teams (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, p. 619) demonstrate this empirically via a "Bounded-Memory Adaptation Model" wherein the robot maintains a POMDP over the human's latent type and adapts its policy accordingly — showing that mutual adaptation via belief-space planning significantly outperforms fixed interaction strategies.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{image/lecture1-interaction-paradigms.png}
+\caption{Lecture-1 slide defining the four HRI interaction paradigms by interdependency: coexistence, cooperation, collaboration, and instruction. The POMDP framework is necessary for graduating beyond coexistence, as collaboration requires modelling the human's unobservable mental states.}
+\label{fig:lecture1-interaction-paradigms}
+\end{figure}
 
 ## 2.2 Uncertainty, Belief States, and Decision-Making
 
@@ -457,7 +496,35 @@ To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (
 
 The deployment of an LLM-augmented POMDP in HRI raises profound ethical concerns. By mathematically operationalising trust, the POMDP framework transforms a once-theoretical psychological concept into a now-computable metric. However, insofar as the reward function solely prioritises task compliance, the optimal policy may learn to *exploit* the user's trust — timing medication requests when inferred cognitive load is highest to force compliance. Designers must therefore explicitly encode user autonomy and informed consent into the reward structure, lest assistance erode into manipulation. Sharkey (2014, p. 64) frames this via the Capability Approach: the robot must preserve the user's capability to function independently, and thus the $R = +3$ autonomy bonus in our model is not merely a design preference but an ethical imperative — encoding the principle that dignity requires the preservation of choice.
 
-The integration of the OpenAI API introduces three additional ethical dimensions. First, **hallucination risk**: LLMs generate plausible but factually incorrect outputs (Ji et al., 2023), and in a medication-adherence context, a hallucinated observation — misclassifying a user's confused hesitation as willing compliance — could trigger an inappropriate action with direct health consequences. As the lecturer argued, "should the clinician trust what you are giving as judgment?" (Lecture 5); for a stochastic LLM, the answer is: not without rigorous validation, and thus Explainable AI (Lecture 5) becomes a non-negotiable requirement — the POMDP must justify *why* it selected a particular action, tracing the decision back through the belief state to the specific observations the API extracted. Second, **cloud data sovereignty**: the continuous multimodal processing of an elderly user's facial expressions, vocal prosody, and physical behaviour — transmitted to a third-party API server — constitutes what Sharkey and Sharkey (2012, p. 35) term "surveillance by design," now compounded by the risk of "transferring data to whichever third party we don't verify" (Lecture 5). The ethical implications thereof are severe: the user's most vulnerable moments are streamed to external servers whose data-handling policies cannot be meaningfully audited. Third, **API latency and proxemic violation**: if the observation function introduces response delays during a time-critical proxemic approach, the robot may freeze mid-interaction or fail to yield — behaviour that Lecture 4 identifies as "aggressive." The ethical watchword is therefore proactive regulation (Lecture 5) — designers must not adopt a bottom-up approach of learning from harm after deployment, but must encode transparent, auditable constraints *ex ante* into both the reward function and the API pipeline, ensuring that the robot does not merely *model* trust but actively *earns* it through explainable, privacy-preserving behaviour.
+The integration of the OpenAI API introduces three additional ethical dimensions. First, **hallucination risk**: LLMs generate plausible but factually incorrect outputs (Ji et al., 2023), and in a medication-adherence context, a hallucinated observation — misclassifying a user's confused hesitation as willing compliance — could trigger an inappropriate action with direct health consequences. As the lecturer argued, "should the clinician trust what you are giving as judgment?" (Lecture 5); for a stochastic LLM, the answer is: not without rigorous validation, and thus Explainable AI (Lecture 5) becomes a non-negotiable requirement — the POMDP must justify *why* it selected a particular action, tracing the decision back through the belief state to the specific observations the API extracted. Second, **cloud data sovereignty**: the continuous multimodal processing of an elderly user's facial expressions, vocal prosody, and physical behaviour — transmitted to a third-party API server — constitutes what Sharkey and Sharkey (2012, p. 35) term "surveillance by design," now compounded by the risk of "transferring data to whichever third party we don't verify" (Lecture 5, Figure~\ref{fig:lecture5-privacy-surveillance}). The ethical implications thereof are severe: the user's most vulnerable moments are streamed to external servers whose data-handling policies cannot be meaningfully audited. Third, **API latency and proxemic violation**: if the observation function introduces response delays during a time-critical proxemic approach, the robot may freeze mid-interaction or fail to yield — behaviour that Lecture 4 identifies as "aggressive" (Figure~\ref{fig:lecture4-aggressive-robot}). The ethical watchword is therefore proactive regulation (Lecture 5, Figure~\ref{fig:lecture5-ethics-approaches}) — designers must not adopt a bottom-up approach of learning from harm after deployment, but must encode transparent, auditable constraints *ex ante* into both the reward function and the API pipeline, ensuring that the robot does not merely *model* trust but actively *earns* it through explainable, privacy-preserving behaviour.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture5-privacy-surveillance.png}
+\caption{Lecture-5 slide raising the surveillance concern: ``The AI records what you do and transfers data\ldots\ to whom? Company? Third Party?'' --- directly applicable to the cloud-based OpenAI API pipeline proposed in Section 2.4.}
+\label{fig:lecture5-privacy-surveillance}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture4-aggressive-robot.png}
+\caption{Lecture-4 slide establishing that a robot which fails to yield during spatial approach ``may appear aggressive'' --- with the annotation ``Is this culturally dependent?'' reinforcing the cultural-calibration argument from Section 1.3.}
+\label{fig:lecture4-aggressive-robot}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture5-ethics-approaches.png}
+\caption{Lecture-5 slide contrasting ``Bottom up'' and ``Pro-active'' ethical approaches to AI regulation, underpinning the argument that designers must encode constraints \textit{ex ante} rather than learning from harm after deployment.}
+\label{fig:lecture5-ethics-approaches}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{image/lecture5-biased-algorithms.png}
+\caption{Lecture-5 slide identifying the biased-algorithms problem: ``AI trains on dataset that may contain a bias (e.g.\ favors young white men)'' --- relevant to the observation model's potential demographic degradation when applied to elderly users (Section 2.4).}
+\label{fig:lecture5-biased-algorithms}
+\end{figure}
 
 \newpage
 
