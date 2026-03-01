@@ -20,4 +20,38 @@ done
 echo ""
 echo "All lecture PDFs gathered in: $DEST"
 
+# Gather all markdown files into a separate folder
+MD_DEST="/tmp/COMP3018-markdown"
+rm -rf "$MD_DEST"
+mkdir -p "$MD_DEST"
+
+j=1
+find "$SRC" -name "*.md" -type f | sort | while read -r f; do
+    name=$(basename "$f")
+    cp "$f" "$MD_DEST/$(printf '%02d' $j)-$name"
+    echo "Copied MD: $name"
+    j=$((j + 1))
+done
+
+echo ""
+echo "All markdown files gathered in: $MD_DEST"
+
+# Gather all text files into a separate folder
+TXT_DEST="/tmp/COMP3018-text"
+rm -rf "$TXT_DEST"
+mkdir -p "$TXT_DEST"
+
+k=1
+find "$SRC" -name "*.txt" -type f | sort | while read -r f; do
+    name=$(basename "$f")
+    cp "$f" "$TXT_DEST/$(printf '%02d' $k)-$name"
+    echo "Copied TXT: $name"
+    k=$((k + 1))
+done
+
+echo ""
+echo "All text files gathered in: $TXT_DEST"
+
 open "$DEST"
+open "$MD_DEST"
+open "$TXT_DEST"
