@@ -30,6 +30,7 @@ header-includes:
       }
 ---
 - [ ] args and kwargs
+- [ ] utilise lec-7 for POMDP insights; similar to machine learning set exercises where i give a quick breakdown if word count allowance
 - [ ] peer-reviewed or conference papers
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
