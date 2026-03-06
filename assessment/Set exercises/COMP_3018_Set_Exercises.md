@@ -38,6 +38,10 @@ header-includes:
 <!--
 - [ ] do ALL TODOs throughout the inline text of the draft itself
 
+- [ ] maths and diagrams circumvent wordcount 
+    - Trust-POMPDP diagram
+- [ ] perhaps model trust in lates diabram? or just latex the fundamental diagtam of POMDP similar to lecture slied in POMDP lectures (10,11)
+
 - [ ] CRITICAL: fix word counts
     - [ ] task 1 over by 150 words
     - [ ] task 2 under by 150 words

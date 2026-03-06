@@ -29,8 +29,16 @@ header-includes:
         showstringspaces=false
       }
 ---
-- [ ] args and kwargs
-- [ ] utilise lec-7 for POMDP insights; similar to machine learning set exercises where i give a quick breakdown if word count allowance
+- [ ] discuss mathematical notiation for the POMDP stuff
+    - [ ] maths and diagrams circumvent wordcount 
+    - [ ] Trust-POMPDP diagram
+    - [ ] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
+    - [ ] model trust in lates diabram? or     just latex the fundamental diagtam of       POMDP similar to lecture slied in POMDP     lectures (10,11)
+    - [ ] latex diagram of continous state in POMDP similar to non-monotnoric graph
+    - [ ] utilise lec-7 for POMDP insights; similar to machine learning set exercises where i give a quick breakdown if word count allowance 
+
+- [ ] args and kwargs (if i can do this)
+
 - [ ] peer-reviewed or conference papers
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.

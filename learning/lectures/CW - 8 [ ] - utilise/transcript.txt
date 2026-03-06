@@ -1,0 +1,648 @@
+So can you remind me what is the difference between the partially observable and observable partially?
+Doesn't know the full picture.
+Doesn't know what's going to happen when it does something.
+Yeah, doesn't know the state.
+Because that's why actually we use this in human robot interaction and not mtp.
+Because MDP requires that all the states are known like in human robot interaction context, like speech, for example, emotions.
+Speech like intense, you know, emotion expressed through facial expressions and so on and so forth.
+That's why we try to add this PMTP to.
+So we were discussing last time until the point of how do we solve the pmdp?
+We understand that solving MDP or PMDP is about to find the best policy.
+Don't read the word, the policy worries you.
+Policy is how can I, how should I take the action?
+Okay, so if I'm saying like the example of last time, I would like to go to the hotel, the Smeaton Tower in the hall.
+So one can say I will go directly straight forward that way and I'll be there after 15 minutes.
+Another person might say, I would go to extra and then go to the home and they will take two hours.
+Another person will say I will go to France and then I will take the ship and go back by the ship and go to the home different ways.
+All of these are policies and the policy denotes strategy.
+So we typically will be just looking at the persons or the guys who take very longer route and say, what are you doing?
+This is not the best route.
+This not.
+It means like this is not the best strategy.
+This means this is not the best policy.
+So when we try to speak about policy, it means like I have to economize something.
+So whether I have to economize the time or the distance so that I maximize my outcome and in the case of the whole, I'm minimizing the distance.
+Okay?
+The same way when you are trying to think about, for example, what are you gonna do in your future?
+And you say, okay, I will choose a route of working.
+And somebody else might say, I will working in a company.
+Somebody else will say I will choose the road to work in academia.
+Because and everyone has his or her own route.
+And for each one there is, for example, after one year I will have this target achieved.
+After second year I will have this target achieved.
+When you accumulate all the targets on all the rewards that you will get for one round over the other route, you will decide finally, should you take Route 1 or Route 2.
+That's why probably this interprets how did you enroll in the masters, for example, and for example, you didn't go to work with a bachelor degree.
+Good.
+So we understand also that one of the basic differences for the partially observable Markov decision process is that we have continuous space.
+So it's not like in the mdp I have state and I'm going, for example, like the chess I am going from.
+Or like I'm trying to present from moving from state one to state two in a discrete way.
+No, we have continuous.
+The space is continuous.
+Okay.
+And it's continuous over the previous state and over the previous actions.
+Good.
+So there are two things we need to understand.
+Here is the belief state.
+Belief.
+Also, don't let the world, you know, feel what this means.
+Belief.
+Belief is the amount of information you have at state whichever.
+So if I'm at this state, what is the information I have?
+This is belief.
+When you are doing your coursework or you have a problem to solve, the amount of information you have at your mind.
+This is your belief.
+Belief.
+It's the amount of information you have.
+And this belief dates.
+So we have belief state.
+This is a probability distribution over states.
+And belief space is the entire probability space.
+What does this mean?
+If I have state S1, S3, S3.
+So I have three states.
+Now.
+So if I say that the probability here is like 0.5, that I am in state S1 and 0.25 in state is 2 and 0.25 in state S3.
+So this means like my belief state.
+Is like the amount of knowledge I have know about the states.
+What is the amount of knowledge I know?
+The probability because the probability itself presents a distribution and this distribution presents information.
+So simply speaking, my belief state is 0.5, 0.25, 0.25.
+This is my belief state.
+However, my beliefs space is different.
+The entire probability space.
+So what is the entire probability space?
+Entire probability space.
+So this is presents S1, S2, S3 in this way.
+However, my, My belief space is different.
+The S or something.
+If I say, for example, I said S1 with S2 with S3, right?
+But it can be also S1 with S3 with S2 it can be S3 with S1 with S2 it can be S2 with S3 with S1 and so on and so forth.
+This is a whole space that we have.
+So this is the whole space we have.
+So we need to separate between both of these two concepts.
+Okay?
+So we say we have here.
+Approaches that we have here to solve the prgp, which Are for example the value iteration, the policy iteration and any other solving technique.
+For example, like you learn again what is, what is the objective is to find the optimal policy.
+So in MGP we'll try finding the optimal policy.
+How can I go with the shortest way to the door?
+So I have to go from S0 to S1.
+I don't need to come to this state, for example, so I need to go from here, move here and from here I need to turn one step here, then move one step, one step, one step.
+I don't need to go to any other, any other state.
+I don't need to come here and go this way.
+So I need to follow this specific route.
+So in order to find the best route, moving from one state to one state, I calculate the value function.
+For example, the value function tells me if I'm in this state, how good is that I come to this state.
+So it tells me it is coming to this state one step forward is better than coming to that state or coming to that state if you are moving from here.
+So the best value is to move one step forward.
+But here I deal with separate states.
+In this case, if I try to see for example how value iteration or policy iteration.
+Value iteration, you try different states, different states until you find the best state the policy is.
+You try randomly several policies and then you find its iterative process, the best policy.
+So it's like you know all of them are related to each other.
+So it's like if you work with policy iteration, it's like you try one policy like this, another policy go make a curve, another policy go here 10 times and go out.
+Etc, etc.
+Etc.
+There are certainly some parameters that we can optimize until we find the policy that can give the maximum reward.
+Policy is represented in front as a function of reward.
+The value function is represented as a function of reward.
+In all cases we are optimizing rewards, maximizing rewards.
+So it's just another representation.
+However, here, value iteration, policy iteration have a problem.
+The problem is that the belief is continuous.
+So we don't have values that I can it for state by state, it is continuous.
+So the value of P is like a curve.
+Which means that you will not get for example table based method.
+Like for example you calculate at S1.
+When I say table based models, like I'm saying at S1, what is the value I have?
+0.3.
+For example, let's say at S2 when I go here, what is the value I have?
+0.25, for example separate values.
+This is called A table based.
+You cannot do it in this way because it is continuous.
+So we have to deal with this kind of curve.
+Okay?
+So it is exactly similar.
+If we just be aware of the basics, the basic differences between MTP and we will find just how.
+We have algorithms to use for each of them.
+And in some cases we have also automatic algorithms that we can use for each of them.
+We just have to be aware of the basic differences and we can run.
+Okay?
+So, simply speaking, we try to think of something like this curve, like this, we can divide it.
+We said that it is not discrete, but what it is composed of segments.
+So imagine that this curve, continuous curve is composed of segments.
+One segment, one segment, one segment, one segment,', okay?
+And one line, one, one line, one line, one line.
+These are segments.
+All of them make this curve.
+Okay?
+Each of them represents.
+Each of these curves represents part of the policy, the strategies that I should follow.
+Okay, so this is just definition saying that a policy made up set up of trees and they are piecewise linear.
+So each of these segments, like if you do, if you cut divide this into part here, part here, part here, you will have linear segments, more or less so group of linear segments.
+If you put them together, this will more or less lead to this curve.
+So each of these linear, linear curves here, here, here represent a segment piecewise linear segments.
+And they are representing policy.
+And this policy itself is like a tree.
+The tree leads to linear piece of region or belief space.
+So this is a tree.
+It can be represented like a tree.
+And this leads to specific space in that belief I have.
+Specific space means a specific amount of information I have that correspond to this part of the value function.
+So the policy tree indicates that the value function is represented hierarchically or as a tree structure.
+It represents a decision making, a strategy over multiple time steps, under uncertainty and as a tray.
+We understand, as we have seen last lecture, that each node correspond to a decision or action to do.
+Okay?
+And the branches represent the possible observations, something like this.
+So we have seen something like this first time.
+So, like each node, for example, here.
+So this is action A1, A2.
+And these are the observations, just a representation of the action I have more easily.
+What does this mean?
+Simply speaking, something like this.
+So we have to think of the optimal value if I have a line or like a value function that is just represented as a function that it is summary of all these values of V values for each segment.
+Each of these segments correspond to a part of the belief feature.
+These segments correspond to a part of the belief.
+And Here we identify certainly each tree gives a right of linear piece alpha.
+So each alpha vector correspond to linear segment in the value function representing the value of P in a certain belief.
+So alpha represents the value of being in a certain wave state at the end, taking a specific action.
+We will see what does this mean.
+So then I can think of if I have something like this, if I will tell you what is a best V V star V star in the mdp.
+It was a value telling me go from this state to this state because the value of this state is 0.25, which is higher than all the other states, states around knowing that or conditional on that, you are starting from this state before.
+Now, if I have this segment, this segment, this segment, I understand that best policy is the sum of all these segments together multiplied by the belief segment multiplied by belief.
+That's exactly what I have here.
+Okay, the belief value and the segment.
+I take the sum and I take max because I might have a lot.
+Because like here I take max.
+Max means what?
+I might have this route, but I might have another route, and I have another route and so on.
+I might have different.
+I might have different routes, not only the red one.
+So I take max because this is what will give me the maximum value.
+It's exactly when I tell you I am trying to find best policy.
+So I tell you best policy is like you can try you go to the door directly or go to the door by making a curve or go 10 times and then go to the door.
+Each of them will give you the value function like I saw your value.
+Okay, a final value and they take the optimal one by taking the maximum.
+The maximum is the best.
+So in case of going to the door, for example, the best will be is just to go forward and then turn right.
+Okay, So I take the maximum and take summation multiplied.
+So B is a probability of state S in belief state B and alpha is a value associated with the state in the Alphabet.
+What does this mean more concretely?
+So if I say, for example, let action A have a value of 0, So late action A have a value of 0 in state s1 and 1 in state s2.
+So s1, s2.
+So the action a1 have here 0.
+And action two.
+Yes.
+So I have two states.
+So I have two states, S1, S2, action A1 has zero in S1 and one in S2.
+Okay?
+And for A2 we have a value of 1.5.
+This is 1unpoint 5 n s 1 and 0 in s 2.
+Our belief state is 0.75 and 0.25, 0.75 and 0.25 between.
+It's expected.
+Because my belief is like whether it would do action one that I would do action too.
+So should I do masters or should I do, for example, go to work with bachelor?
+So certainly you said, for example, let's say if you are here in the masters, probably you said 0.75 for masters and 0.425 to work with a bachelor.
+Both of them will make 100%.
+So your belief is exactly similar.
+Okay, so you have 0.75 for action one and 0.25 for action two.
+This is your belief.
+This is your belief.
+So if this is your belief, then the value of doing the action A1 in this belief is you just distribute so 0.75.
+So you say 0.75 multiplied by so this is for action 1 and this is for action 2.
+So 0.85 multiplied by the two values here multiplied by 0 plus 0.25 multiplied by 0.25.
+That's why multiplied by 1.
+So I just distributed my belief over the states.
+Okay, so this is the value of doing action one in this belief and the value of doing action two in this belief.
+So this is for action one and for action two I can say I have 0.75 multiplied by 1.05.
+I distribute it here plus 0.25 multiplied by zero.
+Sorry.
+So just, just in A2 I just distributed the same like A1.
+Okay, so A1 just appears here.
+But A2 is exactly the same like A2 A1.
+This is exactly what is written, explained in the example.
+So I'm saying if our belief state represents 0.75 and 0.25, then the value of doing action A1 in this belief, our belief like is divided between A1 and A2.
+So the value of doing action 1 is disbelief.
+Certainly I will multiply.
+I distribute the value of the action over the belief I have so that the belief like for example for you, you got the masters and you choose the masters.
+This will have the higher value multiplied by the corresponding action A1.
+Okay, since this is just taking it, so this is just showing similar.
+Simply, how can I use this equation and divide the belief over actions?
+So taking action is expected to higher accumulative reward than in the belief state compared to action A1.
+So this means like if you are trying to do something like this, you say, ah, okay, I will take action A2 or action A1 because it will give me higher belief, higher reward, higher you Know outcome.
+So I will go to work with masters or I will go to work with my patch directly following for example such an example.
+Okay, you follow the note.
+Okay, good.
+So when we come to these equations actually are allowing us to calculate the value of V. But then how can we update.
+We calculated V and V is your belief.
+Right?
+And we understand that the belief is updated.
+And the same thing like you have a belief.
+When I have, when I, when I have, like when I have a belief, let's say belief from.
+Let's say I'm coming from outside and if somebody asks me what is your belief about for example happy or sad persons inside the room?
+And if I don't know and if I have, for example do you think people inside, for example are having happy faces or sad faces or unhappy or sad?
+If I don't know, I would say 0.5.
+0.5 initial belief.
+And then when I come to you, I would try to look at your faces and listen to your voices.
+And then I will try to infer that you are sad or for example happy.
+And then I say for example, I found three sad or.
+And four happy or vice versa.
+Let's say something like that.
+So what happened here?
+I updated my belief.
+So updating belief.
+Also like here, I just calculated the view.
+Now I need to update it and continue updating it.
+And continue updating it.
+So these are from the very basic Bellman equation that we have got in previously in mdp.
+But this is just adapted to the pure mdp.
+So what is this V represented?
+The previous V that I have got.
+In my case it was a 0.5 that I have got at the beginning.
+0.5.
+Okay.
+And this is the B, my initial belief.
+And this is updated belief.
+Okay, so you use your initial belief to get an updated belief.
+You get your initial use initial belief to go to updated proof.
+Okay, so a representative action B represents as a belief.
+And what is O?
+Observation.
+Observation.
+Okay, so certainly what is the observation here?
+For my case I looked at your faces, for example, and I received your voice when you are speaking.
+And I analyzed it as a robot.
+So this is my observation.
+And then I received, I looked at your images and I tried to analyze it.
+I looked at your speech and tried to analyze it.
+So this is my observation example.
+Okay.
+And this is the action whether I have taken or I observe it from you.
+Good.
+So this certainly have some mathematical background, but we don't need to really to try to find, you know like the basis for this.
+But just I'm trying to Give you an idea that okay, we updated the belief.
+We updated the belief.
+So if I'm trying to find the best policy, always best policy is a policy that gives me higher.
+Okay, so if I for example, the best policy that if I for example found somebody sad, the best policy is like I try to consider this with the action and the rewards.
+Okay, so imagine for example a human saying this.
+So somebody, for example, somebody is sad and say I am happy that you are sad.
+This is out of social norms.
+So the reward is that you will feel what are you saying?
+For example, something like this.
+This is a negative cookie.
+So the reward is minimized because the action was not suitable.
+But if I am saying for example that okay, what happened?
+How can I help you?
+For example, or I sympathize with you, or something like this, then the reward increases.
+So you have different actions to do while you are observing the person in front of you, sad, happy, you have different actions to do.
+And for each of the different actions you will have a reward.
+So you are saying, okay know, I will take this time the reward that corresponded to the internal state or emotional state of the person.
+So that if I have a series of interaction, I each time take the maximum.
+So instead of doing that reward, the action that will give me negative reward.
+No, I take the actions will give me positive reward.
+Okay, good.
+Do you like to take a short break?
+Five minutes?
+Ten minutes?
+I'm fine.
+Yeah, I'm alright.
+Okay, so now let's try to see example of famous example of the tiger example example.
+Let's say the words that we have been speaking about.
+The example that I find best policy for going out the door, there is a disc.
+Let's say the tiger example.
+And if we try to think about partially observable mark of decision processes, there should be something intrinsically unobservable.
+What is intrinsically unobservable?
+Over here it's a tiger.
+I don't know where is a tiger.
+Okay, so.
+So I have a tiger hiding here and I have two states.
+The tiger is left, the tiger is right.
+And I say the probability that I have an observation.
+The tiger to the left, given that it is at state is zero.
+We are at state is zero.
+And listen, that means like the state here that I am having tiger.
+The state S0 is tiger left.
+The state S1 is tiger right.
+So which room should I open in the room like you are here and you'd like the tiger here means like the tiger is hiding in the room.
+So should you open the room in the left or should you open the room in the right?
+So normally I say that here.
+For example, the probability that if I say the probability that the tiger is observation that the tiger is left in this state is zero and I listen because I will use listening to know it's the tiger here or is a tiger there.
+So the tiger, for example, let's say at this current state is 0.85.
+This means as a complementary, the probability that the tiger is left if you say here 0.85.
+So if you say the probability here that the tiger is here and you listen it while you are at stick tiger, right?
+Okay, is 0.15 complementary.
+So you are simply saying the tiger should be in this room.
+So if you go to the other room, so you are saying here with the size by probability 0.85.
+So it's simply here you are saying the tiger is in this room by 0.5 complementary, because both of them will give you 100%.
+Okay?
+So if you are at state C0, the fiber is left, your assumption is correct.
+So you are saying, okay, the tiger is in the left room, in the left room.
+And given that you are at state S0, okay, which is tiger left.
+So it means like your theory from the event and you are at state eight tiger.
+And this means like here it's giving 0.85.
+And if you are doing from the other side, you are searching of a 0.85 is 0.50.
+And the inverse, if you are saying you are at the state s0tiger left and you are saying the probability that the tiger is right here is a tiger is in the other room.
+Okay, Given that You are state S1, okay?
+And listen, is 0.15 the inverse.
+It means like you come to the other state and saying the probability is 0.85.
+So it's is in one of them.
+You are saying the probability that in this room the Tiger is here 0.85.
+This means what?
+Where is the rest of the 15%?
+And the other rule?
+The taker should be the other rule.
+And the other option is like you're saying that Tiger is here 0.85.
+What does this mean?
+Means that the other 15% are in the other room.
+Okay, So I don't know because these are states and I don't know in the states which one is what.
+So what is the probability?
+Is it this first here?
+0.85 is a winning one.
+Is 0.85 winning one?
+I don't know.
+And because it is inside the room, okay, and then it is unknown for me.
+I need.
+I cannot use MTP here.
+It's like your emotions.
+So your emotions, you are putting it inside the room so it's not observable for me.
+So I need to infer the same thing here.
+It's put inside the room so it's unobservable for me.
+I don't know it.
+So I'm trying to listen to know if it's inside the room or not.
+The same thing.
+Your emotions are not known for me.
+So I'm trying to listen.
+I'm trying to analyze.
+Sorry, I'm trying to analyze the facial expressions to know if you are for example, happy or sad.
+Good.
+So we have reward function penalty for wrong opening minus 100.
+A reward for correct opening positive 10.
+And the cost for listening action is minus 1.
+So cost for listening action.
+So you have to minimize the listening as much as possible.
+So I expect that the policy is a policy that will give you minimal listening as possible.
+This is exactly like saying I am going for example to the door.
+Each step penalty will have minus one, okay?
+Minus one from my reward.
+So when I say here, cost of listening action, Cost of listening, cost of listening action, minus one.
+This is minus one from my reward.
+So my reward reduces by one.
+So I need this, the policy that reduces the number of listening as much as possible.
+They can know is it in this room or that room by minimal number of listening, Minimum number of listening is exactly when I say I will go to this door, minimal number of walking.
+So if I say 10 steps, it means each step reduced me minus one.
+So minus 10.
+This is different than.
+And that's why so mine so minus 10.
+So 1 step, 2 step, 3 step, 4 step, 10 step means like I reduced by minus 1 each means I reduced by reduced by word by minus 10 on the other side.
+If I say I will go from here to the end of the room and go and come and go and come how many minus ones I lose a lot.
+So if I compare going from here to here, I lost mine.
+I lost minus 10 steps each or I made 10 steps each one minus one.
+So my reward reduced minus 10.
+And if I'm going across that hole 10 times or going to extra or going to France, how many steps I made, how many rewards minus one I lost.
+So this is something to expect then that this is reduced from the reward observations I have.
+Here's a tiger on the left and here's a tiger on the right.
+Okay?
+And the actions I do is like I have listen is like zero action or action one or action two.
+Open, left open.
+So this is not detailed like one by one solving.
+Like not a detailed solving.
+Just to give you some kind of general, you know, brief of how can we formulate just a problem like this in real life.
+So simply speaking, if I'm speaking about my belief, my belief like when I was coming from outside, how many of you Sad or happy?
+0.5, 0.5.
+My initial belief here, if I'm coming from outside and I don't know it's state S0 at state S1, 0.5, 0.5.
+And then I start updating my belief.
+So the 0.5 by listening exactly the same thing.
+I came by update by belief that you are 0.5 sad, 0.5 happy.
+Then I started to update my belief how by looking at faces and by analyzing your speech.
+So I become like more certain.
+For example, saying 0.8 is like you're happy because I analyzed and I received observations from you and analyzed them the same thing here you find that 0.5 and then it starts to get updated to believe to 0.15 and 0.85 as we have seen at the previous slide.
+So I have actions.
+The policy should try to find me the series of action, listen open left, open right and should give me the best series of actions to do.
+Okay?
+So simply speaking, we need to, in order to, to know the policy, we need to know the pmdp, we need to solve it.
+So if at the beginning we will try to, We'll try to formulate our transition probabilities.
+So we say at the beginning transition probabilities.
+At the beginning the tiger was in the rift and tiger like, you know, like I'm like just trying to see the listening at the beginning when I arrived, this is current state and this is next state transition probability between current state and next state.
+And because you just arrived, okay, so nothing changed is like the probability like it was left and it worked.
+So thank God it's right.
+That and the next test it was left was 100% because you didn't, you didn't have any belief about anything.
+So it's like exactly, this is exactly saying 0.5 and 0.5.
+So you have divided it between left, left and right right same probability.
+You don't know, you didn't change anything.
+Okay.
+And also the problem of doing action to left or to right, you have made reset for the problem.
+You don't know where it is at the beginning because you started to just coming on board and then you start updating okay, when you receive observations, you start updating.
+So the updating you received here is exactly.
+You start saying, oh, I start listening.
+So probably the parent is 0.85 and start decomposing it by the same probabilities that I had before, 0.85 and 0.15, for example.
+And you change the 1% to 100%.
+Instead of having it at 100%, you started decomposing the probability to 0.85 and 0.15 just simply as it is here.
+Okay?
+This is just the beginning.
+Just because you started to make the listening.
+Okay?
+And in the opening here at this example, we suppose that any observation without listening and any action without listening is uninformative.
+So here, you know, like opening the door without listening as listening is not involved.
+So we suppose that it didn't change anything.
+So here we focus on listening only.
+Listening only.
+Okay, good.
+And here we put the reward.
+And this is part from the example.
+So if you go for example, like listening.
+So here, like we have here, we have it here.
+Listening cost of listening is minus one.
+Okay?
+Penalty of wrong opening minus 100 and correct opening, positive 100, positive 10.
+So this is what I put here.
+Minus one, minus one for the rewards, okay?
+And the correct opening left and right.
+If you are speaking from the left side and if you're speaking from the right side, it is just the inverse.
+Okay?
+So from the left side, if you were open left, you will lose minus 100 if it's wrong.
+And if it's correct it is positive 10 and the inverse in the other table.
+So simply just extraction of data on probabilities in the table to formulate.
+So simply speaking at the beginning I say, okay, tiger left, tiger.
+So I say at the beginning, tiger left or tiger right.
+And over a belief vector.
+I have no problem, no idea.
+Let's say 0.5, 0.5 it can be.
+I just start listening and try to guess is it the first, you know, like start hearing and say it is on the left or is it on the right?
+And then I start saying, ah, I'm getting some noise.
+Probably the tiger in that room.
+What happens?
+Because I received an observation, I tried to update my belief.
+So my belief, Instead of being 0.5 and 0.5, my belief will be updated.
+So it will become here 0.85 and here will become 0.15.
+How did I update this last lecture?
+Belief update.
+In this lecture we will speak about updating the value function.
+But in last lecture we were speaking updating the belief, updating value Functions for Bellman equation.
+But in previous lecture we'll speak updating the belief.
+So when you had the initial belief, I received information and I updated my belief.
+So the updated belief.
+This is the updated belief B1 is equal to this equation.
+I believe had kind of derivation for it last lecture.
+And here we have a function as it's a function of b0.
+Okay, initially so you update the belief in terms of initial belief.
+And then here we try to see.
+Okay, let's say I am at the beginning.
+I have at the beginning I am just listening and at listening I don't know what is where is the tiger.
+And then I probably try to listen.
+So the action here is listen.
+I try to listen and see.
+Okay, is it here?
+So if the tiger is in this room, I update my belief and they come here and make open left according if it's not here or open right if it's here the other side.
+So what are these value of alpha represent?
+This represents for me the reward and actions.
+So here for example minus 1 and the minus 1 means like the belief state indicates that the agent is moderately uncertain about the true state are depending on listen and -110 and here it should be 10 and the -100 it means if you are opening the wrong room and the other one is if you are opening the correct room.
+From where did we get this?
+From the table that we extracted the values.
+Okay, so if you are opening left, it means like it is already because you listen some noise here.
+So it means like you start by getting the minus 100 the reward because the tiger is there and the positive one is in the other room.
+And here if you listen some noise here, it means that the tiger is hiding here.
+So you get the minus 100 as a second component.
+Okay?
+And if the belief state, certainly the belief state I have, you know, indicates the agent is almost certain that these are these values like 0.0, 0.1, 0.1, 0.9 etc.
+These are the belief state that goes over this continuous belief.
+So is it here 0.1 0.9, 0.85, 0.15 or 0.85, 0.50.
+So these are these values.
+So I start over states and over I state like start drafting over states my value of belief.
+Okay, so for example, it's probably here or it's probably there.
+Okay.
+And start making basically kind of drafting a scenario.
+Where should I move from where to should I start from listening and then moving left, okay.
+Or listening to moving right and you start making a Network of actions and observations.
+Listening, moving Listening, moving.
+So the POMDP here, the solution that we are trying to do should tell you the correct sequence now is exactly like the mdp.
+Like those for example in your coursework of machine learning they are saying if you started at the state S0, how many times what is the best?
+For example, I don't know.
+This was one of your questions.
+For example, how do should you go from.
+From I don't know, let's say like I'm saying I'm this state, how should I go to the external or last state which is the door representing the door.
+So I should say I move one step forward and then turn left and turn right and then go one step after one step of the one step here this is the shortest path.
+So exactly the podp.
+I used it because the tiger was hidden unknown for me.
+But after that I will have a series of states and the PODP will try to tell me which state I should go go from the listening to left, right or open left or open right and so on and so forth.
+So among amaze of a lot of states, it should tell you how to get the rest state.
+So this is exactly the purpose and this is what I needed you to know here.
+Just the difference between the the mdp, NDP and practically how does this look like in hri?
+In HRI you can have a PMDP something similar to this.
+You have received information like sensors coming from your sensors, from your camera, from your microphones.
+This can give you information about for example speech, language, gestures.
+Okay, so this is observations coming from the world.
+So this is a presentation like, similar to the presentations that we have seen last year last lecture with a lot of continuous observations making like connection from state to state to state to state to state.
+Something similar to this.
+So you have sensors, you have language, you have gestures and all of them are connected in such a way.
+Okay, and you have another one, another category states.
+So the states represent the P H, the human mental state.
+Human mental state means your emotions, your plans, your intents and the physical state of the world represents the objects, for example, so where is the object?
+How is the object e.g.
+static or non static?
+Okay, and after this we represent the rewards and we represent the action.
+So this is a typical representation for the PMDP and hri.
+So there is a presentation that's a little bit sophisticated in the slides that we have seen last time.
+But this is just the understanding that I need to know from all the PMDP is I understand that there are observations on There are sensors, there are like, you know, the information is necessary for me to infer state about the world because it's unobservable.
+Okay?
+And after this there will be action, something similar to this thing.
+So what people.
+In human interaction do, okay, so they try to make representations of the PODP and podp actually you define it like, don't say ah.
+This is different than the model that I have seen in the lecture.
+You can just have different graphical representation.
+So this is just a different graphical representation, but the core of the same that you have action for example, and for example action here A2 is connected to this state and indirectly connected to action A1.
+So this means like the same principle that the robot learned from previous action.
+The effect of previous action on P and H. P and H is like physical state of the world, human mental state.
+So if I made an action and the action you received it badly.
+Or for example, if I'm a robot, made an action and I broke cub.
+Okay, so this is the influence of my action on the world or humans.
+Then my second action, when I'm planning for it, it depends on the previous state and previous action.
+The same principles of how the other graphical representation of PMDP was connected or was made.
+Okay, Actions relate to each other, states relate to each other.
+Simply the states from T1 to T to T plus 1 relate to each other.
+It's just different representation.
+So people use it for example in modeling, for example trust.
+So people say, okay, we will need to computational model that integrates it trust.
+So first of all we say if I, if I will model for example a latent variable like trust, like intent.
+Okay, how can I model the trust?
+So people say, let's think about.
+I have, I have a robot, I have a human, I have environments, okay, And I could I try to think of the follow of the loop.
+This is a very basic repository learning design.
+We have an agent that we have seen in lecture in the previous lecture, we have an agent and we have environment and there is interaction and there is a loop between the environment and the robot.
+And the robot includes a human as well, because postlets and testicles and there is this action as the action has a reward.
+So this is a different graphical representation.
+And the human action 80 depends on the world state.
+So the human action 80 depend on the world state.
+And whether, whether this order 80 depends on the world state.
+So the world state XT.
+Okay, so action A 80 represent like depends on the XT.
+So here like, look how these position.
+So this is coming from a Direct research study.
+So this is a research study here, Famous research study published in ACN Transactions and Human Interaction.
+So they said, here I have XT, XT represents the world state inspired by this design.
+Okay?
+XT and I have actions 80, 80 index, what else?
+And I have human trust.
+This is the latest.
+This is your emotion, this is your intent.
+Okay?
+Okay.
+The robot action ATR depends on the world state and its belief over trust and the world state transits.
+So then start making all the story and saying what transits to what?
+Following a description, saying like the robot 80r depends on the world state XT and its brief over theta t the world state XT transit to XT plus one transit.
+So there is an arrow when provided the human action 80.
+So when provided the human action.
+So you find an arrow coming from Egypt.
+So they are making presentation for their problem, what transits to what?
+And they have made this graphical design.
+And then what did they do after this?
+They used PMDP to present this and defined the best solution considering the latent variable.
+So it means like how the robot should interact with the, with.
+With the old parameters, how the robot should interact with for example the world state.
+Consider the world state, okay?
+At the world state x plus one as well.
+And considering for example the human trust and then how it should react.
+So do you see what, what does this mean here?
+Like, I'm trying to put all the parameters like world state, world state at time t, World State of Time T&1 and Action of the human and the trust.
+So this means I'm trying to put all the parameters together so that when I use PODP to find the best sequence of action or behavior, I do, I consider the trust.
+So when I will do an action, if you are sad, for example, I will not tell you I am happy that you are sad because this will break the trust.
+So the trust will be affected as a state.
+But if I will say how can I help you?
+I sympathize with you, the trust increases.
+So certainly the reward here will be increased, whether by smile, for example, the person can give a smile or can say thank you or some kind of any gesture, thank you for this, for example, understanding.
+So it means like I am trying to find let the robot.
+The purpose of this is like I'm letting the robot interact in the environment and interact with the human.
+But considering a latent variable called the trust.
+And if you need to use it, for example, you can sophisticate stated more.
+And instead of the trust, for example, you can use for example latent variable.
+You can add another latent variable called intent.
+And you can add the trust and intent.
+It means like it will make the action considering the trust, considering the intent, considering that it will maximize the trust when interaction, during interaction will maximize the intent, for example, or with the consider the intent so that to maximize the reward during interaction.
+Then they try to solve big problem for this big mathematical problem.
+So that's called the trust pmdp.
+And if you use it for intent, you call it intended trust, PMDP intent of PMDP emotion, pmdp, anything like this.
+So the idea, this whole idea to give you some sense of how people might think of the user structure main structure of PMDP that we have seen.
+And they put their own states that represents what they need to consider as a latent variable, the emotion, for example, the intent put it inside and they complete the modeling so that that whichever action the robot will do or the system will do, it will consider these actions.
+Did you understand the story?
+More or less.
+So this is more or less to make you understand not the mathematical side because this is not machine learning module, but rather to understand the story how people use it.
+So if you are reading for example a human robot or action paper, you have an idea of why, what does it mean PMDP and why it was used and why PMDP and not mdp.
+You see the difference?
+You have questions for this is it okay?
+Probably try to give it another thinking.
+And if you have questions about this, I'm more than happy to answer.
+So I will give you.
+Subs.
+It.
+So your coach today is for the undergraduate.
+Bf sy b, f s, y, c we are 7 underneath 7 attendance also ns 4 to keep the code confidential.
+So bf s, y, z C. So no questions.
+Then I will see you this afternoon and then I'll.
+Thank you so much.
+It's.
+Yeah, yeah.
+You found for example in the research page you say I found that for example in X country or you have tendency to do this.
+Already have tendency to do that.
+So this will.
+Yeah, okay, that's fine.
+Thank you.
+Sorry, can you say.
