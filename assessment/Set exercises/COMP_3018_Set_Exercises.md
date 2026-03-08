@@ -115,6 +115,8 @@ MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTLY BUT INFER WHAT I NEED TO DO IN
 - [X] very good LaTeX visualisations
 -->
 
+- [ ] FULL PROOF READ
+
 # 1- Task (1): Cultural Differences and HRI Design
 
 ## 1.1. Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
