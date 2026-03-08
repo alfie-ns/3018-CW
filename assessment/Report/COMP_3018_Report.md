@@ -29,7 +29,8 @@ header-includes:
         showstringspaces=false
       }
 ---
-- [ ] discuss mathematical notiation for the POMDP stuff
+- [ ] 'persons'
+- [ ] discuss mathematical notiation for the POMDP stuff??? (if not done in set exercises)
     - [ ] maths and diagrams circumvent wordcount 
     - [ ] Trust-POMPDP diagram
     - [ ] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020

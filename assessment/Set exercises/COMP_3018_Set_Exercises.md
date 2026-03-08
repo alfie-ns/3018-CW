@@ -35,16 +35,13 @@ header-includes:
         showstringspaces=false
       }
 ---
-<!--
-- [ ] too many latex figures i need to only keep 2 of the best ones,  one that I definitely want to keep is the one where it's a chart (prove to me you know what I mean by chart before you start removing them)
+
+- [X] too many latex figures i need to only keep 2 of the best ones,  one that I definitely want to keep is the one where it's a chart (prove to me you know what I mean by chart before you start removing them)
 - [ ] do ALL TODOs throughout the inline text of the mainbody itself
-- [ ] utilise transcripts
+- [ ] utilise transcripts insids the learning/
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
-- [ ] CRITICAL: fix word counts (this might be fixed now?)
-    - [ ] task 1 over by 150 words
-    - [ ] task 2 under by 150 words
+
 - [ ] verify all page numbers.
-- [ ] verify word count is within 10% allowance across this report.
 - [ ] verify all lecture references are correct with deeper review of lecture materials
 
 - [X] see where i can fit in LaTeX things
@@ -113,9 +110,10 @@ MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTLY BUT INFER WHAT I NEED TO DO IN
 - [X] review papers: pros or limitations
 - [X] peer-reviewed or conference papers
 - [X] very good LaTeX visualisations
--->
+
 
 - [ ] FULL PROOF READ
+- [ ] get gemini to crituque thus improve the Tikz figure captions 
 
 # 1- Task (1): Cultural Differences and HRI Design
 
