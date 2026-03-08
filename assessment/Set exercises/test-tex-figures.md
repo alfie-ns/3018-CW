@@ -76,7 +76,7 @@ subtitle: "Draft visualisations for COMP3018 Set Exercises"
 
 \end{axis}
 \end{tikzpicture}
-\caption{Simplified belief evolution (3 trust states). The medium-trust state exhibits non-monotonic behaviour: rising sharply after observing Hesitate ($t_1$), then falling after Comply ($t_2$). Red annotations show deviations from the prior, mirroring the style of classical non-monotonic posterior plots.}
+\caption{Simplified belief evolution (3 trust states). The medium-trust state exhibits non-monotonic behaviour: rising sharply after observing Hesitate ($t_1$), then falling after Comply ($t_2$). Red annotations show deviations from the prior, consistent with the trust recovery-despite-ongoing-faults dynamics described by Lee and See (2004) (\textasciitilde non-monotonic).}
 \label{fig:test-belief-simple}
 \end{figure}
 
