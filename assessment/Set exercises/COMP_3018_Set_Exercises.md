@@ -37,87 +37,80 @@ header-includes:
 ---
 <!--
 - [ ] do ALL TODOs throughout the inline text of the mainbody itself
-
 - [ ] utilise transcripts
-
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
-
-- [ ] see where i can fit in LaTeX things  
-- [ ] Trust-POMPDP diagram
-- [ ] perhaps model trust in lates diabram? or just latex the fundamental diagtam of POMDP similar to lecture slied in POMDP lectures (10,11)
-
-- [ ] CRITICAL: fix word counts
+- [ ] CRITICAL: fix word counts (this might be fixed now?)
     - [ ] task 1 over by 150 words
     - [ ] task 2 under by 150 words
-
 - [ ] verify all page numbers.
 - [ ] verify word count is within 10% allowance across this report.
+- [ ] verify all lecture references are correct with deeper review of lecture materials
 
-- [ ] verify all lecture references are correct with deeper review of lecture materials 
-
-
-
+- [X] see where i can fit in LaTeX things
+- [X] Trust-POMPDP diagram
+- [X] perhaps model trust in lates diabram? or just latex the fundamental diagtam of POMDP similar to lecture slied in POMDP lectures (10,11)
 
 # Words-To-Use:
 
-
-
 - [ ] persons
-- [ ] belief
-
-- [ ] **Lecturer's Top Insight:** Be a Reviewer; don't just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
-- [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
-- [ ] 3018-CW/learning/lectures/5 [ ] - utilise/lecture.md (**Task 1 insight!!**)
-- [ ] 3018-CW/learning/lectures/6 [ ] - utilise/lecture.md (**General cw insight**)
 - [ ] use `whom`
-- [ ] talk about nolvety effect in lecture 6
-- [ ] most-{something} {something}
-- [ ] would-be
-- [ ] despite
-- [ ] contravened
-  — [ ] humanlike
-- [ ] watchword
-- [ ] e.g. `1-` , `2-`, ...
-- [ ] despite x something y
 - [ ] and indeed, the robot will...
-- [ ] and `therefore, `x ` thus {does, e.g. *feeds*` `y` continuously throughout the process `wherein`...
-- [ ] `as now-{something} the x thus does y continously throughout the process wherein it does z`
-- [ ] `Whilst`: only used at the start of a sentence
-- [ ] `Whilst this is true, x may be inclinded to {x} based on...`
-- [ ] `and thus *x* therefore...`
 - [ ] `is indeed...`
 - [ ] `and indeed...`
 - [ ] `however, insofar as`
-- [ ] `thereof`: of the thing just mentioned
 - [ ] `herein`: in this document
 - [ ] Note
 - [ ] Approach
-- [ ] within
-- [ ] `wherein`: in which
-- [ ] `regarding, in regard to`, etc
-- [ ] `likelihood`
-- [ ] `thereof`:
-- [ ] `infer`: conclude from reasoning
 - [ ] `init`: initialise
 - [ ] `use`: use
-- [ ] `via`: through
-- [ ] `wherein`: in which
-- [ ] `indeed`: in fact
+
+- [X] belief
+- [X] talk about nolvety effect in lecture 6
+- [X] most-{something} {something}
+- [X] would-be
+- [X] despite
+- [X] contravened
+  — [X] humanlike
+- [X] watchword
+- [X] e.g. `1-` , `2-`, ...
+- [X] despite x something y
+- [X] and `therefore, `x ` thus {does, e.g. *feeds*` `y` continuously throughout the process `wherein`...
+- [X] `as now-{something} the x thus does y continously throughout the process wherein it does z`
+- [X] `Whilst`: only used at the start of a sentence
+- [X] `Whilst this is true, x may be inclinded to {x} based on...`
+- [X] `and thus *x* therefore...`
+- [X] `thereof`: of the thing just mentioned
+- [X] within
+- [X] `wherein`: in which
+- [X] `regarding, in regard to`, etc
+- [X] `likelihood`
+- [X] `thereof`:
+- [X] `infer`: conclude from reasoning
+- [X] `via`: through
+- [X] `wherein`: in which
+- [X] `indeed`: in fact
 
 # TODO:
 
+- [ ] **Lecturer’s Top Insight:** Be a Reviewer; don’t just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
+- [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
+- [ ] 3018-CW/learning/lectures/5 [ ] - utilise/lecture.md (**Task 1 insight!!**)
+- [ ] 3018-CW/learning/lectures/6 [ ] - utilise/lecture.md (**General cw insight**)
 - [ ] verify page numbers are correct
 - [ ] hit word-count*0.1 limit allowance across report
-- [ ] utilise lecture teachings in lec 5-6 etc
-- [ ] review papers: pros or limitations
 - [ ] indeed 10% word-count allowance
-- [ ] peer-reviewed or conference papers
-- [ ] very good LaTeX visualisations
 - [ ] uses 3003-report feedback??
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
+
+MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTKY BUT INFER WHAT I NEED TO DO IN THIS HRI MODULE TO ADDRESS THIS FEEDBACK:
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
 - [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
 - [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
+
+- [X] utilise lecture teachings in lec 5-6 etc
+- [X] review papers: pros or limitations
+- [X] peer-reviewed or conference papers
+- [X] very good LaTeX visualisations
 -->
 
 # 1- Task (1): Cultural Differences and HRI Design
@@ -700,7 +693,7 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 
 # References
 
-- [ ] PEER-REVIEWED OR CONFERENCE SOURCES ONLY
+- [X] PEER-REVIEWED OR CONFERENCE SOURCES ONLY
 
 ## Task (1)'s
 
