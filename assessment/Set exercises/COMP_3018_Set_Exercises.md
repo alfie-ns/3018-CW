@@ -36,6 +36,7 @@ header-includes:
       }
 ---
 <!--
+- [ ] too many latex figures i need to only keep 2 of the best ones,  one that I definitely want to keep is the one where it's a chart (prove to me you know what I mean by chart before you start removing them)
 - [ ] do ALL TODOs throughout the inline text of the mainbody itself
 - [ ] utilise transcripts
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
@@ -53,6 +54,7 @@ header-includes:
 # Words-To-Use:
 
 - [ ] persons
+
 - [ ] use `whom`
 - [ ] and indeed, the robot will...
 - [ ] `is indeed...`
@@ -102,9 +104,9 @@ header-includes:
 - [ ] uses 3003-report feedback??
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
 
-MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTKY BUT INFER WHAT I NEED TO DO IN THIS HRI MODULE TO ADDRESS THIS FEEDBACK:
-- [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
-- [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
+MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTLY BUT INFER WHAT I NEED TO DO IN THIS HRI MODULE TO ADDRESS THAT FEEDBACK:
+- [X] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
+- [X] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
 - [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
 
 - [X] utilise lecture teachings in lec 5-6 etc
@@ -114,8 +116,6 @@ MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTKY BUT INFER WHAT I NEED TO DO IN
 -->
 
 # 1- Task (1): Cultural Differences and HRI Design
-
-~1,750-word $\vert $ 40% weighting $\vert$ Questions 1.1-1.5
 
 ## 1.1. Cultural Differences in the Acceptance of Robots (Kaplan, 2004)
 
@@ -179,21 +179,7 @@ In regards to HRI, this suggests that robots interacting with users across diffe
 
 ### 1.2.3 Oral Tradition and Multimodal Communication:
 
-African cultures historically have preferred oral knowledge transmission over written documentation (Winschiers-Theophilus and Bidwell, 2013, pp. 12-13). This implicates interaction modality, i.e. voice-driven, narrative-based interfaces using speech processing and *prosodic* (rhythmically patterned) features such as pitch and MFCCs (Figure~\ref{fig:lecture3-speech-features}), may achieve higher engagement than text-heavy GUI paradigms. Furthermore, Lecture 2 (Figure~\ref{fig:peter-quote}) established that 65% of daily-life communication is nonverbal; thus, gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{image/peter-quote.png}
-\caption{Lecture-2 slide illustrating the prominence of non-verbal communication in daily life.}
-\label{fig:peter-quote}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{image/lecture3-speech-features.png}
-\caption{Lecture-3 slide listing speech acoustic features, including fundamental frequency (F0) and MFCCs.}
-\label{fig:lecture3-speech-features}
-\end{figure}
+African cultures historically have preferred oral knowledge transmission over written documentation (Winschiers-Theophilus and Bidwell, 2013, pp. 12-13). This implicates interaction modality, i.e. voice-driven, narrative-based interfaces using speech processing and *prosodic* (rhythmically patterned) features such as pitch and MFCCs (Lecture 3), may achieve higher engagement than text-heavy GUI paradigms. Furthermore, Lecture 2 established that 65% of daily-life communication is nonverbal; thus, gestural and paralinguistic channels become critical design considerations for African contexts wherein oral expressiveness is culturally normative.
 
 ### 1.2.4 Infrastructure and Access Constraints:
 
@@ -203,109 +189,7 @@ African cultures historically have preferred oral knowledge transmission over wr
 
 <!-- - [ ] DONE? -->
 
-The cultural factors identified above dictate distinct morphological-and-behavioural traits (how the robot looks and how it acts) to maximise acceptance (Fong, Nourbakhsh and Dautenhahn, 2003, p. 149); Figure~\ref{fig:proxemic-comparison} illustrates how these frameworks approach robot strategies per region.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-    robot/.style args={#1}{rectangle, rounded corners=3pt, draw=black!70, thick,
-                  minimum width=0.9cm, minimum height=1.4cm, fill=#1!15,
-                  font=\scriptsize\sffamily\bfseries},
-    human/.style={circle, draw=black!60, very thick, minimum size=0.8cm,
-                  fill=white, font=\scriptsize\sffamily\bfseries},
-    zonelabel/.style={font=\tiny\sffamily, text=#1!80!black},
-    regiontitle/.style={font=\small\sffamily\bfseries,
-                        text=#1!80!black},
-    traitbox/.style args={#1}{rectangle, rounded corners=2pt, draw=#1!60,
-                     fill=#1!5, text width=3.8cm, font=\tiny\sffamily,
-                     inner sep=4pt, align=left},
-    >=Stealth
-]
-
-% ===== EAST (JAPAN) =====
-\begin{scope}[shift={(0,0)}]
-    \node[regiontitle=eastcol] at (0, 3.2) {(a) East (Japan)};
-    \draw[eastcol!30, fill=eastcol!5, dashed] (0,0) circle (2.4cm);
-    \draw[eastcol!50, fill=eastcol!10, dashed] (0,0) circle (1.5cm);
-    \node[zonelabel=eastcol] at (0, -2.6) {Social zone ($1.2$--$3.7$m)};
-    \node[zonelabel=eastcol] at (0, 1.7) {Personal ($0.5$--$1.2$m)};
-    \node[human] (hE) at (0, 0) {H};
-    \node[robot=eastcol] (rE) at (2.1, 0.3) {R};
-    \draw[->, eastcol, thick, dashed] (rE.west) -- +(-0.5, 0)
-        node[midway, above, font=\tiny\sffamily\itshape, text=eastcol!80] {bow};
-    \node[traitbox=eastcol] at (0, -3.8) {%
-        \textbf{Morphology:} Anthropomorphic, fluid\\
-        \textbf{Approach:} Side-by-side;
-        enlarged buffer\\
-        \textbf{Greeting:} Calibrated bow (no touch)\\
-        \textbf{Basis:} Shinto animism;
-        \textit{kata}
-    };
-\end{scope}
-
-% ===== WEST (EUROPE/NA) =====
-\begin{scope}[shift={(6.5,0)}]
-    \node[regiontitle=westcol] at (0, 3.2) {(b) West (Europe/N.\ America)};
-    \draw[westcol!30, fill=westcol!5, dashed] (0,0) circle (2.4cm);
-    \draw[westcol!50, fill=westcol!10, dashed] (0,0) circle (1.5cm);
-    \node[zonelabel=westcol] at (0, -2.6) {Social zone ($1.2$--$3.7$m)};
-    \node[zonelabel=westcol] at (0, 1.7) {Personal ($0.5$--$1.2$m)};
-    \node[human] (hW) at (0, 0) {H};
-    \node[robot=westcol] (rW) at (1.3, 0) {R};
-    \draw[<->, westcol, thick] (hW.east) -- (rW.west)
-        node[midway, above, font=\tiny\sffamily\itshape, text=westcol!80] {handshake};
-    \node[traitbox=westcol] at (0, -3.8) {%
-        \textbf{Morphology:} Machine-identity markers\\
-        \textbf{Approach:} Face-to-face;
-        personal zone\\
-        \textbf{Greeting:} Haptic handshake (symbolic)\\
-        \textbf{Basis:} Narcissistic shield;
-        transparency
-    };
-\end{scope}
-
-% ===== AFRICA =====
-\begin{scope}[shift={(13,0)}]
-    \node[regiontitle=africacol] at (0, 3.2) {(c) Africa};
-    \draw[africacol!30, fill=africacol!5, dashed] (0,0.1) circle (2.4cm);
-    \draw[africacol!50, fill=africacol!10, dashed] (0,0.1) circle (1.5cm);
-    \node[zonelabel=africacol] at (0, -2.6) {Group social zone};
-    \node[zonelabel=africacol] at (0, 1.8) {Communal space};
-    \node[human, minimum size=0.7cm] (hA1) at (-0.5, 0.5) {E};
-    \node[human, minimum size=0.7cm, font=\tiny\sffamily\bfseries] (hA2) at (0.5, 0.5) {H};
-    \node[human, minimum size=0.7cm, font=\tiny\sffamily\bfseries] (hA3) at (0, -0.4) {H};
-    \node[robot=africacol, minimum height=1.1cm, minimum width=0.7cm]
-        (rA) at (2.1, -0.1) {R};
-    \draw[->, africacol, thick, dashed] (rA.north west) -- (hA1.east)
-        node[midway, above, font=\tiny\sffamily\itshape, text=africacol!80, yshift=1pt] {elder first};
-    \node[traitbox=africacol] at (0, -3.8) {%
-        \textbf{Morphology:} Modest stature;
-        non-imposing\\
-        \textbf{Approach:} Group-facing;
-        peripheral entry\\
-        \textbf{Greeting:} Elder-first;
-        voice-driven narrative\\
-        \textbf{Basis:} Ubuntu; Power Distance; oral trad.
-    };
-\end{scope}
-
-% ===== Legend =====
-\node[font=\tiny\sffamily, text=black!60, align=center] at (6.5, -5.5) {%
-    Proxemic zones adapted from Rios-Martinez, Spalanzani and Laugier (2015):
-    Intimate ($<$0.5m) $\vert$
-    Personal (0.5--1.2m) $\vert$
-    Social (1.2--3.7m) $\vert$
-    Public ($>$3.7m).
-    \\
-    \textbf{H} = Human \quad \textbf{E} = Elder \quad \textbf{R} = Robot \quad
-    Dashed circles = culturally-calibrated approach boundaries.
-};
-
-\end{tikzpicture}
-\caption{Culturally-adapted proxemic zones and robot approach strategies across three regional paradigms.
-The robot's spatial positioning, greeting modality, and morphological design are calibrated to the cultural frameworks identified in Sections 1.1--1.2 (Rios-Martinez, Spalanzani and Laugier, 2015; Kaplan, 2004; Cirasa and Conti, 2025).}
-\label{fig:proxemic-comparison}
-\end{figure}
+The cultural factors identified above dictate distinct morphological-and-behavioural traits (how the robot looks and how it acts) to maximise acceptance (Fong, Nourbakhsh and Dautenhahn, 2003, p. 149).
 
 **(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form (Kaplan, 2004, p. 470), the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Joosse, Lohse and Evers, 2014, p. 2; Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group; hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone of 0.45-1.2m (Rios-Martinez, Spalanzani and Laugier, 2015, p. 5, Table 1).
 
@@ -362,9 +246,6 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 # 2- Task (2): POMDPs in Human-Robot Interaction
 
-- [X] define POMDPs
-- [ ] work out word count*0.1 allowance
-
 <!--
 - [ ] FIND PEER-REVIEWED CITATIONS: POMDPs (Partially Observable Markov Decision Processes): a mathematical framework for modelling decision-making problems where the agent has incomplete information about the environment state. They extend MDPs by incorporating uncertainty in state observation, making them particularly suitable for HRI scenarios wherein the robot must infer human mental states (§trust, intent, etc) from noisy sensory data. A POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is the set of states, $A$ the set of actions, $T$ the transition function, $R$ the reward function, $\Omega$ the set of observations, $O$ the observation function, and $\gamma$ the discount factor.
 
@@ -375,7 +256,7 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in COMP3003 (Lecture 7) by relaxing full state observability (Figure~\ref{fig:pomdp-graphical-model}): rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
 
-To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration. The POMDP therefore provides the principled framework for modelling trust and enabling genuinely collaborative human-robot teams (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
+To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
 
 \begin{figure}[H]
 \centering
@@ -464,9 +345,9 @@ $$
 b'(s') = \eta \cdot O(s', a, o) \sum_{s \in S} T(s, a, s') \cdot b(s)
 $$
 
- $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process whereby each observation incrementally refines the robot's understanding.
+ $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process.
 
-The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998).
+The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998). This is precisely why the POMDP exhibits a non-Markovian *policy* (each action depends on the full history $h_t$, as the umbrella arcs in Figure 4 illustrate) whilst maintaining a Markovian *belief update* (the next belief $b'$ depends only on the current belief $b$, the action taken, and the observation received); the belief state absorbs all relevant history, and thus the agent need not store raw trajectories to act optimally.
 
 ## 2.3 Challenges of Trust Modelling and the POMDP Response
 
@@ -488,76 +369,11 @@ The POMDP addresses these challenges by encoding trust as a hidden state variabl
 
 ## 2.4 Proposed Neuro-Symbolic POMDP Model: Neo Robot with OpenAI Cognitive Architecture
 
-To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (Pepper) humanoid robot augmented with an OpenAI multimodal API, deployed as an elderly medication-adherence assistant. LLMs are powerful observation extractors, capable of parsing unstructured human behaviour into structured probabilistic assessments; however, they are inherently stateless (each API call is independent, with no temporal memory) and prone to hallucination (Ji et al., 2023). Wrapping the API inside a POMDP belief state $b(s)$ therefore provides the temporal scaffold the LLM lacks: a continuously-updated model of the human's latent states (Trust, Cognitive Load) persisting across the full interaction. This neuro-symbolic paradigm, wherein a neural subsystem handles perception whilst a symbolic subsystem governs reasoning, represents what Garcez and Lamb (2023, p. 12389) term the 'third wave' of AI. Ahn et al. (2022) demonstrated via SayCan that LLMs can ground language commands in physical robotic affordances, establishing LLM-directed action selection; however, their architecture lacks the temporal belief maintenance that a POMDP provides, a gap this model directly addresses.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[
-    node distance=1.5cm and 2.0cm,
-    block/.style args={#1}{rectangle, rounded corners=3pt, draw=black!70, thick,
-                  minimum width=2.5cm, minimum height=1.0cm, fill=#1,
-                  font=\scriptsize\sffamily, align=center},
-    human/.style={circle, draw=black!60, very thick, minimum size=0.9cm,
-                  fill=white, font=\small\sffamily\bfseries},
-    >=Stealth
-]
-
-% Bottom row: Neural perception pathway
-\node[human] (H) at (0, 0) {H};
-\node[below=0.15cm of H, font=\tiny\sffamily\itshape] {Elderly User};
-
-\node[block=purple!20, text width=2.0cm] (neo) at (3.5, 0)
-    {Neo Sensors\\{\tiny Camera, Mic,}\\{\tiny Touch}};
-
-\node[block=teal!20, text width=2.8cm, minimum height=1.2cm] (api) at (7.5, 0)
-    {\textbf{OpenAI API}\\{\tiny Multimodal LLM}\\{\tiny (Vision + Speech)}};
-\node[below=0.15cm of api, font=\tiny\sffamily\itshape, text=teal!70] {$O(s', a, o)$};
-
-\node[block=orange!20, text width=1.8cm] (obs) at (11.5, 0)
-    {$o \in \Omega$\\{\tiny Comply,}\\{\tiny Hesitate, \ldots}};
-
-% Top row: Symbolic reasoning pathway
-\node[block=blue!20, text width=3.0cm, minimum height=1.2cm] (belief) at (11.5, 3)
-    {\textbf{Belief Update}\\{\tiny $b'(s') = \eta \cdot O \cdot \sum T \cdot b$}};
-\node[above=0.1cm of belief, font=\tiny\sffamily\itshape, text=blue!70] {POMDP Temporal Engine};
-
-\node[block=green!20, text width=2.2cm] (policy) at (7.5, 3)
-    {$\pi^*(b)$\\{\tiny Optimal}\\{\tiny Policy}};
-
-\node[block=red!20, text width=2.2cm] (exec) at (3.5, 3)
-    {Execution\\{\tiny NLG + Gesture}\\{\tiny via OpenAI}};
-
-% Arrows: perception pathway
-\draw[->, thick] (H) -- (neo);
-\draw[->, thick] (neo) -- (api) node[midway, above, font=\tiny\sffamily\itshape] {raw data};
-\draw[->, thick] (api) -- (obs) node[midway, above, font=\tiny\sffamily\itshape] {$P(o|s',a)$};
-
-% Arrows: up to POMDP
-\draw[->, thick] (obs) -- (belief);
-
-% Arrows: reasoning pathway
-\draw[->, thick] (belief) -- (policy) node[midway, above, font=\tiny\sffamily\itshape] {$b$};
-\draw[->, thick] (policy) -- (exec) node[midway, above, font=\tiny\sffamily\itshape] {$a \in A$};
-
-% Arrow: back to human
-\draw[->, thick] (exec) -- (H) node[midway, left, font=\tiny\sffamily\itshape, align=center] {speech +\\gesture};
-
-\node[block=blue, text width=1.6cm, minimum height=0.7cm, font=\tiny\sffamily] (states) at (14.5, 3)
-    {$S$: Trust\\$\times$ Cog.\ Load};
-\draw[->, dashed, draw=blue!40] (states.west) -- (belief.east);
-
-% Subsystem labels
-\node[font=\scriptsize\sffamily\bfseries, text=purple!50] at (5.5, -1.2) {\textit{Neural Subsystem} (Perception)};
-\node[font=\scriptsize\sffamily\bfseries, text=blue!50] at (7.5, 4.3) {\textit{Symbolic Subsystem} (Reasoning)};
-
-\end{tikzpicture}
-\caption{Neuro-symbolic architecture of the proposed OpenAI-POMDP medication-adherence system. The \textit{neural subsystem} (bottom) utilises the OpenAI multimodal API as the observation function ($O$), parsing high-dimensional sensory data into discrete probabilistic observations. The \textit{symbolic subsystem} (top) maintains the POMDP belief state and optimal policy $\pi^*(b)$, providing temporal memory via Bayesian filtering. Actions are translated back through the API into natural language and gestures for the Neo robot (Garcez and Lamb, 2023; Ahn et al., 2022).}
-\label{fig:neuro-symbolic-arch}
-\end{figure}
+To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (Pepper) humanoid robot augmented with an OpenAI multimodal API, deployed as an elderly medication-adherence assistant. LLMs are powerful observation extractors, capable of parsing unstructured human behaviour into structured probabilistic assessments; however, they are inherently stateless (each API call is independent, with no temporal memory) and prone to hallucination (Ji et al., 2023). Wrapping the API inside a POMDP belief state $b(s)$ therefore provides the temporal scaffold the LLM lacks: a continuously-updated model of the human's latent states (Trust, Cognitive Load) persisting across the full interaction. This neuro-symbolic paradigm, wherein a neural subsystem handles perception whilst a symbolic subsystem governs reasoning, represents what Garcez and Lamb (2023, p. 12389) term the 'third wave' of AI. Ahn et al. (2022) demonstrated via SayCan that LLMs can ground language commands in physical robotic affordances, establishing LLM-directed action selection; however, their architecture lacks the temporal belief maintenance that a POMDP provides.
 
 ### 2.4.1 The Neuro-Symbolic Architecture
 
-The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user, transmitted to the OpenAI multimodal API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API provides a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires; the observation function thus feeds structured assessments continuously throughout the interaction wherein the Bayesian update incrementally refines the model of the user. Concretely, if the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance, as the belief indicates the user is cognitively loaded rather than non-compliant.
+The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user, transmitted to the OpenAI multimodal API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API provides a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires. Concretely, if the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance, as the belief indicates the user is cognitively loaded rather than non-compliant.
 
 ### 2.4.2 Formal Specification
 
@@ -566,7 +382,7 @@ The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capt
 - **Observation Space** ($\Omega$): $\{$Comply, Hesitate, Verbal\_Refuse, Ignore, Gaze\_Avert$\}$, extracted by the OpenAI API from the raw multimodal stream.
 - **Observation Function** ($O$): $P(o \mid s', a)$ is estimated by the API's multimodal inference; e.g. $P(\text{Comply} \mid \text{HighTrust, LowLoad}, \text{Remind}) = 0.8$, derived from the user's facial configuration and vocal tone.
 - **Transition Function** ($T$): Models trust dynamics parametrically. An unneeded Offer\_Physical\_Assist violating personal proxemics (Lecture 4) degrades trust: $P(\text{Low} \mid \text{Med}, \text{Assist}) = 0.6$; conversely, a well-timed Explain\_Benefits yields $P(\text{High} \mid \text{Med}, \text{Explain}) = 0.5$.
-- **Reward Function** ($R$): Successful medication adherence yields $R = +10$; preserving user autonomy (choosing Increase\_Autonomy when trust is High) yields $R = +3$; unwanted physical assistance incurs $R = -5$, reflecting the social cost of proxemic violation. Notably, both $O$ and $R$ must be culturally parametrised per the findings in Task 1; the proxemic penalty, for instance, should be weighted more heavily for non-contact cultures.
+- **Reward Function** ($R$): Successful medication adherence yields $R = +10$; preserving user autonomy (choosing Increase\_Autonomy when trust is High) yields $R = +3$; unwanted physical assistance incurs $R = -5$, reflecting the social cost of proxemic violation. Furthermore, mirroring the 'cost of listening' penalty inherent to POMDP information-gathering (as in the Tiger problem), the architecture imposes $R = -1$ for each API observation cycle, thereby penalising excessive polling latency. Notably, both $O$ and $R$ must be culturally parametrised per the findings in Task 1; the proxemic penalty, for instance, should be weighted more heavily for non-contact cultures.
 
 \begin{figure}[H]
 \centering
@@ -653,13 +469,13 @@ The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capt
 
 ### 2.4.3 Benefits and Limitations
 
-The model's strength lies in neuro-symbolic complementarity: the API parses unstructured multimodal reality into discrete observations, whilst the POMDP provides the temporal cognitive engine (the belief state $b$) that the stateless LLM fundamentally cannot. Unlike traditional solvers such as PBVI (Pineau, Gordon and Thrun, 2003) which struggle with high-dimensional unstructured observations, this approach delegates perceptual dimensionality-reduction to the LLM, thereby preserving the tractability of the belief update. However, the architecture introduces several limitations: 1) a fundamental mathematical friction: the POMDP relies on the Markov property with a stationary observation function $O(s', a, o)$, yet the LLM is inherently non-stationary; its outputs depend on a dynamic context window, meaning the observation function shifts based on the LLM's own internal states, and thus the belief update is technically an approximation rather than an exact sufficient statistic. The practical consequence is insidious: if the LLM's interpretation silently shifts (e.g., following an API version update), the belief state degrades without any mechanism to detect this drift; 2) API latency (200-800ms) may disrupt real-time proxemic responsiveness (Lecture 4); 3) the LLM's stochastic nature means identical inputs may yield different observation distributions, introducing unmodelled noise into the Bayesian update; and 4) the observation model may inherit training-data biases, degrading inference accuracy for elderly users if the model was predominantly trained on younger demographics (Lecture 5).
+The model's strength lies in neuro-symbolic complementarity (Section 2.4). Unlike traditional solvers such as PBVI (Pineau, Gordon and Thrun, 2003) which struggle with high-dimensional unstructured observations, this approach delegates perceptual dimensionality-reduction to the LLM, thereby preserving the tractability of the belief update. However, the architecture introduces several limitations: 1) a fundamental mathematical friction: the POMDP relies on the Markov property with a stationary observation function $O(s', a, o)$, yet the LLM is inherently non-stationary; its outputs depend on a dynamic context window, meaning the observation function shifts based on the LLM's own internal states, and thus the belief update is technically an approximation rather than an exact sufficient statistic. The practical consequence is insidious: if the LLM's interpretation silently shifts (e.g., following an API version update), the belief state degrades without any mechanism to detect this drift; 2) API latency (200-800ms) may disrupt real-time proxemic responsiveness (Lecture 4); 3) the LLM's stochastic nature means identical inputs may yield different observation distributions, introducing unmodelled noise into the Bayesian update; and 4) the observation model may inherit training-data biases, degrading inference accuracy for elderly users if the model was predominantly trained on younger demographics (Lecture 5).
 
 ## 2.5 Ethical and Social Implications
 
 By operationalising trust as a now-computable metric, the POMDP risks enabling exploitation: insofar as the reward function solely prioritises compliance, the optimal policy may learn to time requests when inferred cognitive load is highest. Designers must therefore encode user autonomy into the reward structure, lest assistance erode into manipulation. Sharkey (2014, pp. 69-70) frames this via the Capability Approach: the robot must expand rather than impede access to Nussbaum's central capabilities, and thus the $R = +3$ autonomy bonus is not merely a design preference but an ethical imperative encoding that dignity requires preservation of choice.
 
-The OpenAI API introduces three additional ethical dimensions. Firstly, **hallucination risk**: LLMs generate plausible but factually incorrect outputs (Ji et al., 2023); in a medication-adherence context, misclassifying confused hesitation as willing compliance could trigger inappropriate actions with direct health consequences. Explainable AI (Lecture 5) therefore becomes non-negotiable: the POMDP must justify *why* it selected a particular action, tracing the decision through the belief state to the specific observations extracted. Secondly, **cloud-data sovereignty**: continuous multimodal processing transmitted to third-party servers risks what Sharkey and Sharkey (2012, pp. 35-36) identify as monitoring that infringes on "the right to privacy" (Figure~\ref{fig:lecture5-privacy-surveillance}); the user's most vulnerable moments are thereby streamed to servers whose data-handling policies cannot be meaningfully audited. Finally, **API latency and proxemic violation**: response delays during a time-critical approach may cause the robot to freeze or fail to yield, behaviour Lecture 4 identifies as "aggressive" (Figure~\ref{fig:lecture4-aggressive-robot}). The ethical watchword is therefore proactive regulation (Lecture 5, Figure~\ref{fig:lecture5-ethics-approaches}): designers must encode transparent, auditable constraints *ex ante* into both the reward function and the API pipeline, ensuring the robot does not merely *model* trust but actively *earns* it through explainable, privacy-preserving behaviour.
+The OpenAI API introduces three additional ethical dimensions. Firstly, **hallucination risk**: LLMs generate plausible but factually incorrect outputs (Ji et al., 2023); e.g., in a medication-adherence context, misclassifying confused hesitation as willing compliance could trigger inappropriate actions with direct health consequences. Explainable AI (Lecture 5) therefore becomes non-negotiable: the POMDP must justify *why* it selected a particular action, tracing the decision through the belief state to the specific observations extracted. Secondly, **cloud-data sovereignty**: continuous multimodal processing transmitted to third-party servers risks what Sharkey and Sharkey (2012, pp. 35-36) identify as monitoring that infringes on "the right to privacy" (Figure~\ref{fig:lecture5-privacy-surveillance}); the user's most vulnerable moments are thereby streamed to servers whose data-handling policies cannot be meaningfully audited. Finally, **API latency and proxemic violation**: response delays during a time-critical approach may cause the robot to freeze or fail to yield, behaviour Lecture 4 identifies as "aggressive" (Figure~\ref{fig:lecture4-aggressive-robot}). The ethical watchword is therefore proactive regulation (Lecture 5): designers must encode transparent, auditable constraints *ex ante* into both the reward function and the API pipeline, ensuring the robot does not merely *model* trust but actively *earns* it through explainable, privacy-preserving behaviour.
 
 \begin{figure}[H]
 \centering
@@ -675,27 +491,13 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 \label{fig:lecture4-aggressive-robot}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{image/lecture5-ethics-approaches.png}
-\caption{Lecture-5 slide contrasting ``Bottom up'' and ``Pro-active'' ethical approaches to AI regulation, underpinning the argument that designers must encode constraints \textit{ex ante} rather than learning from harm after deployment.}
-\label{fig:lecture5-ethics-approaches}
-\end{figure}
+# Appendices
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\textwidth]{image/lecture5-biased-algorithms.png}
-\caption{Lecture-5 slide identifying the biased-algorithms problem: ``AI trains on dataset that may contain a bias (e.g.\ favors young white men)'' --- relevant to the observation model's potential demographic degradation when applied to elderly users (Section 2.4).}
-\label{fig:lecture5-biased-algorithms}
-\end{figure}
+- [ ] CRITICAL PRE-SUBMISSION TASK: FINISH AI DECLARATION
 
-\newpage
+## References (Peer-reviewed or Conference only)
 
-# References
-
-- [X] PEER-REVIEWED OR CONFERENCE SOURCES ONLY
-
-## Task (1)'s
+### Task (1)'s
 
 - [ ] fetch exact wording fron paper to earn second tick
 - [ ] [ ] Cirasa, C. and Conti, D. (2025) 'Mapping trust and cultural dimensions in human-robot interaction: a scoping review approach', *Computers in Human Behavior Reports*, 19, article 100763. Available at: [https://doi.org/10.1016/j.chbr.2025.100763](https://doi.org/10.1016/j.chbr.2025.100763) (Accessed: 21 February 2026).
@@ -711,7 +513,7 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 - [ ] [ ] Winschiers-Theophilus, H. and Bidwell, N.J. (2013) 'Toward an Afro-centric indigenous HCI paradigm', *International Journal of Human-Computer Interaction*, 29(4), pp. 243-255. Available at: [https://doi.org/10.1080/10447318.2013.765763](https://doi.org/10.1080/10447318.2013.765763) (Accessed: 21 February 2026).
 - [ ] [ ] Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320-333. Available at: [https://doi.org/10.1080/02681102.2015.1048184](https://doi.org/10.1080/02681102.2015.1048184) (Accessed: 15 February 2026).
 
-## Task (2)'s
+### Task (2)'s
 
 - [ ] fetch exact wording fron paper to earn second tick
 - [ ] make alphabetical
@@ -730,9 +532,7 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 - [X] [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. Available at: https://doi.org/10.1007/s10676-010-9234-6 (Accessed: 16 February 2026).
 - [X] [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems 23 (NeurIPS 2010)*. Vancouver: Curran Associates, pp. 2164-2172. Available at: https://papers.nips.cc/paper/2010/hash/edfbe1afcf9246bb0d40eb4d8027d90f-Abstract.html (Accessed: 15 February 2026).
 
-# Appendices
-
-## Appendix A: AI Declaration
+## Appendix B: AI Declaration
 
 \begin{figure}[H]
 \centering
