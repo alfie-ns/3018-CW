@@ -31,7 +31,7 @@ header-includes:
 ---
 - [ ] 'persons'
 - [ ] discuss mathematical notiation for the POMDP stuff??? (if not done in set exercises)
-    - [ ] maths and diagrams circumvent wordcount 
+    - [ ] maths and diagrams affect wordcount? 
     - [ ] Trust-POMPDP diagram
     - [ ] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
     - [ ] model trust in lates diabram? or     just latex the fundamental diagtam of       POMDP similar to lecture slied in POMDP     lectures (10,11)

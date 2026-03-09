@@ -22,6 +22,10 @@ header-includes:
   - \definecolor{eastcol}{HTML}{4A90D9}
   - \definecolor{westcol}{HTML}{D94A4A}
   - \definecolor{africacol}{HTML}{5CB85C}
+  - \definecolor{trustblue}{HTML}{2E5FA1}
+  - \definecolor{loadred}{HTML}{C0392B}
+  - \definecolor{annotatered}{HTML}{E74C3C}
+  - \definecolor{softgray}{HTML}{888888}
   - |
       \lstset{
         language=Python,
@@ -35,34 +39,24 @@ header-includes:
         showstringspaces=false
       }
 ---
-
+- [X] test-tex-figures.md (determine which one then improve via gemini)
 - [X] too many latex figures i need to only keep 2 of the best ones,  one that I definitely want to keep is the one where it's a chart (prove to me you know what I mean by chart before you start removing them)
-- [ ] do ALL TODOs throughout the inline text of the mainbody itself
-- [ ] utilise transcripts insids the learning/
+- [X] do ALL TODOs throughout the inline text of the mainbody itself
+- [X] utilise transcripts insids the learning/
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
-
 - [ ] verify all page numbers.
 - [ ] verify all lecture references are correct with deeper review of lecture materials
-
 - [X] see where i can fit in LaTeX things
 - [X] Trust-POMPDP diagram
 - [X] perhaps model trust in lates diabram? or just latex the fundamental diagtam of POMDP similar to lecture slied in POMDP lectures (10,11)
 
 # Words-To-Use:
 
-- [ ] persons
-
-- [ ] use `whom`
-- [ ] and indeed, the robot will...
-- [ ] `is indeed...`
-- [ ] `and indeed...`
-- [ ] `however, insofar as`
-- [ ] `herein`: in this document
-- [ ] Note
-- [ ] Approach
-- [ ] `init`: initialise
-- [ ] `use`: use
-
+- [X] persons
+- [X] use `whom`
+- [X] `however, insofar as`
+- [X] Approach
+- [X] `utilise`
 - [X] belief
 - [X] talk about nolvety effect in lecture 6
 - [X] most-{something} {something}
@@ -91,29 +85,21 @@ header-includes:
 
 # TODO:
 
-- [ ] **Lecturer’s Top Insight:** Be a Reviewer; don’t just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
-- [ ] INTEGRATE ROBOTIC LaTeX DIAGRAM
-- [ ] 3018-CW/learning/lectures/5 [ ] - utilise/lecture.md (**Task 1 insight!!**)
-- [ ] 3018-CW/learning/lectures/6 [ ] - utilise/lecture.md (**General cw insight**)
+- [X] **Lecturer’s Top Insight:** Be a Reviewer; don’t just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
+- [X] INTEGRATE ROBOTIC LaTeX DIAGRAM
+- [X] 3018-CW/learning/lectures/5 - utilise/lecture.md (**Task 1 insight!!**)
+- [X] 3018-CW/learning/lectures/6 - utilise/lecture.md (**General cw insight**)
 - [ ] verify page numbers are correct
-- [ ] hit word-count*0.1 limit allowance across report
-- [ ] indeed 10% word-count allowance
-- [ ] uses 3003-report feedback??
-- [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
-
-MACHINE LEARNING FEEDBACK SO DONT DO THIS EXACTLY BUT INFER WHAT I NEED TO DO IN THIS HRI MODULE TO ADDRESS THAT FEEDBACK:
-- [X] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
-- [X] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
-- [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
-
+- [X] hit word-count*0.1 limit allowance across report
+- [X] indeed 10% word-count allowance
+- [X] uses 3003-report feedback
 - [X] utilise lecture teachings in lec 5-6 etc
 - [X] review papers: pros or limitations
 - [X] peer-reviewed or conference papers
 - [X] very good LaTeX visualisations
-
-
+- [X] get gemini to crituque thus improve the Tikz figure captions
 - [ ] FULL PROOF READ
-- [ ] get gemini to crituque thus improve the Tikz figure captions 
+- [ ] final proof read.
 
 # 1- Task (1): Cultural Differences and HRI Design
 
@@ -135,7 +121,7 @@ Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e.
 
 ### 1.1.3 Implications for HRI Design.
 
-The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerners predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome human-like anthropomorphic features that align with the animistic expectations established in Section 1.1.2; Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like robots serving as "social company," whereas US participants instead envisioned theirs as "machine-like" extensions of "household appliances".
+The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerner persons predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome human-like anthropomorphic features that align with the animistic expectations established in Section 1.1.2; Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like robots serving as "social company," whereas US participants instead envisioned theirs as "machine-like" extensions of "household appliances".
 
 Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (culturally-defined personal-space boundaries) based on their own norms. However, non-contact cultures such as Japan maintain larger personal-space buffers, whereas contact cultures such as those in Southern Europe tolerate closer approach distances (Joosse, Lohse and Evers, 2014, pp. 1-2); therefore, a culturally-calibrated model must feed local boundaries into its approach-vector calculations, as failing to respect these bounds contravenes user expectations, effectively alienating the would-be companion (Rios-Martinez, Spalanzani and Laugier, 2015, p. 4).
 
@@ -254,7 +240,7 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 ## 2.1 The Role of POMDPs in Trust, Cooperation, Coordination, and Collaboration
 
-A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in COMP3003 (Lecture 7) by relaxing full state observability (Figure~\ref{fig:pomdp-graphical-model}): rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
+A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in COMP3003 (Lecture 7) by relaxing full state observability: rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
 
 To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
 
@@ -267,74 +253,50 @@ To understand the POMDP's utility, one must strictly differentiate interaction p
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[
-    node distance=2.0cm and 2.5cm,
-    state/.style={circle, draw=blue!70, thick, minimum size=1.0cm,
-                  fill=blue!10, font=\small\sffamily},
-    obs/.style={circle, draw=orange!70, thick, minimum size=1.0cm,
-                fill=orange!10, font=\small\sffamily},
-    action/.style={rectangle, rounded corners=2pt, draw=green!60, thick,
-                   minimum width=0.8cm, minimum height=0.6cm,
-                   fill=green!10, font=\scriptsize\sffamily},
-    >=Stealth
+\begin{tikzpicture}
+\begin{axis}[
+    width=11cm, height=5.5cm,
+    xlabel={Interaction Cycle},
+    ylabel={$b(\text{Med Trust, High Load})$},
+    xmin=-0.3, xmax=5.5,
+    ymin=0, ymax=0.7,
+    xtick={0,1,2,3,4,5},
+    xticklabels={$t_0$,$t_1$,$t_2$,$t_3$,$t_4$,$t_5$},
+    every axis label/.style={font=\small\sffamily},
+    every tick label/.style={font=\scriptsize\sffamily},
+    grid=none,
+    axis lines=left,
+    axis line style={->, thick},
 ]
 
-% Hidden states (middle row)
-\node[state] (s0) at (0, 1.5) {$s_0$};
-\node[state] (s1) at (3.5, 1.5) {$s_1$};
-\node[state] (s2) at (7, 1.5) {$s_2$};
-\node[state] (s3) at (10.5, 1.5) {$s_3$};
-\node at (11.8, 1.5) {$\cdots$};
+% Threshold line
+\addplot[dashed, loadred!60, thin] coordinates {(-0.3, 0.45) (5.5, 0.45)};
+\node[font=\tiny\sffamily, text=loadred!80, anchor=west] at (axis cs: 4.6, 0.48) {$\tau$: Escalate};
 
-% Observations (bottom row)
-\node[obs] (o1) at (3.5, -0.5) {$o_1$};
-\node[obs] (o2) at (7, -0.5) {$o_2$};
-\node[obs] (o3) at (10.5, -0.5) {$o_3$};
+% Prior line
+\addplot[dashed, softgray, thin] coordinates {(-0.3, 0.167) (5.5, 0.167)};
+\node[font=\tiny\sffamily, text=softgray, anchor=west] at (axis cs: 4.6, 0.20) {Prior: $\frac{1}{6}$};
 
-% Actions (top row)
-\node[action] (a0) at (1.75, 3.5) {$a_0$};
-\node[action] (a1) at (5.25, 3.5) {$a_1$};
-\node[action] (a2) at (8.75, 3.5) {$a_2$};
+% Belief trajectory
+\addplot[color=loadred, very thick, mark=*, mark size=3.5pt] coordinates {
+    (0, 0.167) (1, 0.40) (2, 0.52) (3, 0.38) (4, 0.25) (5, 0.15)
+};
 
-% State transitions Pr(s'|s,a)
-\draw[->, thick, blue!60] (s0) -- (s1) node[midway, below, font=\tiny\sffamily\itshape] {$\Pr(s'|s,a)$};
-\draw[->, thick, blue!60] (s1) -- (s2);
-\draw[->, thick, blue!60] (s2) -- (s3);
+% Above/below threshold annotations
+\node[font=\scriptsize\sffamily\itshape, text=trustblue] at (axis cs: 0.5, 0.33) {Verbal};
+\node[font=\scriptsize\sffamily\itshape, text=loadred] at (axis cs: 1.5, 0.55) {Explain};
+\node[font=\scriptsize\sffamily\itshape, text=loadred] at (axis cs: 2.5, 0.53) {Assist};
+\node[font=\scriptsize\sffamily\itshape, text=trustblue] at (axis cs: 3.5, 0.30) {Verbal};
+\node[font=\scriptsize\sffamily\itshape, text=trustblue] at (axis cs: 4.5, 0.12) {Disengage};
 
-% Observation emissions Pr(e|s)
-\draw[->, thick, orange!60] (s1) -- (o1) node[midway, right, font=\tiny\sffamily\itshape] {$\Pr(e|s)$};
-\draw[->, thick, orange!60] (s2) -- (o2);
-\draw[->, thick, orange!60] (s3) -- (o3);
+% Threshold crossing marker
+\draw[annotatered, thick, ->] (axis cs: 1.6, 0.45) -- (axis cs: 1.6, 0.515)
+    node[above, font=\tiny\sffamily\bfseries, text=annotatered] {crosses $\tau$};
 
-% Action influence on state transitions
-\draw[->, thick, green!50, dashed] (a0) -- (s1);
-\draw[->, thick, green!50, dashed] (a1) -- (s2);
-\draw[->, thick, green!50, dashed] (a2) -- (s3);
-
-% === THE "UMBRELLA" (Lecture 7): action-to-action and observation-to-action arcs ===
-% Action to next action (policy depends on history)
-\draw[->, thick, purple!40] (a0) to[bend left=25] (a1);
-\draw[->, thick, purple!40] (a1) to[bend left=25] (a2);
-% Observation to next action (observations inform future decisions)
-\draw[->, thick, purple!40] (o1) to[bend right=40] (a1);
-\draw[->, thick, purple!40] (o2) to[bend right=40] (a2);
-% Long-range observation-to-action arcs (history dependency)
-\draw[->, thick, purple!20] (o1) to[bend right=50] (a2);
-
-% Labels
-\node[font=\tiny\sffamily, text=blue!70, above left=0.05cm of s0] {Hidden};
-\node[font=\tiny\sffamily, text=orange!70, below=0.1cm of o1] {Observable};
-
-% Grey dashed box around hidden states
-\draw[dashed, gray!50, rounded corners=5pt] (-0.8, 0.7) rectangle (11.5, 2.3);
-\node[font=\tiny\sffamily\itshape, text=gray!70] at (5.25, 0.85) {Latent states (Trust $\times$ Cognitive Load) --- not directly accessible};
-
-% Umbrella label
-\node[font=\tiny\sffamily\itshape, text=purple!60] at (5.25, 4.3) {``Umbrella'' (Lecture 7): policy depends on \textbf{entire} action-observation history};
-
+\end{axis}
 \end{tikzpicture}
-\caption{POMDP graphical model. Hidden states $s_t$ (blue) evolve via $\Pr(s'|s,a)$, influenced by actions $a_t$ (green). Observations $o_t$ (orange) are emitted via $\Pr(e|s)$. Critically, the purple ``umbrella'' arcs show that each action depends on \textit{all} prior actions and observations (the history $h_t$), making the POMDP policy non-Markovian even though the belief update itself is Markovian (Lecture 7; Kaelbling, Littman and Cassandra, 1998).}
-\label{fig:pomdp-graphical-model}
+\caption{Action selection governed by continuous belief thresholds. When the probabilistic belief $b(\text{Med Trust, High Load})$ exceeds the escalation threshold $\tau = 0.45$ at $t_2$, the policy dictates a discrete shift from Verbal\_Remind to Explain\_Benefits, then Offer\_Physical\_Assist. As trust recovers and the belief drops below $\tau$ (from $t_3$), the robot de-escalates accordingly. This mapping of a continuous belief space to discrete optimal actions fundamentally distinguishes the POMDP from threshold-free LLM approaches.}
+\label{fig:action-threshold}
 \end{figure}
 
 ## 2.2 Uncertainty, Belief States, and Decision-Making
@@ -347,7 +309,7 @@ $$
 
  $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g., pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process.
 
-The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998). This is precisely why the POMDP exhibits a non-Markovian *policy* (each action depends on the full history $h_t$, as the umbrella arcs in Figure 4 illustrate) whilst maintaining a Markovian *belief update* (the next belief $b'$ depends only on the current belief $b$, the action taken, and the observation received); the belief state absorbs all relevant history, and thus the agent need not store raw trajectories to act optimally.
+The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998). This is precisely why the POMDP exhibits a non-Markovian *policy* (each action depends on the full history $h_t$) whilst maintaining a Markovian *belief update* (the next belief $b'$ depends only on the current belief $b$, the action taken, and the observation received); the belief state absorbs all relevant history, and thus the agent need not store raw trajectories to act optimally.
 
 ## 2.3 Challenges of Trust Modelling and the POMDP Response
 
@@ -355,7 +317,7 @@ Trust is a latent psychological variable; it cannot be directly measured, only i
 
 ### 2.3.1 The Measurement Problem
 
-Observations such as task compliance rate, response latency, gaze direction (Lecture 2), and verbal affirmations are noisy proxies. Hancock et al.'s (2011, p. 520) meta-analysis of 29 empirical studies confirms this, finding that robot performance-based factors exhibit the strongest correlation with trust (mean r = +0.34, p. 522), yet even these explain only modest variance; a user may comply with a robot's suggestion despite low trust (e.g., due to time pressure), or indeed refuse despite high trust (e.g., due to task complexity), and thus the observation alone cannot reliably disambiguate the latent state.
+Observations such as task compliance rate, response latency, gaze direction (Lecture 2), and verbal affirmations are noisy proxies. Hancock et al.'s (2011, p. 520) meta-analysis of 29 empirical studies confirms this, finding that robot performance-based factors exhibit the strongest correlation with trust (mean r = +0.34, p. 522), yet even these explain only modest variance; a user may comply with a robot's suggestion despite low trust (e.g., due to time pressure), or indeed refuse despite high trust (e.g., due to task complexity), and thus the observation alone does not necessarily disambiguate the latent state.
 
 ### 2.3.2 Temporal Dynamics
 
@@ -373,7 +335,7 @@ To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (
 
 ### 2.4.1 The Neuro-Symbolic Architecture
 
-The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user, transmitted to the OpenAI multimodal API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API provides a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires. Concretely, if the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance, as the belief indicates the user is cognitively loaded rather than non-compliant.
+The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user, transmitted to the OpenAI multimodal API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API provides a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires. Concretely, if the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance (Figure~\ref{fig:action-threshold}), as the belief indicates the user is cognitively loaded rather than non-compliant.
 
 ### 2.4.2 Formal Specification
 
@@ -388,82 +350,55 @@ The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capt
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-    width=12cm, height=7cm,
-    xlabel={Timestep},
-    ylabel={Belief Probability $b(s)$},
-    xmin=-0.3, xmax=2.7,
-    ymin=0, ymax=0.65,
+    width=11cm, height=6.5cm,
+    xlabel={Evidence},
+    ylabel={$b(s)$},
+    xmin=-0.3, xmax=2.5,
+    ymin=0, ymax=0.75,
     xtick={0, 1, 2},
-    xticklabels={$t_0$, $t_1$, $t_2$},
-    ytick={0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6},
-    legend style={at={(0.02,0.98)}, anchor=north west, font=\scriptsize\sffamily,
-                  draw=black!30, fill=white, rounded corners=2pt},
-    grid=major,
-    grid style={gray!20},
+    xticklabels={$t_0$: Prior, $t_1$: After Hesitate, $t_2$: After Comply},
+    ytick={0, 0.1, 0.2, 0.33, 0.4, 0.5, 0.6, 0.7},
+    yticklabels={0, 0.1, 0.2, $\frac{1}{3}$, 0.4, 0.5, 0.6, 0.7},
     every axis label/.style={font=\small\sffamily},
     every tick label/.style={font=\scriptsize\sffamily},
+    grid=none,
+    axis lines=left,
+    axis line style={->, thick},
 ]
 
-% High Trust, Low Load
-\addplot[color=blue!70, thick, mark=*, mark size=3pt] coordinates {
-    (0, 0.167) (1, 0.08) (2, 0.18)
+% Uniform prior reference
+\addplot[dashed, softgray, thin] coordinates {(-0.3, 0.333) (2.5, 0.333)};
+\node[font=\tiny\sffamily, text=softgray, anchor=west] at (axis cs: 2.05, 0.36) {Prior: $\frac{1}{3}$};
+
+% High Trust (rises then stays high)
+\addplot[color=trustblue, very thick, mark=*, mark size=3.5pt] coordinates {
+    (0, 0.333) (1, 0.20) (2, 0.52)
 };
-\addlegendentry{$b$(High Trust, Low Load)}
+\node[font=\scriptsize\sffamily, text=trustblue, anchor=south west] at (axis cs: 1.85, 0.53) {High Trust};
 
-% High Trust, High Load
-\addplot[color=blue!30, thick, mark=square*, mark size=2.5pt] coordinates {
-    (0, 0.167) (1, 0.12) (2, 0.22)
+% Medium Trust (spikes then drops) — the dominant non-monotonic line
+\addplot[color=loadred, very thick, mark=*, mark size=3.5pt] coordinates {
+    (0, 0.333) (1, 0.60) (2, 0.28)
 };
-\addlegendentry{$b$(High Trust, High Load)}
+\node[font=\scriptsize\sffamily, text=loadred, anchor=south] at (axis cs: 0.85, 0.62) {Med Trust};
 
-% Med Trust, Low Load
-\addplot[color=orange!80, thick, mark=*, mark size=3pt] coordinates {
-    (0, 0.167) (1, 0.28) (2, 0.15)
+% Low Trust (drops monotonically)
+\addplot[color=softgray, thick, mark=*, mark size=3pt, dashed] coordinates {
+    (0, 0.333) (1, 0.20) (2, 0.20)
 };
-\addlegendentry{$b$(Med Trust, Low Load)}
+\node[font=\scriptsize\sffamily, text=softgray, anchor=north west] at (axis cs: 1.85, 0.19) {Low Trust};
 
-% Med Trust, High Load  (THE DOMINANT STATE after Hesitate)
-\addplot[color=red!70, thick, mark=triangle*, mark size=3.5pt] coordinates {
-    (0, 0.167) (1, 0.40) (2, 0.20)
-};
-\addlegendentry{$b$(Med Trust, High Load)}
+% Red delta annotation: Med Trust spike at t1
+\draw[annotatered, thick, <->] (axis cs: 1.15, 0.333) -- (axis cs: 1.15, 0.59)
+    node[midway, right, font=\tiny\sffamily\bfseries, text=annotatered] {+0.27};
 
-% Low Trust, Low Load
-\addplot[color=gray!60, thick, mark=diamond*, mark size=2.5pt, dashed] coordinates {
-    (0, 0.167) (1, 0.08) (2, 0.05)
-};
-\addlegendentry{$b$(Low Trust, Low Load)}
-
-% Low Trust, High Load
-\addplot[color=gray!30, thick, mark=pentagon*, mark size=2.5pt, dashed] coordinates {
-    (0, 0.167) (1, 0.04) (2, 0.20)
-};
-\addlegendentry{$b$(Low Trust, High Load)}
-
-% Uniform prior line
-\addplot[dashed, gray!50, thin] coordinates {(-0.3, 0.167) (2.7, 0.167)};
-
-% Annotations: actions and observations
-\node[font=\tiny\sffamily, text=black!60, align=center] at (axis cs: -0.15, 0.19) {Uniform\\prior: $\frac{1}{6}$};
-
-% Action/observation labels between timesteps
-\node[font=\scriptsize\sffamily\itshape, text=green!50!black, align=center] at (axis cs: 0.5, 0.58) {$a_0$: Verbal\_Remind};
-\node[font=\scriptsize\sffamily\itshape, text=orange!70!black, align=center] at (axis cs: 0.5, 0.52) {$o_1$: Hesitate};
-
-\node[font=\scriptsize\sffamily\itshape, text=green!50!black, align=center] at (axis cs: 1.5, 0.58) {$a_1$: Explain\_Benefits};
-\node[font=\scriptsize\sffamily\itshape, text=orange!70!black, align=center] at (axis cs: 1.5, 0.52) {$o_2$: Comply};
-
-% Red delta annotations at t=1
-\draw[red!70, thick, ->] (axis cs: 1.12, 0.167) -- (axis cs: 1.12, 0.39)
-    node[midway, right, font=\tiny\sffamily\bfseries, text=red!70] {+0.23};
-
-% Red delta annotation at t=2 (Med High Load drops)
-\draw[red!70, thick, ->] (axis cs: 2.12, 0.40) -- (axis cs: 2.12, 0.21)
-    node[midway, right, font=\tiny\sffamily\bfseries, text=red!70] {$-$0.20};
+% Red delta annotation: Med Trust drop at t2
+\draw[annotatered, thick, <->] (axis cs: 2.15, 0.28) -- (axis cs: 2.15, 0.60)
+    node[midway, right, font=\tiny\sffamily\bfseries, text=annotatered] {$-$0.32};
 
 \end{axis}
 \end{tikzpicture}
-\caption{Belief evolution across two interaction cycles. At $t_0$, the uniform prior assigns equal probability ($\frac{1}{6}$) to all six states. After the robot performs Verbal\_Remind and the API observes Hesitate, the belief at $t_1$ concentrates on medium-trust, high-cognitive-load states (red triangle, +0.23); the policy $\pi^*(b_1)$ consequently selects Explain\_Benefits rather than escalating to physical assistance. At $t_2$, the observation of Comply redistributes belief toward higher-trust states ($-$0.20 from the dominant state), demonstrating the incremental Bayesian refinement that distinguishes the POMDP from a stateless LLM.}
+\caption{Simplified belief evolution over a three-state trust space. The medium-trust posterior exhibits non-monotonic behaviour, rising sharply after observing Hesitate at $t_1$, then declining upon Comply at $t_2$. These deviations from the uniform prior demonstrate the Bayesian update mechanism inferring hidden trust states from partial observations, consistent with the non-linear trust dynamics described by Lee and See (2004, p. 54).}
 \label{fig:belief-evolution}
 \end{figure}
 
@@ -555,7 +490,7 @@ ChatGPT & Finding relevant pages to read in the paper \textbf{(A4)} & If the pap
 \hline
 ChatGPT & General conversations via web-search AI about how the topic relates to others' studies \textbf{(A4)} & Few times \\
 \hline
-TODO & TODO & TODO \\
+ChatGPT & Ideas regarding what Tikz diagrams to visualise \textbf{(A4)} & Once \\
 \hline
 \end{tabular}
 

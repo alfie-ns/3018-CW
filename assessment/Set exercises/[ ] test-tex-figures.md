@@ -1,23 +1,23 @@
 ---
 title: "Test TikZ Figures — Belief Evolution Variants"
 subtitle: "Draft visualisations for COMP3018 Set Exercises"
+header-includes:
+  - \usepackage{float}
+  - \usepackage{tikz, pgfplots, amsmath, xcolor}
+  - \usetikzlibrary{positioning, arrows.meta, calc}
+  - \pgfplotsset{compat=1.18}
+  - \definecolor{trustblue}{HTML}{2E5FA1}
+  - \definecolor{loadred}{HTML}{C0392B}
+  - \definecolor{annotatered}{HTML}{E74C3C}
+  - \definecolor{softgray}{HTML}{888888}
 ---
 
 <!--
-  Compile with: pandoc test-tex-figures.md -o test-tex-figures.pdf --pdf-engine=xelatex
+  Compile with: pandoc "[ ] test-tex-figures.md" -o test-tex-figures.pdf --pdf-engine=xelatex
   These are simplified, humanistic-style belief diagrams inspired by
   the non-monotonic posterior figure. They prioritise clarity and
   hand-drawn-like annotation over visual complexity.
 -->
-
-\usepackage{tikz, pgfplots, amsmath, xcolor}
-\usetikzlibrary{positioning, arrows.meta, calc}
-\pgfplotsset{compat=1.18}
-
-\definecolor{trustblue}{HTML}{2E5FA1}
-\definecolor{loadred}{HTML}{C0392B}
-\definecolor{annotatered}{HTML}{E74C3C}
-\definecolor{softgray}{HTML}{888888}
 
 <!-- ============================================================ -->
 <!-- FIGURE 1: Simplified Belief Evolution (3-state, 2 timesteps)  -->
