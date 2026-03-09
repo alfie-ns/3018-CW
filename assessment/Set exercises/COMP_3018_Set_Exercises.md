@@ -39,10 +39,9 @@ header-includes:
         showstringspaces=false
       }
 ---
-- [X] test-tex-figures.md (determine which one then improve via gemini)
-- [X] too many latex figures i need to only keep 2 of the best ones,  one that I definitely want to keep is the one where it's a chart (prove to me you know what I mean by chart before you start removing them)
-- [X] do ALL TODOs throughout the inline text of the mainbody itself
-- [X] utilise transcripts insids the learning/
+- [ ] CRITICAL PRE-SUBMISSION TASK: FINISH AI DECLARATION
+- [ ] CRITICAL: check all citations can be accessed for free via researchGate or uni
+- [ ] CRITICAL: Verify page numbers
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
 - [ ] verify all page numbers.
 - [ ] verify all lecture references are correct with deeper review of lecture materials
@@ -50,55 +49,11 @@ header-includes:
 - [X] Trust-POMPDP diagram
 - [X] perhaps model trust in lates diabram? or just latex the fundamental diagtam of POMDP similar to lecture slied in POMDP lectures (10,11)
 
-# Words-To-Use:
-
-- [X] persons
-- [X] use `whom`
-- [X] `however, insofar as`
-- [X] Approach
-- [X] `utilise`
-- [X] belief
-- [X] talk about nolvety effect in lecture 6
-- [X] most-{something} {something}
-- [X] would-be
-- [X] despite
-- [X] contravened
-  — [X] humanlike
-- [X] watchword
-- [X] e.g. `1-` , `2-`, ...
-- [X] despite x something y
-- [X] and `therefore, `x ` thus {does, e.g. *feeds*` `y` continuously throughout the process `wherein`...
-- [X] `as now-{something} the x thus does y continously throughout the process wherein it does z`
-- [X] `Whilst`: only used at the start of a sentence
-- [X] `Whilst this is true, x may be inclinded to {x} based on...`
-- [X] `and thus *x* therefore...`
-- [X] `thereof`: of the thing just mentioned
-- [X] within
-- [X] `wherein`: in which
-- [X] `regarding, in regard to`, etc
-- [X] `likelihood`
-- [X] `thereof`:
-- [X] `infer`: conclude from reasoning
-- [X] `via`: through
-- [X] `wherein`: in which
-- [X] `indeed`: in fact
-
 # TODO:
 
-- [X] **Lecturer’s Top Insight:** Be a Reviewer; don’t just argue opinions. Validate every critique with evidence from the literature to ensure it is scientific, not personal.
-- [X] INTEGRATE ROBOTIC LaTeX DIAGRAM
-- [X] 3018-CW/learning/lectures/5 - utilise/lecture.md (**Task 1 insight!!**)
-- [X] 3018-CW/learning/lectures/6 - utilise/lecture.md (**General cw insight**)
+- [ ] ensure nothing is being cited but not actually used specifally in terms of quoted sentences
+- [ ] ensure all citations are peer-reviewed and properly formatted
 - [ ] verify page numbers are correct
-- [X] hit word-count*0.1 limit allowance across report
-- [X] indeed 10% word-count allowance
-- [X] uses 3003-report feedback
-- [X] utilise lecture teachings in lec 5-6 etc
-- [X] review papers: pros or limitations
-- [X] peer-reviewed or conference papers
-- [X] very good LaTeX visualisations
-- [X] get gemini to crituque thus improve the Tikz figure captions
-- [ ] FULL PROOF READ
 - [ ] final proof read.
 
 # 1- Task (1): Cultural Differences and HRI Design
@@ -111,7 +66,7 @@ Kaplan's 2004 identification of East-West fundamental societal divergence is roo
 
 Western culture has persistently viewed the creation of human-like (humanoid) entities slightly suspiciously. Kaplan (2004) identifies this as the "Frankenstein Syndrome": a culturally-filtered conviction wherein "any artificially created humanoid will necessarily turn against his creator at some point" (p. 475).
 
-This anxiety traces to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames humanoid robots as a challenge to human specificity (p. 478), and thus, a transgression *(a violation of the boundary between what humans create and what humans are)* against the natural order; as result, Western societies have historically envisioned robotic development towards industrial, non-anthropomorphic *(i.e. purely functional; not social)* applications wherein the machine remains a *tool* rather than a would-be social entity (Kaplan, 2004, p. 473). Kaplan further notes the concept of "narcissistic shields" *(the psychological-defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners psychologically distance themselves from machines that erode the human-robot distinction.
+This anxiety traces to the West's distinction between nature and culture, which posits "no place for hybrids" in such classifications (Kaplan, 2004, p. 470). The Western cultural narrative therefore frames humanoid robots as a challenge to human specificity (p. 478), and thus, a transgression *(a violation of the boundary between what humans create and what humans are)* against the natural order; as result, the convergence of humans and machines remains "both fascinating and frightening" (Kaplan, 2004, p. 479), wherein the machine is culturally positioned as a functional instrument rather than a would-be social entity. Kaplan further notes the concept of "narcissistic shields" *(the psychological-defence mechanisms protecting human exceptionalism)* (p. 478), whereby Westerners psychologically distance themselves from machines that erode the human-robot distinction.
 
 ### 1.1.2 Eastern Society (Technology Taming and Animism)
 
@@ -119,20 +74,20 @@ Japanese culture exhibits a fundamentally different ontological *(the definition
 
 Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e. a recurring historical pattern wherein foreign technologies are domesticated via integration into existing cultural frameworks (p. 466). This ethos aligns with the *kata* tradition of formalised practice, where repetition leads to "maximum stability" (p. 470). The popular *Astro Boy* manga franchise (p. 466) exemplifies this domestication narratively: the robot is cast not as a Frankensteinian threat, but as a heroic companion (p. 466). Kaplan references the Amaterasu myth (p. 469) to argue that Japanese cosmology fundamentally lacks the creator-vs-creation antagonism (the inherent transgression of usurping divine privilege) that underpins Western technophobia, saying simply that "in Japan, no gods created human beings" (p. 476). This cultural openness persists into the contemporary era; as established in the module materials, Japanese society is "probably less sensitive to risks that might appear from robots" than the West (Lecture 5).
 
-### 1.1.3 Implications for HRI Design.
+### 1.1.3 Implications for HRI Design
 
-The divergent cultural framings dictate interaction design profoundly within HRI; whilst Westerner persons predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome human-like anthropomorphic features that align with the animistic expectations established in Section 1.1.2; Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like robots serving as "social company," whereas US participants instead envisioned theirs as "machine-like" extensions of "household appliances".
+The divergent cultural framings dictate interaction design profoundly within HRI; whilst Western persons predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 478), Eastern users instead welcome human-like anthropomorphic features that align with the animistic expectations established in Section 1.1.2; Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like robots serving as "social company," whereas US participants instead envisioned theirs as "machine-like" extensions of "household appliances".
 
-Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (culturally-defined personal-space boundaries) based on their own norms. However, non-contact cultures such as Japan maintain larger personal-space buffers, whereas contact cultures such as those in Southern Europe tolerate closer approach distances (Joosse, Lohse and Evers, 2014, pp. 1-2); therefore, a culturally-calibrated model must feed local boundaries into its approach-vector calculations, as failing to respect these bounds contravenes user expectations, effectively alienating the would-be companion (Rios-Martinez, Spalanzani and Laugier, 2015, p. 4).
+Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (culturally-defined personal-space boundaries) based on their own norms. However, non-contact cultures such as Japan maintain larger personal-space buffers, whereas contact cultures such as those in Southern Europe tolerate closer approach distances (Joosse, Lohse and Evers, 2014, pp. 1-2); therefore, a culturally-calibrated model must feed local boundaries into its approach-vector calculations, as failing to respect these bounds contravenes user expectations, effectively alienating the would-be companion (Rios-Martinez, Spalanzani and Laugier, 2015, p. 140).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{image/lecture4-proxemic-zones.png}
-\caption{Lecture-4 slide illustrating Hall's four proxemic distance zones and their cultural dependence --- noting the distinction between ``high-contact'' and ``low-contact'' cultures (Bartneck et al., 2020).}
+\caption{Lecture-4 slide illustrating Hall's four proxemic distance zones and their cultural dependence; noting the distinction between ``high-contact'' and ``low-contact'' cultures.}
 \label{fig:lecture4-proxemic-zones}
 \end{figure}
 
-Designers should also account for the novelty effect (Figure~\ref{fig:lecture6-novelty-effect}); users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. The novelty effect, conventionally framed as "a source of noise in need of reduction" and "behavioural disturbances" obscuring the phenomenon under investigation (Smedegaard, 2019, pp. 411-412), thus feeds skewed data, increasing the likelihood of confounding true cultural preference with transient unfamiliarity. The operative principle is therefore cultural relativism: no universal design policy can accommodate fundamentally different ontological commitments, and researchers cannot infer permanent acceptance from early data; instead, the system must evaluate engagement over time.
+Designers should also account for the novelty effect (Figure~\ref{fig:lecture6-novelty-effect}); users for whom the robot represents an entirely novel stimulus exhibit inflated acceptance ratings. The novelty effect, conventionally framed as "a source of noise in need of reduction" and "behavioural disturbances" obscuring the phenomenon under investigation (Smedegaard, 2019, pp. 411-412; Lecture 6), thus feeds skewed data, increasing the likelihood of confounding true cultural preference with transient unfamiliarity. The operative principle is therefore cultural relativism: no universal design policy can accommodate fundamentally different ontological commitments, and researchers cannot infer permanent acceptance from early data; instead, the system must evaluate engagement over time.
 
 \begin{figure}[H]
 \centering
@@ -143,17 +98,17 @@ Designers should also account for the novelty effect (Figure~\ref{fig:lecture6-n
 
 ## 1.2. African Cultural Factors Influencing HRI Design
 
-Kaplan's (2004, Abstract) abstract *confines* the analysis to the East-West axis, framed explicitly as an inquiry into whether robots are "perceived in the same manner in the West and in Japan"; however, a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape the robot's relational acceptance.
+Kaplan's (2004, Abstract) *confines* the analysis to the East-West axis, framed explicitly as an inquiry into whether robots are "perceived in the same manner in the West and in Japan"; however, a complete account of cultural factors in HRI must address the African context, wherein distinct philosophical and socio-structural dimensions shape the robot's relational acceptance.
 
 ### 1.2.1 Ubuntu Philosophy and Communal Identity:
 
-*Ubuntu*: a Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design foregrounds individual user experience (Lim, Rooksby and Cross, 2021, p. 1308), Ubuntu-driven design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access; an inference drawn from Metz's (2007, pp. 324-326) emphasis on consensus over dissent and communal resource distribution. This contrasts with the individualised personal-assistant paradigm prevalent in Western HRI.
+*Ubuntu*: a Southern African philosophical principle that "a person is a person through other persons" (Metz, 2007, p. 323). Whereas Western HRI design foregrounds individual user experience (Lim, Rooksby and Cross, 2021, p. 1319), Ubuntu-driven design would prioritise communal benefit and relational harmony. A robot operating within an Ubuntu-oriented society should therefore be designed to address the *group* rather than the individual, facilitating collective decision-making and shared resource access; an inference drawn from Metz's (2007, pp. 324-326) emphasis on consensus over dissent and communal resource distribution. This contrasts with the individualised personal-assistant paradigm prevalent in Western HRI.
 
 ### 1.2.2 Power Distance and Hierarchical Norms:
 
 Cirasa and Conti's (2025, p. 7) scoping review identifies Hofstede's cultural dimensions framework (a model measuring societal values across indices such as Power Distance and individualism) as dimensions that "significantly affect interactions with technology". Addressing the literature gap outside Western and East Asian spheres, Power Distance can be applied to the African context where many societies score high on this dimension, such that hierarchical authority structures strictly govern social interaction.
 
-In regards to HRI, this suggests that robots interacting with users across different social strata must modulate behaviours accordingly (Cirasa and Conti, 2025, p. 3): deferential language and posture when addressing elders or authoritative figures; a more directive interaction-style when assisting in contexts where the robot is perceived as an institutional representative. Failing to encode these hierarchical norms risks violating deeply held social expectations, thereby undermining trust (Hancock et al., 2011, p. 522).
+In regards to HRI, this suggests that robots interacting with users across different social strata must modulate behaviours accordingly (Cirasa and Conti, 2025, p. 3): deferential language and posture when addressing elders or authoritative figures; a more directive interaction-style when assisting in contexts where the robot is perceived as an institutional representative. Failing to encode these hierarchical norms risks violating deeply held social expectations, thereby undermining trust (Hancock et al., 2011, p. 518).
 
 <!-- OLD DRAFT Version 2 of 1.2.2 (superseded by Version 1 above):
 ### 1.2.2 Power Distance and Hierarchical Norms:
@@ -169,7 +124,7 @@ African cultures historically have preferred oral knowledge transmission over wr
 
 ### 1.2.4 Infrastructure and Access Constraints:
 
-- [ ] Despite rapid technological growth, many African regions face infrastructure limitations e.g. intermittent connectivity and limited access to high-specification hardware (Wyche and Steinfield, 2016). HRI systems deployed in these contexts must therefore be robust to connectivity loss, operable on low-power devices, and designed for shared rather than personal ownership, aligning with the communal ethos of Ubuntu.
+- [ ] Despite rapid technological growth, many African regions face infrastructure limitations e.g. intermittent connectivity and limited access to high-specification hardware (Wyche and Steinfield, 2016, p. 327). HRI systems deployed in these contexts must therefore be robust to connectivity loss, operable on low-power devices, and designed for shared rather than personal ownership, aligning with the communal ethos of Ubuntu.
 
 ## 1.3 Regional Design Traits (Appearance and Behaviour)
 
@@ -177,7 +132,7 @@ African cultures historically have preferred oral knowledge transmission over wr
 
 The cultural factors identified above dictate distinct morphological-and-behavioural traits (how the robot looks and how it acts) to maximise acceptance (Fong, Nourbakhsh and Dautenhahn, 2003, p. 149).
 
-**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form (Kaplan, 2004, p. 470), the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Joosse, Lohse and Evers, 2014, p. 2; Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group; hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone of 0.45-1.2m (Rios-Martinez, Spalanzani and Laugier, 2015, p. 5, Table 1).
+**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form (Kaplan, 2004, p. 470), the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Joosse, Lohse and Evers, 2014, p. 2; Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) has beneficial effects primarily within the same social group; hence physical touch is replaced by proxemic attentiveness, maintaining Hall's personal zone of 0.45-1.2m (Rios-Martinez, Spalanzani and Laugier, 2015, p. 140).
 
 **(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like aesthetic markers (visible joints, metallic surfaces) rather than overtly human-like features, clearly signalling artificiality to prevent descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit transparency, explicitly stating operational reasoning to alleviate what Kaplan (2004, p. 475) characterises as anxieties of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
 
@@ -191,7 +146,7 @@ Kahn et al. (2008) identify eight design patterns for sociality in HRI, noting t
 
 - *(a) East:* Rather than tactile handshakes, the robot must initiate interaction with a calibrated bow, as "in Japan it's very considered impolite if you break the personal distance or space and try to touch somebody" (Lecture 4). The bow angle should parametrically encode social hierarchy recognition.
 - *(b) West:* The *Initial Introduction* can incorporate the handshake as a tactile greeting, albeit with sensitivity to the Mediterranean (closer) versus Northern European (distant) proxemic distinctions (Lecture 4).
-- *(c) Africa:* Reflecting Ubuntu's communal orientation, the introduction must address groups rather than individuals. Encoding Power Distance norms, the robot must always greet the eldest or most-senior member first (Cirasa and Conti, 2025).
+- *(c) Africa:* Reflecting Ubuntu's communal orientation, the introduction must address groups rather than individuals. Encoding Power Distance norms, the robot must always greet the eldest or most-senior member first; an inference drawn from the high Power Distance norms identified by Cirasa and Conti (2025, p. 7).
 
 **Pattern 4: Personal Interests and History (Kahn et al., 2008, p. 101).**
 
@@ -313,7 +268,7 @@ The belief state $b$ therefore serves as a **sufficient statistic** for the enti
 
 ## 2.3 Challenges of Trust Modelling and the POMDP Response
 
-Trust is a latent psychological variable; it cannot be directly measured, only inferred from observable behavioural indicators. Lee and See (2004, p. 54) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterised by uncertainty and vulnerability"; a definition foregrounding the latent nature that necessitates probabilistic modelling. Three core challenges arise.
+Trust is a latent psychological variable; it cannot be directly measured, only inferred from observable behavioural indicators. Lee and See (2004, p. 54) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the latent nature that necessitates probabilistic modelling. Three core challenges arise.
 
 ### 2.3.1 The Measurement Problem
 
@@ -415,20 +370,18 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{image/lecture5-privacy-surveillance.png}
-\caption{Lecture-5 slide raising the surveillance concern: ``The AI records what you do and transfers data\ldots\ to whom? Company? Third Party?'' --- directly applicable to the cloud-based OpenAI API pipeline proposed in Section 2.4.}
+\caption{Lecture-5 slide raising the surveillance concern: ``The AI records what you do and transfers data\ldots\ to whom? Company? Third Party?''; directly applicable to the cloud-based OpenAI API pipeline proposed in Section 2.4.}
 \label{fig:lecture5-privacy-surveillance}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\textwidth]{image/lecture4-aggressive-robot.png}
-\caption{Lecture-4 slide establishing that a robot which fails to yield during spatial approach ``may appear aggressive'' --- with the annotation ``Is this culturally dependent?'' reinforcing the cultural-calibration argument from Section 1.3.}
+\caption{Lecture-4 slide establishing that a robot which fails to yield during spatial approach ``may appear aggressive''; with the annotation ``Is this culturally dependent?'' reinforcing the cultural-calibration argument from Section 1.3.}
 \label{fig:lecture4-aggressive-robot}
 \end{figure}
 
 # Appendices
-
-- [ ] CRITICAL PRE-SUBMISSION TASK: FINISH AI DECLARATION
 
 ## References (Peer-reviewed or Conference only)
 
@@ -443,7 +396,7 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 - [X] [ ] Lim, V., Rooksby, M. and Cross, E.S. (2021) 'Social robots on a global stage: establishing a role for culture during human-robot interaction', International Journal of Social Robotics, 13(6), pp. 1307-1333. Available at: [https://doi.org/10.1007/s12369-020-00710-4](https://doi.org/10.1007/s12369-020-00710-4) (Accessed: 19 February 2026).
 - [ ] [ ] Metz, T. (2007) 'Toward an African moral theory', *Journal of Political Philosophy*, 15(3), pp. 321-341. Available at: [https://doi.org/10.1111/j.1467-9760.2007.00280.x](https://doi.org/10.1111/j.1467-9760.2007.00280.x) (Accessed: 15 February 2026).
 - [ ] [ ] Mori, M. (1970) 'The uncanny valley', *Energy*, 7(4), pp. 33-35. Translated by MacDorman, K.F. and Kageki, N. (2012) *IEEE Robotics and Automation Magazine*, 19(2), pp. 98-100. Available at: [https://doi.org/10.1109/MRA.2012.2192811](https://doi.org/10.1109/MRA.2012.2192811) (Accessed: 15 February 2026).
-- [ ] [ ] Rios-Martinez, J., Spalanzani, A. and Laugier, C. (2015) 'From proxemics theory to socially-aware navigation: a survey', *International Journal of Social Robotics*, 7(2), pp. 137-153. Available at: [https://doi.org/10.1007/s12369-014-0251-1](https://doi.org/10.1007/s12369-014-0251-1) (Accessed: 21 February 2026).
+- [ ] [ ] Rios-Martinez, J., Spalanzani, A. and Laugier, C. (2015) 'From proxemics theory to socially-aware navigation: a survey', *International Journal of Social Robotics*, 7(2), pp. 137-153. Available at: [https://www.researchgate.net/publication/276881232_From_Proxemics_Theory_to_Socially-Aware_Navigation_A_Survey](https://www.researchgate.net/publication/276881232_From_Proxemics_Theory_to_Socially-Aware_Navigation_A_Survey) (Accessed: 21 February 2026).
 - [X] [ ] Smedegaard, C.V. (2019) 'Reframing the role of novelty within social HRI: from noise to information', in Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19). Daegu: IEEE Press, pp. 411-420. Available at: [https://doi.org/10.1109/HRI.2019.8673167](https://doi.org/10.1109/HRI.2019.8673167) (Accessed: 19 February 2026).
 - [ ] [ ] Winschiers-Theophilus, H. and Bidwell, N.J. (2013) 'Toward an Afro-centric indigenous HCI paradigm', *International Journal of Human-Computer Interaction*, 29(4), pp. 243-255. Available at: [https://doi.org/10.1080/10447318.2013.765763](https://doi.org/10.1080/10447318.2013.765763) (Accessed: 21 February 2026).
 - [ ] [ ] Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320-333. Available at: [https://doi.org/10.1080/02681102.2015.1048184](https://doi.org/10.1080/02681102.2015.1048184) (Accessed: 15 February 2026).
