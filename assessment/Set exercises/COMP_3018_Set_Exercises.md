@@ -45,6 +45,7 @@ header-includes:
 - [ ] Do all page number TODOS
 - [ ] endure non-overused words eg 'indeed'
 - [ ] remove all construction-type stuff eg checkboxs, TODOs, etc before submission
+- [ ] verify word count
 
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
 - [ ] verify all page numbers.
@@ -110,7 +111,7 @@ Kaplan's (2004, Abstract) *confines* the analysis to the East-West axis, framed 
 
 ### 1.2.2 Power Distance and Hierarchical Norms:
 
-Cirasa and Conti's (2025, p. 7) scoping review identifies Hofstede's cultural dimensions framework (a model measuring societal values across indices such as Power Distance and individualism) as dimensions that "significantly affect interactions with technology". Addressing the literature gap outside Western and East Asian spheres, Power Distance can be applied to the African context where many societies score high on this dimension, such that hierarchical authority structures strictly govern social interaction.
+Cirasa and Conti's (2025, p. 7) scoping review identifies Hofstede's cultural dimensions framework (a model measuring societal values across indices such as Power Distance and individualism) as dimensions that "significantly affect interactions with technology". Addressing the literature gap outside Western and East Asian spheres, Power Distance can be applied to the African context where societies such as Nigeria and Ghana score high on this dimension, such that hierarchical authority structures strictly govern social interaction.
 
 In regards to HRI, this suggests that robots interacting with users across different social strata must modulate behaviours accordingly (Cirasa and Conti, 2025, p. 3): deferential language and posture when addressing elders or authoritative figures; a more directive interaction-style when assisting in contexts where the robot is perceived as an institutional representative. Failing to encode these hierarchical norms risks violating deeply held social expectations, thereby undermining trust (Hancock et al., 2011, p. 518).
 
@@ -192,9 +193,9 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 - [ ]
 
-A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in *COMP3003* (Lecture 7) by relaxing full state observability: rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998, Section-3.1, p. 105). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.x
+A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in *COMP3003* (Lecture 7) by relaxing full state observability: rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998, Section-3.1, p. 105). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
 
-To understand the POMDP's utility, one must strictly *differentiate interaction paradigms* as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
+To understand the POMDP's utility, one must strictly *differentiate interaction paradigms* as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. **Coordination** requires temporal alignment thereof: sequencing complementary actions so neither agent blocks nor duplicates the other; the POMDP's belief state enables this by allowing the robot to anticipate *when* to act versus yield based on inferred human intent. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
 
 \begin{figure}[H]
 \centering
@@ -287,7 +288,7 @@ To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (
 
 ### 2.4.1 The Neuro-Symbolic Architecture
 
-The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user, transmitted to the OpenAI multimodal API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API provides a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires. Concretely, if the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance (Figure~\ref{fig:action-threshold}), as the belief indicates the user is cognitively loaded rather than non-compliant.
+The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture raw multimodal data from the elderly user, transmitted to the OpenAI multimodal API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API can be prompted to estimate a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires. Concretely, if the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance (Figure~\ref{fig:action-threshold}), as the belief indicates the user is cognitively loaded rather than non-compliant.
 
 ### 2.4.2 Formal Specification
 
@@ -438,9 +439,9 @@ I declare that I've used the AI tools listed below whilst preparing this assessm
 \hline
 ChatGPT & Finding relevant pages to read in the paper \textbf{(A4)} & If the paper takes too long to consume efficiently \\
 \hline
-ChatGPT & General conversations via web-search AI about how the topic relates to others' studies \textbf{(A4)} & Few times \\
+ChatGPT & General conversations via web-search AI about how the paper's topic relates to others' studies \textbf{(A4)} & Few times \\
 \hline
-ChatGPT & Ideas regarding what Tikz diagrams to visualise \textbf{(A4)} & Once \\
+ChatGPT & Used to identify which sections were over-weighted relative to mark allocation for trimming to match word-count allowance \textbf{(A2)} & Once \\
 \hline
 ChatGPT & Traversing papers to find relevant sentences for the essay \textbf{(A4)} & Quite a few times \\
 \hline
