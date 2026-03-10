@@ -42,6 +42,10 @@ header-includes:
 - [ ] CRITICAL PRE-SUBMISSION TASK: FINISH AI DECLARATION
 - [ ] CRITICAL: check all citations can be accessed for free via researchGate or uni
 - [ ] CRITICAL: Verify page numbers
+- [ ] Do all page number TODOS
+- [ ] endure non-overused words eg 'indeed'
+- [ ] remove all construction-type stuff eg checkboxs, TODOs, etc before submission
+
 - [ ] Humanise parts distinctly further so it doesn’t just look AI generated etc
 - [ ] verify all page numbers.
 - [ ] verify all lecture references are correct with deeper review of lecture materials
@@ -124,15 +128,15 @@ Despite rapid technological growth, many African regions face infrastructure lim
 
 The cultural factors identified above dictate distinct morphological-and-behavioural traits (how the robot looks and how it acts) to maximise acceptance (Fong, Nourbakhsh and Dautenhahn, 2003, p. 149).
 
-**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form (Kaplan, 2004, p. 470), the robot's movements must be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Joosse, Lohse and Evers, 2014, p. 2; Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) is replaced by proxemic attentiveness in non-tactile cultures, maintaining Hall's personal zone of 0.45-1.2m (Rios-Martinez, Spalanzani and Laugier, 2015, p. 140).
+**(a) The East (Japan).** Because Shinto animism dissolves the natural/artificial boundary (Kaplan, 2004), anthropomorphic or highly expressive aesthetic traits are welcomed. However, to align with the *kata* tradition of harmonious form (Kaplan, 2004, p. 470), the robot's movements need to be fluid and graceful rather than purely functional. Behaviourally, the robot should adopt a "side-by-side" cooperative posture rather than an imposing face-to-face stance, reflecting Japanese non-tactile proxemic norms requiring larger personal-space buffers (Joosse, Lohse and Evers, 2014, p. 2 & Lecture 4). As Lecture 2 establishes, *haptics* (deliberate physical communication) is replaced by proxemic attentiveness in non-tactile cultures, maintaining Hall's personal zone of 0.45-1.2m (Rios-Martinez, Spalanzani and Laugier, 2015, p. 140).
 
-**(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like aesthetic markers (visible joints, metallic surfaces) rather than overtly human-like features, clearly signalling artificiality to prevent descent into the uncanny valley (Mori, 1970). Behaviourally, they must exhibit transparency, explicitly stating operational reasoning to alleviate what Kaplan (2004, p. 475) characterises as anxieties of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean versus Northern European proxemic distinction (Lecture 4).
+**(b) The West (Europe/North America).** To avoid triggering the Frankenstein Syndrome and to respect the "narcissistic shield" (Kaplan, 2004, p. 478), Western robots should possess functional, machine-like aesthetic markers (visible joints, metallic surfaces) rather than overtly human-like features, thereby avoiding descent into the uncanny valley (Mori, 1970, p. 100). Behaviourally, they should exhibit transparency, explicitly stating operational reasoning to alleviate what Kaplan (2004, p. 475) characterises as anxieties of autonomous transgression. The handshake serves as a *symbolic gesture* (a movement with a culturally agreed-upon meaning) combined with *haptics* (Lecture 2), albeit calibrated to the Mediterranean vs Northern European proxemic distinction (Lecture 4).
 
-**(c) Africa.** Informed by Ubuntu and high Power Distance (Cirasa and Conti, 2025), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic, utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Winschiers-Theophilus and Bidwell, 2013). Furthermore, as Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels, specifically *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject), become critical design considerations.
+**(c) Africa.** Informed by Ubuntu and high Power Distance (Cirasa and Conti, 2025), an African-deployed robot should possess a modest physical stature to avoid perceived challenges to human hierarchical authority. Behaviourally, it must be group-facing rather than dyadic (one-robot-to-one-user), utilising a warm, highly expressive vocal synthesiser capable of rendering the rich prosodic variations (pitch, tone) necessary for an oral-tradition society (Lecture 3; Winschiers-Theophilus and Bidwell, 2013, *.pdf*-pp. 12-13). Furthermore Lecture 2 established that "65% of communication is non-verbal," gestural and paralinguistic channels, specifically *beat gestures* (rhythmic hand movements accentuating speech rhythm) and *iconic gestures* (movements visually representing the subject), become critical design considerations.
 
 ## 1.4 Adapting Design Patterns for Sociality (Kahn et al., 2008)
 
-Kahn et al. (2008) identify eight design patterns for sociality in HRI, noting the patterns are "likely under-described" (p. 99). These patterns must be regionally adapted using the traits established in Section 1.3:
+Kahn et al. (2008, p. 99) identify eight design patterns for sociality in HRI, noting the patterns are "likely under-described" (p. 99). These patterns must be regionally adapted using the traits established in Section 1.3:
 
 **Pattern 1: Initial Introduction (Kahn et al., 2008, p. 100).**
 
@@ -143,8 +147,8 @@ Kahn et al. (2008) identify eight design patterns for sociality in HRI, noting t
 **Pattern 4: Personal Interests and History (Kahn et al., 2008, p. 101).**
 
 - *(a) East:* The robot's backstory can elaborately integrate into the animistic expectation of objects possessing a "spirit" or character (Kaplan, 2004).
-- *(b) West:* Self-disclosure must be transparently mechanical, framing its "interests" around its programmed purpose to reinforce the user's ontological comfort (Lecture 1).
-- *(c) Africa:* This pattern should be realised via storytelling and voice-based dialogue. The robot must establish *joint attention* (the ability of multiple agents to focus on a shared reference point) via structured eye gaze to maintain narrative authority (Lecture 2; Lecture 3).
+- *(b) West:* Self-disclosure must be transparently mechanical, framing its "interests" around its programmed purpose to reinforce the user's ontological comfort (Lecture 1; the Western-"Utilitarian"-robot-as-tool stance).
+- *(c) Africa:* This pattern should be realised via storytelling and voice-based dialogue. The robot must establish *joint attention* (the ability of multiple agents to focus on a shared reference point) via structured eye gaze to maintain narrative authority (Lecture 2 & Lecture 3).
 
 **Pattern 5: Recovering From Mistakes (Kahn et al., 2008, p. 101).**
 
@@ -166,9 +170,9 @@ Kahn et al. (2008) identify eight design patterns for sociality in HRI, noting t
 \midrule
 East (Japan) & Shinto animism; non-tactile norms; \textit{kata} tradition & Bowing protocols; enlarged personal-space buffers; indirect error recovery \\
 \addlinespace
-West & Frankenstein Syndrome; individualism; narcissistic shields & Machine-identity markers; handshake-ready; transparent self-disclosure \\
+West & Frankenstein Syndrome; individualism; narcissistic shields & Machine-identity markers; *handshake-ready*; transparent self-disclosure \\
 \addlinespace
-Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder-first hierarchy; voice-driven narrative interfaces \\
+Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder-first hierarchy; *voice-driven narrative interfaces* \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -182,14 +186,15 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 <!--
 - [ ] FIND PEER-REVIEWED CITATIONS: POMDPs (Partially Observable Markov Decision Processes): a mathematical framework for modelling decision-making problems where the agent has incomplete information about the environment state. They extend MDPs by incorporating uncertainty in state observation, making them particularly suitable for HRI scenarios wherein the robot must infer human mental states (§trust, intent, etc) from noisy sensory data. A POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is the set of states, $A$ the set of actions, $T$ the transition function, $R$ the reward function, $\Omega$ the set of observations, $O$ the observation function, and $\gamma$ the discount factor.
 
-- [ ] this needs to change as I am going to incorporate an AI API into the robot's system
 -->
 
 ## 2.1 The Role of POMDPs in Trust, Cooperation, Coordination, and Collaboration
 
-A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in COMP3003 (Lecture 7) by relaxing full state observability: rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
+- [ ]
 
-To understand the POMDP's utility, one must strictly differentiate interaction paradigms as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
+A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in *COMP3003* (Lecture 7) by relaxing full state observability: rather than direct access to the true environment state, the robot can only *infer* it via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998, Section-3.1, p. 105). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, where $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.x
+
+To understand the POMDP's utility, one must strictly *differentiate interaction paradigms* as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** involves agents sharing an environment but completing different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary tasks. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing that mutual adaptation via belief-space planning significantly outperforms fixed strategies.
 
 \begin{figure}[H]
 \centering
@@ -256,7 +261,7 @@ $$
 
  $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the core epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 discussed regarding affective computing, the robot utilises descriptors (e.g. pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, and thus *feeds* these into the belief update process.
 
-The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998). This is precisely why the POMDP exhibits a non-Markovian *policy* (each action depends on the full history $h_t$) whilst maintaining a Markovian *belief update* (the next belief $b'$ depends only on the current belief $b$, the action taken, and the observation received); the belief state absorbs all relevant history, and thus the agent need not store raw trajectories to act optimally.
+The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998, Section-3.2, p. 106). This is why the POMDP exhibits a non-Markovian *policy* (each action depends on the full history $h_t$) whilst maintaining a Markovian *belief update* (the next belief $b'$ depends only on the current belief $b$, the action taken, and the observation received); the belief state absorbs all relevant history, and thus the agent need not store raw trajectories to act optimally.
 
 ## 2.3 Challenges of Trust Modelling and the POMDP Response
 
@@ -351,7 +356,7 @@ The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capt
 
 ### 2.4.3 Benefits and Limitations
 
-The model's strength lies in neuro-symbolic complementarity (Section 2.4). Unlike traditional solvers such as PBVI (Pineau, Gordon and Thrun, 2003) which struggle with high-dimensional unstructured observations, this approach delegates perceptual dimensionality-reduction to the LLM, thereby preserving the tractability of the belief update. However, the architecture introduces several limitations: 1) a fundamental mathematical friction: the POMDP relies on the Markov property with a stationary observation function $O(s', a, o)$, yet the LLM is inherently non-stationary; its outputs depend on a dynamic context window, meaning the observation function shifts based on the LLM's own internal states, and thus the belief update is technically an approximation rather than an exact sufficient statistic. The practical consequence is insidious: if the LLM's interpretation silently shifts (e.g. following an API version update), the belief state degrades without any mechanism to detect this drift; 2) API latency (200-800ms) may disrupt real-time proxemic responsiveness (Lecture 4); 3) the LLM's stochastic nature means identical inputs may yield different observation distributions, introducing unmodelled noise into the Bayesian update; and 4) the observation model may inherit training-data biases, degrading inference accuracy for elderly users if the model was predominantly trained on younger demographics (Lecture 5).
+The model's strength lies in neuro-symbolic complementarity (Garcez and Lamb, 2023, Section 2.4, p. 12389). Unlike traditional solvers such as PBVI (Pineau, Gordon and Thrun, 2003, p. 1025) which struggle with high-dimensional unstructured observations, this approach delegates perceptual dimensionality-reduction to the LLM, thereby preserving the tractability of the belief update. However, the architecture introduces several limitations: 1) a fundamental mathematical friction: the POMDP relies on the Markov property with a stationary observation function $O(s', a, o)$, yet the LLM is inherently non-stationary; its outputs depend on a dynamic context window, meaning the observation function shifts based on the LLM's own internal states, and thus the belief update is technically an approximation rather than an exact sufficient statistic. The practical consequence is insidious: if the LLM's interpretation silently shifts (e.g. following an API version update), the belief state degrades without any mechanism to detect this drift; 2) API latency (200-800ms) may disrupt real-time proxemic responsiveness (Lecture 4); 3) the LLM's stochastic nature means identical inputs may yield different observation distributions, introducing unmodelled noise into the Bayesian update; and 4) the observation model may inherit training-data biases, degrading inference accuracy for elderly users if the model was predominantly trained on younger demographics (Lecture 5).
 
 ## 2.5 Ethical and Social Implications
 
@@ -436,6 +441,8 @@ ChatGPT & Finding relevant pages to read in the paper \textbf{(A4)} & If the pap
 ChatGPT & General conversations via web-search AI about how the topic relates to others' studies \textbf{(A4)} & Few times \\
 \hline
 ChatGPT & Ideas regarding what Tikz diagrams to visualise \textbf{(A4)} & Once \\
+\hline
+ChatGPT & Traversing papers to find relevant sentences for the essay \textbf{(A4)} & Quite a few times \\
 \hline
 \end{tabular}
 
