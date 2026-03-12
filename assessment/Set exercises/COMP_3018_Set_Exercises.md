@@ -355,7 +355,7 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 
 # Appendices
 
-## References (Peer-reviewed or Conference only)
+## Appendix A: References (Peer-reviewed or Conference only)
 
 ### Task (1)'s
 
