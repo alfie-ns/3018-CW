@@ -42,25 +42,10 @@ header-includes:
 
 # CRITICAL PRE-SUBMISSION CHECKLIST:
 
-- [ ] trim word count
-- [ ] check all citations can be accessed for free via researchGate or uni
-- [ ] Verify 5 page numbers
-- [ ] verify 3 lecture references
-- [ ] verify all maths is entirely correct
-- [ ] finish AI decleration and ensure everything's allowed
-
-- [X] verify if non-monotonic thing is
-- [X] endure non-overused words eg 'indeed'
 - [ ] remove all construction-type stuff eg checkboxs, TODOs, etc before submission
-- [ ] verify word count
-- [ ] verify AI dec is allowed
+
 - [ ] Humanise parts distinctly further
 
-# TODO:
-
-- [ ] ensure nothing is being cited but not actually used specifally in terms of quoted sentences
-- [ ] ensure all citations are peer-reviewed and properly formatted
-- [X] verify page numbers are correct
 - [ ] final proof read.
 
 # 1- Task (1): Cultural Differences and HRI Design
@@ -83,7 +68,7 @@ Furthermore, Kaplan discussed the cultural mechanism of "technology taming" i.e.
 
 ### 1.1.3 Implications for HRI Design
 
-The divergent cultural framings dictate interaction design profoundly within HRI; whilst Western persons predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 14, section-5.2, lines-10-11), Eastern users instead welcome human-like anthropomorphic features that align with the animistic expectations established in Section 1.1.2; Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like robots serving as "social company," whereas US participants instead envisioned theirs as "machine-like" extensions of "household appliances".
+The divergent cultural framings dictate interaction design profoundly within HRI; whilst Western persons predominantly prefer robots that maintain clear machine identity markers, thereby preserving the 'narcissistic shield' (Kaplan, 2004, p. 14, section-5.2, lines-10-11), Eastern users instead welcome human-like (anthropomorphic) features that align with the animistic expectations established in Section 1.1.2; Lim, Rooksby and Cross (2021, p. 1321) observed this contrasting preference, confirming that culture significantly influences the acceptance of robotic morphology as Korean participants envisioned human-like robots serving as "social company," whereas US participants instead envisioned theirs as "machine-like" extensions of "household appliances".
 
 Whilst this is true, a Western robot-designer may be inclined to impose universal proxemic standards (culturally-defined personal-space boundaries) based on their own norms. However, non-contact cultures such as Japan maintain larger personal-space buffers, whereas contact cultures such as those in Southern Europe tolerate closer approach distances (Joosse, Lohse and Evers, 2014, pp. 1-2); therefore, a culturally-calibrated model must feed local boundaries into its approach-vector calculations, as failing to respect these bounds contravenes user expectations, effectively alienating the would-be companion (Rios-Martinez, Spalanzani and Laugier, 2015, p. 140).
 
@@ -126,8 +111,6 @@ African cultures historically have preferred oral knowledge transmission over wr
 Despite rapid technological growth, many African regions face infrastructure limitations e.g. intermittent connectivity and limited access to high-specification hardware (Wyche and Steinfield, 2016, p. 327). HRI systems deployed in these contexts must therefore be robust to connectivity loss, operable on low-power devices, and designed for shared rather than personal ownership, aligning with the communal ethos of Ubuntu.
 
 ## 1.3 Regional Design Traits (Appearance and Behaviour)
-
-<!-- - [ ] DONE? -->
 
 The cultural factors identified above dictate distinct morphological-and-behavioural traits (how the robot looks and how it acts) to maximise acceptance (Fong, Nourbakhsh and Dautenhahn, 2003, p. 149).
 
@@ -195,9 +178,9 @@ Africa & Ubuntu; high Power Distance; oral tradition & Communal greetings; elder
 
 - [ ]
 
-A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in *COMP3003* (Lecture 7) by relaxing full-state observability: the robot can only *infer* the true state via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998, Section-3.1, p. 105). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, wherein $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function, and $\gamma \in [0,1)$ the discount factor.
+A Partially Observable Markov Decision Process (POMDP) extends the MDP studied in *COMP3003* (Lecture 7) by relaxing full-state observability: the robot can only *infer* the true state via noisy, incomplete observations (Kaelbling, Littman and Cassandra, 1998, Section-3.1, p. 105). Formally, a POMDP is defined by the tuple $\langle S, A, T, R, \Omega, O, \gamma \rangle$, wherein $S$ is a finite set of states, $A$ the available actions, $T(s, a, s') = P(s' \mid s, a)$ the transition function, $R: S \times A \rightarrow \mathbb{R}$ the reward function, $\Omega$ a finite set of observations, $O(s', a, o) = P(o \mid s', a)$ the observation function and $\gamma \in [0,1)$ the discount factor.
 
-To understand the POMDP's utility, one must *differentiate interaction paradigms* as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** is where agents share an environment but complete different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary parts of a task. **Coordination** requires temporal alignment: sequencing complementary actions so neither agent blocks nor duplicates the other; the POMDP's belief state enables this by allowing the robot to anticipate *when* to act versus yield based on inferred human intent. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020, p. 6). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing mutual adaptation via belief-space planning significantly outperforms fixed strategies.
+To understand the POMDP's utility, one must *differentiate interaction paradigms* as defined in Lecture 1 (Figure~\ref{fig:lecture1-interaction-paradigms}). **Coexistence** is where agents share an environment but complete different tasks, requiring only fully-observable physical states to avoid collisions. **Cooperation** involves a shared workspace and complementary parts of a task. **Coordination** requires temporal alignment: sequencing complementary actions so neither agent blocks nor duplicates the other; the POMDP's belief state enables this by allowing the robot to anticipate *when* to act versus yield based on inferred human intent. However, true **collaboration** demands a shared workspace and the *exact same shared goal* (Lecture 1). In collaboration, the robot must continuously align its actions with the human's unobservable mental states: trust, intent, cognitive load. Because the robot is fundamentally blind to these latent variables, the POMDP's belief state $b$ becomes the computational prerequisite for graduating from mere coexistence to true collaboration (Chen et al., 2020, p. 6). Indeed, Nikolaidis et al. (2017, pp. 621-623) demonstrate this empirically via a "Bounded-Memory Adaptation Model" (BAM) wherein the robot maintains a mixed-observability MDP over the human's latent adaptability, showing mutual adaptation via belief-space planning hugely outperforms fixed strategies.
 
 \begin{figure}[H]
 \centering
@@ -262,7 +245,7 @@ $$
 b'(s') = \eta \cdot O(s', a, o) \sum_{s \in S} T(s, a, s') \cdot b(s)
 $$
 
- $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 establishes, the robot utilises affective-computing descriptors (e.g. pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, *feeding* these into the belief update.
+ wherein $\eta$ is a normalisation constant ensuring $\sum_{s'} b'(s') = 1$. This update rule captures the epistemic challenge of HRI: the robot must continuously revise its model of the human's internal state as new and could-be contradictory evidence arrives. As Lecture 3 establishes, the robot utilises affective-computing descriptors (e.g. pitch, MFCCs, zero-crossing rate) to extract observations from the human's behaviour, *feeding* these into the belief update.
 
 The belief state $b$ therefore serves as a **sufficient statistic** for the entire interaction history, compressing all past actions and observations into a single probability vector (Kaelbling, Littman and Cassandra, 1998, Section-3.2, p. 106). This is why the POMDP exhibits a non-Markovian *policy* (each action depends on the full history $h_t$) whilst maintaining a Markovian *belief update* (the next belief $b'$ depends only on the current belief $b$, the action taken, and the observation received); the belief state absorbs all relevant history, and thus the agent need not store raw trajectories to act optimally.
 
@@ -290,7 +273,7 @@ To concretise this framework, I propose a neuro-symbolic POMDP model for a Neo (
 
 ### 2.4.1 The Neuro-Symbolic Architecture
 
-The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture multimodal data from the elderly user, transmitted to the OpenAI API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. Crucially, the API can be prompted to estimate a probability distribution over possible observations rather than a categorical label, thereby preserving the epistemic uncertainty the POMDP requires. If the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance (Figure~\ref{fig:action-threshold}), as the belief indicates the user is cognitively loaded rather than non-compliant.
+The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capture multimodal data from the elderly user, transmitted to the OpenAI API serving as the **observation function** ($O$). The API processes this stream, analysing facial action units, extracting prosodic descriptors (pitch, MFCCs, zero-crossing rate) from speech (Lecture 3), and interpreting gestural semantics, to output a structured observation $o \in \Omega$. The API can be prompted to estimate a probability distribution over possible observations rather than a categorical label, preserving the epistemic uncertainty the POMDP requires. If the robot performs Verbal\_Remind and the API observes Hesitate, the belief shifts toward medium-trust, high-load states; $\pi^*(b)$ consequently selects Explain\_Benefits rather than escalating to physical assistance (Figure~\ref{fig:action-threshold}), as the belief indicates the user is cognitively loaded rather than non-compliant.
 
 ### 2.4.2 Formal Specification
 
@@ -299,7 +282,7 @@ The Neo robot's onboard sensors (camera, microphone array, tactile sensors) capt
 - **Observation Space** ($\Omega$): $\{$Comply, Hesitate, Verbal\_Refuse, Ignore, Gaze\_Avert$\}$, extracted by the OpenAI API.
 - **Observation Function** ($O$): $P(o \mid s', a)$ is estimated by the API's multimodal inference; e.g. $P(\text{Comply} \mid \text{HighTrust, LowLoad}, \text{Remind}) = 0.8$, derived from the user's facial configuration and vocal tone.
 - **Transition Function** ($T$): Models trust dynamics parametrically. An unneeded Offer\_Physical\_Assist violating personal proxemics (Lecture 4) degrades trust: $P(\text{Low} \mid \text{Med}, \text{Assist}) = 0.6$; conversely, a well-timed Explain\_Benefits yields $P(\text{High} \mid \text{Med}, \text{Explain}) = 0.5$.
-- **Reward Function** ($R$): Successful medication adherence yields $R = +10$; preserving user autonomy (choosing Increase\_Autonomy when trust is High) yields $R = +3$; unwanted physical assistance incurs $R = -5$, reflecting the social cost of proxemic violation. Mirroring the POMDP's 'cost of listening' penalty (the Tiger problem), the architecture imposes $R = -1$ per observation cycle, penalising excessive polling. Both $O$ and $R$ must be culturally parametrised per the findings in Task 1; the proxemic penalty, for instance, should be weighted more heavily for non-contact cultures.
+- **Reward Function** ($R$): Successful medication adherence yields $R = +10$; preserving user autonomy (choosing Increase\_Autonomy when trust is High) yields $R = +3$; unwanted physical assistance incurs $R = -5$, reflecting the social cost of proxemic violation. Mirroring the POMDP's 'cost of listening' penalty (the Tiger problem), the architecture imposes $R = -1$ per observation cycle, penalising excessive polling. Both $O$ and $R$ must be culturally parametrised from the findings in Task 1; the proxemic penalty, for instance, should be weighted more heavily for non-contact cultures.
 
 \begin{figure}[H]
 \centering
@@ -387,38 +370,64 @@ The OpenAI API introduces three additional ethical dimensions. Firstly, **halluc
 
 ### Task (1)'s
 
-- [ ] fetch exact wording from paper to earn second tick
-- [ ] [ ] Cirasa, C. and Conti, D. (2025) 'Mapping trust and cultural dimensions in human-robot interaction: a scoping review approach', *Computers in Human Behavior Reports*, 19, article 100763. Available at: [https://doi.org/10.1016/j.chbr.2025.100763](https://doi.org/10.1016/j.chbr.2025.100763) (Accessed: 21 February 2026).
-- [ ] [ ] Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3-4), pp. 143-166. Available at: [https://doi.org/10.1016/S0921-8890(02)00372-X](https://doi.org/10.1016/S0921-8890(02)00372-X) (Accessed: 8 March 2026).
-- [ ] [ ] Joosse, M., Lohse, M. and Evers, V. (2014) 'Lost in proxemics: spatial behavior for cross-cultural HRI', in Proceedings of the 2014 ACM/IEEE International Conference on Human-Robot Interaction (HRI '14). Bielefeld: ACM/IEEE, pp. 1-6. Available at: [https://doi.org/10.1145/2559636.2559661](https://doi.org/10.1145/2559636.2559661) (Accessed: 19 February 2026).
-- [ ] [ ] Kahn, P.H., Freier, N.G., Kanda, T., Ishiguro, H., MacDorman, K.F., Severson, R.L. and Friedman, B. (2008) 'Design patterns for sociality in human-robot interaction', in *Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97-104. Available at: [https://dl.acm.org/doi/10.1145/1349822.1349836](https://dl.acm.org/doi/10.1145/1349822.1349836) (Accessed: 15 February 2026).
-- [ ] [ ] Kaplan, F. (2004) 'Who is afraid of the humanoid? Investigating cultural differences in the acceptance of robots', *International Journal of Humanoid Robotics*, 1(3), pp. 1-16. Available at: [https://doi.org/10.1142/S0219843604000289](https://doi.org/10.1142/S0219843604000289) (Accessed: 15 February 2026).
-- [X] [ ] Lim, V., Rooksby, M. and Cross, E.S. (2021) 'Social robots on a global stage: establishing a role for culture during human-robot interaction', International Journal of Social Robotics, 13(6), pp. 1307-1333. Available at: [https://doi.org/10.1007/s12369-020-00710-4](https://doi.org/10.1007/s12369-020-00710-4) (Accessed: 19 February 2026).
-- [ ] [ ] Metz, T. (2007) 'Toward an African moral theory', *Journal of Political Philosophy*, 15(3), pp. 321-341. Available at: [https://doi.org/10.1111/j.1467-9760.2007.00280.x](https://doi.org/10.1111/j.1467-9760.2007.00280.x) (Accessed: 15 February 2026).
-- [ ] [ ] Mori, M. (1970) 'The uncanny valley', *Energy*, 7(4), pp. 33-35. Translated by MacDorman, K.F. and Kageki, N. (2012) *IEEE Robotics and Automation Magazine*, 19(2), pp. 98-100. Available at: [https://doi.org/10.1109/MRA.2012.2192811](https://doi.org/10.1109/MRA.2012.2192811) (Accessed: 15 February 2026).
-- [ ] [ ] Rios-Martinez, J., Spalanzani, A. and Laugier, C. (2015) 'From proxemics theory to socially-aware navigation: a survey', *International Journal of Social Robotics*, 7(2), pp. 137-153. Available at: [https://www.researchgate.net/publication/276881232_From_Proxemics_Theory_to_Socially-Aware_Navigation_A_Survey](https://www.researchgate.net/publication/276881232_From_Proxemics_Theory_to_Socially-Aware_Navigation_A_Survey) (Accessed: 21 February 2026).
-- [X] [ ] Smedegaard, C.V. (2019) 'Reframing the role of novelty within social HRI: from noise to information', in Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19). Daegu: IEEE Press, pp. 411-420. Available at: [https://doi.org/10.1109/HRI.2019.8673167](https://doi.org/10.1109/HRI.2019.8673167) (Accessed: 19 February 2026).
-- [ ] [ ] Winschiers-Theophilus, H. and Bidwell, N.J. (2013) 'Toward an Afro-centric indigenous HCI paradigm', *International Journal of Human-Computer Interaction*, 29(4), pp. 243-255. Available at: [https://doi.org/10.1080/10447318.2013.765763](https://doi.org/10.1080/10447318.2013.765763) (Accessed: 21 February 2026).
-- [ ] [ ] Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320-333. Available at: [https://doi.org/10.1080/02681102.2015.1048184](https://doi.org/10.1080/02681102.2015.1048184) (Accessed: 15 February 2026).
+- Cirasa, C. and Conti, D. (2025) 'Mapping trust and cultural dimensions in human-robot interaction: a scoping review approach', *Computers in Human Behavior Reports*, 19, article 100763. Available at: [https://www.researchgate.net/publication/394316314_Mapping_trust_and_cultural_dimensions_in_Human-Robot_Interaction_A_scoping_review_approach](https://www.researchgate.net/publication/394316314_Mapping_trust_and_cultural_dimensions_in_Human-Robot_Interaction_A_scoping_review_approach) (Accessed: 21 February 2026).
+
+- Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3-4), pp. 143-166. Available at: [https://doi.org/10.1016/S0921-8890(02)00372-X](https://doi.org/10.1016/S0921-8890(02)00372-X) (Accessed: 8 March 2026).
+
+- Hancock, P.A., Billings, D.R., Schaefer, K.E., Chen, J.Y.C., de Visser, E.J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: [https://www.researchgate.net/publication/51763875_A_Meta-Analysis_of_Factors_Affecting_Trust_in_Human-Robot_Interaction](https://www.researchgate.net/publication/51763875_A_Meta-Analysis_of_Factors_Affecting_Trust_in_Human-Robot_Interaction) (Accessed: 16 February 2026).
+
+- Joosse, M., Lohse, M. and Evers, V. (2014) 'Lost in proxemics: spatial behavior for cross-cultural HRI', *in Proceedings of the 2014 ACM/IEEE International Conference on Human-Robot Interaction (HRI '14)*. Bielefeld: ACM/IEEE, pp. 1-6. Available at: [https://doi.org/10.1145/2559636.2559661](https://doi.org/10.1145/2559636.2559661) (Accessed: 19 February 2026).
+
+- Kahn, P.H., Freier, N.G., Kanda, T., Ishiguro, H., MacDorman, K.F., Severson, R.L. and Friedman, B. (2008) 'Design patterns for sociality in human-robot interaction', *in Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97-104. Available at: [https://dl.acm.org/doi/10.1145/1349822.1349836](https://dl.acm.org/doi/10.1145/1349822.1349836) (Accessed: 15 February 2026).
+
+- Kaplan, F. (2004) 'Who is afraid of the humanoid? Investigating cultural differences in the acceptance of robots', *International Journal of Humanoid Robotics*, 1(3), pp. 1-16. Available at: [https://www.researchgate.net/publication/220065746_Who_is_Afraid_of_the_Humanoid_Investigating_Cultural_Differences_in_the_Acceptance_of_Robots](https://www.researchgate.net/publication/220065746_Who_is_Afraid_of_the_Humanoid_Investigating_Cultural_Differences_in_the_Acceptance_of_Robots) (Accessed: 15 February 2026).
+
+- Lim, V., Rooksby, M. and Cross, E.S. (2021) 'Social robots on a global stage: establishing a role for culture during human-robot interaction', *International Journal of Social Robotics*, 13(6), pp. 1307-1333. Available at: [https://link.springer.com/article/10.1007/s12369-020-00710-4](https://link.springer.com/article/10.1007/s12369-020-00710-4) (Accessed: 19 February 2026).
+
+- Metz, T. (2007) 'Toward an African moral theory', *Journal of Political Philosophy*, 15(3), pp. 321-341. Available at: [https://www.researchgate.net/publication/227993551_Toward_an_African_Moral_Theory](https://www.researchgate.net/publication/227993551_Toward_an_African_Moral_Theory) (Accessed: 15 February 2026).
+
+- Mori, M. (1970) 'The uncanny valley', *Energy*, 7(4), pp. 33-35. Translated by MacDorman, K.F. and Kageki, N. (2012) *IEEE Robotics and Automation Magazine*, 19(2), pp. 98-100. Available at: [https://www.researchgate.net/publication/254060168_The_Uncanny_Valley_From_the_Field](https://www.researchgate.net/publication/254060168_The_Uncanny_Valley_From_the_Field) (Accessed: 15 February 2026).
+
+- Rios-Martinez, J., Spalanzani, A. and Laugier, C. (2015) 'From proxemics theory to socially-aware navigation: a survey', *International Journal of Social Robotics*, 7(2), pp. 137-153. Available at: [https://www.researchgate.net/publication/276881232_From_Proxemics_Theory_to_Socially-Aware_Navigation_A_Survey](https://www.researchgate.net/publication/276881232_From_Proxemics_Theory_to_Socially-Aware_Navigation_A_Survey) (Accessed: 21 February 2026).
+
+- Smedegaard, C.V. (2019) 'Reframing the role of novelty within social HRI: from noise to information', in Proceedings of the 14th ACM/IEEE *International Conference on Human-Robot Interaction (HRI '19)*. Daegu: IEEE Press, pp. 411-420. Available at: [https://doi.org/10.1109/HRI.2019.8673219](https://doi.org/10.1109/HRI.2019.8673219) (Accessed: 19 February 2026).
+
+- Winschiers-Theophilus, H. and Bidwell, N.J. (2013) 'Toward an Afro-centric indigenous HCI paradigm', *International Journal of Human-Computer Interaction*, 29(4), pp. 243-255. Available at: [https://doi.org/10.1080/10447318.2013.765763](https://doi.org/10.1080/10447318.2013.765763) (Accessed: 21 February 2026).
+
+- Wyche, S. and Steinfield, C. (2016) 'Why don't farmers use cell phones to access market prices? Technology affordances and barriers to market information services adoption in rural Kenya', *Information Technology for Development*, 22(2), pp. 320-333. Available at: [https://doi.org/10.1080/02681102.2015.1048184](https://doi.org/10.1080/02681102.2015.1048184) (Accessed: 15 February 2026).
 
 ### Task (2)'s
 
-- [ ] fetch exact wording from paper to earn second tick
-- [ ] make alphabetical
-- [X] [ ] Ahn, M., Brohan, A., Brown, N. et al. (2022) 'Do As I Can, Not As I Say: Grounding Language in Robotic Affordances', in *Proceedings of the 6th Conference on Robot Learning (CoRL 2022)*. Auckland: PMLR, pp. 287-318. Available at: https://arxiv.org/abs/2204.01691 (Accessed: 18 February 2026).
-- [X] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-aware decision making for human-robot collaboration: model learning and planning', *ACM Transactions on Human-Robot Interaction*, 9(2), Article 9. Available at: [https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf](https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf) (Accessed: 15 February 2026).
-- [X] [ ] Desai, M., Kaniarasu, P., Medber, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', in *Proceedings of the 8th ACM/IEEE International Conference on Human-Robot Interaction (HRI '13)*. Tokyo: IEEE Press, pp. 251-258. Available at: https://doi.org/10.1109/HRI.2013.6483596 (Accessed: 16 February 2026).
-- [X] [ ] Garcez, A.d'A. and Lamb, L.C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56(11), pp. 12387-12406. Available at: https://doi.org/10.1007/s10462-023-10448-w (Accessed: 18 February 2026).
-- [X] [ ] Hancock, P.A., Billings, D.R., Schaefer, K.E., Chen, J.Y.C., de Visser, E.J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: [https://journals.sagepub.com/doi/10.1177/0018720811417254](https://journals.sagepub.com/doi/10.1177/0018720811417254) (Accessed: 16 February 2026).
-- [X] [ ] Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y.J., Madotto, A. and Fung, P. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), Article 248. Available at: https://doi.org/10.1145/3571730 (Accessed: 18 February 2026).
-- [X] [ ] Kaelbling, L.P., Littman, M.L. and Cassandra, A.R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: [https://doi.org/10.1016/S0004-3702(98)00023-X](https://doi.org/10.1016/S0004-3702(98)00023-X) (Accessed: 15 February 2026).
-- [X] [ ] Lee, J.D. and See, K.A. (2004) 'Trust in automation: designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: https://doi.org/10.1518/hfes.46.1.50.30392 (Accessed: 16 February 2026).
-- [X] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: models and experiments', *International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://doi.org/10.1177/0278364917690593 (Accessed: 16 February 2026).
-- [X] [ ] Papadimitriou, C.H. and Tsitsiklis, J.N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: [https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf](https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf) (Accessed: 15 February 2026).
-- [X] [ ] Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: an anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*. Acapulco: Morgan Kaufmann, pp. 1025-1030. Available at: [https://www.ijcai.org/Proceedings/03/Papers/147.pdf](https://www.ijcai.org/Proceedings/03/Papers/147.pdf) (Accessed: 15 February 2026).
-- [X] [ ] Sharkey, A. (2014) 'Robots and human dignity: a consideration of the effects of robot care on the dignity of older people', *Ethics and Information Technology*, 16(1), pp. 63-75. Available at: https://doi.org/10.1007/s10676-014-9338-5 (Accessed: 16 February 2026).
-- [X] [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. Available at: https://doi.org/10.1007/s10676-010-9234-6 (Accessed: 16 February 2026).
-- [X] [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems 23 (NeurIPS 2010)*. Vancouver: Curran Associates, pp. 2164-2172. Available at: https://papers.nips.cc/paper/2010/hash/edfbe1afcf9246bb0d40eb4d8027d90f-Abstract.html (Accessed: 15 February 2026).
+- Ahn, M., Brohan, A., Brown, N. et al. (2022) 'Do As I Can, Not As I Say: Grounding Language in Robotic Affordances', in *Proceedings of the 6th Conference on Robot Learning (CoRL 2022)*. Auckland: PMLR, pp. 287-318. Available at: [https://arxiv.org/abs/2204.01691](https:
+//arxiv.org/abs/2204.01691) (Accessed: 18 February 2026).
+
+- Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-aware decision making for human-robot collaboration: model learning and planning', *ACM Transactions on Human-Robot Interaction*, 9(2), Article 9. Available at: [https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf](https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf) (Accessed: 15 February 2026).
+
+- Desai, M., Kaniarasu, P., Medber, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', in *Proceedings of the 8th ACM/IEEE International Conference on Human-Robot Interaction (HRI '13)*. Tokyo: IEEE Press, pp. 251-258. Available at: [https://ieeexplore.ieee.org/document/6483596](https://ieeexplore.ieee.org/document/6483596) (Accessed: 16 February 2026).
+
+- Garcez, A.d'A. and Lamb, L.C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56(11), pp. 12387-12406. Available at: [https://www.researchgate.net/publication/346933355_Neurosymbolic_AI_The_3rd_Wave](https://www.researchgate.net/publication/346933355_Neurosymbolic_AI_The_3rd_Wave) (Accessed: 18 February 2026).
+
+- Hancock, P.A., Billings, D.R., Schaefer, K.E., Chen, J.Y.C., de Visser, E.J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: [https://www.researchgate.net/publication/51763875_A_Meta-Analysis_of_Factors_Affecting_Trust_in_Human-Robot_Interaction](https://www.researchgate.net/publication/51763875_A_Meta-Analysis_of_Factors_Affecting_Trust_in_Human-Robot_Interaction) (Accessed: 16 February 2026).
+
+- Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y.J., Madotto, A. and Fung, P. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), Article 248. Available at: [https://www.researchgate.net/publication/358458381_Survey_of_Hallucination_in_Natural_Language_Generation](https://www.researchgate.net/publication/358458381_Survey_of_Hallucination_in_Natural_Language_Generation) (Accessed: 18 February 2026).
+
+- Kaelbling, L.P., Littman, M.L. and Cassandra, A.R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: [https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf](https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf) (Accessed: 15 February 2026).
+
+- Kahn, P.H., Freier, N.G., Kanda, T., Ishiguro, H., MacDorman, K.F., Severson, R.L. and Friedman, B. (2008) 'Design patterns for sociality in human-robot interaction', *in Proceedings of the 3rd ACM/IEEE International Conference on Human-Robot Interaction (HRI '08)*. Amsterdam: ACM Press, pp. 97-104. Available at: [https://dl.acm.org/doi/10.1145/1349822.1349836](https://dl.acm.org/doi/10.1145/1349822.1349836) (Accessed: 15 February 2026).
+
+- Lee, J.D. and See, K.A. (2004) 'Trust in automation: designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: [https://scispace.com/pdf/trust-in-automation-designing-for-appropriate-reliance-2uiy4o89ga.pdf](https://scispace.com/pdf/trust-in-automation-designing-for-appropriate-reliance-2uiy4o89ga.pdf) (Accessed: 16 February 2026).
+
+- Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: models and experiments', *International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: [https://pmc.ncbi.nlm.nih.gov/articles/PMC7449140/](https://pmc.ncbi.nlm.nih.gov/articles/PMC7449140/) (Accessed: 16 February 2026).
+
+- Papadimitriou, C.H. and Tsitsiklis, J.N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: [https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf](https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf) (Accessed: 15 February 2026).
+
+- Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: an anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*. Acapulco: Morgan Kaufmann, pp. 1025-1030. Available at: [https://www.ijcai.org/Proceedings/03/Papers/147.pdf](https://www.ijcai.org/Proceedings/03/Papers/147.pdf) (Accessed: 15 February 2026).
+
+- Sharkey, A. (2014) 'Robots and human dignity: a consideration of the effects of robot care on the dignity of older people', *Ethics and Information Technology*, 16(1), pp. 63-75. Available at: [https://www.researchgate.net/publication/261960182_Robots_and_human_dignity_A_consideration_of_the_effects_of_robot_care_on_the_dignity_of_older_people](https://www.researchgate.net/publication/261960182_Robots_and_human_dignity_A_consideration_of_the_effects_of_robot_care_on_the_dignity_of_older_people) (Accessed: 16 February 2026).
+
+- Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. Available at: [https://www.dhi.ac.uk/san/waysofbeing/data/governance-crone-sharkey-2012a.pdf](https://www.dhi.ac.uk/san/waysofbeing/data/governance-crone-sharkey-2012a.pdf) (Accessed: 16 February 2026).
+
+- Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems 23 (NeurIPS 2010)*. Vancouver: Curran Associates, pp. 2164-2172. Available at: [https://papers.neurips.cc/paper_files/paper/2010/file/edfbe1afcf9246bb0d40eb4d8027d90f-Paper.pdf](https://papers.neurips.cc/paper_files/paper/2010/file/edfbe1afcf9246bb0d40eb4d8027d90f-Paper.pdf) (Accessed: 15 February 2026).
 
 ## Appendix B: AI Declaration
 
@@ -445,7 +454,7 @@ ChatGPT & General conversations via web-search AI about how the paper's topic re
 \hline
 ChatGPT & Used to identify which sections were over-weighted relative to mark allocation for trimming to match word-count allowance \textbf{(A2)} & Once \\
 \hline
-ChatGPT & Traversing papers to find relevant sentences for the essay \textbf{(A4)} & Quite a few times \\
+ChatGPT & Traversing papers to find relevant parts to read for the essay \textbf{(A4)} & Quite a few times \\
 \hline
 \end{tabular}
 
