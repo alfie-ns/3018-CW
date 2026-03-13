@@ -25,8 +25,8 @@ emotions = { # dict of different emotions
 observed_emotions = ['calm', 'happy', 'fearful', 'disgust']
 
 def extract_features(file_name, mfcc=True, chroma=True, mel=True): 
-    with soundfile.SoundFile(file_name) as sound_file: # extract files from read sound file
-        X = sound_file.read(dtype='float32') # convert sound file to float32
+    with soundfile.SoundFile(file_name) as sound_file: # open and read from sound file
+        X = sound_file.read(dtype='float32') # read audio data as float32
         sample_rate = sound_file.samplerate # extract sample rate from sound file
         if len(X.shape) > 1: # if the sound file has more than one channel, take the mean of the channels to convert it to mono (single channel)
             X = np.mean(X, axis=1) # convert to mono by taking the mean of the channels/columns
@@ -37,7 +37,7 @@ def extract_features(file_name, mfcc=True, chroma=True, mel=True):
         #Extract all average features and concatenate them into 'result' array
         '''
         chroma_stft: capture intensity of each of the 12 different pitch classes (C, C#, D, D#, E, F, F#, G, G#, A, A#, B) in the audio signal; capture harmonic and melodic characteristics of music and speech
-        mfcc: Mel-frequency Cepstral Coefficients: capture broad spectral characteristics of audio signals to capture broad 
+        mfcc: Mel-frequency Cepstral Coefficients: capture the spectral envelope of audio signals; encodes timbral qualities of speech
         melspectrogram: capture how energy is distributed across meaningful frequency bands
         '''
         if chroma:
@@ -90,7 +90,7 @@ model = MLPClassifier( # create MLPClassifier model with specified parameters
     alpha=0.01, # prevent overfitting due to penalty term 
     batch_size=256, # size of mini-batches for stochastic optimizers
     epsilon=1e-08, # term added to improve numerical stability
-    hidden_layer_sizes=(300,), # number of neurons in the hidden layers
+    hidden_layer_sizes=(300,), # one hidden layer with 300 neurons
     learning_rate='adaptive', # learning rate schedule for weight updates
     max_iter=500 # maximum number of iterations
 )
@@ -103,13 +103,13 @@ accuracy = accuracy_score(y_true=y_test, y_pred=y_pred) # accuracy = number of c
 cm = confusion_matrix(y_test, y_pred) # confusion matrix = table used to describe the performance of a classification model
 
 print(f'Correctly classified: {accuracy * 100:.4f}% of {len(y_test)} samples') # output 4-decimal accuracy score
-# print(f'Confusion matrix: \n {cm}') output confusion matrix
+# print(f'Confusion matrix: \n {cm}')  # output confusion matrix
 
 labels = model.classes_
 
 print("\nConfusion matrix:")
 print("Actual \\ Predicted ->", labels)
-print("Note in the confusion")
+print("Note: in the confusion matrix, rows = actual labels, columns = predicted labels")
 
 for i, row in enumerate(cm):
     print(f"{labels[i]:<10} {row}")
