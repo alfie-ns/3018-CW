@@ -1,0 +1,492 @@
+So as I said, you have to start with peers speed.
+For the project that you would do, you have to approve the idea of speed first.
+Okay.
+So that we can understand if it is doable.
+Not doable, okay.
+It has enough complexity.
+Enough complexity.
+This is for those who will use robots, for those who will not use robots, they have to come to speak to me.
+So today we start introduction to or bodies and we try to see how it's different from social bodies.
+So from your, from memory, what is difference?
+Now when you say cognitive robotics, what you expect to see?
+With respect to our previous lectures in social robotics.
+Yeah, we are not focusing mainly on the social behavior and how to evaluate it.
+We have seen in one lecture how to evaluate social behavior.
+For example, through anova, how to curate a social behavior, the facial expressions, the speech, all these things that we speak about.
+The layer of social romance robotics or social interaction.
+Now we speak about cognitive robotics.
+So we will deal more, try to deal with more.
+Certainly this is itself is a discipline.
+So try to build more into how can we create cognitive behavior.
+And there are many.
+There are many.
+So for example, if anything I say, for example, grasping an object, this is a cognitive behavior is called affordances learning.
+How can you learn affordances of an object?
+So if I have this object here, should I catch it like this?
+Or should I catch it like this?
+Should I catch it like this?
+If I have for example a handle like this, should I, how should I for example, catch this object?
+I have to learn that I should put my fingers across this hole.
+If I'm opening the door, I have to put my catch with my fingers the handle and open.
+So all these are advanced behaviors, cognitive architectures as well.
+So we will highlight during this remaining lectures these different parts of the module and then we'll be finalizing it.
+I have never seen up to now a project like somebody would like to work on affordances learning, for example.
+So it's like invitation for challenging minds would like to make something like excellent like this.
+But we vary time that we have.
+We very much that we have limited time as well.
+Sorry, I don't really hear what you said.
+What type of, what type of project?
+Say again please?
+No, I'm saying just like for example, no one working before on something related to cognitive.
+Oh, cognitive.
+Yeah, yeah.
+But actually we will bear in mind also the time constraints.
+Okay, so today we introduce this.
+So it will be a light lecture.
+So cognitive robotics is intersection between artificial intelligence and robotics.
+So we are in this area here and one of the very famous Murphy Robert Murphy, he was one of the very famous scientists who was speaking about, about the cognitive robotics and what it is about and, and what are the basic components of cognitive robotics research.
+So if we add one more circle here and this is what entitled this small area what entitled robotics.
+So we just don't speak about robotics in general from the engineering perspective, but artificial intelligence from the functions like computer vision or speech processing, etc.
+We speak also about cognitive and biological science.
+So we need to intersect this with for example cognitive science theory related to psychology, theory related to cognition.
+And then we try to model this.
+So if you'd like to learn how for example children are improving their cognitive, certain cognitive functionality, what about we can study this with children and some studies effectively do this in psych, in psychology, in psychology.
+So they brings children and try to see for example how they sophisticate a certain behavior, certain capability, how they develop the language, how they develop all this over time.
+But another approach to do this is to use a robot, model it on a robot.
+And because like the robot for you is like just platform for modeling, supposed to be open box.
+So what you cannot interpret or observe from the child with a baby infant, you can certainly observe on a robot.
+So this is a platform for modeling.
+So when we speak about modeling, so we need cognitive ground, biological science ground for this.
+So Kangalusi and Asada.
+So Kangaroosi was our very most famous scientist, one of the top guys who were in Plymouth driving this research worldwide, but left and Asada is a very famous guy in Japan.
+So they put a definition, it's always, you know, like in social robotics.
+We try to see that some people started to define what is social robotics.
+And like socially assistive robotics, we've found different expressions and different definitions for this.
+Similarly.
+So they try to say what is cognitive robotics.
+And cognitive robotics is still one of the, still we find a lot of challenges like social robotics.
+So there is no lack of, you know, you find one entire definition like anything in the world.
+If you speak about let's say general things related to economy, related to politics, related to anything, you find everyone has different interpretation and a different explanation for it.
+So cognitive robotics is a field that combines insights and the missions from robotics AI in the cognitive and biological sciences to design an integrated cognitive system combining the sensory motor radia high higher limit functions, social capabilities of higher intelligence.
+So you involve the sensory motor behavior.
+Sensory motor is that behavior that's related to sensors and the motors, like for example sensory motors, like when I'm moving my arm, my link So I observe something from my sensor and I make an action responding action by moving the arm or the sensory motor behavior.
+Higher level functions is all about the cognitive functions that we are trying to model from what we have in infants and robots and social capabilities.
+So if you work in cognitive robotics, you certainly can work in social robotics in some sense.
+You know, this is like.
+This is like this was actually even my approach.
+Like when I was young, I finished my PhD in Social Robotics and then I said no, I need to work in more sophisticated research than working on the very social layer of research in robotics.
+So I was like by the time I was searching for a postdoc and I resisted, I was believing like in same idea in the background.
+This was my attitude.
+I said no, I will not continue in social robotics per se.
+And by the time I was resisting saying I should work in cognitive robotics, developmental robotics.
+So as a postdoc.
+So it took me some time and that actually what took me to Japan to stay several years there to work on cognitive and developmental like language development etc related to this?
+Yeah, like different point of view.
+Like the easier one was to continue the same route of what I did.
+But you know, it gave me some different ideas.
+So yeah, so this is just a definition for it.
+So P. People who work in cognitive robotics certainly can work on social robotics.
+For example, we need the intelligence to be deployed over social layer of behavior, not vice versa.
+So cognitive robotics emphasizes the bio inspired human like animal like behavior intelligence system driven integration of range of cognitive capabilities like system skills, knowledge representation, reasoning, social interaction and interdisciplinary approach that combines both like including cognitive neuroscience, cognitive psychology and biology.
+So you know there is like you be inspired by some but it's end of the.
+And you try to make integration of this at different levels integration.
+So system level integration so that the system can be inspired by humans infants in something and try to in like use this kind of cognitive abilities for you know, one cognitive system.
+What we can call cognitive system and the development of cognitive robotics, let's say.
+Okay, so actually like when we say the development development we understand that what is not social robotics, what's not social robot can be called the cognitive robot in some sense if it makes some cognitive functionality.
+Like in the early 90s, 1995 and 1950 there was tortoises shaky.
+This is probably if you search YouTube for robots, you'll find Shaky from MIT.
+This was like by the time evolution some product like very important.
+And we have very first related book is by Walter in 1953 move to move to Darwin robot move to CB2 move to ICubs in my lab, most of you have seen it and so on and so forth.
+So that's probably the book of Kangaroosi and Schlesinger.
+It's called Developmental Robotics from Babies to Robots.
+So he choose this kind of attractive title from Babies to robots.
+So how babies are moving immediately like this is the icub things like they used expressive image for robots crawling to.
+So there is a lot of platforms and you know, like, despite a lot of like, you know, like the research platform, the platform itself, it's not.
+There's no EQ height.
+You can do platform like you can use any robot to do research in cognitive robots, even now robots.
+But the standard, informal standard is that iCub, this one is the one that is used mostly in research related code robotics.
+Probably when you have seen it in my lab, you have seen that it has sophisticated fingers.
+So it's like more capable of grasping for example.
+But we understand from the face that it is difficult to be used for social robotics despite the fact that they have some lids and these lids can, can be, you know, showing eyebrows, moving smiles, some stuff like that.
+But turn on clear.
+What is cognitive robotics?
+So in order to identify or define, sorry, define what's cognitive robotics?
+There are three questions that we need to define.
+Cognitive robotics.
+So there is cognition and there is robotics.
+Yes.
+What's cognition?
+What's cognition useful in robotics?
+Why is useful for real robotics and how do cognizant robots work?
+So let's start by question number two.
+Why is cognition useful in robotics?
+Why is cognition useful?
+Robotics can perform more sophisticated tasks, therefore allowing to do much more.
+We need exactly to make it more, make it able to, to think more, reason more.
+You know, we don't need just have to train on a, on a data set, you know, like just a limited interaction or limited behavior based on a specific data set.
+We need something that is able to learn and able to interact in like free environments.
+That's what's called old artificial general intelligence.
+Despite the fact that we are not yet or we are not at all at the phase of artificial general intelligence.
+Say you can make some tasks, you know, like train the road on some tasks and take it to, you know, to in this like in the street or something and it will still perform well, like avoiding people, avoiding obstacles.
+But some cognitive functionalities like you know, like an absolute way speak to people, interact with people, etc.
+In open environments there are like, there might be some challenges.
+So we need the robot to be able to reason.
+We need to the robot to be able to understand and to represent knowledge.
+Because what actually when you learn knowledge, you have to represent knowledge to be able to take the knowledge forward.
+What's called artificial general intelligence.
+To represent it in a knowledge in kind of logic form that allows you to generalize it to other situations.
+So if I.
+If you learn that there is something called the gravity and the gravity means, for example, any object, if it's subject to gravity will fall down.
+It means like, for example, object.
+Like.
+It means like any object.
+So it means like this object, if I leave it, it will fall down.
+This object, if I leave it for the gravity will fall down, this object will fall down, this object will fall down.
+You know, so this is how for example, we can generalize knowledge outside specific constraint of training, outside specific, you know, knowledge context that you can learn.
+You can generalize it to other situations.
+So why cognition?
+Cognition useful in robotics.
+It allows robots to work autonomously in everyday environments.
+It enables effective interaction with humans.
+So a cognitive robot is capable of flexible context sensitive code directed action.
+So goal directed action.
+Action that is directed to specific goal like grasping a cup.
+You need to drink.
+So you have a cup and you need to grasp it.
+So it's not action like I'm speaking now making gestures.
+What is the name of these gestures, by the way?
+Note.
+Oh, sorry.
+No, from the kind of gestures.
+Remember we were saying it general gestures that I'm speaking like waving my hands like this, without specific reference.
+Semantic.
+No, no, nonverbal communication.
+Remind me, what are kind of gestures as we studied to be one kind?
+Iconic.
+Iconic.
+This needs.
+Yeah, this needs.
+Like when I say two persons and then I close my hand like this.
+So when I have like way moving my hands like this, I'm speaking.
+What kind of gestures is this?
+Metaphoric.
+So metaphoric gesture.
+So metaphoric gestures is not goal directed.
+It's not.
+It doesn't align, for example, like concerning the semantics.
+It doesn't have direct semantic meaning.
+Direct semantic reference to the ground.
+Go directed is like you are making an action for a specific goal.
+Like grasping an object to make something flexible, context sensitive.
+Context sensitive.
+So it's like it can certainly learn from the context so we understand it Goal cognitive robots that can make action aiming to having a specific goal to do.
+And not only this, this context sensitive.
+So it can learn from context.
+It can for example understand like what is the context behind this action.
+So it can observe A cognitive robot can be associated or cognitive layer can be associated to social layer and understand that for example X person has behaved this way.
+I am observing.
+But within this context, okay, the same thing you can do, for example, you can do certain behavior, but within a specific context.
+So cognitive robotics also can be or cognitive like you know, cognitively intelligent system can be the system or is a system that is supposed to learn this kind of high level features or backgrounds.
+Okay?
+So the robot anticipates.
+The robot in cognitive systems anticipates the need to act and the outcome of the action, okay?
+And this is action itself is guided by prospection.
+So anticipates and this is called introspection.
+Anticipates need to act and outcome of this action.
+And based on this, this is called guided by prospection.
+Prospection is like you don't depend on sensory motor information.
+You don't depend only on information.
+Like for example, there is an object that I need to or for example, turn around based on your sensory information.
+Not only this, but you try to expect the outcome of the action, okay?
+You try to expect the outcome of the action and, and expect it or consider it in your planning, like reinforcement learning.
+So learn from the action and plan or use it to plan for future action.
+So this is the prospection part.
+Prospection allows you to anticipate the outcome and consider it when you are taking an action.
+So it can also adapt to changing circumstances like adjusting for example, existing action policies, creating new action policies, for example, and so on.
+So it does this by dynamically recruiting several core cognitive abilities like perception, attention, action selection, memory, learning, reasoning, metacognition, prospection.
+So these are the basic building blocks of cognitive agents and more or less remember when I was speaking at the beginning, the difference between when I speak about the pipeline of artificial intelligence.
+I told you roughly that we have basic component for perception, information fusion, because we learn from information.
+So the same thing artificially intelligent artificial intelligence system need perception, need fusion to fuse the information and learn from them.
+And then machine learning to extract knowledge and then knowledge representation and so on and so forth.
+This was basic building blocks for artificial intelligence.
+And here the cognitive capabilities, the core cognitive capabilities that we might have is the perception, the attention, the action selection, memory, learning, reasoning.
+So if you'd like to build basic building blocks for in general, and you will see this in cognitive architecture.
+So people say I will, I will build a cognitive architecture that can allow a robot that can be used by, for navigation.
+You will find that they build basic building.
+They have kind of different blocks in basic construction.
+As they say how, for example, block 1 would be connected by block 2 connected by block 3 and they explain the whole system.
+And most of their build building blocks are these basic.
+So when I'd like to say I made a cognitive architecture, which means a cognitive system, and there are many and I'd like them to be used or available for use by researchers.
+There is for example, for certain tasks or another task or a different task, different kind of cognitive architectures.
+Cognitive architectures can tell you with these basic.
+But the knows how to communicate between each part and each part.
+So for example, they present for example a form of communication, a form of logic, for example, to transfer knowledge from one basic building block to another building block.
+So how the communication is happening between building blocks.
+This is actually called cognitive architectures.
+For example, as a system for.
+As a cognitive system or example for cognitive system.
+Okay, so what is cognition?
+Good question.
+So in trying to apply for this.
+So there is a project European Network for Advancement in Artificial Cognitive Systems.
+So this is a kind of network that is emerged from projects big European project.
+So there were actually different definitions when we tried to see what is cognition.
+So cognition by Mike Denham is the ability to, to relate perception to action in a meaningful way, determined by experience, learning and the memory.
+So the guy here spoke about memory, spoke about learning, machine learning, spoke about perception, action, similar to the basic building blocks that we were speaking about.
+And as a person said, a cognitive system possesses the ability to self of self reflection, or at least self awareness.
+This is a little bit advanced, more advanced definition, you know, self reflection, self awareness.
+So if the robot is aware of itself, this is called cognitive system.
+So this is called the cognitive cognition in general or cognitive system.
+So self awareness, you are aware of yourself, it's called self awareness.
+You are aware of yourself, you are aware of your emotions, you are aware of your intents.
+You are not all only perceiving as you are aware, able to think about or able to see.
+This is what I need, this is what I feel, this is the interpretation of your emotions.
+So this is self awareness.
+You know yourself in some sense.
+So this is one definition.
+Cognition is gaining knowledge through the senses.
+Cognition is the ability to ground perception into concepts together with the ability to manipulate concepts in order to proceed toward the goals and so on and so forth.
+How many?
+42 definitions.
+So in most of them, in most of them, we can see that cognition has, you know, different cycles or basic cycles, or basic stages and cycles, like we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy.
+So you will not find in general in all these theories, you Will find them anticipating something, learning, adapting, okay?
+And associating this with perception and action, okay?
+So that they create the autonomy, what's called autonomy.
+So the whole this is like the basic, in general, the conclusion of all these 42 defin 42 definitions.
+Okay?
+So the core abilities of cognitive system is a perception, attention, action selection, memory, learning, reasoning and maintenance.
+And the prospection, we understand that prospection is anticipation.
+So you anticipate the outcome.
+So you don't say like, because I observe there is for example, an obstacle on my way now so that I should do X action or Y action.
+No, instead you say I probably will think about the outcome as well and involve the outcome in the action selection.
+So perception, we understand attention, for example, attention to a specific action you are doing.
+So this attracts my attention, but also attracts the attention of a cognitive agent.
+So one person who's walking here, for example, I unconsciously moved my head.
+This is attention, okay?
+Similarly there's attention.
+For example, you are doing one of you doing particular action.
+Now this is attention, you attracted attention.
+Same thing, what we might be observing and learning as it is, for example, some specific task being done here.
+Okay, that we might.
+And action selection.
+If you are generating an action, so which action should you take?
+The same thing.
+We have a lot of actions, you know, we have action.
+You can say action X action, Y action, Z action, memory, learning, reasoning and meta reasoning.
+What is the difference When I say meta?
+Well, meta meta.
+So what the reasoning behind the reasoning?
+I guess reason behind reasoning.
+Okay, so why did you reason?
+Okay, that way.
+So you think about the reasoning that you have reasoned and why did you reason in that way?
+Okay, two times thinking, you know, and from this actually we speak about cognition, domain and cognition, you know, so that, you know, like the basic, but like the higher level of cognition.
+So if I speak about cognition, it's just the connection of the building blocks, like the attention, the memories and learning and that what create cognition.
+So if I just make cognition as a concept and connect this with the basic building blocks, the meta layer is a layer above layer.
+So you think about why did you do this in that situation, for example, which is sometimes we do, you take an action and then you reflect about the action you have taken.
+Say why did I do this?
+So this is a meta thinking or meta cognition.
+Source of, source of.
+So in the prospection side, we anticipate, we predict, we internally, we have intention, we have planning, we have simulation, and we have episodic future thinking.
+Have you heard about the word epizodic?
+Episodic memory.
+Episodic.
+So.
+The episodic future thinking is like you have the past and you have the future.
+The past events are reconstructed to allow the agent to re experience the future.
+So you have think about it.
+The past events are reconstructed to allow the Asian to experience the future.
+You might have a situation you have passed with and now you would like to make in the anticipation, for example, what would be the outcome of particular action?
+You do you remember a problem, similar problem happened or similar situation happened and how you've been thinking or how you have reacted and how your reaction generated a specific or another reaction specifically generated as a reaction from others, for example.
+So you start rebuilding the situation in your mind and rest like reconstructing the story in your mind to think about what happened and then expecting that probably when I did this in the past, the reaction of the person was good or not good.
+So I can take this to anticipate in the new situation I have should I react like the past or should I adapt and not react like the past to have better consequences.
+So this is, this is called episodic future thinking.
+So more detailed definition of cognitive robotics.
+So there is actually some definitions here and all these names actually are more or less the people who are driving this research still.
+All of them are like, you know, like active.
+Jean from IIT IIT is the Italian Institute of Technology.
+They institute that created the ICAP world.
+You know, Alexander Security in IIT, David Vernon in Carnegie Mellon, etc.
+So they have been developing different theories or different interpretations.
+Like the word recognition derives from the Latin verb cognoscal a composition from con meaning related to and to know.
+So related to and to know.
+So cognitive robotics then is a branch of robotics where knowledge plays central role in supporting action selection, execution and understanding.
+So it focuses on designing and the best building robots that have the ability to learn from experience and from others, from its own experience and learn from others, other people or other agents, okay, Commit relevant knowledge and skills to memory and retrieve them as a context requires and flexibly use this knowledge to select appropriate actions in the pursuit of their goals while anticipating the outcome of those actions.
+Like exactly what humans do on very high level motivation.
+So cognitive robotics can use their knowledge to reason about their actions and actions of those with whom they are interacting and thereby modify their behavior of a long term effectiveness.
+So this is you know, more or less different or multi detailed definition or definitions across like a group of people to be able to give like clear understanding.
+For if we'd like to build a cognitive robotic system?
+What does it mean?
+What do we need the basic building block?
+So from now and on you will see in all the systems that we will discuss in the in the next two lectures for the many lectures that the basic building blocks are always having learning memory, having action, etc.
+Etc.
+Okay.
+And how do cognitive robots work?
+So probably to answer this, let's take a shorter break.
+Okay.
+And come a little more time to some qualify.
+You was not here at the beginning as you click here.
+I was saying that there will be a change from six.
+So how do cognitive robots work?
+Okay, so cognitive robots achieve the goals by perceiving their environment, paying attention to the events that matter, as we expected from using the same like primary basic.
+The basic building forms anticipate the need for some action, planning what to do, anticipating the outcome as it executes the action and learning from result of the interaction and adapting to change.
+So the perception makes use of many sensory modalities like vision, like auditory information, haptic, for example, and so on and so forth.
+So you'd like to perceive the environment how you perceive the environment, same way that we perceive the environment.
+So we use our eyes, we use our ears to listen, we use haptic information just to make some sense.
+So I understand even I close my eye, what is the tissue, for example, of this object or that object.
+So can I have some sense?
+And I can build some kind of cognitive representation without ic so I can feel that there is a chair here for the example.
+So in my memory, my brain, I can put the cognitive representation saying there is a chair, some object like that, and in front of this object there is a table.
+So I can build cognitive representation for what I feel like, even by haptic information, without having vision.
+Okay, so but certainly this is not the same for as I said before, this is not the same for persons who are born, for example, or have like or have problem in vision, like for example, blind, for example, because the ability to update the cognitive representation is not the same.
+So we use vision and we use haptic information and we are updating our cognitive representation daily, daily, daily ideas who are a trained system.
+However, some people who are probably in one of the sensor sensory information sources like vision, for example, they are have difficulty to create this kind of cognitive representation.
+So you still feel that one person needs some support, for example, who is blind, for example, needs support to be able to navigate the environment.
+Still cannot.
+I can create.
+You can create by touching.
+Here you come start to already understand the spatial relationship between objects.
+You understand there is an object, There is an object, There is an object, there is an object, there is an object here.
+So you start creating this spatial now, and you can even navigate.
+If you touch everything while you don't see, you can build everything in your mind without seeing and you can even mostly navigate.
+Is totally different than if we don't have this capability.
+Okay, for paying attention.
+Paying attention can be through three approaches, like whether suppressive, restrictive or selective.
+There's a suppressive that you suppress features or objects or locations that are deemed to be not relevant.
+So you can Say for example, I'm not focusing on for example any object rather than circular object like Apple.
+So PC for example.
+I don't care.
+So I say, for example, I'm just suppressive.
+I'm paying attention to any object, small object that is in the size of Apple.
+So I don't care about maybe an agent.
+I'm searching for small objects particular for specific tasks.
+It can be selective, it can be restrictive like to what to look at or where to look for it, for example, instructive design.
+I will look for example for reaction of students to what I'm teaching, for example.
+And I will try to make this for the UG group, not the bottom postgraduate.
+So I will not for example be looking to the reaction while you are all here.
+So not be looking to the faces or reactions of postgraduate, for example and be more focusing to see the faces of students or reaction.
+Observe the reaction of UG students, for example to see the reactions or like saying it's very difficult or not very difficult.
+Maybe I'm making a survey about this behavior.
+I would like to see the behavior a lot reaction of what I'm teaching in ugly same inverse.
+If I'm making it about postgraduate, you know, so this is like you are trying to be selective, sorry, restrictive for where to give attention.
+Anticipating also referred to, as we said before, Prospection.
+So the anticipated action is often associated with achieving a goal.
+Okay, and four, it has four models of operation.
+You start simulating, okay?
+You have prediction, you have intention, you have planning.
+Okay, so you start making simulation to understand the feasibility.
+You make your prediction which is a prospection.
+You understand the intention and you start doing the planning for the action, exploring action that based on outcome.
+So your prospect means you think about the future, possible future outcome of your action.
+And the based on this, I expect, for example, that would be suitable action or non suitable action.
+Based on this, you start creating your planning.
+Okay, so it's a planning.
+What to do?
+Is the planning sometimes affected by reasoning about the current state of the world or anticipate future states.
+So start planning for what to do.
+Okay, this exploits memories of past experience.
+It's called episodic memory and the knowledge of the world.
+So please distinguish or remember these two because we will see these two memories in many of the cognitive architectures models that we will be highlighting.
+The episodic memory and semantic memory.
+The episodic memory exploits memories of past experience.
+If you're thinking about the past and you'd like to exploit the experiences, what happened?
+What was the context?
+This is photo however, you have another memory kind of memory called semantic memory.
+So in cognitive architectures, they have both.
+So you find the episodic memory, you find the semantic memory.
+So what cognitive architecture does is like how to connect, how to extract the knowledge.
+You extract the knowledge so you can imagine in my, in this situation, I did that, I did this.
+Build the expression experience in your mind and then you extract the lessons.
+This is cognitive architecture.
+Strive to do how you create or like retrieve information from past experience and how you make representation of the world.
+So you understand like the semantic, you know, have the knowledge of the world, the semantic memory.
+Like for example, the spatial relationship in one place.
+Like for example, relationship between, between this object and this object, for example.
+So they are beside each other.
+So this is a part of the spatial mapping or spatial concept as a part of the semantic memory.
+So when we have this information, how can we extract this information from these basic building blocks.
+So how do we represent plastics for those, how do you represent plastics?
+You for you.
+We all, for us, we present it simply just close our eyes, we think about what happened, how the agent should present past experience, in which form should it.
+For example, in a normal form like situation, what happened?
+Outcome, simple like this.
+So cognitive architectures try to find the representation suitable representation for each building block.
+Okay, whichever the form, whichever the logic, try to even like I'm just giving a simple example what happened, what is the situation context, what is the output of something like that.
+So this is how each knowledge, each cognitive architecture propose some kind of representation for this information and actually proposes how can it communicate the information with other basic other components.
+And the semantic memory is for the knowledge about the world.
+The anticipation, anticipating the outcome of a possible action can refer to the action of the robot itself or action of other agents.
+When I say agent, that's also one of the technical words.
+When I say agent, what do I mean by agent?
+Without looking, it's just like the.
+Well, I've read it, unfortunately, but it's a thing the other person or robot that it's interacting.
+Agent means robot or human.
+So I am agent and the paper robot is an agent.
+Okay, so both of us, so it can be.
+So when I say, for example, there's a conference called Hai Human agent interaction.
+So human agent interaction, it means a human robot interaction and the human human interaction.
+Okay, so simply we say like the conference that try to see how humans are interacting in which way and try to apply this in robots, for example.
+So the learning from actions means future actions.
+How can be effective and More efficient.
+So often based on reasoning and sometimes refer to all to meta reasoning or metacognition.
+So both are similar recognition.
+We try to think about what happens.
+So thinking of a cognition of cognition reasoning behind reasonable reasoning of the reasoning.
+Why did I reasoned why did I make this particular behavior in such situation?
+And adapting to change.
+So adapting to change is like you learn something, you understand the consequences and you try to unlearn and adapt it.
+Okay, so, so more or less like we try to cognition.
+Like we perceive the environment, we learn from experience, we anticipate outcome, okay.
+And we act at that.
+So what orchestrates all this requires is like one orchestrates all the time the cognitive architecture.
+So as I was saying, cognitive architecture puts all these basic building blocks together and supports the communications that can happen between all.
+So a key feature of cognitive robotics is a focus on prospection to augment the immediate sensory motor experience pose when navigating element relating objects in the robots environment and when you interact with people.
+Cognitive robots are able to carry out tasks effectively by anticipating the effects of their own actions as well as actions of people around them.
+If I can anticipate the action of others or my own action as an agent with a certain way, very high in the function of a cognitive world, okay.
+And being able to view the world from another person's perspective.
+So I can anticipate the person's introduction.
+So I can for example reading your eye, your eyes, for example, or reading your mind, try to see or that's what's called theory of mind.
+So I'm speaking to you and you're saying I will do this, I would do this, I would do this.
+And from what you're saying, I can anticipate that you aim to do this or do that at the end.
+So I'm trying from what's called a Scorpion theory of mind, try to put myself in your place.
+And from that I try to infer your goals.
+Certainly there should be shared context for what should be done.
+But what is the context?
+What is how it's happening?
+But I try from the information you are giving, anticipate what's going.
+The same thing like you say, for example, you find for example people normal interaction between humans.
+I know that you would know you will do it.
+How did I say I know that you will do it?
+Because I was able to anticipate your reaction.
+I know from your behavior that you would do X reaction, Y reaction was able to put myself in your place.
+So this is being able to view their words for another one perspective, okay?
+And this applies something to direct interaction with assisting customer in supermarket for the local or indirect interaction, like robots taking shelves while customers are shopping.
+So it can be done in direct interaction or in indirect interaction.
+Because indirect interaction, for example, you might have indirect interaction, but one action, like if I am having, for example, for example, I'm a robot and you are a human, and we are.
+Everyone is doing a task, but we are connected through the environment.
+Which means, like if we have direct interaction, each action you will do will affect me directly, or vice versa.
+If we have indirect interaction, if you.
+Any action you will do in the environment will affect me in indirectly some sense, because we are still in kind of continuum environment that contains both of us.
+So if we react to the environment, this reacts.
+So final thought is, there are two reasons why people study cognitive robotics.
+They want to build smart robots or they want to understand the cognition.
+If you'd like to understand cognition, like what I'm doing, for example.
+So we think about imported cognition.
+Remember I was always saying that intelligence means body, and that's what actually said what's like that.
+That's what created the term imported cognition or imported intelligence.
+Intelligence mean body, same senses.
+So, for example, if we are building our own intelligence through our, you know, our own capabilities, abilities to touch and interact with the environment, the robot should have this capability to sense, to be able to create knowledge or kind of.
+I was speaking a few minutes ago about the model or like a cognitive representation of space.
+So we need a body.
+So that's why we use robots to understand cognition, to understand, for example, how specific mobile motor action, how motor action, for example, can develop for infants from which months to which ones there are theories.
+So people in psychology can put theories, if you'd like to see or to model these theories, to write down your notes and remarks about it experimentally.
+You need a robot for the child.
+You need.
+You can observe, but you cannot enter into, cannot enter inside the child.
+Okay.
+However, with a robot, you can see how, for example, through developmental interaction, how a robot, for example, can sophisticate an action, so make a specific movement and sophisticate the movement, for example, to create more sophisticated movement at some point.
+Okay?
+Same for language, how children are putting words together to create phrases and phrases together to create sentences.
+How aroma can learn this.
+So that's it for today, and we will be next time speaking about different parts related to cognitive.
+So do you have any questions?
+Okay.

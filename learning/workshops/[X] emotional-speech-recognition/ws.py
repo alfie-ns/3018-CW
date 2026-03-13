@@ -22,6 +22,7 @@ emotions = { # dict of different emotions
     '08': 'surprised'
 }
 
+# subset of emotions
 observed_emotions = ['calm', 'happy', 'fearful', 'disgust']
 
 def extract_features(file_name, mfcc=True, chroma=True, mel=True): 
@@ -39,8 +40,10 @@ def extract_features(file_name, mfcc=True, chroma=True, mel=True):
         chroma_stft: capture intensity of each of the 12 different pitch classes (C, C#, D, D#, E, F, F#, G, G#, A, A#, B) in the audio signal; capture harmonic and melodic characteristics of music and speech
         mfcc: Mel-frequency Cepstral Coefficients: capture the spectral envelope of audio signals; encodes timbral qualities of speech
         melspectrogram: capture how energy is distributed across meaningful frequency bands
+
+        `result`: combined feature vector (MFCC + chroma ||+ mel) representing this audio sample
         '''
-        if chroma:
+        if chroma: # 
             stft = np.abs(librosa.stft(X))
 
         if mfcc:
@@ -109,7 +112,12 @@ labels = model.classes_
 
 print("\nConfusion matrix:")
 print("Actual \\ Predicted ->", labels)
-print("Note: in the confusion matrix, rows = actual labels, columns = predicted labels")
+print("rows = actual labels; columns = predicted labels")
 
-for i, row in enumerate(cm):
+for i, row in enumerate(cm): # print values for each instance of confusion matrix
     print(f"{labels[i]:<10} {row}")
+
+print("Therefore:")
+print("First row: `calm` as is the highest (most classified)")
+print("Second row: `disgust` is most classified")
+print("Third row: fearful (79)

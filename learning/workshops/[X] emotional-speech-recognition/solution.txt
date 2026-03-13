@@ -1,0 +1,194 @@
+"""
+COMP3018 – Human-Robot Interaction
+Week 7 – Emotional Speech Recognition
+"""
+
+import os
+import glob
+import numpy as np
+import librosa
+import soundfile as sf
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# ──────────────────────────────────────────────
+# 1. Emotion dictionary and observed emotions
+# ──────────────────────────────────────────────
+emotions = {
+    '01': 'neutral',
+    '02': 'calm',
+    '03': 'happy',
+    '04': 'sad',
+    '05': 'angry',
+    '06': 'fearful',
+    '07': 'disgust',
+    '08': 'surprised'
+}
+
+# Subset of emotions we want to classify
+observed_emotions = ['calm', 'happy', 'fearful', 'disgust']
+
+
+# ──────────────────────────────────────────────
+# 2. Feature extraction function
+# ──────────────────────────────────────────────
+def extract_feature(file_name: str):
+    with sf.SoundFile(file_name) as sound_file:
+        audio = sound_file.read(dtype="float32")
+        sample_rate = sound_file.samplerate
+
+    # Force mono: average channels if stereo or multi-channel
+    if audio.ndim > 1:
+        audio = audio.mean(axis=1)
+
+    # Skip files that are too short for a meaningful STFT (need > n_fft samples)
+    n_fft = 2048
+    if len(audio) < n_fft:
+        return None
+
+    # Chroma requires the Short-Time Fourier Transform
+    stft = np.abs(librosa.stft(audio, n_fft=n_fft))
+
+    # MFCC – short-term power spectrum representation (40 coefficients)
+    mfccs = np.mean(librosa.feature.mfcc(
+        y=audio, sr=sample_rate, n_mfcc=40).T, axis=0).flatten()
+
+    # Chroma – 12-element pitch-class energy vector
+    chroma = np.mean(librosa.feature.chroma_stft(
+        S=stft, sr=sample_rate).T, axis=0).flatten()
+
+    # Mel Spectrogram – amplitude mapped to the Mel scale
+    mel = np.mean(librosa.feature.melspectrogram(
+        y=audio, sr=sample_rate).T, axis=0).flatten()
+
+    return np.concatenate([mfccs, chroma, mel])
+
+
+# ──────────────────────────────────────────────
+# 3. Data loading function
+# ──────────────────────────────────────────────
+def load_data(dataset_path: str):
+    X, y = [], []
+
+    for file in glob.glob(dataset_path):
+        file_name = os.path.basename(file)
+
+        # RAVDESS filename format:
+        # Modality-VocalChannel-Emotion-Intensity-Statement-Repetition-Actor.wav
+        # Emotion code is the 3rd field (index 2)
+        parts = file_name.split("-")
+        if len(parts) < 3:
+            continue  # skip unexpected filenames
+
+        emotion_code = parts[2]
+        emotion = emotions.get(emotion_code)
+
+        if emotion not in observed_emotions:
+            continue  # only keep the four target emotions
+
+        features = extract_feature(file)
+        if features is None:
+            print(f"  Skipping (too short / corrupt): {file_name}")
+            continue
+
+        # Guard: skip if feature vector length is unexpected
+        if X and features.shape != X[0].shape:
+            print(f"  Skipping (shape mismatch {features.shape}): {file_name}")
+            continue
+        X.append(features)
+        y.append(emotion)
+
+    return np.array(X), y
+
+
+# ──────────────────────────────────────────────
+# 4. Main pipeline
+# ──────────────────────────────────────────────
+if __name__ == "__main__":
+
+    # ── Auto-detect the dataset location ──────────────────────────
+    # The script searches several common locations automatically.
+    # Add your own path to SEARCH_ROOTS if needed.
+    SEARCH_ROOTS = [
+        ".",                                        # current working directory
+        os.path.dirname(os.path.abspath(__file__)), # same folder as this script
+        os.path.expanduser("~/Downloads"),
+        os.path.expanduser("~/Desktop"),
+        os.path.expanduser("~/Documents"),
+    ]
+
+    DATASET_PATH = None
+    for root in SEARCH_ROOTS:
+        candidate = os.path.join(root, "**", "Actor_*", "*.wav")
+        matches = glob.glob(candidate, recursive=True)
+        if matches:
+            # Build the glob pattern relative to where Actor_* folders live
+            actor_dir = os.path.dirname(os.path.dirname(matches[0]))
+            DATASET_PATH = os.path.join(actor_dir, "Actor_*", "*.wav")
+            print(f"✔  Dataset found at: {actor_dir}")
+            break
+
+    print("\nLoading data and extracting features …")
+    X, y = load_data(DATASET_PATH)
+    print(f"  Dataset shape : {X.shape}")
+    print(f"  Total samples : {len(y)}")
+    print(f"  Label counts  : { {e: y.count(e) for e in observed_emotions} }")
+
+    # ── Print features ──────────────────────────────────────────
+    print("\nExtracted Features:")
+    print("  - MFCC (40 coefficients)")
+    print("  - Chroma (12 coefficients)")
+    print("  - Mel Spectrogram (128 coefficients)")
+
+    # ── Train / test split ──────────────────────────────────────
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.25, random_state=42)
+
+    print(f"\nTraining samples : {len(X_train)}")
+    print(f"Testing  samples : {len(X_test)}")
+
+    # ── MLP Classifier ──────────────────────────────────────────
+    model = MLPClassifier(
+        alpha=0.01,
+        batch_size=256,
+        epsilon=1e-08,
+        hidden_layer_sizes=(300,),
+        learning_rate='adaptive',
+        max_iter=500,
+        verbose=True
+    )
+
+    print("\nTraining MLP model …")
+    model.fit(X_train, y_train)
+
+    # ── Predictions & evaluation ────────────────────────────────
+    y_pred = model.predict(X_test)
+
+    acc = accuracy_score(y_test, y_pred)
+    print(f"\nAccuracy: {acc * 100:.2f}%")
+
+    cm = confusion_matrix(y_test, y_pred, labels=observed_emotions)
+    print("\nConfusion Matrix:")
+    print(cm)
+
+    # ── Plot confusion matrix ───────────────────────────────────
+    fig, ax = plt.subplots(figsize=(7, 6))
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt='d',
+        cmap='Blues',
+        xticklabels=observed_emotions,
+        yticklabels=observed_emotions,
+        ax=ax
+    )
+    ax.set_xlabel("Predicted Emotion", fontsize=12)
+    ax.set_ylabel("True Emotion", fontsize=12)
+    ax.set_title(f"Confusion Matrix  (Accuracy: {acc * 100:.2f}%)", fontsize=13)
+    plt.tight_layout()
+    plt.savefig("confusion_matrix.png", dpi=150)
+    plt.show()
+    print("Confusion matrix saved to confusion_matrix.png")
