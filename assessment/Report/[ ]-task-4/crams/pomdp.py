@@ -218,7 +218,7 @@ def build_reward_model() -> np.ndarray:
     """
     R[s][a] = immediate expected reward for action a in state s.
 
-    Rewards encode the clinical goal: maximise medicL interventjon adherence
+    Rewards encode the clinical goal: maximise medication adherence
     (which correlates with high trust, low load) whilst penalising
     actions that are inappropriate for the current state.
     """
@@ -234,18 +234,42 @@ def build_reward_model() -> np.ndarray:
             r = trust_r + load_p
 
             # -- context-sensitive action penalties / bonuses --
+
+            # penalties: actions mismatched to the current state
             if action == "Direct_Prompt" and t == 2:
                 r -= 3.0   # assertive prompt when trust is low -> damages rapport
             if action == "Explain_Importance" and l == 2:
                 r -= 2.0   # lengthy explanation when cognitively overloaded -> counterproductive
-            if action == "Withdrawal" and t == 0 and l == 0:
+            if action == "Simplify" and l == 0:
+                r -= 2.5   # oversimplifying for capable user -> patronising
+            if action == "Simplify" and l == 1:
+                r -= 0.5   # premature simplification at medium load
+            if action == "Direct_Prompt" and l == 2:
+                r -= 1.5   # assertive pressure on strained user -> overwhelm
+            if action == "Encourage" and t == 2:
+                r -= 1.5   # positive reinforcement from untrusted source -> insincere
+            if action == "Gentle_Reminder" and t == 2:
+                r -= 1.0   # gentle nudge ineffective without trust
+            if action == "Back_Off" and t == 0 and l == 0:
                 r -= 1.0   # backing off when everything is fine -> missed opportunity
+            if action == "Back_Off" and t <= 1 and l <= 1:
+                r -= 1.0   # withdrawing from engaged, manageable user -> disengagement
+
+            # bonuses: actions well-suited to the current state
+            if action == "Gentle_Reminder" and t == 0 and l <= 1:
+                r += 3.0   # gentle nudge for cooperative, unloaded user (set exercises R=+3)
             if action == "Simplify" and l == 2:
-                r += 2.0   # simplifying under high load -> appropriate support
+                r += 2.5   # appropriate cognitive support under high load
+            if action == "Back_Off" and l == 2:
+                r += 2.5   # pressure relief when overwhelmed (Lecture 4 proxemics)
             if action == "Encourage" and t == 1:
-                r += 1.5   # encouragement for uncertain user -> trust-building
-            if action == "Gentle_Reminder" and t == 0:
-                r += 1.0   # gentle approach with trusting user -> natural
+                r += 2.0   # rapport-building at the trust tipping point
+            if action == "Back_Off" and t == 2 and l >= 1:
+                r += 2.0   # respecting autonomy when trust is absent (set exercises)
+            if action == "Explain_Importance" and t >= 1 and l <= 1:
+                r += 1.5   # educational approach when user can listen
+            if action == "Direct_Prompt" and t == 0 and l == 0:
+                r += 1.5   # clear instruction welcomed by cooperative user
 
             R[s, a_idx] = r
 

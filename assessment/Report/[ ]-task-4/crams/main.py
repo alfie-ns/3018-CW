@@ -211,7 +211,7 @@ class CRAMSAgent:
 
         # cognitive modules
         self.memory = EpisodicMemory(capacity=200)
-        self.meta = MetaReasoner(window=5, decline_threshold=-0.3)
+        self.meta = MetaReasoner(window=4, decline_threshold=-0.2)
 
         # history for visualisation
         self.belief_history: List[np.ndarray] = [self.belief.copy()]
