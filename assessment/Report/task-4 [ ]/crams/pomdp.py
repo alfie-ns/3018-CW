@@ -87,7 +87,7 @@ def state_components(idx: int) -> Tuple[int, int]:
 #   worsen  = trust falls or load rises (index moves towards max)
 
 _TRUST_SHIFT = {
-    #                        improve  same  worsen
+    #                       improve  same  worsen
     "Gentle_Reminder":      [0.20,   0.70, 0.10],
     "Explain_Importance":   [0.40,   0.50, 0.10],
     "Back_Off":             [0.15,   0.55, 0.30],
@@ -97,7 +97,7 @@ _TRUST_SHIFT = {
 }
 
 _LOAD_SHIFT = {
-    #                        decrease same  increase
+    #                       decrease same  increase
     "Gentle_Reminder":      [0.15,   0.65, 0.20],
     "Explain_Importance":   [0.10,   0.50, 0.40],
     "Back_Off":             [0.55,   0.35, 0.10],
@@ -218,7 +218,7 @@ def build_reward_model() -> np.ndarray:
     """
     R[s][a] = immediate expected reward for action a in state s.
 
-    Rewards encode the clinical goal: maximise medication adherence
+    Rewards encode the clinical goal: maximise medicL interventjon adherence
     (which correlates with high trust, low load) whilst penalising
     actions that are inappropriate for the current state.
     """
@@ -238,7 +238,7 @@ def build_reward_model() -> np.ndarray:
                 r -= 3.0   # assertive prompt when trust is low -> damages rapport
             if action == "Explain_Importance" and l == 2:
                 r -= 2.0   # lengthy explanation when cognitively overloaded -> counterproductive
-            if action == "Back_Off" and t == 0 and l == 0:
+            if action == "Withdrawal" and t == 0 and l == 0:
                 r -= 1.0   # backing off when everything is fine -> missed opportunity
             if action == "Simplify" and l == 2:
                 r += 2.0   # simplifying under high load -> appropriate support
