@@ -34,28 +34,26 @@ header-includes:
 
 ## DR ALY QUESTIONS:
 
-- [ ] 
-
+- [ ]
 
 ---
 
-
 - [ ] CRAMS figure verified -- 5/6 actions appear (Back_Off absent because true state never sustained Low Trust long enough). Update report Task 4 discussion to: 1) explain why the action timeline shows context-sensitive selection (link each action cluster to the reward territory that produced it), 2) note Back_Off correctly absent given the Medium-trust initial state and stress profile, 3) highlight META-ADAPT triggers (red dotted lines) as evidence of metacognition detecting the stress event within 2 steps
-- [ ] USE 'misclassified'
-- [ ] consider a project wherein it is 'cogntive robotics' (lecture 9) ensure it involves what we have learnt in the labs
+- [X] USE ‘misclassified’
+- [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
 - [ ] write code like lecturer in: `3018-cw/learning/workshops/[X] emotional-speech-recognition/solution.py`
-- [ ] 'persons'
+- [X] ‘persons’
 - [ ] make the robot kinda like how I disucssed you should make it in the set exercises
 - [ ] discuss mathematical notiation for the POMDP stuff??? (if not done in set exercises)
 
   - [ ] maths and diagrams affect wordcount?
   - [ ] Trust-POMPDP diagram
-  - [ ] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
+  - [X] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
   - [ ] model trust in lates diabram? or     just latex the fundamental diagtam of       POMDP similar to lecture slied in POMDP     lectures (10,11)
   - [ ] latex diagram of continous state in POMDP similar to non-monotnoric graph
   - [ ] utilise lec-7 for POMDP insights; similar to machine learning set exercises where i give a quick breakdown if word count allowance
 - [ ] args and kwargs (if i can do this)
-- [ ] peer-reviewed or conference papers
+- [X] peer-reviewed or conference papers
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
 - [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
@@ -63,12 +61,12 @@ header-includes:
 
 LECTURE 9 – TODOs FOR ASSESSMENT 2 REPORT
 Task 3: Literature Review (Assistive Robotics Essay):
-	- [ ] Frame assistive robotics as requiring cognitive capabilities, not just social behaviour – use Aly’s hierarchy: “intelligence deployed over the social layer, not vice versa"
-	- [ ] Reference Cangelosi & Asada definition of cognitive robotics
-	- [ ] Use Vernon (2014) cognition cycle (Anticipate -> Learn -> Adapt + Perception <-> Action = Autonomy) as a framing device for what effective assistive robots need
-	- [ ] Discuss theory of mind, prospection, and episodic memory as future directions/current gaps in assistive robotics
-	- [ ] Acknowledge the 42-definitions problem to argue the field still lacks consensus on what cognition actually is (shows critical thinking)
-	- [ ] Connect embodied cognition (“intelligence means body”) to ethical implications of robots entering intimate care spaces
+	- [X] Frame assistive robotics as requiring cognitive capabilities, not just social behaviour – use Aly’s hierarchy: “intelligence deployed over the social layer, not vice versa”
+	- [X] Reference Cangelosi & Asada definition of cognitive robotics
+	- [X] Use Vernon (2014) cognition cycle (Anticipate -> Learn -> Adapt + Perception <-> Action = Autonomy) as a framing device for what effective assistive robots need
+	- [X] Discuss theory of mind, prospection, and episodic memory as future directions/current gaps in assistive robotics
+	- [X] Acknowledge the 42-definitions problem to argue the field still lacks consensus on what cognition actually is (shows critical thinking)
+	- [X] Connect embodied cognition (“intelligence means body”) to ethical implications of robots entering intimate care spaces
 Task 4: Programming Project
 	- [ ]	GET APPROVAL FROM ALY – confirm extending set exercises POMDP into cognitive architecture implementation is acceptable; confirm simulation-only is fine
 	- [ ]	Wait for Lectures 10/11 on cognitive architectures before finalising design – Aly said the building blocks reappear in those lectures
@@ -145,34 +143,79 @@ The ethical watchword is therefore proactive regulation: design-stage ethics tha
 
 Assistive robotics stands at an inflection point. Current systems (PARO, basic medication prompt robots, simple rehabilitation aids) deliver measurable benefits within narrow operational envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon (2014) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would constitute a qualitative advance over the most-capable systems presently deployed.
 
-The neuro-symbolic paradigm offers a technically viable path toward this vision, as the Trust-POMDP framework demonstrated in medication adherence applications attests (Chen et al., 2020). However, the challenges are substantial: computational intractability, the measurement problem for latent psychological variables, and unresolved ethical questions regarding privacy, autonomy, and accountability. The field must therefore pursue cognitive capability and ethical governance in concert. The ultimate test, per the embodied cognition thesis, is a robot that can sense, remember, anticipate, and adapt within the physical world, whilst respecting the autonomy and dignity of the persons it serves.
+The neuro-symbolic paradigm offers a technically viable path toward this vision, as the Trust-POMDP framework demonstrated in medication adherence applications attests (Chen et al., 2020). Future applications will likely extend beyond single-task assistance toward cognitively autonomous home-dwelling companions: robots that proactively monitor health indicators, anticipate daily living needs via episodic memory, and adapt their interaction style to the user's evolving cognitive and emotional state. Sharkey and Sharkey (2012, p. 27) identify this trajectory whilst cautioning that such systems risk replacing rather than supplementing human care, and therefore the field must pursue cognitive capability and ethical governance in concert. Figure~\ref{fig:assistive-trajectory} visualises this trajectory. The ultimate test, per the embodied cognition thesis, is a robot that can sense, remember, anticipate, and adapt within the physical world, whilst respecting the autonomy and dignity of the persons it serves.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=12.5cm, height=8.5cm,
+    xlabel={\textbf{Cognitive Architecture Completeness}},
+    ylabel={\textbf{Assistive Scope}},
+    xmin=-0.3, xmax=3.3,
+    ymin=-0.3, ymax=3.3,
+    xtick={0, 1, 2, 3},
+    xticklabels={None, {\shortstack{Perception\\+ Action}}, {\shortstack{+ Memory\\+ Reasoning}}, {\shortstack{+ Prospection\\+ ToM + Meta.}}},
+    ytick={0, 1, 2, 3},
+    yticklabels={, Single-task, Multi-domain, {\shortstack{Holistic\\Home Care}}},
+    every axis label/.style={font=\sffamily\small},
+    every tick label/.style={font=\scriptsize\sffamily, align=center},
+    grid=both,
+    grid style={gray!20, thin},
+    axis lines=left,
+    axis line style={->, thick},
+    clip=false,
+]
+
+% --- Trajectory arrow (background) ---
+\draw[-{Stealth[length=5pt]}, line width=2.5pt, color=black!15]
+    (axis cs: 0.4, 0.8) -- (axis cs: 2.7, 2.8);
+\node[font=\tiny\sffamily\itshape, text=black!35, rotate=37] at (axis cs: 1.8, 2.15) {trajectory};
+
+% --- System 1: PARO ---
+\node[circle, fill=red!60, inner sep=4pt, draw=red!80, thick] (paro) at (axis cs: 0.5, 1) {};
+\node[font=\scriptsize\sffamily, anchor=south west, text width=3.2cm, align=left] at (axis cs: 0.7, 0.75)
+    {\textbf{PARO}\\[-1pt]{\tiny Reactive; no user model;}\\ {\tiny tactile/auditory response only}};
+
+% --- System 2: Trust-POMDP ---
+\node[circle, fill=orange!70, inner sep=4pt, draw=orange!90, thick] (pomdp) at (axis cs: 1.6, 1.8) {};
+\node[font=\scriptsize\sffamily, anchor=south west, text width=3.5cm, align=left] at (axis cs: 1.85, 1.55)
+    {\textbf{Trust-POMDP}\\[-1pt]{\tiny Belief-based; episodic memory;}\\ {\tiny infers latent trust/load}};
+
+% --- System 3: Future Cognitive Companion ---
+\node[circle, fill=green!50!black, inner sep=4pt, draw=green!70!black, thick] (future) at (axis cs: 2.7, 2.8) {};
+\node[font=\scriptsize\sffamily, anchor=south east, text width=3.8cm, align=right] at (axis cs: 2.55, 3.15)
+    {\textbf{Future: Cognitive Companion}\\[-1pt]{\tiny Prospection + theory of mind +}\\ {\tiny metacognition; proactive holistic care}};
+
+% --- Vernon cycle building blocks along x-axis (bottom annotation) ---
+\node[font=\tiny\sffamily\itshape, text=gray, anchor=north] at (axis cs: 1.5, -0.15)
+    {Vernon (2014) cognition cycle building blocks $\longrightarrow$};
+
+% --- Ethical caution annotation ---
+\draw[-{Stealth[length=3pt]}, dashed, red!60, thin] (axis cs: 2.9, 2.3) -- (axis cs: 2.9, 2.65);
+\node[font=\tiny\sffamily, text=red!70, anchor=west, text width=2.8cm] at (axis cs: 3.0, 2.3)
+    {Sharkey \& Sharkey\\(2012): risk of\\replacing human care};
+
+\end{axis}
+\end{tikzpicture}
+\caption{Trajectory of assistive robotics from reactive single-task systems (PARO) through adaptive belief-based architectures (Trust-POMDP) toward cognitively autonomous home-dwelling companions. Expanding assistive scope without expanding cognitive capability is insufficient; the diagonal trajectory requires both.}
+\label{fig:assistive-trajectory}
+\end{figure}
 
 - [ ] ## Task-3 References
-
 - [ ] Cangelosi, A. and Asada, M. (in press) *Cognitive Robotics*, Chapter 1. Cambridge, MA: MIT Press.
-
 - [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23.
-
 - [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275.
-
 - [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387-12406.
-
 - [ ] Hancock, P. A., Billings, D. R., Schaefer, K. E., Chen, J. Y. C., de Visser, E. J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527.
-
 - [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134.
-
 - [ ] Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80.
-
 - [ ] Papadimitriou, C. H. and Tsitsiklis, J. N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450.
-
 - [ ] Pfeifer, R. and Bongard, J. (2007) *How the Body Shapes the Way We Think: A New View of Intelligence*. Cambridge, MA: MIT Press.
-
 - [ ] Sandini, G., Sciutti, A. and Vernon, D. (2021) 'Cognitive Robotics', in Ang, M., Khatib, O. and Siciliano, B. (eds.) *Encyclopedia of Robotics*. Berlin: Springer.
-
+- [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40.
 - [ ] Vernon, D. (2014) *Artificial Cognitive Systems: A Primer*. Cambridge, MA: MIT Press.
-
 - [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99.
-
 - [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980.
 
 # 2- Task (4) Programming Project
