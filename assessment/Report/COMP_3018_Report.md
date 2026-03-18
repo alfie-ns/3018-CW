@@ -39,9 +39,7 @@ header-includes:
 ---
 
 - [ ] relatively talk about how it relates to others, motivation
-
 - [ ] do all page number TODOs
-
 - [ ] CRAMS figure verified -- 5/6 actions appear (Back_Off absent because true state never sustained Low Trust long enough). Update report Task 4 discussion to: 1) explain why the action timeline shows context-sensitive selection (link each action cluster to the reward territory that produced it), 2) note Back_Off correctly absent given the Medium-trust initial state and stress profile, 3) highlight META-ADAPT triggers (red dotted lines) as evidence of metacognition detecting the stress event within 2 steps
 - [X] USE ‘misclassified’
 - [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
@@ -99,7 +97,7 @@ However, most-current assistive robots operate at what Cangelosi and Asada (in p
 
 - [ ] ## 1.2. Literature Review
 
-Cognitive robotics, as defined by Cangelosi and Asada ({TODO date}, Chapter 1), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as a purely engineered artefact)* and from social robotics *(which addresses interaction behaviour without necessarily modelling the underlying cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
+Cognitive robotics, as defined by Cangelosi and Asada ({TODO date}, Chapter 1), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling the underlying cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
 
 Vernon (2014, TODO) synthesises the field's definitional plurality into a core cycle. The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 distinct definitions of cognition, yet the common thread across all is: "we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy." This cycle provides an architectural checklist for assistive robots: a system that cannot anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sandini, Sciutti and Vernon (2021) further specify that cognitive robots must "reason about own actions and actions of interaction partners"; a capacity termed *theory of mind*, wherein the agent infers another's latent mental state from observable behaviour alone.
 
@@ -229,6 +227,10 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 ## 2.2. Background (10%)
 
 ## 2.3. Methods & Setup (35%)
+
+The reward function is structured such that trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
+
+All interaction data (belief states, action choices, observations, outcomes) are persisted to a database, enabling cross-session learning and adaptation rather than resetting to ignorance each session; this implements the episodic-semantic memory distinction Vernon (2014) identifies, wherein the robot accumulates generalised knowledge about a specific user over time.
 
 ## 2.4. Outcome & System Analysis (30%)
 
