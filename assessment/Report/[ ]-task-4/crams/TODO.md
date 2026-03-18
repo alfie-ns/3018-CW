@@ -1,5 +1,8 @@
 # CRAMS -- Build Order
 
+- [ ] personalise to learn the how and when the user takes medication
+
+
 ## Pre-req
 
 * [ ] GET APPROVAL FROM ALY
