@@ -235,6 +235,8 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 
 ## 2.3. Methods & Setup (35%)
 
+- [ ] anticipate
+
 The reward function is structured such that trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
 
 Crucially, the ratio between encouragement (context-sensitive bonuses) and discouragement (context-sensitive penalties) determines the robot's behavioural attitude. Three configurable personality presets scale these ratios: *cautious* (penalty weight 1.5$\times$, bonus weight 0.8$\times$, load sensitivity 1.5$\times$) produces a patient-first robot that backs off readily under high cognitive load; *balanced* (1.0$\times$ throughout) represents the default; *assertive* (penalty weight 0.7$\times$, bonus weight 1.3$\times$, trust drive 1.3$\times$) pursues compliance more aggressively. The same base reward values and state-action conditions are shared across all three; only the scaling differs. This design permits direct comparison of how reward-ratio tuning shapes emergent behaviour on identical scenarios, thereby isolating the effect of the encouragement-to-discouragement balance on the robot's interaction strategy.
