@@ -44,7 +44,7 @@ header-includes:
 - [X] USE ‘misclassified’
 - [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
 - [ ] write code like lecturer in: `3018-cw/learning/workshops/[X] emotional-speech-recognition/solution.py`
-- [X] ‘persons’
+- [ ] ‘persons’
 - [ ] make the robot kinda like how I disucssed you should make it in the set exercises
 - [ ] discuss mathematical notiation for the POMDP stuff??? (if not done in set exercises)
 
@@ -93,15 +93,15 @@ Cross-check with Gemini.
 
 Ageing populations and a shrinking care workforce have positioned assistive robotics *(the deployment of robotic systems to support humans with physical, cognitive, or social impairments in activities of daily living)* as a prominent technological response to a widening care gap. Robots now administer medication reminders, facilitate rehabilitation exercises, and provide therapeutic companionship in both clinical and domestic settings. Measurably: reduced caregiver burden, improved patient outcomes in controlled trials, and increased social engagement among isolated elderly residents.
 
-However, most-current assistive robots operate at what Cangelosi and Asada (in press, Chapter 1) term the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sandini, Sciutti and Vernon (2021, p. {TODO}) argue that genuinely effective assistive robots must be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon (2014, p. {TODO}) formalises this requirement via a cognition cycle wherein the agent anticipates, learns, and adapts, intersecting these processes with perception and action to achieve autonomy. This essay contends that assistive robotics must graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer, not vice versa) if it is to deliver sustained, personalised support. The following sections survey the theoretical foundations thereof, evaluate prominent applications through this cognitive lens, discuss the challenges and ethical implications that arise, and identify future directions for the field.
+However, most-current assistive robots operate at what Cangelosi and Asada (in press, Chapter 1) term the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. (2023, p. 160) argue that genuinely effective assistive robots must be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon (2014, p. xi) formalises this requirement via a cognition cycle wherein the agent anticipates, learns, and adapts, intersecting these processes with perception and action to achieve autonomy. This essay contends that assistive robotics must graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer, not vice versa) if it is to deliver sustained, personalised support. The following sections survey the theoretical foundations thereof, evaluate prominent applications through this cognitive lens, discuss the challenges and ethical implications that arise, and identify future directions for the field.
 
 - [ ] ## 1.2. Literature Review
 
-Cognitive robotics, as defined by Cangelosi and Asada ({TODO date}, Chapter 1), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling the underlying cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
+Cognitive robotics, as defined by Cangelosi and Asada (in press, Chapter 1) and introduced within the module (Lecture 9, slides 4-5), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling the underlying cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
 
-Vernon (2014, TODO) synthesises the field's definitional plurality into a core cycle. The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 distinct definitions of cognition, yet the common thread across all is: "we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy." This cycle provides an architectural checklist for assistive robots: a system that cannot anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sandini, Sciutti and Vernon (2021) further specify that cognitive robots must "reason about own actions and actions of interaction partners"; a capacity termed *theory of mind*, wherein the agent infers another's latent mental state from observable behaviour alone.
+Vernon (2014, p. xi) synthesises the field's definitional plurality into a core cycle (Lecture 9, slide 14). The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 distinct definitions of cognition (Lecture 9, slide 13), yet as Aly explained, the common thread across all is: "we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy." This cycle provides an architectural checklist for assistive robots: a system that cannot anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sandini, Sciutti and Vernon (2021) further specify that cognitive robots must "reason about own actions and actions of interaction partners"; a capacity termed *theory of mind*, wherein the agent infers another's latent mental state from observable behaviour alone.
 
-Memory, moreover, is not monolithic. Vernon (2014) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*. An assistive medication robot, for instance, needs episodic memory to recall that a particular user refused medication after a restless night, and semantic memory to know that certain drugs cannot be co-administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is precisely what effective assistive robotics demands.
+Memory, moreover, is not monolithic. Vernon (2014, Chapter 7) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*. An assistive medication robot, for instance, needs episodic memory to recall that a particular user refused medication after a restless night, and semantic memory to know that certain drugs cannot be co-administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is precisely what effective assistive robotics demands.
 
 - [ ] ## 1.3. Applications
 
@@ -204,7 +204,14 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 \label{fig:assistive-trajectory}
 \end{figure}
 
-- [ ] ## Task-3 References
+## 1.6. Task-3 References
+
+### 1.6.1 Foundational
+- Vernon, D. (2014) Artificial Cognitive Systems: A Primer. Cambridge, MA: MIT Press.
+
+### 1.6.2 Papers and Journal Articles
+- Sciutti, A., Beetz, M., Inamura, T., Korsah, A., Oh, J., Sandini, G., Shimoda, S. and Vernon, D. (2023) 'The Present and the Future of Cognitive Robotics', IEEE Robotics
+  & Automation Magazine, 30(3), pp. 160-163. Available at: [https://ieeexplore.ieee.org/document/10255092](https://ieeexplore.ieee.org/document/10255092) (Accessed: 18 March 2026).
 - [ ] Cangelosi, A. and Asada, M. (in press) *Cognitive Robotics*, Chapter 1. Cambridge, MA: MIT Press.
 - [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23.
 - [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275.
@@ -229,6 +236,75 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 ## 2.3. Methods & Setup (35%)
 
 The reward function is structured such that trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
+
+Crucially, the ratio between encouragement (context-sensitive bonuses) and discouragement (context-sensitive penalties) determines the robot's behavioural attitude. Three configurable personality presets scale these ratios: *cautious* (penalty weight 1.5$\times$, bonus weight 0.8$\times$, load sensitivity 1.5$\times$) produces a patient-first robot that backs off readily under high cognitive load; *balanced* (1.0$\times$ throughout) represents the default; *assertive* (penalty weight 0.7$\times$, bonus weight 1.3$\times$, trust drive 1.3$\times$) pursues compliance more aggressively. The same base reward values and state-action conditions are shared across all three; only the scaling differs. This design permits direct comparison of how reward-ratio tuning shapes emergent behaviour on identical scenarios, thereby isolating the effect of the encouragement-to-discouragement balance on the robot's interaction strategy.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    width=12cm, height=8cm,
+    xlabel={\textbf{Trust Level}},
+    ylabel={$R(s,\;\texttt{Direct\_Prompt})$},
+    xmin=0.5, xmax=3.5,
+    ymin=-6, ymax=9,
+    xtick={1, 2, 3},
+    xticklabels={High, Medium, Low},
+    every axis label/.style={font=\sffamily\small},
+    every tick label/.style={font=\small\sffamily},
+    grid=both,
+    grid style={gray!20, thin},
+    axis lines=left,
+    axis line style={->, thick},
+    clip=false,
+    legend style={at={(0.03,0.97)}, anchor=north west, font=\scriptsize\sffamily,
+                  draw=gray!40, fill=white, fill opacity=0.9},
+]
+
+% --- R = 0 reference line ---
+\draw[dashed, gray!60, thin] (axis cs: 0.5, 0) -- (axis cs: 3.5, 0)
+    node[right, font=\tiny\sffamily\itshape, text=gray] {$R = 0$};
+
+% --- Cautious ---
+\addplot[color=blue!70, thick, mark=*, mark size=3pt, mark options={fill=blue!70}]
+    coordinates {(1, 5.20) (2, 2.00) (3, -4.50)};
+\addlegendentry{Cautious}
+
+% --- Balanced ---
+\addplot[color=gray!70, thick, mark=*, mark size=3pt, mark options={fill=gray!70}]
+    coordinates {(1, 5.50) (2, 2.00) (3, -3.00)};
+\addlegendentry{Balanced}
+
+% --- Assertive ---
+\addplot[color=red!70, thick, mark=*, mark size=3pt, mark options={fill=red!70}]
+    coordinates {(1, 7.15) (2, 2.60) (3, -2.10)};
+\addlegendentry{Assertive}
+
+% --- Delta annotation at Low Trust ---
+\draw[<->, red!60, thick] (axis cs: 3.15, -4.50) -- (axis cs: 3.15, -2.10);
+\node[font=\tiny\sffamily, text=red!70, anchor=west] at (axis cs: 3.25, -3.30)
+    {$\Delta = 2.40$};
+
+% --- Delta annotation at High Trust ---
+\draw[<->, red!60, thick] (axis cs: 0.85, 5.20) -- (axis cs: 0.85, 7.15);
+\node[font=\tiny\sffamily, text=red!70, anchor=east] at (axis cs: 0.78, 6.18)
+    {$\Delta = 1.95$};
+
+% --- Point labels ---
+\node[font=\tiny\sffamily, text=blue!70, anchor=south east] at (axis cs: 2.95, -4.50)
+    {$-4.50$};
+\node[font=\tiny\sffamily, text=red!70, anchor=north west] at (axis cs: 3.05, -2.10)
+    {$-2.10$};
+\node[font=\tiny\sffamily, text=red!70, anchor=south west] at (axis cs: 1.05, 7.15)
+    {$+7.15$};
+\node[font=\tiny\sffamily, text=blue!70, anchor=north west] at (axis cs: 1.05, 5.20)
+    {$+5.20$};
+
+\end{axis}
+\end{tikzpicture}
+\caption{Reward for \texttt{Direct\_Prompt} as trust degrades (cognitive load held at Low). The cautious personality penalises assertive action at Low Trust nearly twice as heavily as the assertive personality ($-4.50$ vs $-2.10$), whilst the assertive personality amplifies the bonus at High Trust ($+7.15$ vs $+5.20$). The widening gap at Low Trust demonstrates how penalty-weighted ratios produce a robot that strongly avoids rapport-damaging actions when trust is absent.}
+\label{fig:personality-reward}
+\end{figure}
 
 All interaction data (belief states, action choices, observations, outcomes) are persisted to a database, enabling cross-session learning and adaptation rather than resetting to ignorance each session; this implements the episodic-semantic memory distinction Vernon (2014) identifies, wherein the robot accumulates generalised knowledge about a specific user over time.
 

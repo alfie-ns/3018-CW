@@ -108,6 +108,37 @@ n_s = len(STATES)         # 9
 n_a = len(ACTIONS)        # 6
 n_o = len(OBSERVATIONS)   # 7
 
+# ── Personality Presets ────────────────────────────────────────────
+# Each personality tunes the ratio between reward (behaviour the robot
+# encourages) and penalty (behaviour it discourages).  A cautious robot
+# weighs penalties higher, producing patient-respecting, conservative
+# action selection; an assertive robot weighs bonuses higher, pushing
+# harder for medication compliance at the risk of damaging rapport.
+#
+# Keys:
+#   bonus_w   -- multiplier on context-sensitive bonuses in R(s,a)
+#   penalty_w -- multiplier on context-sensitive penalties in R(s,a)
+#   load_w    -- multiplier on intrinsic load penalty (higher = more
+#                sensitive to cognitive overload)
+#   trust_w   -- multiplier on intrinsic trust reward
+
+PERSONALITIES={
+    "cautious":{
+        "bonus_w":0.8,"penalty_w":1.5,"load_w":1.5,"trust_w":1.0,
+        "desc":"Patient-first: penalises mismatched actions heavily, "
+               "backs off readily under high load",
+    },
+    "balanced":{
+        "bonus_w":1.0,"penalty_w":1.0,"load_w":1.0,"trust_w":1.0,
+        "desc":"Default: equal weighting of encouragement and discouragement",
+    },
+    "assertive":{
+        "bonus_w":1.3,"penalty_w":0.7,"load_w":0.8,"trust_w":1.3,
+        "desc":"Goal-driven: pursues compliance aggressively, tolerates "
+               "higher load before backing off",
+    },
+}
+
 
 # ── Index helpers ───────────────────────────────────────────────────
 
@@ -269,64 +300,74 @@ def build_observation_model() -> np.ndarray:
 #   not within R itself) discounts recently-repeated actions, preventing
 #   the POMDP from converging on a single strategy.
 
-def build_reward_model() -> np.ndarray:
+def build_reward_model(personality: str="balanced") -> np.ndarray:
     """
     R[s][a] = immediate expected reward for action a in state s.
 
     Rewards encode the clinical goal: maximise medication adherence
     (which correlates with high trust, low load) whilst penalising
     actions that are inappropriate for the current state.
+
+    The personality parameter scales the ratio between encouragement
+    and discouragement, producing distinct robot attitudes from the
+    same underlying reward structure.
     """
-    R = np.zeros((n_s, n_a))
+    p=PERSONALITIES[personality]
+    tw,lw=p["trust_w"],p["load_w"]
+    bw,pw=p["bonus_w"],p["penalty_w"]
+
+    R=np.zeros((n_s,n_a))
 
     for s in range(n_s):
-        t, l = state_components(s)
+        t,l=state_components(s)
 
-        for a_idx, action in enumerate(ACTIONS):
-            # -- intrinsic state value --
-            trust_r = (2 - t) * 2.0       # High=4, Med=2, Low=0
-            load_p = l * (-1.0)            # Low=0, Med=-1, High=-2
-            r = trust_r + load_p
+        for a_idx,action in enumerate(ACTIONS):
+            # -- intrinsic state value (scaled by personality) --
+            trust_r=(2-t)*2.0*tw       # High=4*tw, Med=2*tw, Low=0
+            load_p=l*(-1.0)*lw         # Low=0, Med=-1*lw, High=-2*lw
+            r=trust_r+load_p
 
-            # -- context-sensitive action penalties / bonuses --
+            # -- context-sensitive action penalties (scaled by pw) --
+            penalty=0.0
 
-            # penalties: actions mismatched to the current state
-            if action == "Direct_Prompt" and t == 2:
-                r -= 3.0   # assertive prompt when trust is low -> damages rapport
-            if action == "Explain_Importance" and l == 2:
-                r -= 2.0   # lengthy explanation when cognitively overloaded
-            if action == "Simplify" and l == 0:
-                r -= 2.5   # oversimplifying for capable user -> patronising
-            if action == "Simplify" and l == 1:
-                r -= 0.5   # premature simplification at medium load
-            if action == "Direct_Prompt" and l == 2:
-                r -= 1.5   # assertive pressure on strained user -> overwhelm
-            if action == "Encourage" and t == 2:
-                r -= 1.5   # positive reinforcement from untrusted source
-            if action == "Gentle_Reminder" and t == 2:
-                r -= 1.0   # gentle nudge ineffective without trust
-            if action == "Back_Off" and t == 0 and l == 0:
-                r -= 1.0   # backing off when everything is fine
-            if action == "Back_Off" and t <= 1 and l <= 1:
-                r -= 1.0   # withdrawing from engaged, manageable user
+            if action=="Direct_Prompt" and t==2:
+                penalty+=3.0   # assertive prompt when trust is low -> damages rapport
+            if action=="Explain_Importance" and l==2:
+                penalty+=2.0   # lengthy explanation when cognitively overloaded
+            if action=="Simplify" and l==0:
+                penalty+=2.5   # oversimplifying for capable user -> patronising
+            if action=="Simplify" and l==1:
+                penalty+=0.5   # premature simplification at medium load
+            if action=="Direct_Prompt" and l==2:
+                penalty+=1.5   # assertive pressure on strained user -> overwhelm
+            if action=="Encourage" and t==2:
+                penalty+=1.5   # positive reinforcement from untrusted source
+            if action=="Gentle_Reminder" and t==2:
+                penalty+=1.0   # gentle nudge ineffective without trust
+            if action=="Back_Off" and t==0 and l==0:
+                penalty+=1.0   # backing off when everything is fine
+            if action=="Back_Off" and t<=1 and l<=1:
+                penalty+=1.0   # withdrawing from engaged, manageable user
 
-            # bonuses: actions well-suited to the current state
-            if action == "Gentle_Reminder" and t == 0 and l <= 1:
-                r += 3.0   # gentle nudge for cooperative, unloaded user
-            if action == "Simplify" and l == 2:
-                r += 2.5   # appropriate cognitive support under high load
-            if action == "Back_Off" and l == 2:
-                r += 2.5   # pressure relief when overwhelmed
-            if action == "Encourage" and t == 1:
-                r += 2.0   # rapport-building at the trust tipping point
-            if action == "Back_Off" and t == 2 and l >= 1:
-                r += 2.0   # respecting autonomy when trust is absent
-            if action == "Explain_Importance" and t >= 1 and l <= 1:
-                r += 1.5   # educational approach when user can listen
-            if action == "Direct_Prompt" and t == 0 and l == 0:
-                r += 1.5   # clear instruction welcomed by cooperative user
+            # -- context-sensitive action bonuses (scaled by bw) --
+            bonus=0.0
 
-            R[s, a_idx] = r
+            if action=="Gentle_Reminder" and t==0 and l<=1:
+                bonus+=3.0   # gentle nudge for cooperative, unloaded user
+            if action=="Simplify" and l==2:
+                bonus+=2.5   # appropriate cognitive support under high load
+            if action=="Back_Off" and l==2:
+                bonus+=2.5   # pressure relief when overwhelmed
+            if action=="Encourage" and t==1:
+                bonus+=2.0   # rapport-building at the trust tipping point
+            if action=="Back_Off" and t==2 and l>=1:
+                bonus+=2.0   # respecting autonomy when trust is absent
+            if action=="Explain_Importance" and t>=1 and l<=1:
+                bonus+=1.5   # educational approach when user can listen
+            if action=="Direct_Prompt" and t==0 and l==0:
+                bonus+=1.5   # clear instruction welcomed by cooperative user
+
+            R[s,a_idx]=r - penalty*pw + bonus*bw
 
     return R
 
@@ -853,15 +894,17 @@ class CRAMSAgent:
         8. Action selection                  (action selection)
     """
 
-    def __init__(self, gamma: float = 0.95,
-                 db_path: Optional[str] = "crams_memory.db"):
+    def __init__(self, gamma: float=0.95,
+                 db_path: Optional[str]="crams_memory.db",
+                 personality: str="balanced"):
+        self.personality=personality
         # build POMDP model
-        self.T = build_transition_model()
-        self.O = build_observation_model()
-        self.R = build_reward_model()
+        self.T=build_transition_model()
+        self.O=build_observation_model()
+        self.R=build_reward_model(personality)
 
         # prospective planner
-        self.solver = QMDPSolver(self.T, self.R, gamma)
+        self.solver=QMDPSolver(self.T,self.R,gamma)
 
         # persistent storage (SQLite)
         self.db = PersistentStore(db_path) if db_path else None
@@ -988,9 +1031,10 @@ class CRAMSAgent:
 #  SECTION 5 -- SIMULATION & VISUALISATION
 # =====================================================================
 
-def run_simulation(n_steps: int = 30, initial_state: int = 4,
-                   seed: int = 42, stress_step: Optional[int] = 15,
-                   db_path: Optional[str] = "crams_memory.db"):
+def run_simulation(n_steps: int=30, initial_state: int=4,
+                   seed: int=42, stress_step: Optional[int]=15,
+                   db_path: Optional[str]="crams_memory.db",
+                   personality: str="balanced"):
     """
     Run CRAMS and produce comprehensive visualisation.
 
@@ -1009,17 +1053,22 @@ def run_simulation(n_steps: int = 30, initial_state: int = 4,
     db_path : str or None
         Path to SQLite database for persistent memory. None disables
         persistence (pure in-memory simulation).
+    personality : str
+        Robot personality preset: "cautious", "balanced", or "assertive".
+        Controls the ratio between reward bonuses and penalties.
     """
     np.random.seed(seed)
 
-    agent = CRAMSAgent(gamma=0.95, db_path=db_path)
+    agent=CRAMSAgent(gamma=0.95,db_path=db_path,personality=personality)
     user = SimulatedUser(true_state_idx=initial_state)
 
-    print("=" * 70)
+    pdesc=PERSONALITIES[personality]["desc"]
+    print("="*70)
     print("  CRAMS -- Cognitive Robot for Adaptive Medical Support")
     print("  POMDP-based Medication Adherence Simulation")
-    print("=" * 70)
-    print(f"\n  Initial user state : {STATES[initial_state]}")
+    print("="*70)
+    print(f"\n  Personality        : {personality} -- {pdesc}")
+    print(f"  Initial user state : {STATES[initial_state]}")
     print(f"  Simulation steps   : {n_steps}")
     if stress_step:
         print(f"  Stress event at    : step {stress_step}")
@@ -1280,9 +1329,16 @@ def compare_scenarios(n_steps: int = 30):
 
 # ── Entry Point ─────────────────────────────────────────────────────
 
-if __name__ == "__main__":
+if __name__=="__main__":
     # Primary simulation with stress event at step 15
-    run_simulation(n_steps=30, initial_state=4, seed=42, stress_step=15)
+    run_simulation(n_steps=30,initial_state=4,seed=42,stress_step=15,
+                   personality="balanced")
+
+    # Try different personalities to see how reward ratios shape behaviour:
+    # run_simulation(n_steps=30,initial_state=4,seed=42,stress_step=15,
+    #                personality="cautious")
+    # run_simulation(n_steps=30,initial_state=4,seed=42,stress_step=15,
+    #                personality="assertive")
 
     # Uncomment for multi-scenario comparison:
     # compare_scenarios()
