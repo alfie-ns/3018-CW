@@ -1,52 +1,96 @@
 """
-CRAMS -- Cognitive Robot for Adaptive Medical Support
+    LECTURE 10 (LfD / IRL) -- WEAVE INTO REPORT
+    ==============================================
+    This is the theoretical layer that elevates the report from
+    "I built a POMDP" to "I understand where CRAMS sits within
+    cognitive robotics theory." Use Dr. Aly's exact terminology.
 
-A POMDP-based cognitive robot that supports medication adherence by reading
-a user's behavioural cues, maintaining a probabilistic belief about their
-hidden trust level and cognitive load, and selecting contextually appropriate
-actions -- all whilst remembering past interactions and self-checking its own
-performance.
+    REPORT SECTION: Introduction (10%)
+    - [ ] TODO: Frame the *problem* using Dr. Aly's LfD rationale:
+          "Programming robots is hard; huge number of possible tasks,
+          unique environmental demands, tasks difficult to describe
+          formally." This justifies why CRAMS uses a learning approach
+          (POMDP) rather than hand-coded behavioural rules
+    - [ ] TODO: State that CRAMS performs **implicit knowledge transfer**:
+          the robot never directly observes the user's trust or cognitive
+          load; it must infer them from behavioural cues
 
-Cognitive architecture (maps to Vernon, 2014; Lecture 9):
-    Perception:         -> OpenAI API via NAO camera/mic (simulated here)
-    Attention:          -> selective focus on trust / load signals
-    Action selection:   -> QMDP policy over belief state
-    Memory:             -> episodic memory (session) + semantic memory (SQLite)
-    Learning:           -> Bayesian belief update
-    Reasoning:          -> QMDP value iteration (prospection)
-    Meta-reasoning:     -> self-check for declining performance
-    Prospection:        -> forward simulation before acting
+    REPORT SECTION: Background (10%)
+    - [ ] TODO: Position CRAMS within the LfD taxonomy: it is an
+          **External Observation / Imitation** system (Slide 14 of
+          Lecture 10); the robot observes the user without direct sensor
+          access to internal states, and embodiment correspondence is
+          inferred
+    - [ ] TODO: Explicitly name **Inverse Reinforcement Learning (IRL)**
+          as the theoretical paradigm: CRAMS infers the user's implicit
+          "reward" (compliance/engagement) from behavioural cues rather
+          than receiving an explicit reward signal. Quote Dr. Aly:
+          "You don't have a reward, but you have an expert. So you try
+          to learn this reward in some sense."
+    - [ ] TODO: Draw the formal parallel: LfD's (S, A, Z, M, pi) maps
+          to CRAMS's POMDP tuple (S, A, O, T, Omega, R, gamma);
+          Z = O, M = Omega, pi = QMDP policy
 
-POMDP tuple: (S, A, O, T, Omega, R, gamma)
-    S     = hidden states (Trust x CognitiveLoad)
-    A     = robot actions
-    O     = observable user behaviours
-    T     = transition model  P(s' | s, a)
-    Omega = observation model P(o  | s', a)
-    R     = reward function   R(s, a)
-    gamma = discount factor
+    REPORT SECTION: Method and Setup (35%)
+    - [ ] TODO: Describe the OpenAI API perception layer as the
+          **mapping function M** that solves the **correspondence
+          problem** (high-dimensional human behaviour to 7 discrete
+          observations)
+    - [ ] TODO: Explain QMDP value iteration as the **policy derivation**
+          mechanism (Dr. Aly's term)
+    - [ ] TODO: Note that CRAMS uses **interactive** (not batch) training;
+          beliefs update continuously each step, which aligns with the
+          incremental policy development mode from Slide 9
+    - [ ] TODO: Frame the observation model Omega(o|s',a) as learning
+          the **underlying pattern** (Dr. Aly's preferred ML expression)
+          behind user behavioural responses
 
-Pipeline (deployment on NAO):
-    NAO mic/camera -> OpenAI API (perception) -> structured observation ->
-    POMDP updates belief & selects action (memory / reasoning / prospection) ->
-    OpenAI API translates action into language & gesture -> NAO speaks/gestures ->
-    user responds -> cycle repeats
+    REPORT SECTION: Results/Outcome (30%)
+    - [ ] TODO: Frame multi-scenario comparison (cooperative, uncertain,
+          resistant) as addressing **problem space continuity**: the agent
+          generalises learned behaviour to new situations similar to
+          demonstrated ones (Slide 9)
+    - [ ] TODO: Present belief evolution plots as evidence the robot
+          learns the **underlying pattern** of user behaviour
+    - [ ] TODO: Frame MetaReasoner adaptation as the **IRL mechanism**:
+          when inferred reward declines, the robot adjusts strategy,
+          exactly as Dr. Aly described with the obstacle-avoidance
+          reward inference example
 
-References:
-    Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998)
-    'Planning and acting in partially observable stochastic domains',
-    Artificial Intelligence, 101(1-2), pp. 99-134.
+    REPORT SECTION: Conclusion (10%)
+    - [ ] TODO: Future work: **transfer learning** between user profiles
+          (directly from Dr. Aly's Lecture 10 tangent); a CRAMS agent
+          trained on cooperative users could fine-tune to resistant users,
+          analogous to his Alzheimer's/related-disorder example
+    - [ ] TODO: Future work: moving from External Observation to Sensors
+          on Teacher (wearable physiological sensors for direct trust/load
+          measurement), thereby shifting from **imitation** to
+          **demonstration** in Dr. Aly's taxonomy and eliminating the
+          correspondence problem
+    - [ ] TODO: Limitation: acknowledge CRAMS currently uses a pre-defined
+          reward function R(s,a) rather than pure IRL; the reward is
+          designed, not fully inferred. The meta-reasoner partially
+          addresses this gap
 
-    Littman, M. L., Cassandra, A. R. and Kaelbling, L. P. (1995)
-    'Learning policies for partially observable environments: Scaling up',
-    Proceedings of the 12th International Conference on Machine Learning,
-    pp. 362-370.
+    CODE DOCUMENTATION
+    - [ ] TODO: Add a comment block in the POMDP engine (Section 1)
+          explaining CRAMS's position in the LfD taxonomy (External
+          Observation / Imitation)
+    - [ ] TODO: Add a comment block at MetaReasoner explaining the IRL
+          connection (inferring reward from declining performance trends)
 
-    Vernon, D. (2014) Artificial Cognitive Systems: A Primer.
-    Cambridge, MA: MIT Press.
+    KEY TERMINOLOGY CHECKLIST (use each at least once in report)
+    - [ ] "underlying pattern"
+    - [ ] "mapping function"
+    - [ ] "inverse reinforcement learning"
+    - [ ] "policy derivation"
+    - [ ] "correspondence problem"
+    - [ ] "implicit knowledge transfer"
+    - [ ] "problem space continuity"
+    - [ ] "external observation"
 
-    Atance, C. M. and O'Neill, D. K. (2001) 'Episodic future thinking',
-    Trends in Cognitive Sciences, 5(12), pp. 533-539.
+    - [ ] TODO: talk about the LfD (learn-from-demonstration)
+    - [ ] TODO: talk about IRL (inverse reinforcement learning)
 """
 
 import numpy as np
@@ -62,11 +106,11 @@ import os
 import uuid
 
 
-# =====================================================================
+# --------------------------------------------------------------------
 #  SECTION 1 -- POMDP ENGINE
-# =====================================================================
+# --------------------------------------------------------------------
 
-# ── State Space ─────────────────────────────────────────────────────
+# ── State Space ──
 # 2-D hidden state: (Trust, CognitiveLoad), each with 3 levels -> 9 states.
 # The robot never observes these directly; it maintains a belief distribution.
 
@@ -77,7 +121,7 @@ STATES = [f"T:{t}_L:{c}" for t in TRUST_LEVELS for c in LOAD_LEVELS]
 # Index 0 = (High trust, Low load)  -- best case
 # Index 8 = (Low trust, High load)  -- worst case
 
-# ── Action Space ────────────────────────────────────────────────────
+# ── Action Space ──
 # Actions the cognitive robot can take during a medication adherence episode.
 
 ACTIONS = [
@@ -89,7 +133,7 @@ ACTIONS = [
     "Simplify",              # break task into smaller steps (load-reducing)
 ]
 
-# ── Observation Space ───────────────────────────────────────────────
+# ── Observation Space ──
 # Structured observations derived from multimodal perception (face, voice,
 # gesture). In deployment, the OpenAI API maps raw sensory data to these
 # discrete categories; herein the simulated user generates them directly.
@@ -140,7 +184,7 @@ PERSONALITIES={
 }
 
 
-# ── Index helpers ───────────────────────────────────────────────────
+# ── Index helpers ──
 
 def state_idx(trust: int, load: int) -> int:
     """Flat index from (trust_level_idx, load_level_idx)."""
@@ -152,7 +196,7 @@ def state_components(idx: int) -> Tuple[int, int]:
     return divmod(idx, len(LOAD_LEVELS))
 
 
-# ── Transition Model T[a][s][s'] ────────────────────────────────────
+# ── Transition Model T[a][s][s'] ──
 # Trust and load evolve independently given the robot's action.
 # Shift probabilities: [P(improve), P(same), P(worsen)]
 #   improve = trust rises or load falls (index moves towards 0)
@@ -284,7 +328,7 @@ def build_observation_model() -> np.ndarray:
     return O
 
 
-# ── Reward Function R[s][a] ─────────────────────────────────────────
+# ── Reward Function R[s][a] ──
 #
 # Design rationale (anti-pestering):
 #   The reward is NOT a simple "+100 for compliance, -10 for annoyance"
@@ -372,7 +416,7 @@ def build_reward_model(personality: str="balanced") -> np.ndarray:
     return R
 
 
-# ── Belief Update ───────────────────────────────────────────────────
+# ── Belief Update ──
 
 def belief_update(belief: np.ndarray, action: int, obs: int,
                   T: np.ndarray, O: np.ndarray) -> np.ndarray:
@@ -400,7 +444,7 @@ def belief_update(belief: np.ndarray, action: int, obs: int,
     return b_new
 
 
-# ── QMDP Solver ─────────────────────────────────────────────────────
+# ── QMDP Solver ──
 
 class QMDPSolver:
     """
@@ -450,9 +494,9 @@ class QMDPSolver:
         return belief @ self.Q
 
 
-# =====================================================================
+# ---------------------------------------------------------------------
 #  SECTION 2 -- COGNITIVE MODULES
-# =====================================================================
+# ---------------------------------------------------------------------
 
 # ── Anti-Pestering Configuration ────────────────────────────────────
 # Q-value penalty applied when the robot repeats the same action within
@@ -621,7 +665,7 @@ class Episode:
         return OBSERVATIONS[self.observation]
 
 
-# ── Episodic Memory ─────────────────────────────────────────────────
+# ── Episodic Memory ──
 # Stores past interaction episodes so the robot can recall what worked
 # and what did not.  Implements episodic future thinking: past events
 # are reconstructed to allow the agent to pre-experience the future.
@@ -698,7 +742,7 @@ class EpisodicMemory:
         return successes / len(relevant)
 
 
-# ── Semantic Memory ─────────────────────────────────────────────────
+# ── Semantic Memory ──
 # Whilst episodic memory stores specific interaction events, semantic
 # memory stores generalised knowledge that persists across sessions:
 #   - User's baseline trust level
@@ -793,7 +837,7 @@ class SemanticMemory:
             self.store("last_compliance_rate", f"{rate:.3f}", confidence=0.8)
 
 
-# ── Meta-Reasoning ──────────────────────────────────────────────────
+# ── Meta-Reasoning ──
 # The robot monitors its own performance and triggers strategy adaptation
 # when reward trends decline -- reasoning about reasoning.
 #
@@ -840,9 +884,9 @@ class MetaReasoner:
         return 0.0
 
 
-# =====================================================================
+# ---------------------------------------------------------------------
 #  SECTION 3 -- SIMULATED USER
-# =====================================================================
+# ---------------------------------------------------------------------
 # Replaces the OpenAI API perception layer for offline testing.
 # In deployment on the NAO, the API would map camera/microphone input
 # to one of the OBSERVATIONS categories; here the user samples from the
@@ -867,9 +911,9 @@ class SimulatedUser:
         self.history.append(self.true_state)
 
 
-# =====================================================================
+# ---------------------------------------------------------------------
 #  SECTION 4 -- CRAMS AGENT
-# =====================================================================
+# ---------------------------------------------------------------------
 
 class CRAMSAgent:
     """
@@ -1251,7 +1295,7 @@ def _print_summary(agent: CRAMSAgent, n_steps: int):
     print()
 
 
-# ── Multi-scenario comparison ───────────────────────────────────────
+# ── Multi-scenario comparison ──
 
 def compare_scenarios(n_steps: int = 30):
     """
@@ -1327,7 +1371,7 @@ def compare_scenarios(n_steps: int = 30):
     plt.show()
 
 
-# ── Entry Point ─────────────────────────────────────────────────────
+# ── Entry Point ──
 
 if __name__=="__main__":
     # Primary simulation with stress event at step 15

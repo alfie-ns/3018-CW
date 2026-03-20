@@ -38,6 +38,10 @@ header-includes:
 
 ---
 
+- [ ] decides the reward based on what it oberserves = inferring the reward
+- [ ] talk about the LfD (learn-from-demonstration)
+- [ ] talk about IRL (inverse reinforcement learning)
+- [ ] LfD (learning from demonstation)
 - [ ] relatively talk about how it relates to others, motivation
 - [ ] do all page number TODOs
 - [ ] CRAMS figure verified -- 5/6 actions appear (Back_Off absent because true state never sustained Low Trust long enough). Update report Task 4 discussion to: 1) explain why the action timeline shows context-sensitive selection (link each action cluster to the reward territory that produced it), 2) note Back_Off correctly absent given the Medium-trust initial state and stress profile, 3) highlight META-ADAPT triggers (red dotted lines) as evidence of metacognition detecting the stress event within 2 steps
@@ -60,6 +64,12 @@ header-includes:
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
 - [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
 - [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
+- [ ] TODO: talk about the LfD (learn-from-demonstration)
+
+  - [ ] TODO: talk about IRL (inverse reinforcement learning)
+- [ ] TODO: talk about the LfD (learn-from-demonstration)
+
+  - [ ] TODO: talk about IRL (inverse reinforcement learning)
 
 LECTURE 9 – TODOs FOR ASSESSMENT 2 REPORT
 Task 3: Literature Review (Assistive Robotics Essay):
@@ -207,11 +217,14 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 ## 1.6. Task-3 References
 
 ### 1.6.1 Foundational
+
 - Vernon, D. (2014) Artificial Cognitive Systems: A Primer. Cambridge, MA: MIT Press.
 
 ### 1.6.2 Papers and Journal Articles
+
 - Sciutti, A., Beetz, M., Inamura, T., Korsah, A., Oh, J., Sandini, G., Shimoda, S. and Vernon, D. (2023) 'The Present and the Future of Cognitive Robotics', IEEE Robotics
   & Automation Magazine, 30(3), pp. 160-163. Available at: [https://ieeexplore.ieee.org/document/10255092](https://ieeexplore.ieee.org/document/10255092) (Accessed: 18 March 2026).
+
 - [ ] Cangelosi, A. and Asada, M. (in press) *Cognitive Robotics*, Chapter 1. Cambridge, MA: MIT Press.
 - [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23.
 - [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275.

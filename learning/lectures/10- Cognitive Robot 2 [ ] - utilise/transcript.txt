@@ -1,0 +1,656 @@
+Which is about learning from demonstration.
+Learning from demonstration evident as evident by the name.
+I try to make it demonstration comfortable and learn from it.
+Why do you think this can be important?
+He said, I'm training for example a robot to do a particular task.
+And imagine the amount of data that you might need to train a robot.
+You just show the robot the movement and the robot try to learn it from you.
+So this is for example an approach in machine learning and in human interaction.
+So but certainly, you know, like the amount of data that might be needed.
+Let's say if you say we need thousands of data to create data set suitable for training robots, that's fine.
+If you don't have this data set, you need to create it.
+And in order to create it, you create it through learning by making demonstration how many samples you need to do.
+If for example, you are using something like deep learning to learn this, you have to read a lot of samples.
+Like in.
+When I was working in Japan, there was experience where there was a robot hand and they wanted the robot arm.
+They wanted the robot arm to follow specific trajectory and avoid obstacles.
+So they needed to generate data.
+Amount of data huge.
+They were trying 24 hours, three, eight hours each student or each group of students eight hours.
+And then they go home and other eight students 24 hours.
+And they were continuing to do this for one month.
+So imagine now like you are you.
+Most of you use the now we use the paper.
+So you understand that you can ask the joints of now and the paper to there is 3 degree of freedom.
+Degrees of freedom.
+Degrees of freedom.
+So you can give specific for the new pitch at all can give specific values.
+So the robot will make or the robot articulation will make specific movement.
+Now if you force this so I can give the shoulder for example specific roll pitch and roll your pitch roll and then for example it can make this movement.
+Now let's say if you use the arm by your hand and moved it up.
+This means like you force it to make this specific values for the yoke pitch.
+So if you are monitoring the values how the values change of your P true.
+You will find that really they Change it so to 000 when you moved it like this, whether it moved by itself.
+Okay.
+Or you force it to move it come to a value for example XIO X peach and or Y peach and then Y pro.
+So they were generating these values.
+So once you generate or start moving the arm of the robot the obtrol change of the articulation.
+So when I imagine that they are changing If I take the U and P and roll of each articulation and try to plot it.
+So I am trying to make one movement.
+So I'm trying to use the robot arm and move it around another one, move it with a different way and different speed, and so on and so forth.
+And if we try to see the trajectories, we'll find effectively different trajectories for different person.
+And these are the data that didn't exist.
+But we implicitly create the data, for example, this way and ask the robot to learn from this data to make programming robot is hard.
+Huge number of possible tasks, unique environmental demands.
+Task tasks are difficult to describe formally.
+And expert engineers engineering in particular.
+So a natural way, for example, using learning demonstration is natural expressive way to program.
+No expert knowledge required.
+Valuable human intuition to program new tasks as needed.
+So how can robot be shown how to grow, how to perform tasks?
+You ask the robot, like as I said, I'm for example cooking and I'm showing that I'm cooking and making something movement.
+And the robot try to do this.
+So for example, take eggs, for example, some salt, some pepper and put for example on egg in the pan, something like that.
+And actually we have some demonstrations for robots that are already cooking and for example folding shirts, for example, and T shirts.
+So these are tasks that robots can do.
+So what we're trying to do is pretty much one is that we are trying to transfer the robot skills that look that took years from humans to master.
+Human can quickly retrain the robot to adapt to task changes.
+And the human teaches by showing how to perform the task simply like that.
+So I have a teacher and the teacher is showing I'm doing stuff.
+And this is like learning like it's a demonstration factory.
+When I am doing some particular task, there are data generated and I can capture it by observation.
+Exactly the same thing.
+Like when I am moving my arm, for example.
+So I'm saying I make specific movement and I moved my arm like this.
+Certainly there are changes happen in my GOP three role values.
+Okay, so there are.
+When the, when the teacher is doing some movements, they generates some data.
+And from the data we try to learn the policy.
+To learn the policy because like, is it similar to enforcement learning?
+Try to learn the policy because what is the policy?
+Policy is the best approach from reinforcement learning.
+I'm trying to learn the best approach to do something here is it similar to reinforcement learning?
+So up till now we say that learning from demonstration is driving the policy from examples provided by the teacher.
+So the learner first observes the actions of human expert during the training phase.
+The learner then uses this training set to learn a policy that tries to perform the same task demonstrated by an expert in order to achieve the best performance.
+So I try to observe what the person is doing.
+I try to learn a policy.
+So is it similar in your understanding to reinforcement learning or not to reinforcement learning?
+Reinforcement learning?
+Yes.
+Is it similar or not similar?
+Is it the same?
+Is it the reinforcement learning task or not?
+Reinforcement learning task.
+Think okay about the reward.
+What do we have in reinforcement learning?
+And do one.
+What do we have in learning components?
+Demonstration.
+What do we have always end Reinforcement learning.
+Do we have expert or don't?
+Yeah, we don't have expert.
+For those who make machine learning.
+Hello, 3003.
+Do we have in machine learning.
+In reinforcement learning, do we have expert or not?
+Yes, we have expert.
+Are you sure?
+When the robot.
+When.
+When you are trying to learn how to eat or since you have infants, do you have experts?
+Yeah, you have adults that will become your kind of.
+They're the expert that you're learning from.
+Observing, observation.
+Okay, you had an observation, but actually not all the trials that you do.
+When do the reinforcement learning, you have an expert.
+So what is a key point here is a reward.
+So you can try to make exper.
+Like try to make interaction with the environment and you learn is it good or bad by the reward.
+And the reward is a cookie.
+So I understand that, okay, I made a bad action or I made a good action based on the cookie.
+Was the person sad, feeling sad or feeling happy?
+This is my cookie.
+So if I made it good, this is positive cookie.
+So I understand that this can be a part of my policy.
+So if I'm learning for example how to for example, best approach to or best strategy or policy to go to Zara to go out.
+Right.
+Example to go to the door.
+My strategy can from here saying that okay, take one step forward and then go to right and go 10 steps out of the door.
+Another strategy can say go from here to that screen 10 times and then go here out or go around the whole three, four times until go out.
+What is the difference between each policy?
+Because I'm learning the reward, the cumulative reward world.
+So you say, okay, no, if I go this way, this is a shortest because each step I do is minus one.
+So if I go, for example, go and come, go and come, go on, come.
+This is my.
+If I tell you for example, best, best way to go to the home.
+So say I will go from here that route it will take five minutes.
+Another person can say, I will go to Germany, and from Germany I will take flight to Manchester, and from Manchester I will go to exterior.
+You will reach extra, and from extra you can go to the home, for example.
+But you know, something that can finish in five minutes versus something that can finish in days.
+So what is the difference between both is that how much time did you save?
+So this is your reward.
+The more time passes, the more negatives you lose.
+The more steps I do, the more minus one I add.
+Okay, so the criteria here is the minus.
+So effectively it's not reinforcement learning for the reason that the expert is needed.
+So when the expert is needed, this is a different story.
+This is called inverse reinforcement.
+So this is not reinforcement learning per se.
+This is inverse reinforcement learning.
+So it is different from reinforcement learning in which the policy is driven by experience.
+This means that there is no such expert.
+The agent has a reward function and it uses greedy exploitative strategies to effectively explore the state and action space and come up with itself using trial error.
+Here we use the inverse.
+So here we have the expert verification.
+Then we don't have the chat, but we have a reward.
+Here we don't have a reward.
+So we try to maximize.
+In the reinforcement learning, we try to maximize this reward.
+Okay, so optimize it or maximize it.
+Optimize.
+When I say optimize, it means minimize or maximize.
+Not only minimize can be also maximized.
+So maximize the reward to find the best policy.
+Here you don't have a reward, but you have an expert.
+So you try for.
+You try to learn this reward in some sense.
+So if I am, if I am following, for example, an expert, so the expert, for example, let's say I'm trying to do an action, let's say moving the arm.
+And there were a lot of obstacles.
+So when I'm moving the robot arm, I find that there was, for example, the robot has a little bit slowed down or tried try to avoid this object and then try to avoid this object and then try to avoid this object.
+And there was always positive, you know, like reward here or like more focus on avoiding these objects.
+So I will understand, implicitly infer it, that when I approach this object, I should avoid it.
+It's not like walking in any approach, I should not collide with it.
+I should have avoided.
+When I approach another object, I should avoid it.
+When I find another object, I should avoid it.
+So I infer the reward.
+I don't have explicit words, but try to infer it so that the purpose is to find that best function.
+So the phases of learning from demonstration, you gather examples, the procedure process of recording e.g.
+examples example data to drive a policy from and you drive the policy.
+If I try to formalize it and define formal definition.
+We have the world consists of states, okay?
+So state is capital.
+It's A.
+Define the state of possible environment state, okay?
+So this is a world surrounding, okay?
+And actions A.
+It defines a set of possible actions that an agent can take in the environment.
+So this is a general environment.
+We have also state Z.
+So Z capital is the observations coming from the teacher.
+So there is S the whole world.
+There is a direct observations coming from the teacher, okay?
+From that demonstrations of the teacher teacher, okay, that are mapped from S to Z.
+So we have like the state of the world and we have the state coming from the observations of the teacher, okay?
+So we try to have a mapping function.
+Mapping function.
+Simply speaking, saying, like, given that what the teacher is doing state of the world, for example, and inputs what could be that output?
+The so the mapping function M. Try to link everything together.
+The teacher is doing, for example, for example, doing some cooking.
+But there is for example some animal around around a teacher, for example, who's doing cooking, making some kind of dangerous acts that I should avoid when I am cooking.
+So he has a cat or she has a cat and they'd like to avoid colliding with the cat, for example.
+This is from the environment different from what is a teacher is doing.
+Okay, so stay from the world, stay from the teacher movements.
+And there is input the emo function.
+Try to get this all together and tell the robot what is the best output.
+So you have to repeat what the teacher is doing.
+Avoid colliding with for example some.
+Some obstacles like attack, for example, to achieve the target.
+So the policy is simply links the states Z with the action A.
+Okay?
+Based on the observed world state.
+So we can say that the policy is drive after all training data is working.
+Do you know this is called the batch training?
+Do you know the batch world the word batch training?
+Have you heard about it?
+Batch?
+So you have all the data already arrived and you have it.
+Nothing's coming after.
+On the other side, on one side, the other side that you have the incoming incrementally coming data.
+So it's called the batch training.
+You have already everything.
+You have all the data and you train it.
+So one of the challenges in learning from demonstration is subtly like every task, the continuity of the.
+Of the problem space.
+Problem space.
+When I say problem space, what is a problem Space, problem space.
+Three things.
+The task, the environment and the demonstration.
+The demonstration is a Z.
+The word states ss, Z and S and the task.
+So this is the continuity of the problem space, which means that the agent should be able to generalize the learned behavior to new situation that are similar to the demonstrated ones.
+So if you for example learned to form some, let's say big, for example, let's say bed sheets, you should be able to transfer this knowledge to for example, for the T shirt.
+Okay.
+And some robots effectively, after suitable training, they do these tasks.
+They find a robot like robot like Baxter robot, for example the big red one in my lab that use its hand and understand, okay, I have a big piece of cloth and I can fold it.
+So start making folding the concept learned.
+So if you give it a different piece of clothes texture, for example, a different piece of clothes or different texture or whatever, like T shirt, I'd say okay, or shirt have to fold it with the same principle, if the task is about folding.
+So there is a lot of research going in this area and it opens the door to robots to learn something.
+Okay, we can say okay, like if you have.
+For example, do you remember function learning spoke about transfer learning before machine learning highlighted it at least.
+Have you heard transfer learning?
+Transfer learning, the master's group?
+Not yet.
+Okay, we will have, we'll have a strong module coming soon.
+So warm up in the summer.com 5008 advanced machine learning so transfer learning, simply we try to transfer knowledge, but through training data.
+Which means if you learn how to play ping pong, this is a knowledge you created, which we can learn, we can transfer and apply it to for example, squash.
+Because the concept is that there is a racket, you catch the racket and you play.
+So there is a racket, there is a ball and you play, you catch it and see why the shape of the racket is different.
+But the principle is that you should catch the ball and you hit it or you can play tennis from ping pong.
+So instead of saying I need to train a system on X data, what if the X data doesn't exist?
+What would you do?
+You have to using transfer learning.
+Look at similar area that has connections.
+It's not anything.
+And you understand as machine learning engineer, there is knowledge in that area that can be transferred.
+Okay.
+And then you use if like in the other area, let's say it has a lot of data.
+And in the new.
+In the, in the area X areas that you would like to use, you don't have data.
+So instead of being stuck I cannot.
+I cannot do it.
+For example, let's say I would like to make diagnosis for, for example Alzheimer.
+And I have let's say very limited data set.
+300, 300 data element or data set or data points.
+Not enough to train a system.
+But let's say I have another disease or disorder that has thousands of data and cognitively related to Alzheimer.
+Then what should I do?
+I will go to this connected, related to some extent related disease or disorder, train my system on the data that exist here.
+Then take that train system and come back to the 300 data elements that I have in Alzheimer, for example.
+And try to fine tune, fine tune so I could core knowledge.
+And I try to fine tune what I have learned.
+So what do we do exactly is like let's say you created deep learning model.
+You come and you cut the last layer.
+So you have your knife and you cut the last layer that represents the knowledge and you fine tune the model again on this few data samples that you have created and you create another layer that substitutes the previous layer.
+So in other words, you have adapted the model with core knowledge that just belongs to something else, to your case and it can make miracles.
+In this case we don't have this data.
+So we try to learn this instead of depending on data on depending on demonstrations.
+So you see that machine learning always try to provide you with some solutions.
+If you have data, fine, you are safe.
+If you don't have data, try to learn from demonstrations and generate data implicitly.
+So to ensure that the agent can generalize to different situation, it is essential to collect diverse sets of demonstrations that cover different variations of tasks.
+For example, if the task is to navigate a robot, either environment administration should cover different types of obstacles, terrains and lighting conditions so that you have as much as possible knowledge, basic knowledge that you can cover when you are learning from demonstration.
+Good.
+So when we speak about driving a policy or like learning the mapping function that connects the state of the world, that connects the state observations from the demonstrator, that connects the input to a specific output.
+That's the robot should do.
+So what is underlying function?
+Mapping functions with underlying function.
+I'd like to learn it.
+I can learn it.
+How should like saying that this is the environment, this is what the person is doing and this is the input.
+And they would like to learn all this to give a particular output.
+What is the underlying function?
+You don't want to infer.
+You cannot infer this by yourself.
+So we try to use machine learning.
+Like we say always.
+Machine learning is like aims to like learn the underlying pattern.
+Underlying pattern.
+Try to make sure that you are attentive to this, to these technical words.
+So if you are an interview and you say to learn the for example, underlying pattern.
+This is a standard, if I hear it underlying pattern, I I will say this guy, for example is, you know, used to use or more familiar with common standard expressions in machine learning, machine learning.
+Or that guy or that person is speaking machine learning.
+This is a language like French, like Italian.
+So underlying underlying matter.
+Okay, so there is certainly approach like regression based approaches, several regression pages, approaches that try to adjust it, try to fit a function.
+So you have functions that you want to create and you have different points.
+And what you have to do is just fitting a function to the input output.
+So you have inputs, you have outputs and you just need to link between them, link between them through a function.
+So simply speaking, you try to find the curve that passes by all the inputs and the outputs.
+Like any normal.
+Curve affecting approach, there is also decision tree based model.
+So the decision tree, if you know the decision tree.
+Decision tree is like making a tree.
+And the tree has a lot of nodes and these nodes are used for making a decision.
+So should I, for example, I reached an obstacle.
+If I try to apply a decision tree on for example the navigation problem.
+Let's say I am trying to create a tree for environment here.
+So I reached an obstacle.
+If I reached an obstacle, should I go to left or right?
+So this become a node that tells me if you will go to left.
+For example, if you find your left is free, go to left.
+If you find your right is free, go to right.
+For example, if, for example you find your left and your right are not free, go back.
+Okay, making a decision.
+After this you try to find another obstacle.
+I find a human.
+Should I for example do X action, Y action?
+So another decision node.
+So start by mother node and it's like a tree, it has branches.
+And in the branches there are some decision nodes until I come to a final action.
+Okay, so each node tells me which action to do.
+So for example, go to it.
+Then I found like for example, I'm navigating.
+I found that there is no obstacle in front of me.
+So the decision node tells me then continue going forward until I found another object, for example, for example group of humans and objects.
+So do this action or that action until the the tree branch ends and you come to final action.
+So this is what I say here, that construct a tree structure that partitions the input and input space.
+So input space like the it represents the input space with all the obstacles, humans or objects, okay?
+And the output of.
+For each file, for each partition is determined by the majority vote.
+Okay?
+So once we have trained the decision tree, okay, you can use it to estimate the mapping function.
+Which means the mapping function is.
+Simply tells me I have the inputs, for example, this world state and observations from the person.
+And this input.
+And I need to know the output.
+The decision tree tells you, okay?
+The obstacle, for example, this is obstacle from the world, for example, this is obstacle, for example, observation.
+When I come to make observation from the teacher, I see an observation and I learn a decision Note.
+Should I repeat, not repeat, or should I avoid obstacle from the environment or not avoid observation obstacle from the environment.
+So I'm trying to put both the nodes, the decision nodes, make them represent the world and the observation from the teacher.
+So I make decision nodes everywhere and until I come to a final branch and a final action.
+So this tell me, for example, this actually represents if you.
+If you create it for.
+Let's say I have.
+If.
+Let's say if I'm making.
+Coming to the example where we are trying to move the robot arm several times.
+Several times.
+Several times.
+This exactly tells you you need to learn the mapping function.
+So you found, for example, when I'm moving the arm of the robot, I find an obstacle here, obstacle here, obstacle here, obstacle from the environment can be represented as a human.
+And the decision is that I should avoid such an obstacle.
+Where there is a big human, for example, I should try to step back a little bit, okay?
+Not approach the human and move and move forward a little and come to this object and avoid it in some, in some way.
+And come to this object, avoid it to some.
+Some way.
+And this is because it's my.
+For example, it was my way when I was moving the robot arm.
+Another person will move the robot arm from different direction.
+Another person will move the robot arm with higher speed, okay?
+Or different approach or different trajectory.
+So you'll find every person is making different way to do the action.
+Then if you build a tree representing all these actions and each node that represents a decision that each person took when they were creating the robot action, you find unified tree and you give all this data for training.
+So this means like you train the decision tree.
+After you train the decision tree, you can use it, for example, when you are trying to learn, okay, I have this in, in a test case, you have the human with observations, the teacher, the environment, and you have the input.
+And I would like to know what kind of decision I should take.
+So the robot, the decision tree will tell you you have to do this decision.
+So finally, finally, that decision tree is about making decision.
+And the decision here represents the action that I need to do.
+Okay?
+So it learns from the data that we give it.
+As any decision tree, it learns what is the mapping function.
+Because magnet function links all the inputs, state of the world, actions or observation done by the human teacher and try to map them to action.
+Okay?
+And finally, we have also the inverse reinforcement learning.
+So here we don't have a reward, but we try to infer the reward.
+But we have a teacher.
+So I will understand the teacher is trying to do as a teacher.
+Teacher tried when he was trying to approach this obstacle, he avoided it.
+Avoided it.
+So I will try to give more weight for avoiding obstacles.
+And I will infer that the reward is that avoiding obstacles, these obstacles, or humans or other objects can or other obstacles can give more weight.
+Okay, More weight for the reward.
+So I will understand that I should not collide with these objects.
+So the same principle of the reward.
+Okay, the same principle of the reward.
+If you'd like to refresh yourself, feel free.
+Right?
+Okay, probably.
+Let's take 10 minutes to give everyone a refreshment time break and then turn off.
+March too much.
+Because obviously we have Wednesday off and then.
+Yeah.
+Thursday as well.
+Because we.
+Next.
+Yeah.
+Yeah.
+Well if you want to go or show you around.
+I don't know and all I do is like when I'm all trails.
+So show you some hikes that nearby.
+There's nothing in spirit miserable for anything like that.
+It's yeah.
+Pretty bad.
+Amir, would you be able to explain how it would inf.
+How it would infer the reward?
+How the robot would infer the reward?
+Yeah.
+How does it infer the reward?
+Yeah.
+Okay, so like if I am for example.
+Sorry, would you say before obstacle closer.
+I didn't hear.
+I put a group of obstacles.
+I try to avoid the group of obstacles.
+This is something that we can understand that there is obstacle in XYZ coordinates and the person tried to turn around xyz.
+So this means the person tried to avoid these obstacles.
+Yeah.
+So this will be a point itself that are these points for example should be avoided.
+Okay.
+In this way.
+Yeah.
+Yeah.
+Even you didn't get explicitly.
+But there also you try particularly if I came also I use this is there's an obstacle here in XYZ because I can estimate X location.
+So like decides based on what it observes.
+Yeah.
+It's a pretty like boring event.
+Following last email,
+I was able to
+activate the geographic report.
+The world isn't directly accessible to the robot.
+So it has to be to depend on its observations.
+So you know the state of the robot and the state of the world.
+So you have to observe by yourself and try to use your observations in extracting the knowledge that you write about.
+So the learning policy then tells the robot what action to take based on its information.
+During learning, knowledge is transferred to the robot.
+So if I see the human doing a specific task, this knowledge should be transferred to the robot.
+But we have some conditions here.
+That explicit way to transfer this knowledge to the robot is if the robot directly accesses the teacher knowledge.
+So, for example, the motion, the world state information that characterize the action being put, which means you teach the robot.
+For example, like, example, when I was trying to.
+The example of trying to teach the robot arm how to move.
+So this has been direct explicitly because we were trying to teach the robot the motions to do in other ways.
+When the robot doesn't have this explicit knowledge directly accessed, we call it implicit.
+Implicit.
+Like you have to infer, like for example, the human is walking and avoiding some kind of obstacles.
+So you have to, you have to understand the state of the environment and what the human is doing with respect to obstacles.
+And then this is inference of the knowledge that is being expressed.
+So there are two also steps for this transfer.
+Recording the teacher action or deter and determining the correspondence of this data to the robot environment.
+And either step certainly can be directly done.
+So you can record from the teacher, actually record the teacher action and try to determine the correspondence.
+Why this is important because we humans, the teacher has more or different degrees of freedom than robots.
+You have two arms.
+You might find a robot that has only one arm.
+You have, for example, three degree of freedom in each articulation.
+The robot might have one or two or the three, for example, so there are different mechanical structure or different mechanical or like different mechanical, let's say structure for that can make differentiate between a robot.
+So we understand that either step like you record and you try to map.
+So if I see the robot, for example, the teacher is doing a specific action.
+I have to transfer this to the robot, to the robot arm.
+So the robot.
+Actually this is quite critical.
+If the eye cup, for example, that robot, expensive robot in my lab.
+If, for example, the teacher was doing a particular action with the hand, with the arm, and we tried to, for example, move or make this, the robot do this action, particularly without simulating it, for example, it can break any of the articulations and it costs a lot.
+Okay.
+So doing in the real world is something doing in the robot.
+Over the robot is another thing.
+You have to have automatic.
+So all the observations XYZ in one particular has to be transferred to the load from the world to the robot, so that it can be implemented softly.
+So I'm saying we record the teacher actions, we determine the correspondence, and each of these steps can be directly or indirectly executed.
+Like data can be used for having learned.
+Like that can be used by the robot without modification.
+Or the data can be mapped, has to be mapped to the robot.
+Like we might have a robot that's really identical to the human in terms of degrees of freedom and construction.
+Then feel free to map, to use it without modification, because it's same construction.
+Three degrees of freedom, three degrees of freedom, one degree of freedom.
+The same thing in the robot.
+So whichever.
+And for example, the the range of each articulation, for example, you have your articulation can move from 0 to for example 100.
+The same also action, the same range is available for the robot.
+Then you can use it without modification.
+But if it is different, you have to find a mapping of functions that tells you if you observe something by the road, how to move, how to implement it in by the human out of the interval.
+This is the indirect one.
+So in summary, we can say that we have two stages.
+Recording or embodiment recording.
+Like I would do recording from the teacher action directly.
+Or I would try to find correspondence for embodiment.
+And each of these options can be directly used or indirectly mapped.
+So this means I have four different types of learning from demonstration, what's called tele operation, Shadowing sensors on teacher and external observation.
+So again, I'll speak about embodiment and recording, embodiment and recording, recording and embodiment.
+And I speak about two options, directly used or directly.
+Directly used and indirectly met.
+So what are these four quarters?
+The tele operation.
+Tele operation.
+Have you heard teleoperation before?
+Operated when you have a machine teleoperated.
+So you have a machine and you are for example, from far, you're operating it in a way or another.
+So it's called teleoperation.
+So example of the T operation.
+A human directly controls mobile robot and robot record the control data.
+So when I say recording by the way, it means like I am moving my arm.
+So the robot is recording what I'm doing.
+And understanding that XYZ moved from 0 to 10, XYZ moved from 0 to 15 and so on.
+So this is a recording.
+And this is the tele operation.
+The Teleoperation, you try to do some action remotely and the robot records what you're trying to do.
+Okay?
+That's why this is represents the equivalent.
+And used directly, this is exactly like what when you have like for example, the kid and this at Xbox and you have like this camera and you try to play tennis in this kind of environment, immersive environment.
+So this exactly the camera can measure directly your articulations and how they are moving.
+And this is the recording map them directly to the embodiment.
+So you find the teacher the robot is doing or the character is doing the same thing.
+Okay, so this is an example of the operation for the other part, for example, is the sensors and teacher.
+So the example here, or like here, the robot has direct access to the teacher, to the teacher action data.
+So sensors and teacher is like, instead of using Kinect that can infer, that can capture all this data directly, you have sensors on teacher.
+So the teacher has some sensors.
+And these sensors transfer the movement data directly.
+So the human uses gestures to teach a mobile robot.
+And human gesture data is recorded for analysis by robot.
+Now you have also the shadowing.
+So the shadowing means human use a gesture to teach a humanoid robot and the robot observes a human interpreting the movement.
+So here the robot doesn't have direct access to the teacher actually action data, but through the sensors, the robot has direct access to the teacher action data.
+Why?
+Because here there are sensors.
+So the sensors give the robot direct access.
+Here you don't have the sensors shadowing, you don't have the sensors.
+So the robot doesn't have direct access to the teacher action data.
+And we use the word shadowing, right?
+Somehow you say, for example, I am leaving my position, for example, and the X person will be shadowing me, for example, in some sense.
+So it's not like doing exactly the same thing, but observing and trying to interpret what you are doing and learn differences.
+And the external observation, the robot observes recordings of an expert and performing the task, this external observation.
+So the first part, the teleoperation and shadowing, this tells you about demonstration.
+The second part is about imitation.
+So this is learning from demonstration and you can have your imitation lab.
+So the difference between demonstration and imitation is quite very verified.
+Learning from demonstration and learning from imitation is simply related to how the robot can access the data and the embodiment versus recording.
+So here we find, like when they are used directly, this is demonstration.
+When we are mapped or inferred, this is imitation.
+Okay, demonstration, like when you have access directly because you have access to the data of the teacher.
+So there is a teacher.
+There's inference of the teacher is trying to demonstrate.
+Explain to you something unlike the imitation learning while you are trying to do it.
+But you don't have direct access to the data.
+So are you able to understand these examples?
+So one video we can show here to you.
+Put object on the table.
+Place the objects for the close demonstration.
+I found two objects shown only.
+Please show me the task.
+Great.
+I found two objects.
+Now tell me when you are ready to demonstrate the task.
+This is how.
+Finish.
+Same examples that I was telling you about.
+This is one tile.
+Demonstration.
+Yes.
+Yes.
+Change the layout a little.
+Finished.
+Let me have a look.
+Great.
+And two objects Tell me.
+Ready.
+It.
+Finished.
+Another demonstration.
+Yes.
+Great.
+I found two objects.
+Ready.
+Ready.
+Taste.
+Ready.
+Different demonstrations a lot in the room.
+Would now try to do it after it learned.
+Okay, so.
+So have you seen the example?
+Like it can try to or it succeeds.
+Generate the action in the same way that it learns from humans.
+So when we learn the correspondence exactly the same thing that I was telling you about that the mechanical.
+Like how the human structure.
+Like let's say the administrator has other and 3 degrees of freedom.
+When you are speaking about, for example, another robot.
+And the robot has 2 degree freedom and 3 degree of freedom.
+And different layout, different structure.
+Then each correspondence across degrees of freedom that you establish it will feasible.
+When it's not feasible, you need to have kind of a mapping function between them.
+So when you have for example, like for example between now robot or paper robot and you there will be a problem of correspondence.
+So you need to have this kind of mapping function that can create this interface for sensing motion capture.
+Like when we say sensors on teacher.
+So we have the example that whether you work an environment that has cameras everywhere and these cameras can capture your movement.
+Or you have sensors yourself.
+Okay.
+Like for example, whether you put sensor like this in a specific suit.
+Or you have sensors in a different way, different arrangements that can track your movement.
+And then for example, this can go to a robo director.
+Also the motion sensors.
+When I speak them about motion sensors, they have like pros and cons.
+They have real time kinematic information they provide.
+They solve the correspondence problem.
+But the conseil required wear the system.
+And this is probably not comfortable, not smooth interaction and no haptic information.
+So each part has process cons.
+There is sensing devices like the Kinect.
+This is output from depth camera.
+Like Kinect camera.
+So this is for example 3D constructed depth image.
+And this is for example a person who Front of the Kinect camera that I was telling you when we were using.
+It is exactly the camera used for Xbox when you, for example, play a game with Xbox.
+So it provides the depth cameras.
+RGP provides like RGB colors and they provide you the ability to define the depth of objects, for example, or dimensions of objects.
+So it facilitates 3D interaction or interpretation.
+Okay.
+There are also variable sensors, different approaches, different models of wearable sensors like accelerometer, pressure sensors, you know, etc.
+Etc.
+Okay.
+For the haptic devices, you have haptic devices which can allow you to have the feeling of when you touch an object.
+This is haptic information.
+So they solve the correspondence problem they have.
+They provide haptic information, but require training and not very easy to use.
+Also from the way of communication there are.
+They use this kind of Sony device as to control a robot from tele operations.
+I just use it.
+I have for example, something like this in my lab to control my underwater robot.
+So I send the robot underwater and using that kind of device like this to ask the robot to move forward, move back.
+This is a sort of table operation.
+So it's learning by doing.
+So I make the robot do something and learn from it.
+Okay.
+Shadowing is exactly similar thing.
+You make a training in front of a robot and the robot immediates you.
+You have here some sensors.
+And these sensors move directly to the robot in real time.
+So when you move your leg or move your arm, it moves.
+The same thing you can do with Kinect, the camera.
+When I was a student in my generation, I was doing Kinect, using Kinect to make imitation for them.
+So I move with Kinect and Kinect capture how, for example, the articulations moved and how the distance of my articulation of my arm moved and imitated.
+So you can transfer.
+And if there is no Kinect, you can use some sensors to transfer the knowledge directly to the robot.
+Another good video is.
+So trying to make it learn how to put a hand and clean around some kind of dust or dirt.
+Showing the movement and trying to repeat it by different strategies, different approaches.
+The robots trying to do the similar thing, detecting where is the dirt and try to clean it corpse.
+Certainly the more you train the world, the more trajectories, the more data it will be.
+So here, for example, after very limited trials, very different training cycles, if you give more data, more data, more data that I was telling you to take me one month from students to make this very fine movement, the robots are will be able to learn better and make human like movement.
+That is more credible.
+So the purpose here is like, we sometimes don't have data to train our boat, so we try to transfer the knowledge this way.
+We show the movement, train it on it and the ask.
+So this is for today.
+And do you have any questions?

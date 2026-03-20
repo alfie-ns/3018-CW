@@ -11,3 +11,5 @@ Code-specific: a Python simulation that shows the belief updating, the action ch
 Wraps chatgpt (which is good at reading people but has no actual non-custom-made memory (apart from computantially created in a conversation-loop list etc); no planning ability, etc) a POMDP will instead provide *memory* (which provides the memory and planning the LLM lacks).
 
 POMDP ARCHITECTURE: OpenAI API (perception) \to structured observation (Comply, Hesitate, Verbal_Refuse, Ignore, Gaze_Avert, ...) \to POMDP updates belief & selects action (memory/reasoning/prospection) \to OpenAI API translates action into language & gesture \to user responds \to cycle repeats
+
+Lfd because it learns from the user's behaviour, not from a predefined reward function. It infers what the user wants and how they feel based on their cues, and it learns to adapt its behaviour accordingly.
