@@ -48,7 +48,7 @@ class VideoCamera(object):
 def gen(camera):
     while True:
         frame = camera.get_frame()
-        cv2.imshow('Facial Expression Recognization',frame)
+        cv2.imshow('Facial Expression Recognisation',frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cv2.destroyAllWindows()
