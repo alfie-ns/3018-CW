@@ -34,16 +34,21 @@ header-includes:
 
 ## DR ALY QUESTIONS:
 
-- [ ]
+- [ ] so maths and code won't affect word count right? However I never explcitly knew if captions within a figure-diagram count towards word count?
 
 ---
-
-- [ ] decides the reward based on what it oberserves = inferring the reward
-- [ ] talk about the LfD (learn-from-demonstration)
-- [ ] talk about IRL (inverse reinforcement learning)
-- [ ] LfD (learning from demonstation)
-- [ ] relatively talk about how it relates to others, motivation
+## First-to-do:
 - [ ] do all page number TODOs
+
+
+## General:
+- [ ] decides the reward based on what it oberserves = inferring the reward
+- [ ] discuss POMDP maths
+- [ ] use wording from 3018 Task-4 Proposal Google Doc
+- [ ] talk about the LfD (learning-from-demonstration)
+- [ ] talk about IRL (inverse reinforcement learning)
+- [ ] relatively talk about how it relates to others, motivation
+
 - [ ] CRAMS figure verified -- 5/6 actions appear (Back_Off absent because true state never sustained Low Trust long enough). Update report Task 4 discussion to: 1) explain why the action timeline shows context-sensitive selection (link each action cluster to the reward territory that produced it), 2) note Back_Off correctly absent given the Medium-trust initial state and stress profile, 3) highlight META-ADAPT triggers (red dotted lines) as evidence of metacognition detecting the stress event within 2 steps
 - [X] USE ‘misclassified’
 - [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
