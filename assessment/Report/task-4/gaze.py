@@ -724,19 +724,29 @@ def nao_say(ssh, text):
     """
     Speak text on Pepper with natural sentence-level pausing.
 
-    Splits dialogue at sentence boundaries and inserts Pepper's native
-    \\pau=400\\ pause tags between sentences so the speech cadence sounds
-    naturally human rather than a single rapid-fire block of text.
+    Packs all sentences into a single SSH payload so Pepper handles the
+    loop and pauses internally. This eliminates the 1-2 second SSH
+    round-trip overhead per sentence that would otherwise ruin the
+    carefully designed 0.4s inter-sentence cadence.
     """
     sentences = _split_into_sentences(text)
-    for i, sentence in enumerate(sentences):
-        safe = json.dumps(sentence)
-        nao_run(ssh, f"""
+    safe_sentences = json.dumps(sentences)
+
+    nao_run(ssh, f"""
 from naoqi import ALProxy
-ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
-""")
+import time
+
+try:
+    tts = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
+    sentences = {safe_sentences}
+
+    for i, sentence in enumerate(sentences):
+        tts.say(sentence)
         if i < len(sentences) - 1:
-            time.sleep(0.4)  # brief pause between sentences for natural cadence
+            time.sleep(0.4)
+except Exception:
+    pass
+""")
 
 
 def nao_say_animated(ssh, text):
@@ -952,11 +962,21 @@ def check_audio_volume() -> bool:
 
 
 def transcribe() -> str:
-    """Transcribe the local WAV with Whisper."""
-    with open(LOCAL_WAV, "rb") as fh:
-        return client.audio.transcriptions.create(
-            model="whisper-1", file=fh
-        ).text.strip()
+    """
+    Transcribe the local WAV with Whisper, gracefully handling API drops.
+
+    Returns an empty string on failure, which the adaptive engine seamlessly
+    interprets as a silent/missed answer via the existing disengagement logic
+    — therefore no additional error handling is needed upstream.
+    """
+    try:
+        with open(LOCAL_WAV, "rb") as fh:
+            return client.audio.transcriptions.create(
+                model="whisper-1", file=fh, timeout=API_TIMEOUT
+            ).text.strip()
+    except Exception as e:
+        print(f"  [Whisper fallback] Transcription failed: {e}")
+        return ""
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1591,6 +1611,11 @@ def main():
 
             print(f"\nRobot: {current_question}")
             print(f"(Answer: {current_answer})")
+
+            # ── PROGRESSIVE SAVE ──────────────────────────────────────────
+            # auto-save after every round so data survives unexpected crashes
+            # (laptop dies, SSH timeout, etc.) — protects report data
+            save_session(engine, personality, preferred_game)
 
     except KeyboardInterrupt:
         print("\n\nInterrupted.")
