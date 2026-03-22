@@ -39,6 +39,7 @@ header-includes:
 ---
 ## First-to-do:
 - [ ] do all page number TODOs
+- [ ] implement loads of peer-reviewed papers everywhere again 
 
 
 ## General:
@@ -61,7 +62,7 @@ header-includes:
   - [ ] Trust-POMPDP diagram
   - [X] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
   - [ ] model trust in lates diabram? or     just latex the fundamental diagtam of       POMDP similar to lecture slied in POMDP     lectures (10,11)
-  - [ ] latex diagram of continous state in POMDP similar to non-monotnoric graph
+  - [ ] latex diagram of continous state in POMDP similar to non-monotnoric graph (not about non-monitonic itsekf just a similar graph)
   - [ ] utilise lec-7 for POMDP insights; similar to machine learning set exercises where i give a quick breakdown if word count allowance
 - [ ] args and kwargs (if i can do this)
 - [X] peer-reviewed or conference papers
@@ -122,7 +123,7 @@ Memory, moreover, is not monolithic. Vernon (2014, Chapter 7) distinguishes *epi
 
 ### 1.3.1 Therapeutic and Emotional Support
 
-The PARO therapeutic seal robot represents one of the most-widely deployed assistive platforms in elderly care. Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and basic auditory processing to modulate its behaviour in response to stroking and vocal stimulation. Clinical trials report reduced cortisol levels and increased social engagement among residents in long-term care facilities, and the platform has indeed been adopted in care homes across Japan, Europe, and the United States.
+The PARO therapeutic seal robot represents one of the most-widely deployed assistive platforms in elderly care. Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and basic auditory processing to modulate its behaviour in response to stroking and vocal stimulation. Clinical trials report reduced cortisol levels and increased social engagement among residents in long-term care facilities, thus the platform has been adopted in care homes across Japan, Europe, and the United States.
 
 Notwithstanding these benefits, PARO operates entirely at the reactive layer. It possesses no theory of mind (it cannot infer *why* a patient is agitated: loneliness, pain, confusion) nor episodic memory of what calmed this specific patient previously. A cognitively-equipped therapeutic robot, by contrast, would anticipate mood shifts via prospection *(forward simulation of likely emotional trajectories)*, recall that music soothed this patient yesterday via episodic memory, and adapt its strategy via metacognition when repeated interventions produce diminishing returns. Insofar as PARO's effectiveness plateaus because it cannot personalise its responses over time, the cognitive gap is not merely theoretical but clinically consequential.
 

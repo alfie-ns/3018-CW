@@ -48,7 +48,10 @@ load_dotenv()
 NAO_IP       = os.getenv("NAO_IP", "ROBOT_IP")
 NAO_USER     = "nao"
 NAO_PASS     = "nao"
-RECORD_SECS  = 8           # longer than conversational thus user needs thinking time
+RECORD_MAX_SECS    = 12     # hard ceiling — never record longer than this
+RECORD_MIN_SECS    = 2      # minimum recording before silence detection kicks in
+SILENCE_POLL_SECS  = 0.5    # polling interval for silence detection on Pepper
+SILENCE_DURATION   = 1.5    # seconds of silence after speech to trigger stop
 REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
@@ -577,16 +580,64 @@ def nao_run(ssh, code):
 
 
 def nao_record(ssh):
-    """Record audio on Pepper and SFTP the WAV back to computer."""
+    """
+    Record audio on Pepper with dynamic silence detection.
+
+    Instead of a fixed sleep, the robot polls its own microphone energy
+    via ALAudioDevice. Recording stops when:
+      1- speech is detected (energy above threshold), THEN
+      2- silence persists for SILENCE_DURATION seconds after speech ends, OR
+      3- the hard ceiling RECORD_MAX_SECS is reached.
+
+    This eliminates the awkward dead-air delay wherein the user answers
+    in one second but the system hangs for seven more.
+    """
     nao_run(ssh, f"""
-                  from naoqi import ALProxy
-                  import time
-                  r = ALProxy("ALAudioRecorder","127.0.0.1",9559)
-                  r.stopMicrophonesRecording()
-                  r.startMicrophonesRecording("{REMOTE_WAV}","wav",16000,[0,0,1,0])
-                  time.sleep({RECORD_SECS})
-                  r.stopMicrophonesRecording()
-                  """)
+from naoqi import ALProxy
+import time
+
+rec  = ALProxy("ALAudioRecorder", "127.0.0.1", 9559)
+audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
+
+rec.stopMicrophonesRecording()
+rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [0, 0, 1, 0])
+
+speech_detected  = False
+silence_start    = None
+start            = time.time()
+ENERGY_THRESHOLD = 800
+
+while True:
+    elapsed = time.time() - start
+
+    # hard ceiling — never exceed max duration
+    if elapsed >= {RECORD_MAX_SECS}:
+        break
+
+    # poll front microphone energy level
+    energy = audio.getFrontMicEnergy()
+
+    if elapsed < {RECORD_MIN_SECS}:
+        # minimum recording period — always wait this long
+        if energy > ENERGY_THRESHOLD:
+            speech_detected = True
+        time.sleep({SILENCE_POLL_SECS})
+        continue
+
+    if energy > ENERGY_THRESHOLD:
+        speech_detected = True
+        silence_start = None
+    else:
+        if speech_detected and silence_start is None:
+            silence_start = time.time()
+        if speech_detected and silence_start is not None:
+            if (time.time() - silence_start) >= {SILENCE_DURATION}:
+                break
+
+    time.sleep({SILENCE_POLL_SECS})
+
+rec.stopMicrophonesRecording()
+""")
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_WAV, LOCAL_WAV)
     sftp.close()
@@ -763,9 +814,36 @@ m.setStiffnesses("Arms", 0.0)
 }
 
 
-def nao_gesture(ssh, gesture_type: str):
-    """Execute a gesture on Pepper aligned to the game context."""
+def nao_gesture(ssh, gesture_type: str,
+                personality: Personality = Personality.ENCOURAGING):
+    """
+    Execute a gesture on Pepper aligned to the game context AND personality.
+    Serious personality  → slower, calmer motions (duration x1.8).
+    Sarcastic personality → sharper, snappier motions (duration x0.7).
+    Encouraging personality → default timing (unchanged).
+
+    This prevents cognitive dissonance wherein a 'Serious' robot executes
+    a highly animated celebration, or an 'Encouraging' robot moves stiffly.
+    """
     code = GESTURE_CODE.get(gesture_type, GESTURE_CODE["neutral"])
+
+    # dynamically scale motion durations to match personality
+    if personality == Personality.SERIOUS:
+        # slower, more restrained movements — calm and deliberate
+        code = code.replace("[1.0]", "[1.8]")
+        code = code.replace("[0.3]", "[0.55]")
+        code = code.replace("[0.5]", "[0.9]")
+        code = code.replace("[1.2]", "[2.0]")
+        code = code.replace("[1.5]", "[2.5]")
+    elif personality == Personality.SARCASTIC:
+        # sharper, quicker movements — snappy and theatrical
+        code = code.replace("[1.0]", "[0.7]")
+        code = code.replace("[0.3]", "[0.2]")
+        code = code.replace("[0.5]", "[0.35]")
+        code = code.replace("[1.2]", "[0.85]")
+        code = code.replace("[1.5]", "[1.05]")
+    # encouraging = default timing, no modification needed
+
     try:
         nao_run(ssh, code)
     except Exception:
@@ -841,35 +919,54 @@ def capture_and_classify(ssh, face_model, face_cascade,
 #  OPENAI GAME GENERATION + ANSWER CHECKING
 # ══════════════════════════════════════════════════════════════════════════════
 
+API_TIMEOUT = 10  # seconds — prevents Pepper freezing if OpenAI/network stalls
+
+
 def generate_game_response(prompt: str, conversation: list) -> dict:
     """
     Send the dynamically constructed prompt to OpenAI.
     Returns parsed JSON: {dialogue, answer, category, gesture}.
+
+    Wrapped in a strict timeout with a graceful fallback so the robot
+    remains 'alive' and the interaction loop keeps moving even if the
+    API call fails or the university network drops mid-request.
     """
     messages = conversation + [{"role": "user", "content": prompt}]
 
-    resp = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=messages,
-        temperature=0.8,
-    )
-    content = resp.choices[0].message.content.strip()
-
-    # strip markdown code fences if present
-    if content.startswith("```"):
-        content = content.split("\n", 1)[1] if "\n" in content else content[3:]
-        if content.endswith("```"):
-            content = content[:-3]
-        content = content.strip()
-
     try:
+        resp = client.chat.completions.create(
+            model="gpt-4.1",
+            messages=messages,
+            temperature=0.8,
+            timeout=API_TIMEOUT,
+        )
+        content = resp.choices[0].message.content.strip()
+
+        # strip markdown code fences if present
+        if content.startswith("```"):
+            content = content.split("\n", 1)[1] if "\n" in content else content[3:]
+            if content.endswith("```"):
+                content = content[:-3]
+            content = content.strip()
+
         return json.loads(content)
+
     except json.JSONDecodeError:
+        # API responded but returned malformed JSON — use raw text as dialogue
         return {
             "dialogue": content,
             "answer":   "",
             "category": "general",
             "gesture":  "neutral",
+        }
+    except Exception as e:
+        # network timeout, API outage, or any other failure
+        print(f"  [API fallback] OpenAI call failed: {e}")
+        return {
+            "dialogue": "Hmm, let me think about that one. Let's try another!",
+            "answer":   "",
+            "category": "fallback",
+            "gesture":  "think",
         }
 
 
@@ -878,31 +975,40 @@ def check_answer(user_answer: str, correct_answer: str,
     """
     Use OpenAI to judge correctness — handles paraphrasing, partial answers,
     and pronunciation quirks from speech-to-text.
+
+    Falls back to a simple string-containment check if the API call fails,
+    thereby ensuring the game loop never stalls on answer verification.
     """
     if not user_answer.strip():
         return False
 
-    resp = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[{
-            "role": "system",
-            "content": (
-                "You are an answer checker. Given a question, the correct answer, "
-                "and the user's spoken answer, determine if the user is correct. "
-                "Be lenient with pronunciation, phrasing, and partial answers that "
-                "demonstrate knowledge. Respond with ONLY 'correct' or 'incorrect'."
-            ),
-        }, {
-            "role": "user",
-            "content": (
-                f"Question: {question_context}\n"
-                f"Correct answer: {correct_answer}\n"
-                f"User's answer: {user_answer}"
-            ),
-        }],
-        temperature=0.0,
-    )
-    return "correct" in resp.choices[0].message.content.strip().lower()
+    try:
+        resp = client.chat.completions.create(
+            model="gpt-4.1",
+            messages=[{
+                "role": "system",
+                "content": (
+                    "You are an answer checker. Given a question, the correct answer, "
+                    "and the user's spoken answer, determine if the user is correct. "
+                    "Be lenient with pronunciation, phrasing, and partial answers that "
+                    "demonstrate knowledge. Respond with ONLY 'correct' or 'incorrect'."
+                ),
+            }, {
+                "role": "user",
+                "content": (
+                    f"Question: {question_context}\n"
+                    f"Correct answer: {correct_answer}\n"
+                    f"User's answer: {user_answer}"
+                ),
+            }],
+            temperature=0.0,
+            timeout=API_TIMEOUT,
+        )
+        return "correct" in resp.choices[0].message.content.strip().lower()
+    except Exception as e:
+        # fallback: naive string match so the game loop continues
+        print(f"  [API fallback] Answer check failed: {e}")
+        return correct_answer.lower().strip() in user_answer.lower().strip()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1110,13 +1216,13 @@ def main():
         prev_personality = save_data.get("personality", "encouraging")
 
         welcome_back = (
-            f"Welcome back! Last time you played {prev_rounds} rounds and "
-            f"got {prev_correct} correct. Want to continue where you left off, "
-            "or start fresh?"
+            f"Welcome back! Last time you played {prev_rounds} rounds, "
+            f"got {prev_correct} correct, and I was in {prev_personality} mode. "
+            "Want to continue where you left off, or start fresh?"
         )
         nao_track_face(ssh, enable=True)
         nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
-        nao_gesture(ssh, "wave")
+        nao_gesture(ssh, "wave", personality)
         nao_say(ssh_tts, welcome_back)
         print(f"\nRobot: {welcome_back}")
 
@@ -1153,7 +1259,7 @@ def main():
         # ── startup sequence ──
         nao_track_face(ssh, enable=True)
         nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
-        nao_gesture(ssh, "wave")
+        nao_gesture(ssh, "wave", personality)
 
         # ── ask personality preference ──
         personality_prompt = (
@@ -1251,7 +1357,8 @@ def main():
 
     # deliver first question with gesture
     gesture_thread = threading.Thread(
-        target=nao_gesture, args=(ssh, game_data.get("gesture", "neutral")),
+        target=nao_gesture,
+        args=(ssh, game_data.get("gesture", "neutral"), personality),
         daemon=True,
     )
     gesture_thread.start()
@@ -1389,7 +1496,8 @@ def main():
 
             # gesture and speech run in parallel
             gesture_thread = threading.Thread(
-                target=nao_gesture, args=(ssh, gesture_type), daemon=True
+                target=nao_gesture,
+                args=(ssh, gesture_type, personality), daemon=True
             )
             gesture_thread.start()
             nao_say(ssh_tts, current_question)
@@ -1441,7 +1549,7 @@ def main():
     else:
         farewell = "Thanks for stopping by! See you next time!"
 
-    nao_gesture(ssh, "wave")
+    nao_gesture(ssh, "wave", personality)
     nao_say(ssh_tts, farewell)
     print(f"\nRobot: {farewell}")
 
