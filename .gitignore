@@ -2,5 +2,6 @@
 .DS_Store
 venv/
 assessment/Report/task-4/crams/__pycache__
-# model weight files are too large for git (51MB each); regenerate by running ws.py
+assessment/Report/task-4/proposal.pdf
 *.h5
+.env
