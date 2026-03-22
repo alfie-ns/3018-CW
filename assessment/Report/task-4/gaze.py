@@ -43,12 +43,12 @@ from tensorflow.keras.models import model_from_json
 load_dotenv()
 
 
-# ── Configuration ────────────────────────────────────────────────────────────
+# ── Configuration ──
 
 NAO_IP       = os.getenv("NAO_IP", "ROBOT_IP")
 NAO_USER     = "nao"
 NAO_PASS     = "nao"
-RECORD_SECS  = 8           # longer than conversational — user needs thinking time
+RECORD_SECS  = 8           # longer than conversational thus user needs thinking time
 REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
@@ -57,7 +57,7 @@ VOLUME_THRESHOLD = 500
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
-# set GAZE_LOCAL_CAMERA=true to use your webcam instead of Pepper's camera
+# false when connected ti pepper; true for testing when no Pepper's camera
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
 
 # paths to pre-trained facial expression model (WS-10)
@@ -70,8 +70,8 @@ HAAR_CASCADE  = os.path.join(WORKSHOP_DIR, "[X]-ws-10", "haarcascade_frontalface
 # adaptive engine thresholds
 RESPONSE_TIME_BASELINE = 30.0   # seconds — beyond this, user is slow
 CORRECTNESS_WINDOW     = 5      # rolling window size
-CORRECTNESS_FLOOR      = 0.4    # below → ease off
-CORRECTNESS_CEILING    = 0.8    # above → ramp up
+CORRECTNESS_FLOOR      = 0.4    # below thus ease off
+CORRECTNESS_CEILING    = 0.8    # above thus ramp up
 SILENCE_THRESHOLD      = 2      # consecutive non-responses before intervention
 MAX_ROUNDS             = 20     # natural session end
 
@@ -81,9 +81,8 @@ SAVE_FILE = os.path.join(SCRIPT_DIR, "gaze_save.json")
 client = OpenAI()
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  FACIAL EXPRESSION MODEL (WS-10)
-# ══════════════════════════════════════════════════════════════════════════════
+# --------------------------------
 
 class FacialExpressionModel:
     """Pre-trained CNN — 7-class emotion classifier (48x48 greyscale input)."""
@@ -103,9 +102,9 @@ class FacialExpressionModel:
         return self.EMOTIONS[idx], float(preds[0][idx])
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  ENUMS AND DATA CLASSES
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------
 
 class Difficulty(Enum):
     EASY   = 1
@@ -140,12 +139,12 @@ PERSONALITY_PROMPTS = {
     Personality.SARCASTIC: (
         "Your personality is playfully sarcastic and witty. "
         "Use dry humour and gentle teasing — never mean-spirited. "
-        "Think friendly banter, not cruelty. If they get one wrong, "
+        "Think friendly banter, not cruelty. If they get one wrong just take this piss kindly "
         "joke about it lightly. If they get one right, act surprised."
     ),
     Personality.SERIOUS: (
         "Your personality is calm, focused, and matter-of-fact. "
-        "No jokes, no fluff. Deliver questions cleanly, acknowledge "
+        "No jokes, no fluff. Deliver questions seriously and cleanly, acknowledge "
         "correct answers briefly, and move on efficiently. "
         "Think quiz show host, not children's entertainer."
     ),
@@ -154,21 +153,21 @@ PERSONALITY_PROMPTS = {
 @dataclass
 class RoundResult:
     """Record of a single game round."""
-    round_number:        int
-    game_type:           GameType
-    difficulty:          Difficulty
-    question:            str
-    user_answer:         str
-    correct:             bool
-    response_time:       float
-    facial_expression:   str
+    round_number:          int
+    game_type:             GameType
+    difficulty:            Difficulty
+    question:              str
+    user_answer:           str
+    correct:               bool
+    response_time:         float
+    facial_expression:     str
     expression_confidence: float
-    inferred_state:      InferredState
-    timestamp:           float = field(default_factory=time.time)
+    inferred_state:        InferredState
+    timestamp:             float = field(default_factory=time.time)
 
 @dataclass
 class AdaptiveDecision:
-    """Output of the adaptive engine — what to do next."""
+    """Output of the adaptive engine (what to do next)"""
     difficulty:         Difficulty
     game_type:          GameType
     inferred_state:     InferredState
@@ -178,9 +177,9 @@ class AdaptiveDecision:
     tone:               str     # "encouraging" | "celebratory" | "calm" | "energetic" | "neutral"
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  ADAPTIVE ENGINE
-# ══════════════════════════════════════════════════════════════════════════════
+# ----------------
 
 class AdaptiveEngine:
     """
@@ -188,19 +187,19 @@ class AdaptiveEngine:
     real state — crucially, it does NOT just trust the camera.
 
     Examples of multi-signal reasoning:
-      Camera=Angry  + fast correct answers        → fine, resting face.  Carry on.
+      Camera=Angry   + fast correct answers        → fine, resting face.  Carry on.
       Camera=Neutral + long silence + low accuracy → disengaged.  Intervene.
-      Camera=Sad    + slow + low correctness       → struggling.  Ease off.
-      Camera=Happy  + fast correct answers         → thriving.   Ramp up.
+      Camera=Sad     + slow + low correctness       → struggling.  Ease off.
+      Camera=Happy   + fast correct answers         → thriving.   Ramp up.
 
     Cognitive mapping:
-      Perceive  → raw signals arrive
-      Attend    → focus on attentiveness, emotion, performance
-      Anticipate → assess how user finds current difficulty
-      Plan      → decide next action (difficulty, game switch, encouragement)
-      Predict   → consider how chosen action will affect user
-      Learn     → track what worked across rounds (episodic memory)
-      Adapt     → refine decisions each subsequent round
+      Perceive   ---> raw signals arrive
+      Attend     ---> focus on attentiveness, emotion, performance
+      Anticipate ---> assess how user finds current difficulty
+      Plan       ---> decide next action (difficulty, game switch, encouragement)
+      Predict    ---> consider how chosen action will affect user
+      Learn      ---> track what worked across rounds (episodic memory)
+      Adapt      ---> refine decisions each subsequent round
     """
 
     def __init__(self):
@@ -219,7 +218,7 @@ class AdaptiveEngine:
         self.best_streak                   = 0
         self.rewards_given: set[str]       = set()
 
-    # ── properties ───────────────────────────────────────────────────────
+    # ── properties --
 
     @property
     def round_number(self) -> int:
@@ -237,7 +236,7 @@ class AdaptiveEngine:
             return RESPONSE_TIME_BASELINE / 2
         return sum(r.response_time for r in recent) / len(recent)
 
-    # ── multi-signal state inference ─────────────────────────────────────
+    # ── multi-signal state inference --
 
     def infer_state(self, expression: str, response_time: float,
                     correct: bool, answer_text: str) -> InferredState:
@@ -295,7 +294,7 @@ class AdaptiveEngine:
         # ── default: comfortable ──
         return InferredState.COMFORTABLE
 
-    # ── core decision function ───────────────────────────────────────────
+    # ── core decision function --
 
     def decide(self, expression: str, expression_conf: float,
                response_time: float, correct: bool,
@@ -429,9 +428,8 @@ class AdaptiveEngine:
         }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  DYNAMIC PROMPT CONSTRUCTION
-# ══════════════════════════════════════════════════════════════════════════════
+# ----------------------------
 
 GAME_DESCRIPTIONS = {
     GameType.TRIVIA:     "a general-knowledge trivia question",
@@ -464,7 +462,7 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
                       reward_message: Optional[str] = None) -> str:
     """
     Dynamically construct the OpenAI prompt from live metrics.
-    This prompt is NEVER the same twice — it changes every round.
+    This prompt is NEVER the same twice; this changes every round.
     """
     parts = []
 
@@ -514,7 +512,7 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
                 "acknowledge the change naturally (e.g. 'Let's try something different!')."
             )
 
-        if decision.give_hint:
+        if decision.give_hint: # if decided to give a hint append hint instruction to prompt
             parts.append(
                 "The user is struggling. Include a subtle hint or make the question "
                 "more approachable."
@@ -523,7 +521,7 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
         if decision.give_encouragement:
             if decision.inferred_state == InferredState.THRIVING:
                 parts.append(
-                    "The user is on a streak! Acknowledge it enthusiastically. "
+                    "The user is on a streak!!! Acknowledge it enthusiastically. "
                     "Be genuinely impressed."
                 )
             elif decision.inferred_state in (InferredState.STRUGGLING,
@@ -558,13 +556,13 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
     return "\n\n".join(parts)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+# --------------------------------------
 #  SSH AND PEPPER ROBOT HELPERS
 #  (adapted from lab-robot-code-fin.py)
-# ══════════════════════════════════════════════════════════════════════════════
+# --------------------------------------
 
 def ssh_connect():
-    """Open an SSH connection to the Pepper robot."""
+    """Open SSH connection to Pepper and return the client."""
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(NAO_IP, username=NAO_USER, password=NAO_PASS, timeout=SSH_TIMEOUT)
@@ -579,16 +577,16 @@ def nao_run(ssh, code):
 
 
 def nao_record(ssh):
-    """Record audio on Pepper and SFTP the WAV back."""
+    """Record audio on Pepper and SFTP the WAV back to computer."""
     nao_run(ssh, f"""
-from naoqi import ALProxy
-import time
-r = ALProxy("ALAudioRecorder","127.0.0.1",9559)
-r.stopMicrophonesRecording()
-r.startMicrophonesRecording("{REMOTE_WAV}","wav",16000,[0,0,1,0])
-time.sleep({RECORD_SECS})
-r.stopMicrophonesRecording()
-""")
+                  from naoqi import ALProxy
+                  import time
+                  r = ALProxy("ALAudioRecorder","127.0.0.1",9559)
+                  r.stopMicrophonesRecording()
+                  r.startMicrophonesRecording("{REMOTE_WAV}","wav",16000,[0,0,1,0])
+                  time.sleep({RECORD_SECS})
+                  r.stopMicrophonesRecording()
+                  """)
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_WAV, LOCAL_WAV)
     sftp.close()
@@ -598,11 +596,11 @@ def nao_say(ssh, text):
     """Speak text on Pepper, pausing 0.5s on newlines."""
     segments = [s.strip() for s in text.split("\n") if s.strip()]
     for i, seg in enumerate(segments):
-        safe = json.dumps(seg)
-        nao_run(ssh, f"""
-from naoqi import ALProxy
-ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
-""")
+        safe = json.dumps(seg) # escape for safe embedding in single quotes; the followng import ALProxy to make Pepper text-to-speech 
+        nao_run(ssh, f""" 
+                            from naoqi import ALProxy
+                            ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
+                      """)
         if i < len(segments) - 1:
             time.sleep(0.5)
 
