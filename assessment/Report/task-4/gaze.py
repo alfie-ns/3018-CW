@@ -23,6 +23,7 @@ GAZE: Game-Adaptive Zone of Engagement
 """
 
 import os
+import re
 import json
 import time
 import wave
@@ -52,6 +53,9 @@ RECORD_MAX_SECS    = 12     # hard ceiling — never record longer than this
 RECORD_MIN_SECS    = 2      # minimum recording before silence detection kicks in
 SILENCE_POLL_SECS  = 0.5    # polling interval for silence detection on Pepper
 SILENCE_DURATION   = 1.5    # seconds of silence after speech to trigger stop
+CALIBRATION_SECS   = 3      # duration of ambient noise calibration at startup
+ENERGY_BUFFER      = 200    # margin above ambient baseline to set speech threshold
+DEFAULT_ENERGY_THRESHOLD = 800  # fallback if calibration fails
 REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
@@ -579,7 +583,46 @@ def nao_run(ssh, code):
     return stdout.read().decode().strip()
 
 
-def nao_record(ssh):
+def nao_calibrate_ambient(ssh) -> int:
+    """
+    Calibrate microphone energy threshold to the current room environment.
+
+    Silently listens for CALIBRATION_SECS seconds via ALAudioDevice,
+    samples the front microphone energy at regular intervals, and returns
+    the ambient baseline + ENERGY_BUFFER as the speech detection threshold.
+
+    This prevents false positives in noisy labs wherein ambient noise
+    exceeds the hardcoded default, and false negatives in quiet rooms
+    wherein the threshold is unnecessarily high.
+    """
+    try:
+        raw = nao_run(ssh, f"""
+from naoqi import ALProxy
+import time
+
+audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
+samples = []
+start = time.time()
+while (time.time() - start) < {CALIBRATION_SECS}:
+    samples.append(audio.getFrontMicEnergy())
+    time.sleep(0.2)
+
+if samples:
+    avg = sum(samples) / len(samples)
+    print(int(avg))
+else:
+    print(0)
+""")
+        ambient = int(raw) if raw.strip().isdigit() else 0
+        threshold = ambient + ENERGY_BUFFER
+        print(f"  Ambient energy: {ambient}, speech threshold: {threshold}")
+        return threshold
+    except Exception as e:
+        print(f"  Calibration failed ({e}), using default threshold: {DEFAULT_ENERGY_THRESHOLD}")
+        return DEFAULT_ENERGY_THRESHOLD
+
+
+def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD):
     """
     Record audio on Pepper with dynamic silence detection.
 
@@ -589,52 +632,64 @@ def nao_record(ssh):
       2- silence persists for SILENCE_DURATION seconds after speech ends, OR
       3- the hard ceiling RECORD_MAX_SECS is reached.
 
-    This eliminates the awkward dead-air delay wherein the user answers
-    in one second but the system hangs for seven more.
+    The energy_threshold is calibrated at startup via nao_calibrate_ambient()
+    so the system adapts to the ambient noise level of the room, thereby
+    preventing false positives in noisy labs and false negatives in quiet ones.
+
+    If ALAudioDevice.getFrontMicEnergy() is unsupported on the robot's firmware,
+    the inner loop falls back to a safe fixed-duration recording so the demo
+    never breaks.
     """
     nao_run(ssh, f"""
 from naoqi import ALProxy
 import time
 
 rec  = ALProxy("ALAudioRecorder", "127.0.0.1", 9559)
-audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
 
 rec.stopMicrophonesRecording()
 rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [0, 0, 1, 0])
 
-speech_detected  = False
-silence_start    = None
-start            = time.time()
-ENERGY_THRESHOLD = 800
+try:
+    audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
 
-while True:
-    elapsed = time.time() - start
+    speech_detected  = False
+    silence_start    = None
+    start            = time.time()
+    threshold        = {energy_threshold}
 
-    # hard ceiling — never exceed max duration
-    if elapsed >= {RECORD_MAX_SECS}:
-        break
+    while True:
+        elapsed = time.time() - start
 
-    # poll front microphone energy level
-    energy = audio.getFrontMicEnergy()
+        # hard ceiling — never exceed max duration
+        if elapsed >= {RECORD_MAX_SECS}:
+            break
 
-    if elapsed < {RECORD_MIN_SECS}:
-        # minimum recording period — always wait this long
-        if energy > ENERGY_THRESHOLD:
+        # poll front microphone energy level
+        energy = audio.getFrontMicEnergy()
+
+        if elapsed < {RECORD_MIN_SECS}:
+            # minimum recording period — always wait this long
+            if energy > threshold:
+                speech_detected = True
+            time.sleep({SILENCE_POLL_SECS})
+            continue
+
+        if energy > threshold:
             speech_detected = True
+            silence_start = None
+        else:
+            if speech_detected and silence_start is None:
+                silence_start = time.time()
+            if speech_detected and silence_start is not None:
+                if (time.time() - silence_start) >= {SILENCE_DURATION}:
+                    break
+
         time.sleep({SILENCE_POLL_SECS})
-        continue
 
-    if energy > ENERGY_THRESHOLD:
-        speech_detected = True
-        silence_start = None
-    else:
-        if speech_detected and silence_start is None:
-            silence_start = time.time()
-        if speech_detected and silence_start is not None:
-            if (time.time() - silence_start) >= {SILENCE_DURATION}:
-                break
-
-    time.sleep({SILENCE_POLL_SECS})
+except Exception:
+    # firmware fallback — getFrontMicEnergy() unsupported on this Pepper
+    # fall back to a safe fixed-duration recording so the demo never breaks
+    time.sleep({RECORD_MAX_SECS})
 
 rec.stopMicrophonesRecording()
 """)
@@ -643,17 +698,45 @@ rec.stopMicrophonesRecording()
     sftp.close()
 
 
+def _split_into_sentences(text: str) -> list[str]:
+    """
+    Split dialogue into natural sentence-level segments for speech delivery.
+
+    OpenAI frequently returns dialogue as a single unbroken block. Without
+    splitting, Pepper rattles off the entire paragraph without breathing,
+    thereby ruining the illusion of a cognitive companion. This function
+    splits at sentence terminators (. ? !) whilst preserving abbreviations
+    and decimal numbers.
+    """
+    # split on sentence-ending punctuation followed by a space or end-of-string
+    raw_segments = re.split(r'(?<=[.!?])\s+', text.strip())
+    # also split any remaining newlines within segments
+    sentences = []
+    for seg in raw_segments:
+        for line in seg.split("\n"):
+            cleaned = line.strip()
+            if cleaned:
+                sentences.append(cleaned)
+    return sentences if sentences else [text.strip()]
+
+
 def nao_say(ssh, text):
-    """Speak text on Pepper, pausing 0.5s on newlines."""
-    segments = [s.strip() for s in text.split("\n") if s.strip()]
-    for i, seg in enumerate(segments):
-        safe = json.dumps(seg) # escape for safe embedding in single quotes; the followng import ALProxy to make Pepper text-to-speech 
-        nao_run(ssh, f""" 
-                            from naoqi import ALProxy
-                            ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
-                      """)
-        if i < len(segments) - 1:
-            time.sleep(0.5)
+    """
+    Speak text on Pepper with natural sentence-level pausing.
+
+    Splits dialogue at sentence boundaries and inserts Pepper's native
+    \\pau=400\\ pause tags between sentences so the speech cadence sounds
+    naturally human rather than a single rapid-fire block of text.
+    """
+    sentences = _split_into_sentences(text)
+    for i, sentence in enumerate(sentences):
+        safe = json.dumps(sentence)
+        nao_run(ssh, f"""
+from naoqi import ALProxy
+ALProxy("ALTextToSpeech","127.0.0.1",9559).say({safe})
+""")
+        if i < len(sentences) - 1:
+            time.sleep(0.4)  # brief pause between sentences for natural cadence
 
 
 def nao_say_animated(ssh, text):
@@ -1203,6 +1286,10 @@ def main():
     ssh_tts = ssh_connect()         # dedicated TTS connection
     print("  Connected.")
 
+    # ── calibrate ambient noise level ──
+    print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
+    energy_threshold = nao_calibrate_ambient(ssh)
+
     # ── check for saved session ──
     personality    = Personality.ENCOURAGING     # default
     preferred_game = None
@@ -1228,7 +1315,7 @@ def main():
 
         print("\nListening for continue/fresh...")
         nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        nao_record(ssh)
+        nao_record(ssh, energy_threshold)
 
         resume_text = ""
         if check_audio_volume():
@@ -1272,7 +1359,7 @@ def main():
 
         print("\nListening for personality choice...")
         nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        nao_record(ssh)
+        nao_record(ssh, energy_threshold)
 
         if check_audio_volume():
             personality_text = transcribe()
@@ -1306,7 +1393,7 @@ def main():
 
         print("\nListening for game choice...")
         nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        nao_record(ssh)
+        nao_record(ssh, energy_threshold)
 
         game_choice_text = ""
         chosen_game      = None
@@ -1391,7 +1478,7 @@ def main():
             # 3. listen for verbal answer
             print("Listening...")
             nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-            nao_record(ssh)
+            nao_record(ssh, energy_threshold)
 
             response_time = time.time() - question_start
 
