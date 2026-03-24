@@ -47,6 +47,8 @@ header-includes:
 
 ## First-to-do:
 
+- [ ] integrate gage 
+
 - [ ] do all page number TODOs
 - [ ] implement loads of peer-reviewed papers everywhere again
 
