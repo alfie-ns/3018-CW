@@ -32,12 +32,12 @@ header-includes:
 ---
 # TODO
 
-## Mentor 
+## Mentor
 
-[18/03/2026, 19:39:37] Rhydian: Scenario 1) patient takes meds = + 100 points
-[18/03/2026, 19:39:52] Rhydian: Scenario 2) Patient is annoyed = -10 points
-[18/03/2026, 19:40:58] Rhydian: When you implement tis you need to be careful to structure the rewards such that the system does not pester the patient as it seeks to maximise it's rewards
-[18/03/2026, 19:45:19] Rhydian: You'll need to play around with the precise ratios between 1 (behaviour you want to encourage) and 2 (behaviour you want to discourage) to achieve the desired attitude from the robot
+Scenario 1) patient takes meds = + 100 points
+Scenario 2) Patient is annoyed = -10 points
+When you implement tis you need to be careful to structure the rewards such that the system does not pester the patient as it seeks to maximise it's rewards
+You'll need to play around with the precise ratios between 1 (behaviour you want to encourage) and 2 (behaviour you want to discourage) to achieve the desired attitude from the robot
 
 ## DR ALY QUESTIONS:
 
@@ -47,8 +47,9 @@ header-includes:
 
 ## First-to-do:
 
-- [ ] integrate gage 
-
+- [ ] **Most critical:** verify all page numbers and sentences manually
+- [ ] **Most critical:** verify all links to papers manually
+- [ ] integrate 'gage'
 - [ ] do all page number TODOs
 - [ ] implement loads of peer-reviewed papers everywhere again
 
@@ -117,61 +118,61 @@ Cross-check with Gemini.
 
 - [ ] ## 1.1. Introduction
 
-Ageing populations and a shrinking care workforce have positioned assistive robotics *(the deployment of robotic systems to support humans with physical, cognitive, or social impairments in activities of daily living)* as a prominent technological response to a widening care gap. Robots now administer medication reminders, facilitate rehabilitation exercises, and provide therapeutic companionship in both clinical and domestic settings. Measurably: reduced caregiver burden, improved patient outcomes in controlled trials, and increased social engagement among isolated elderly residents.
+Ageing populations and a shrinking care workforce have positioned assistive robotics *(the deployment of robotic systems to support humans with physical, cognitive, or social impairments in activities of daily living)* as a prominent technological response to a widening care gap. Robots now administer medication reminders, facilitate rehabilitation exercises, and provide therapeutic companionship in clinical and domestic settings. Measurably: reduced caregiver burden, improved patient outcomes in controlled trials, and increased social engagement among isolated elderly residents.
 
-However, most-current assistive robots operate at what Cangelosi and Asada (in press, Chapter 1) term the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. (2023, p. 160) argue that genuinely effective assistive robots must be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon (2014, p. xi) formalises this requirement via a cognition cycle wherein the agent anticipates, learns, and adapts, intersecting these processes with perception and action to achieve autonomy. This essay contends that assistive robotics must graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer, not vice versa) if it is to deliver sustained, personalised support. The following sections survey the theoretical foundations thereof, evaluate prominent applications through this cognitive lens, discuss the challenges and ethical implications that arise, and identify future directions for the field.
+However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) term the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots must be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. TODO) formalise this requirement via a cognition cycle wherein the agent anticipates, learns, and adapts, intersecting these processes with perception and action to achieve autonomy. This essay contends that assistive robotics must graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer, not vice versa) if it is to deliver sustained, personalised support. The following sections survey the theoretical foundations thereof, evaluate prominent applications through this cognitive lens, discuss challenges and ethical implications, and identify future directions.
 
 - [ ] ## 1.2. Literature Review
 
-Cognitive robotics, as defined by Cangelosi and Asada (in press, Chapter 1) and introduced within the module (Lecture 9, slides 4-5), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling the underlying cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
+Cognitive robotics, as defined by Sciutti et al. (2023, p. 160) and introduced within the module (Lecture 9, slides 4-5), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
 
-Vernon (2014, p. xi) synthesises the field's definitional plurality into a core cycle (Lecture 9, slide 14). The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 distinct definitions of cognition (Lecture 9, slide 13), yet as Aly explained, the common thread across all is: "we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy." This cycle provides an architectural checklist for assistive robots: a system that cannot anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sandini, Sciutti and Vernon (2021) further specify that cognitive robots must "reason about own actions and actions of interaction partners"; a capacity termed *theory of mind*, wherein the agent infers another's latent mental state from observable behaviour alone.
+Vernon, Metta and Sandini (2007, p. TODO) synthesise the field's definitional plurality into a core cycle (Lecture 9, slide 14). The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 distinct definitions of cognition (Lecture 9, slide 13), yet as Aly explained, the common thread across all is: "we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy." This cycle provides an architectural checklist for assistive robots: a system that cannot anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, p. 160) further specify that cognitive robots must "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's latent mental state from observable behaviour.
 
-Memory, moreover, is not monolithic. Vernon (2014, Chapter 7) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*. An assistive medication robot, for instance, needs episodic memory to recall that a particular user refused medication after a restless night, and semantic memory to know that certain drugs cannot be co-administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is precisely what effective assistive robotics demands.
+Memory, moreover, is not monolithic. Vernon, Metta and Sandini (2007, p. TODO) distinguish *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*. An assistive medication robot, for instance, needs episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot be co-administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is precisely what assistive robotics demands.
 
 - [ ] ## 1.3. Applications
 
 ### 1.3.1 Therapeutic and Emotional Support
 
-The PARO therapeutic seal robot represents one of the most-widely deployed assistive platforms in elderly care. Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and basic auditory processing to modulate its behaviour in response to stroking and vocal stimulation. Clinical trials report reduced cortisol levels and increased social engagement among residents in long-term care facilities, thus the platform has been adopted in care homes across Japan, Europe, and the United States.
+The PARO therapeutic seal robot represents one of the most-widely deployed assistive platforms in elderly care. Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and auditory processing to modulate its behaviour in response to touch and voice. Clinical trials report reduced cortisol levels and increased social engagement among residents, thus the platform has been adopted in care homes across Japan, Europe, and the United States.
 
-Notwithstanding these benefits, PARO operates entirely at the reactive layer. It possesses no theory of mind (it cannot infer *why* a patient is agitated: loneliness, pain, confusion) nor episodic memory of what calmed this specific patient previously. A cognitively-equipped therapeutic robot, by contrast, would anticipate mood shifts via prospection *(forward simulation of likely emotional trajectories)*, recall that music soothed this patient yesterday via episodic memory, and adapt its strategy via metacognition when repeated interventions produce diminishing returns. Insofar as PARO's effectiveness plateaus because it cannot personalise its responses over time, the cognitive gap is not merely theoretical but clinically consequential.
+Notwithstanding these benefits, PARO operates at the reactive layer. It possesses no theory of mind (it cannot infer *why* a patient is agitated: loneliness, pain, confusion) nor episodic memory of what calmed this patient previously. A cognitively-equipped therapeutic robot, by contrast, would anticipate mood shifts via prospection *(forward simulation of likely emotional trajectories)*, recall that music soothed this patient yesterday via episodic memory, and adapt its strategy via metacognition when interventions produce diminishing returns. Insofar as PARO's effectiveness plateaus because it cannot personalise its responses over time, the cognitive gap is not merely theoretical but clinically consequential. Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy: PARO occupies the 'social interface' level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the 'socially intelligent' level. The distance between these levels is the cognitive deficit assistive robotics must close.
 
 ### 1.3.2 Medication Adherence and Daily Living Support
 
-Medication non-adherence imposes substantial costs on healthcare systems, and elderly patients with polypharmacy regimens are particularly vulnerable to missed or incorrect doses. Assistive robots deployed in this domain must navigate a fundamentally different challenge from therapeutic companionship: trust and cognitive load are latent psychological variables that cannot be directly measured, only inferred from noisy behavioural proxies. Lee and See (2004, p. 54) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the latent nature that necessitates probabilistic modelling. A user may comply with a medication prompt despite low trust (e.g. time pressure), or indeed refuse despite high trust (e.g. task complexity), and thus the observation alone does not necessarily disambiguate the latent state (Hancock et al., 2011, p. 522).
+Medication non-adherence imposes substantial costs on healthcare systems, and elderly patients with polypharmacy regimens are particularly vulnerable to missed or incorrect doses. Robots in this domain must navigate a different challenge from therapeutic companionship: trust and cognitive load are latent variables that cannot be directly measured, only inferred from noisy behavioural proxies. Lee and See (2004, p. 54) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the latent nature that necessitates probabilistic modelling. A user may comply with a medication prompt despite low trust (e.g. time pressure), or indeed refuse despite high trust (e.g. task complexity), and thus the observation alone cannot reliably disambiguate the latent state (Hancock et al., 2011, p. 522).
 
-The Partially Observable Markov Decision Process (POMDP) provides the formal machinery to address this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a probabilistic belief distribution over the human's trust level and selects actions that maximise long-term collaboration, showing that belief-space planning significantly outperforms fixed strategies. Garcez and Lamb (2023, p. 12389) identify the neuro-symbolic paradigm as the 'third wave' of AI, wherein neural subsystems (e.g. large language models) handle perception whilst symbolic subsystems (e.g. POMDPs) govern temporal reasoning, thereby providing the temporal scaffold that stateless reactive systems lack.
+The Partially Observable Markov Decision Process (POMDP) provides formal machinery for this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a belief distribution over trust and selects actions that maximise long-term collaboration, showing belief-space planning outperforms fixed strategies. Garcez and Lamb (2023, p. 12389) identify the neuro-symbolic paradigm as the 'third wave' of AI, wherein neural subsystems (e.g. large language models) handle perception whilst symbolic subsystems (e.g. POMDPs) govern temporal reasoning, providing the temporal scaffold stateless systems lack. Nikolaidis, Hsu and Srinivasa (2017, p. 625) provide empirical corroboration: in a collaborative task (n = 69), robots utilising mutual adaptation via a Mixed Observability MDP (modelling human adaptability as a latent variable) were rated significantly more trustworthy than fixed-policy alternatives (U = 180, p = 0.048). This aligns with Hancock et al.'s (2011, p. 522) finding that robot performance attributes are the strongest trust predictors, whilst demonstrating that belief-space planning as advocated by Chen et al. (2020, p. 6) translates into measurable trust gains.
 
 ### 1.3.3 Physical Rehabilitation and Mobility
 
-Robotic exoskeletons and assistive manipulators for stroke recovery and mobility support constitute a third prominent application domain. These systems must adapt in real time not only to the patient's physical state (joint angles, muscle activation patterns) but also to their psychological state: motivation, frustration, and fatigue are latent variables that determine whether a patient perseveres with a rehabilitation exercise or disengages entirely.
+Robotic exoskeletons and assistive manipulators for stroke recovery and mobility support constitute a third application domain. These systems must adapt in real time not only to the patient's physical state (joint angles, muscle activation patterns) but also to their psychological state: motivation, frustration, and fatigue are latent variables that determine whether a patient perseveres or disengages.
 
-Herein, the concept of embodied cognition becomes essential. Pfeifer and Bongard (2007) argue that intelligence is fundamentally shaped by physical interaction with the environment; a rehabilitation robot therefore occupies a uniquely cognitive niche, as it must sense the patient's body, reason about current capabilities, and adapt its assistance accordingly. A purely language-based or screen-based interface cannot achieve this. The cognitive building blocks required (haptic perception, prospective planning of exercise difficulty, episodic memory of the patient's progress trajectory) thus mandate an embodied cognitive architecture rather than a disembodied reactive controller.
+Herein, embodied cognition becomes essential. Brooks (1991, p. TODO) argues that intelligence emerges from physical interaction with the environment rather than abstract representation, whereas Fong, Nourbakhsh and Dautenhahn (2003, p. 149) operationalise this as "perturbatory coupling": the more channels of mutual influence between robot and environment, the more embodied the system. A rehabilitation robot therefore occupies a uniquely cognitive niche, as it must sense the patient's body, reason about current capabilities, and adapt accordingly. A purely language-based or screen-based interface cannot achieve this. The cognitive building blocks required (haptic perception, prospective planning of exercise difficulty, episodic memory of the patient's trajectory) thus mandate an embodied cognitive architecture rather than a disembodied controller.
 
 - [ ] ## 1.4. Discussion
 
 ### 1.4.1 Challenges
 
-Three challenges impede the deployment of cognitively-capable assistive robots. First, computational intractability: solving POMDPs exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the continuous belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Kaelbling, Littman and Cassandra, 1998, p. 120) and online tree search mitigate this, real-time cognitive processing within embodied systems remains an open engineering challenge, particularly when multiple latent variables (trust, load, emotion) must be tracked simultaneously.
+Three challenges impede the deployment of cognitively-capable assistive robots. First, computational intractability: solving POMDPs exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025; Kaelbling, Littman and Cassandra, 1998, p. 120) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple latent variables (trust, load, emotion) must be tracked simultaneously.
 
-Second, the measurement problem: trust, cognitive load, and emotional state are latent variables; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 empirical studies finds that even the strongest correlates of trust explain only modest variance. Desai et al. (2013, p. 256) further demonstrate that trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into inappropriate action selection.
+Second, the measurement problem: trust, cognitive load, and emotional state are latent variables; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only modest variance. Desai et al. (2013, p. 256) further demonstrate that trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into inappropriate action selection. Nikolaidis, Hsu and Srinivasa (2017, p. 627), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner.
 
 Third, adaptation without exploitation: a robot that infers cognitive load could, in principle, time its medication requests to coincide with periods of high vulnerability, thereby maximising compliance at the expense of user autonomy. The reward function governing the POMDP's policy must therefore encode ethical constraints alongside clinical objectives, ensuring that the optimisation target is genuine adherence rather than coerced compliance.
 
 ### 1.4.2 Ethical Implications
 
-Assistive robots operating in intimate care spaces (bedrooms, bathrooms, rehabilitation clinics) collect sensitive behavioural data continuously. Facial expressions, vocal patterns, and movement trajectories constitute biometric data, yet regulatory frameworks have not kept pace with the technology's deployment. Wachter, Mittelstadt and Floridi (2017) demonstrate that even the General Data Protection Regulation provides no enforceable "right to explanation" of automated decisions; a gap that is particularly concerning in healthcare contexts wherein algorithmic recommendations may directly affect patient wellbeing.
+Assistive robots operating in intimate care spaces (bedrooms, bathrooms, rehabilitation clinics) collect sensitive behavioural data continuously. Facial expressions, vocal patterns, and movement trajectories constitute biometric data, yet regulatory frameworks have not kept pace with deployment. Wachter, Mittelstadt and Floridi (2017, p. TODO) demonstrate that even the General Data Protection Regulation provides no enforceable "right to explanation" of automated decisions; a gap particularly concerning in healthcare wherein recommendations directly affect patient wellbeing.
 
-Moreover, over-reliance on assistive robots risks eroding the user's functional independence. If a robot consistently anticipates and pre-empts the user's needs via prospection, the user may disengage from self-directed activity, thereby creating a dependency that contradicts the assistive mandate. The responsibility gap compounds this: when a care robot administers incorrect medication, legal liability falls ambiguously between manufacturer, deploying institution, and supervising clinician.
+Moreover, over-reliance on assistive robots risks eroding functional independence. If a robot consistently anticipates and pre-empts needs via prospection, the user may disengage from self-directed activity, thereby creating a dependency that contradicts the assistive mandate. Sharkey (2014, p. 6) frames this via Nordenfelt's 'Dignity of Identity': "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences would also be likely to negatively affect their feelings of dignity." This implies that only cognitively-equipped robots (those with episodic memory of individual users) can avoid dignity violations; reactive systems such as PARO, notwithstanding their therapeutic benefits (Wada and Shibata, 2007, p. 974), risk infantilisation precisely because they cannot personalise. The responsibility gap compounds this further: when a care robot administers incorrect medication, liability falls ambiguously between manufacturer, deployer, and clinician.
 
-The ethical watchword is therefore proactive regulation: design-stage ethics that anticipate failure modes before deployment, rather than reactive patchwork after harm has occurred. Connecting this to the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely and inherently high.
+The ethical watchword is therefore proactive regulation: design-stage ethics that anticipate failure modes before deployment, rather than reactive patchwork after harm. Per the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely high.
 
 - [ ] ## 1.5. Conclusion
 
-Assistive robotics stands at an inflection point. Current systems (PARO, basic medication prompt robots, simple rehabilitation aids) deliver measurable benefits within narrow operational envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon (2014) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would constitute a qualitative advance over the most-capable systems presently deployed.
+Assistive robotics stands at an inflection point. Current systems (PARO, medication prompt robots, rehabilitation aids) deliver measurable benefits within narrow operational envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon, Metta and Sandini (2007) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would constitute a qualitative advance over the most-capable systems deployed.
 
-The neuro-symbolic paradigm offers a technically viable path toward this vision, as the Trust-POMDP framework demonstrated in medication adherence applications attests (Chen et al., 2020). Future applications will likely extend beyond single-task assistance toward cognitively autonomous home-dwelling companions: robots that proactively monitor health indicators, anticipate daily living needs via episodic memory, and adapt their interaction style to the user's evolving cognitive and emotional state. Sharkey and Sharkey (2012, p. 27) identify this trajectory whilst cautioning that such systems risk replacing rather than supplementing human care, and therefore the field must pursue cognitive capability and ethical governance in concert. Figure~\ref{fig:assistive-trajectory} visualises this trajectory. The ultimate test, per the embodied cognition thesis, is a robot that can sense, remember, anticipate, and adapt within the physical world, whilst respecting the autonomy and dignity of the persons it serves.
+The neuro-symbolic paradigm offers a viable path toward this vision, as the Trust-POMDP framework attests (Chen et al., 2020). Sciutti et al. (2023, pp. 162-163) independently identify the integration of learning with model-based approaches as cognitive robotics' most-prominent trajectory; that this converges with Garcez and Lamb's (2023, p. 12389) 'third wave' thesis from AI theory suggests the direction is robust rather than parochial. Future applications will likely extend beyond single-task assistance toward cognitively autonomous home-dwelling companions: robots that proactively monitor health indicators, anticipate daily needs via episodic memory, and adapt their interaction style to the user's evolving cognitive and emotional state. Sharkey and Sharkey (2012, p. 27) identify this trajectory whilst cautioning that such systems risk replacing rather than supplementing human care, and therefore the field must pursue cognitive capability and ethical governance in concert. Figure~\ref{fig:assistive-trajectory} visualises this trajectory. The ultimate test, per the embodied cognition thesis, is a robot that can sense, remember, anticipate, and adapt within the physical world, whilst respecting the autonomy and dignity of the persons it serves.
 
 \begin{figure}[H]
 \centering
@@ -217,7 +218,7 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 
 % --- Vernon cycle building blocks along x-axis (bottom annotation) ---
 \node[font=\tiny\sffamily\itshape, text=gray, anchor=north] at (axis cs: 1.5, -0.15)
-    {Vernon (2014) cognition cycle building blocks $\longrightarrow$};
+    {Vernon, Metta and Sandini (2007) cognition cycle building blocks $\longrightarrow$};
 
 % --- Ethical caution annotation ---
 \draw[-{Stealth[length=3pt]}, dashed, red!60, thin] (axis cs: 2.9, 2.3) -- (axis cs: 2.9, 2.65);
@@ -232,41 +233,68 @@ The neuro-symbolic paradigm offers a technically viable path toward this vision,
 
 ## 1.6. Task-3 References
 
-### 1.6.1 Foundational
+### 1.6.1 Papers and Journal Articles
 
-- Vernon, D. (2014) Artificial Cognitive Systems: A Primer. Cambridge, MA: MIT Press.
+- [ ] verify all links work and extract each papers insights
 
-### 1.6.2 Papers and Journal Articles
+**REMOVE: one checkmark for working link second for insight gathered**
 
 - Sciutti, A., Beetz, M., Inamura, T., Korsah, A., Oh, J., Sandini, G., Shimoda, S. and Vernon, D. (2023) 'The Present and the Future of Cognitive Robotics', IEEE Robotics
   & Automation Magazine, 30(3), pp. 160-163. Available at: [https://ieeexplore.ieee.org/document/10255092](https://ieeexplore.ieee.org/document/10255092) (Accessed: 18 March 2026).
 
-- [ ] Cangelosi, A. and Asada, M. (in press) *Cognitive Robotics*, Chapter 1. Cambridge, MA: MIT Press.
-- [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23.
-- [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275.
-- [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387-12406.
-- [ ] Hancock, P. A., Billings, D. R., Schaefer, K. E., Chen, J. Y. C., de Visser, E. J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527.
-- [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134.
-- [ ] Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80.
-- [ ] Papadimitriou, C. H. and Tsitsiklis, J. N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450.
-- [ ] Pfeifer, R. and Bongard, J. (2007) *How the Body Shapes the Way We Think: A New View of Intelligence*. Cambridge, MA: MIT Press.
-- [ ] Sandini, G., Sciutti, A. and Vernon, D. (2021) 'Cognitive Robotics', in Ang, M., Khatib, O. and Siciliano, B. (eds.) *Encyclopedia of Robotics*. Berlin: Springer.
-- [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40.
-- [ ] Vernon, D. (2014) *Artificial Cognitive Systems: A Primer*. Cambridge, MA: MIT Press.
-- [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99.
+- [ ] Bemelmans, R., Gelderblom, G. J., Jonker, P. and de Witte, L. (2012) 'Socially assistive robots in elderly care: a systematic review into effects and effectiveness', *Journal of the American Medical Directors Association*, 13(2), pp. 114-120. Available at: https://pubmed.ncbi.nlm.nih.gov/21450215/ (Accessed: 25 March 2026).
+
+- [ ] Broadbent, E., Stafford, R. and MacDonald, B. (2009) 'Acceptance of Healthcare Robots for the Older Population: Review and Future Directions', *International Journal of Social Robotics*, 1(4), pp. 319-330. Available at: https://link.springer.com/article/10.1007/s12369-009-0030-6 (Accessed: 25 March 2026).
+
+- [ ] Brooks, R. A. (1991) 'Intelligence without representation', *Artificial Intelligence*, 47(1-3), pp. 139-159. Available at: https://people.csail.mit.edu/brooks/papers/representation.pdf (Accessed: 24 March 2026).
+
+- [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23. Available at: https://arxiv.org/abs/1801.04099 (Accessed: 15 March 2026).
+
+- [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275. Available at: https://ieeexplore.ieee.org/document/6483596 (Accessed: 20 March 2026).
+
+- [ ] Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3-4), pp. 143-166. Available at: https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf (Accessed: 18 March 2026).
+
+- [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387-12406. Available at: https://link.springer.com/article/10.1007/s10462-023-10448-w (Accessed: 20 March 2026).
+
+- [ ] Hancock, P. A., Billings, D. R., Schaefer, K. E., Chen, J. Y. C., de Visser, E. J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: https://journals.sagepub.com/doi/10.1177/0018720811417254 (Accessed: 15 March 2026).
+
+- [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf (Accessed: 13 March 2026).
+
+- [ ] Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392 (Accessed: 15 March 2026).
+
+- [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
+
+- [ ] Papadimitriou, C. H. and Tsitsiklis, J. N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf (Accessed: 13 March 2026).
+
+- [ ] Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: An anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*, pp. 1025-1030. Available at: http://www.cs.cmu.edu/~ggordon/jpineau-ggordon-thrun.ijcai03.pdf (Accessed: 24 March 2026).
+
+- [ ] Sharkey, A. (2014) 'Robots and human dignity: A consideration of the effects of robot care on the dignity of older people', *Ethics and Information Technology*, 16(1), pp. 63-75. Available at: https://philarchive.org/rec/SHARAH-2 (Accessed: 22 March 2026).
+
+- [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. (Accessed: 22 March 2026).
+
+- [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems (NeurIPS 23)*, pp. 2164-2172. Available at: https://proceedings.neurips.cc/paper/2010/file/edfbe1afcf9246bb0d40eb4d8027d90f-Paper.pdf (Accessed: 24 March 2026).
+
+- [ ] Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics & Automation Magazine*, 14(1), pp. 35-42. Available at: https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf (Accessed: 25 March 2026).
+
+- [ ] Vernon, D., Metta, G. and Sandini, G. (2007) 'A Survey of Artificial Cognitive Systems: Implications for the Autonomous Development of Mental Capabilities in Computational Agents', *IEEE Transactions on Evolutionary Computation*, 11(2), pp. 151-180. Available at: https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf (Accessed: 13 March 2026).
+
+- [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99. Available at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2903469 (Accessed: 22 March 2026).
+
 - [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980.
 
 # 2- Task (4) Programming Project
 
+- [ ] 'anticipate'
+
+
 ## 2.1. Introduction (10%)
 
-## 2.2. Background (10%)
+## 2.2. Background (10%; Alfie)
 
-## 2.3. Methods & Setup (35%)
+## 2.3. Methods & Setup (35%; Alfie)
 
-- [ ] anticipate
 
-The reward function is structured such that trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
+The reward function is structured trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
 
 Crucially, the ratio between encouragement (context-sensitive bonuses) and discouragement (context-sensitive penalties) determines the robot's behavioural attitude. Three configurable personality presets scale these ratios: *cautious* (penalty weight 1.5$\times$, bonus weight 0.8$\times$, load sensitivity 1.5$\times$) produces a patient-first robot that backs off readily under high cognitive load; *balanced* (1.0$\times$ throughout) represents the default; *assertive* (penalty weight 0.7$\times$, bonus weight 1.3$\times$, trust drive 1.3$\times$) pursues compliance more aggressively. The same base reward values and state-action conditions are shared across all three; only the scaling differs. This design permits direct comparison of how reward-ratio tuning shapes emergent behaviour on identical scenarios, thereby isolating the effect of the encouragement-to-discouragement balance on the robot's interaction strategy.
 
