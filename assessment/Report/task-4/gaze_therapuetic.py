@@ -164,7 +164,7 @@ PERSONALITY_PROMPTS = {
     Personality.ENCOURAGING: (
         "Your personality is warm, encouraging, and supportive. "
         "Celebrate every small win. Use phrases like 'You've got this!' and "
-        "'Brilliant effort!' Genuinely cheer the user on."
+        "'Brilliant effort! Keep going!' Genuinely cheer the user on."
     ),
     Personality.SARCASTIC: (
         "Your personality is playfully sarcastic and witty. "
