@@ -266,9 +266,11 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 
 # 2- Task (4) Programming Project
 
+- [ ] ensure code-solution matches `proposal.pdf`
+
 References:
 
----
+```markdown
 
 ### 1. Adaptive Companion / Socially Assistive Role (core concept)
 
@@ -320,7 +322,7 @@ References:
 - Papadimitriou and Tsitsiklis (1987) -- Complexity of MDPs. Only cite if you formally discuss the computational complexity of your adaptive decision-making.
 - Metz (2007), Winschiers-Theophilus and Bidwell (2013), Wyche and Steinfield (2016) -- African moral theory / indigenous HCI / technology adoption. Not directly applicable unless you bring in a specific cultural-ethics angle.
 
----
+```
 
 **Strongest citations for the core GAZE concept: Tapus et al. (2007), Sciutti et al. (2023), Nikolaidis et al. (2017), Ahn et al. (2022), and Smedegaard (2019). These five alone cover the adaptive-assistive role, cognitive framing, mutual adaptation, LLM-robot grounding, and the novelty-engagement challenge.**
 
