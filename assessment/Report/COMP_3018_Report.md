@@ -41,7 +41,7 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 
 ## DR ALY QUESTIONS:
 
-- [ ] so maths and code won't affect word count right? However I never explcitly knew if captions within a figure-diagram count towards word count?
+- [X] so maths and code won't affect word count right? However I never explcitly knew if captions within a figure-diagram count towards word count?
 
 ---
 
@@ -55,8 +55,8 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 
 ## General:
 
-- [ ] Download Bemelmans and Broadbent via Plymouth library                                                                                                                     
-- [ ] Run past Gemini  
+- [ ] Download Bemelmans and Broadbent via Plymouth library
+- [ ] Run past Gemini
 - [ ] decides the reward based on what it oberserves = inferring the reward
 - [ ] discuss POMDP maths
 - [ ] use wording from 3018 Task-4 Proposal Google Doc
@@ -243,58 +243,94 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 
 - [X] [ ] Sciutti, A., Beetz, M., Inamura, T., Korsah, A., Oh, J., Sandini, G., Shimoda, S. and Vernon, D. (2023) 'The Present and the Future of Cognitive Robotics', IEEE Robotics
   & Automation Magazine, 30(3), pp. 160-163. Available at: [https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092](https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092) (Accessed: 18 March 2026).
-
 - [ ] [ ] Bemelmans, R., Gelderblom, G. J., Jonker, P. and de Witte, L. (2012) 'Socially assistive robots in elderly care: a systematic review into effects and effectiveness', *Journal of the American Medical Directors Association*, 13(2), pp. 114-120. Available at: https://pubmed.ncbi.nlm.nih.gov/21450215/ (Accessed: 25 March 2026).
-
 - [ ] [ ] Broadbent, E., Stafford, R. and MacDonald, B. (2009) 'Acceptance of Healthcare Robots for the Older Population: Review and Future Directions', *International Journal of Social Robotics*, 1(4), pp. 319-330. Available at: https://link.springer.com/article/10.1007/s12369-009-0030-6 (Accessed: 25 March 2026).
-
 - [ ] [ ] Brooks, R. A. (1991) 'Intelligence without representation', *Artificial Intelligence*, 47(1-3), pp. 139-159. Available at: https://people.csail.mit.edu/brooks/papers/representation.pdf (Accessed: 24 March 2026).
-
 - [ ] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23. Available at: https://arxiv.org/abs/1801.04099 (Accessed: 15 March 2026).
-
 - [ ] [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275. Available at: https://ieeexplore.ieee.org/document/6483596 (Accessed: 20 March 2026).
-
 - [ ] [ ] Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3-4), pp. 143-166. Available at: https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf (Accessed: 18 March 2026).
-
 - [ ] [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387-12406. Available at: https://link.springer.com/article/10.1007/s10462-023-10448-w (Accessed: 20 March 2026).
-
 - [ ] [ ] Hancock, P. A., Billings, D. R., Schaefer, K. E., Chen, J. Y. C., de Visser, E. J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: https://journals.sagepub.com/doi/10.1177/0018720811417254 (Accessed: 15 March 2026).
-
 - [ ] [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf (Accessed: 13 March 2026).
-
 - [ ] [ ] Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392 (Accessed: 15 March 2026).
-
 - [ ] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
-
 - [ ] [ ] Papadimitriou, C. H. and Tsitsiklis, J. N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf (Accessed: 13 March 2026).
-
 - [ ] [ ] Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: An anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*, pp. 1025-1030. Available at: http://www.cs.cmu.edu/~ggordon/jpineau-ggordon-thrun.ijcai03.pdf (Accessed: 24 March 2026).
-
 - [ ] [ ] Sharkey, A. (2014) 'Robots and human dignity: A consideration of the effects of robot care on the dignity of older people', *Ethics and Information Technology*, 16(1), pp. 63-75. Available at: https://philarchive.org/rec/SHARAH-2 (Accessed: 22 March 2026).
-
 - [ ] [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. Available at: https://philarchive.org/rec/SHAGAT (Accessed: 22 March 2026).
-
 - [ ] [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems (NeurIPS 23)*, pp. 2164-2172. Available at: https://proceedings.neurips.cc/paper/2010/file/edfbe1afcf9246bb0d40eb4d8027d90f-Paper.pdf (Accessed: 24 March 2026).
-
 - [ ] [ ] Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics & Automation Magazine*, 14(1), pp. 35-42. Available at: https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf (Accessed: 25 March 2026).
-
 - [ ] [ ] Vernon, D., Metta, G. and Sandini, G. (2007) 'A Survey of Artificial Cognitive Systems: Implications for the Autonomous Development of Mental Capabilities in Computational Agents', *IEEE Transactions on Evolutionary Computation*, 11(2), pp. 151-180. Available at: https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf (Accessed: 13 March 2026).
-
 - [ ] [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99. Available at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2903469 (Accessed: 22 March 2026).
-
 - [ ] [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980. Available at: https://ieeexplore.ieee.org/document/4339551 (Accessed: 18 March 2026).
 
 # 2- Task (4) Programming Project
 
-- [ ] 'anticipate'
+References:
 
+---
+
+### 1. Adaptive Companion / Socially Assistive Role (core concept)
+
+- Tapus, Mataric and Scassellati (2007) -- This is your single most important paper. Socially assistive robotics is precisely what GAZE does: a robot that adapts its behaviour to motivate and coach a user. Their framework for robot-assisted therapy (detecting disengagement, adjusting difficulty) maps almost 1:1 onto your core loop.
+- Fong, Nourbakhsh and Dautenhahn (2003) -- Foundational survey on socially interactive robots. Use it to ground GAZE within the broader taxonomy of social robots (companion, assistant, coach).
+- Kahn et al. (2008) -- Design patterns for sociality in HRI. Directly supports your robot personality modes (encouraging vs. sarcastic) and the idea of building rapport through game interaction.
+
+### 2. Cognitive Robotics Framework (perceive-attend-anticipate-plan-learn-adapt)
+
+- Sciutti et al. (2023) -- Cite this to justify framing GAZE as a *cognitive* robot. Their definition of cognitive robotics maps onto your 6-point "How is cognitive" section almost verbatim.
+
+### 3. Multi-Signal User State Inference & Adaptive Engine
+
+- Nikolaidis, Hsu and Srinivasa (2017) -- Human-robot *mutual* adaptation in collaborative tasks. Directly supports your adaptive difficulty/game-switching mechanism where the robot adjusts based on inferred user state.
+- Kaelbling, Littman and Cassandra (1998) -- Your adaptive engine is essentially a POMDP: user emotional/cognitive state is partially observable (you see facial expression + response time + correctness but not the true internal state). Cite this to give your inference model theoretical grounding.
+- Pineau, Gordon and Thrun (2003) and Silver and Veness (2010) -- If you want to frame the adaptive engine formally, these are scalable POMDP solvers. Even if you don't implement a full POMDP, citing them shows you understand the decision-theoretic underpinning of what your weighted-signal inference is approximating.
+
+### 4. Trust & Engagement Over Time
+
+- Desai et al. (2013) -- Impact of robot failures and feedback on real-time trust. Directly relevant: if GAZE generates a bad question or misreads emotion, how does that affect user trust? Supports your feedback system idea.
+- Hancock et al. (2011) -- Meta-analysis of trust factors in HRI. Use to justify which signals matter for building trust (robot performance, reliability of adaptation).
+- Lee and See (2004) -- Trust in automation. Your system is making autonomous decisions (switching games, adjusting difficulty). This paper grounds *why* the user needs to trust those decisions.
+- Chen et al. (2020) -- Trust-aware decision making. Supports the idea that your adaptive engine should factor in whether the user trusts the robot's choices, not just performance metrics.
+- Smedegaard (2019) -- Novelty effects in social HRI. Critical for your proposal: initial engagement with Pepper may be high due to novelty, then decline. Your adaptive system needs to sustain engagement *beyond* the novelty phase. Cite this to show awareness of that challenge.
+
+### 5. LLM Integration (OpenAI for Game/Dialogue Generation)
+
+- Ahn et al. (2022) -- Grounding language in robotic affordances ("SayCan"). Cite to justify connecting an LLM to Pepper's physical capabilities (speech, gestures). The LLM generates the game content, but it must be grounded in what Pepper can actually *do*.
+- Ji et al. (2023) -- LLM hallucination survey. Critical to acknowledge: if OpenAI generates a trivia question, the answer could be wrong. Your system needs a correctness-verification layer. Shows awareness of a real technical risk.
+- Garcez and Lamb (2023) -- Neurosymbolic AI. Your architecture is inherently neurosymbolic: the LLM (neural) handles dialogue generation, but game logic, scoring, and state tracking are symbolic/rule-based. Cite to frame this hybrid approach deliberately rather than accidentally.
+
+### 6. Uncanny Valley / Robot Appearance
+
+- Mori (1970) -- Pepper sits in an interesting spot on the uncanny valley curve (humanoid but clearly not human). Brief cite to justify why Pepper is a suitable platform for a companion role without triggering discomfort.
+
+### 7. Ethics of Robot Companionship
+
+- Sharkey and Sharkey (2012) -- Ethical issues in robot care for the elderly. If GAZE has any therapeutic/wellbeing angle, cite this to show awareness of ethical considerations (e.g., should a robot be a substitute for human interaction?).
+- Sharkey (2014) -- Robots and human dignity. Supports ethical grounding of the companion role.
+- Wachter, Mittelstadt and Floridi (2017) -- If you're storing user progress/preferences, cite for GDPR and explainability considerations regarding the adaptive engine's decisions.
+
+### 8. Cultural Considerations (if relevant to your report)
+
+- Kaplan (2004), Lim, Rooksby and Cross (2021), Cirasa and Conti (2025) -- All address cultural differences in robot acceptance and trust. Useful if your report discusses how GAZE might be received differently across cultures.
+
+### Less Directly Relevant
+
+- Rios-Martinez et al. (2015) and Joosse et al. (2014) -- Proxemics/navigation. Since Pepper is stationary, these are tangential unless you discuss the seating arrangement/distance.
+- Papadimitriou and Tsitsiklis (1987) -- Complexity of MDPs. Only cite if you formally discuss the computational complexity of your adaptive decision-making.
+- Metz (2007), Winschiers-Theophilus and Bidwell (2013), Wyche and Steinfield (2016) -- African moral theory / indigenous HCI / technology adoption. Not directly applicable unless you bring in a specific cultural-ethics angle.
+
+---
+
+**Strongest citations for the core GAZE concept: Tapus et al. (2007), Sciutti et al. (2023), Nikolaidis et al. (2017), Ahn et al. (2022), and Smedegaard (2019). These five alone cover the adaptive-assistive role, cognitive framing, mutual adaptation, LLM-robot grounding, and the novelty-engagement challenge.**
+
+- [ ] 'anticipate'
 
 ## 2.1. Introduction (10%)
 
 ## 2.2. Background (10%; Alfie)
 
 ## 2.3. Methods & Setup (35%; Alfie)
-
 
 The reward function is structured trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
 
@@ -373,7 +409,7 @@ All interaction data (belief states, action choices, observations, outcomes) are
 
 ## 2.5. Conclusion (10%)
 
-## 2.6. References (5%)
+## 2.6 References (5%)
 
 ## 2.7. Appendix
 
