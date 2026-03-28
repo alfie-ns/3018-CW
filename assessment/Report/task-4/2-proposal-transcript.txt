@@ -1,0 +1,599 @@
+And what we will discuss is.
+Okay, so this I will just discuss with them so we understand.
+For example, for example, one person will do vision task, one person will do another task so that we make sure that tasks are clear and then you can start working on it.
+What we will need to do is like it's one report as in you will all contribute it.
+So for example, the person speaking about task one, Did we validate all the ideas?
+I validated here.
+Validated here.
+Did we discuss we discussed your idea the.
+Next.
+Time.
+Yeah, I've got a like good proposal.
+Okay, so I will be passing group by group in the chat as well.
+Brother,.
+It's.
+It.
+One additional session that was Masters 1 on Wednesday.
+So how do you know who want to proceed?
+Like start coming from the vacation after this start on Wednesday an additional experiment work work workshop session for all groups to you know like the progress fast semester.
+Or do you want to start coming on Fridays and see if you will meet Wednesday and they come for example the week after.
+So we have two weeks.
+We have two weeks and there is a standby Wednesday session.
+So do you want to apply to use it from the first week after vacation or see how the progress will be the first week first with the two sessions?
+Because like we have have two workshops so little lecture.
+But we will use other time workshop.
+And.
+The afternoon workshop and then we will have one final week.
+For this one final week we will have workshop Friday and another workshop in the morning workshop afternoon.
+And if you have like if you need additional workshop we can take it Wednesday.
+So now I'm asking you about Wednesday, the first Wednesday.
+Do you need to take it or do you need to leave it to see how we progress first?
+I prefer to have that first Wednesday.
+As well, I think.
+Okay,.
+Can we get both Wednesdays?
+Okay, that's fine.
+So I'll be here Wednesday.
+So we will then meet on Wednesday after the.
+So it should be.
+Yeah, yeah, that will be effectively 22nd.
+Okay.
+So normally, normally we'll have the session in case like I'll be just returning from Japan 22nd, 21st.
+That will be coming in the after.
+If any disruption happened to the plane or something probably you ask Ashley to wait me.
+What you need to do is like to work and.
+Speech or something.
+So you still have things to do.
+But just in case like any has seen happen to something.
+But normally I should be here on 21st.
+So I'll be here on 22nd.
+So it runs for you.
+It runs anyway.
+Normally there will be somebody here and it runs normally.
+Yeah.
+What time would it be on Wednesday work time?
+It will be on Wednesday 2pm I think.
+Yeah, 2pm Same time like the workshop of them.
+So it's indicated here Wednesday all weekdays.
+It's.
+It's.
+Yeah, it's just until March but it's a 2 to 4.
+Okay.
+So on 2 to 4 Wednesday after location 20 seconds I don't hear or anything that something happens delay or something actually work has replacement.
+Okay.
+But you will have the room available for you to discuss your session.
+Okay, so that's good.
+So it's the.
+That you.
+The first one will be on the 20.
+25Th, 22nd.
+Oh yeah, 22nd of April.
+So I will be here.
+It's up to you.
+If you, if you need to come, come if it's up to you.
+Additional session.
+Yeah, from two to four.
+So I thought that was on April.
+April, yes.
+All right.
+So the novelty is multi signal emotional inference.
+So so just may I ask.
+Okay.
+So you, you're not interested?
+Okay, I will send it anyway.
+An email to confirm how probably as well you will speak to your colleague if you will attend.
+But yeah, that's fine.
+Yeah yeah.
+Okay so game adaptive zone of engagement.
+Okay so please tell me about it.
+So it's like it's.
+It decides what games you should.
+It just basically thinks about what games you play.
+Yeah, my.
+The reason I write it down is from my memory but it's.
+I've tried to.
+So it's just like the sizable get.
+So there'll be like different games you can play and yeah it just, it also like.
+So the reason it's multi signal is because it kind of infers like.
+Oh so for example like they could look sad but actually that's just their resting face and if they're still doing getting things right then.
+So can you tell me more?
+Gays.
+What do you mean gays Here.
+So it's like, like adapt.
+It is take like I, I, I, I. I think it dynamically changes the games that they play.
+But I'm using the word that adapted adaptively changes.
+So what kind of game?
+Just to understand.
+So it will play different ones.
+But I'm thinking like you know, what's it called?
+You know like kind of like you know that TV show Count get Countdown.
+I know what's in it.
+It's like you have like you get given a bunch of numbers or get given a bunch of letters and you have to like decide.
+No, you have to like.
+Yeah.
+Come up with a.
+Come up with the letter or the word or the sum that they want you to with the things or the highest one.
+I think.
+I don't really watch Countdown as your stone.
+I've seen it on the TV when parents are watching it and stuff.
+It's just kind of basically that it's like mathematical games or spelling type games.
+Yeah but we need to choose one specific game the game.
+Just one game.
+So it doesn't have to do one game.
+Yeah like because you need to model something on the robot.
+So I understand.
+So I didn't need 100 games.
+Particularly just you speak about different games now.
+What is the game name of the game?
+Well, it was going to play.
+It's going to play.
+I want I wanted to play different games, but.
+Different games?
+Yeah.
+Why do you make it difficult like this?
+It won't.
+That won't be the too difficult difficult part would just be like cuz like.
+For example, your colleagues are providing games, but the architecture of one game is totally different than another game.
+And what one game requires, for example, one game can require speech processing, another game doesn't require speech processing or you know, like a different level.
+Yeah, well all these games are kind of speech based.
+So they'll.
+They kind of all.
+They will, they will.
+All.
+So just like tell me like for example, we are in a session with a robot.
+So how does this multiple games work together?
+So the pep will sit there and it'll be like you talk to be like, what game do you want to play?
+It'll be like, what game do you want to play?
+It'll give you some options of games to play.
+You'd be like, yeah, let's play Countdown.
+And then it'll go like great.
+They'll give you, give me a bunch of numbers and it'll be like I can't remember how Countdown really works.
+But yeah, okay, so there is a game like this.
+Okay, I just need to know that there is a game with this name and it will be.
+Yeah, okay, but you understand like speech based.
+But for example, as we said like there is expected to generate gesture behavior.
+Yeah, so.
+So when you generate gesture behavior, the gesture behavior varies according to the.
+Can I just play what I've written?
+If you make gesture behavior for one game, this accompany the speech.
+But this is different from one game to one game because the speech is different.
+Very similar.
+You see what they mean?
+Yeah.
+Could I just play the proposal I've written in full and then, and you, and then could.
+Could you tell me what's wrong there?
+No, I'm saying like if you're saying like speech only because you're saying you're playing different games.
+As I understand and I understand like you are saying that it will be based on speechments.
+Actually it should be also based on gestures.
+And if you want model gestures.
+Yeah, so.
+Gestures will be different according to the speech happening.
+So for example, if you have one speech, for example saying blah, blah blah blah blah, this is a story and another speech saying different thing, the gestures will not be the same.
+So if you are counting three stories or three games and you are playing with the three games and.
+You will count like okay, you should still work with gestures or something.
+So I think you are increasing the difficulty in my opinion, you know, you're making a little bit.
+It's obviously if I just read you out what the scenario and stuff.
+It's.
+It.
+You speak about hybrid cognitive architecture.
+It's not ideal warning.
+Why hybrid cognitive architecture?
+Because it's like multiple things.
+No, no, we don't use cognitive architecture here.
+Do you use a cognitive architect?
+What do you mean?
+Because you are saying that first paper will act cognitively and after this you are speaking about hybrid cognitive architecture.
+Do you use hybrid cognitive architectures?
+Yeah, I'm thinking of trying to, yeah.
+But we didn't complete yet.
+Oh, what so is the next lecture.
+Oh yeah.
+Because the next question is after the is up.
+Because make it simple.
+Your colleagues are making it simple.
+Make it simple.
+My advice, you don't need to really over complicate it because you have two weeks on.
+You don't have one year.
+Yeah.
+So I'll delete the bit about how.
+Oh, because.
+Yeah, because the game rules are symbolic.
+And it will not be.
+I recommend you don't go like symbolic.
+Okay.
+If you have three months, four months work, I will do support here on Sunday.
+Prospection.
+I. I appreciate that you are even putting a lot of words from cognitive side, but we have two weeks, remember.
+Please.
+We have two weeks.
+Yeah.
+So it needs to be more realistic and easy to do.
+It's just the thing is, it's like I understand that's two weeks, but this is kind of all I do.
+I think I. I can stay, I can be working, I'm at home for all night and I. I feel like I could.
+Because like it's.
+It's also involves another colleague of your.
+You.
+I don't think he would be happy to do it in cognitive.
+The robotics and the work, all that.
+Well, no, I can do all that myself.
+I respect this.
+But please understand that, you know, like if I'm asking you to do there will be a lot of difficulties appearing to you and this is not realistic period duration for such kind of work.
+Okay.
+You speak about perception, you speak about attention, you speak about action selection.
+This is not about.
+With very sophisticated routine.
+Can you make something simpler?
+This is basic as hands on.
+I'm not asking PhD work while I appreciate what you are doing.
+But the time is a challenge and I'm telling you, for example the standard of the school, the learning objectives of this module is to have the courage to work at some level on the robot, but not to achieve something like, let's say something that's extremely, for example sophisticated because of the time.
+Two weeks only.
+So my role is to explain this point to you cognitive architectures, you know, fine, but this is something.
+We will complete it next after the vacation.
+So even it is sophisticated to be implemented this way.
+So I would probably ask to simplify the task.
+All your colleagues were working on the range of games, for example.
+That's more than enough to use the modalities and implement it.
+So if you are returning to the game side of the things that you're saying, some games that you are based on speech and that's fine for me.
+But employing this with cognitive architecture within two weeks.
+I believe this will be a challenge.
+Oh yeah, I can.
+But I can.
+I'm not like disagreeing with you.
+I just.
+I just could just tell me what, like how.
+Like what?
+Like an example of something that would make this too challenging to do.
+So an example to do to help.
+Example of like an issue I'd run into and I wouldn't have two weeks.
+To solve it after all of it.
+All of it will not be able to do two weeks.
+All of it.
+Not an example, all of it.
+In terms of creating from everything, in terms of the code or in terms of.
+Everything.
+Yeah.
+If you'd like to took it on your responsibility.
+I'm fine.
+Like, I'm fine.
+I will, you know, I will just be waiting a project to be ended.
+I'm fine.
+But I will just remind you that I explained this to you.
+Yeah.
+That's why I'm saying like as a person of having this agreement before is to make sure that even, even if.
+I like read a whole bunch of like properly just try to work out that like.
+I don't know, even if it was.
+Like, like this is a group project.
+So first of all, Salman Muhammad should be happy with this.
+I mean, and it doesn't.
+There's no.
+Nothing means that you will be only.
+Doing all work, you know, so the contribution split.
+Split.
+Simon would be doing the game logic and gesture research and he'd be writing the introduction and the results and outcomes.
+Result outcomes or system analysis.
+So paper, camera, paper.
+So.
+So I. I can find text called Salman, one thing called sales Salman and the one thing called Alfie.
+But there are other cubes that don't have Salman or Alfie.
+But it might have not printed properly.
+Okay.
+Are you talking about the contribution split at the bottom?
+At the bottom.
+So Alfie.
+Okay, so.
+So you have like Alfie generate code, intellectual facial recognition.
+Salman, game logic, gesture.
+So what I would be doing in regards to the robot is the general code getting the OpenAI API working and putting in the facial recognition.
+If we can.
+Can we use the facial recognition stuff from the Workshop 10?
+Workshop 10.
+I think it Was.
+Yeah, so I'll be doing that.
+I'll be writing the background, the conclusion, the method and setup.
+This is if you want like the writing is not important.
+Okay.
+Yeah.
+Okay.
+Yeah.
+So yeah, so I'll be in a code architecture integrating OpenAI into it, getting the facial recognition working.
+Someone will be doing the game logic and the gesture research and we would both be doing.
+We'd both be like constructing a prompt.
+We'll be like helping each other like two better than one, like making a prompt.
+And also just like I did like I guess he'll just give me advice and I give him advice.
+And who would be the cognitive architecture?
+Who would be doing the cognitive architecture?
+Me probably.
+He won't be.
+In terms of like research, cognitive architecture itself, there's too much amount for so will be imbalance.
+So if you would like to have like what you said, like adding cognitive architecture, this imbalance work.
+So this means like there will be too much work for one person with respect to other person, much less work.
+So, so cognitive architecture itself is work by itself.
+So I will accept this a task, for example by one person itself.
+Let's say now if you will upload, if you load yourself with other tasks as well, this will be too much for one person and for balance of marks because like we need as well to make sure that everyone is working and everyone is involved.
+Now if you'd like Salman to do part of the cognitive architecture, please speak to him and let him send me an email with CCU that he accepts to do cognitive architecture.
+So you will both be doing the different tasks, camera vision, like speech etc.
+Etc.
+Plus cognitive architecture dev is happy with this.
+I would understand that this is group approval, group acceptance.
+And I will leave it up to you and I will say that I told you in advance that it will be challenging within the given time.
+But please like we cannot say that you will do a lot of things.
+Plus so will that be difficult to do?
+Like to code in the cognitive architecture?
+Of course, you know, realistically it's not because like I would like to make you disappointed because it's just because it will take longer time.
+Even like the bare minimum.
+Even what?
+The bare minimum cognitively.
+No, no, it will take new thing.
+It will take some, believe me, to take some time.
+Okay, you will have technically one week because like I will give the lecture as well within 1000 Friday.
+So you'll have until next lecture, last lecture, one week of work of the robots.
+Yeah, so I.
+So, so with.
+So we're finished now for the Spring break.
+And when we come back we're gonna have one or two more lectures.
+One more lecture and then the hand in.
+Yeah, so one more.
+So we'll have technically after I finish the next lecture, one more week to work with the robot.
+And we understand the robot has physio like logistic issues that might appear.
+The robot will not be working most of the time.
+There might be many issues that might appear and you are not anticipating if,.
+If we, when you said we can come in.
+Okay, look, if you don't want me to do that, it's fine, I won't do it.
+Do what?
+Cognitive.
+Yeah, yeah.
+Like really, I am not forcing, I am.
+It's up to you if you'd like to do it.
+My role ends by clarifying too that it will be challenging to do.
+Is that because time.
+Robot logistics.
+What do you mean by robot logistics?
+Yeah, as a robot you might, you might try.
+I'm not connecting to the robot for whichever reason.
+And we try to start to, to you know, like to stop it and restart again.
+10, 15 minutes.
+Done.
+For example.
+I see.
+So when are you saying we can come in?
+On Wednesdays.
+We'll be able to test with Pepper or not?
+We have.
+What would I, would I be able to test with Pepper?
+No, like we will work on the same robots as every group.
+Yeah, yeah, yeah.
+So on Wednesdays.
+Yes.
+But when the robot.
+When, when you already reach the level of making it on the robot.
+Sorry.
+On your PC working.
+So yeah, yeah, going to the robot.
+We have to make sure that it is already ready for your PC.
+The system.
+Yeah.
+So I don't know.
+But when are you, you going on a holiday soon, did you say?
+Yeah.
+When is that?
+The Supreme Court.
+Oh yeah.
+I thought you meant you're going away.
+I think you're going to Japan.
+Yeah.
+So could I try just get this working on my computer and if.
+And I'll just email you, ask you.
+And then in that email we'll also be.
+Because we, I mean, Cuz we do have other options which is a storyteller and robot or a social skills trainer.
+Storytelling.
+Yeah.
+Looks more realistic.
+It's just like remember, remember like within the time you need to make first four, you have successions.
+We speak about logistical issues.
+We speak about that the experiment should be working.
+We speak about that you will prepare videos for robot running.
+You know, many things like that.
+So with my experience and I saw how the groups work, the meaning when you are with robot, there will be many things that appear and you know, like it's not like what you are working on the offline.
+There will be many things appearing.
+So if you extremely make it difficult, you will see immediately that there are difficulties in finishing was in time.
+So what I recommend here why I again appreciate your endeavor and your initiative trying to do this is the singer try to do something acceptably not difficult, something not easy, something not difficult, but doable.
+Yeah, so one of the questions.
+Well, it's not questions at the bottom and it's like will the complexity not give me more marks?
+Well, the complexity.
+Well, well like you know, like of the robot.
+Nothing, nothing saying the complexity should give more marks.
+But certainly, you know, like if you are somebody doing some complexity like you.
+If you make something complex but doesn't work, there are no marks.
+Yeah, no, I know that.
+Yeah.
+So complexity gives you more marks.
+For example, acceptable if it work.
+Finally.
+What if I got it working?
+What if I got it working on my computer first?
+I mean obviously I won't be able to do with Pepper, but I could probably like see if it's gonna work.
+You discuss this with Salman and decide the problem project because like if you will decide cognitive architecture, it should be accepting to work on cognitive architecture.
+Yeah, I understand that.
+So if you are both happy with it and having said that I explained this to you, I will consider that you are aware that it is a risky project considering different factors that I explained to you and I will give you the opportunity to proceed based on.
+Yeah, so if I asked Salmon to do more thing different things, would I be able to take cognitive architecture and.
+Okay, so I was just, just going to do the other.
+The older lecture, the one before not cog.
+I only changed it now to cognitive architecture.
+I mean I can see that.
+I can.
+On Google Docs they have a.
+And what cognitive version history you have tens and tens.
+So what cognitive architecture you will be using and what is not one corner, it's many.
+So you know to find if there is cognitive architecture suitable for the task you are trying to do.
+This is one thing.
+And which cognitive architecture you will be trying to find, for example, and understand the language in which it smells written and understand how it is created.
+So this is very risky.
+This is very risky.
+Yeah, I have.
+So this is just because Google Docs has version history and only today I after the lecture I tried to.
+This is just a simple, simple cognitive.
+Can I charge a screenshot and send it to you?
+I can see here,.
+This is just from the.
+These are just from the lecture we had about the one that wasn't today.
+I Think it was the one, not the second cognitive lecture.
+The first time you talked about cognitive.
+Robotics learning from demonstration.
+Do I say, I mean it's kind of the same things.
+It's just like I can't just change that.
+I just kind of just change the headings to match the cognitive architecture.
+But I, I guess it's not really cognitive architecture, it's just, you know the first cognitive robotics lecture we had.
+Yes.
+And in the, in a slide.
+Perceiving the environment, paying attention to the events that matter.
+Anticipating the need for some action.
+These just like things will do.
+So perceiving the environment, it would observe the user paying attention to the events.
+It would be specific things like if how paying attention to stuff like how is the user finding things which would be anticipating the need for some action.
+I mean I think it's a doable but I mean if you don't really want me to, I can just do it.
+No, I, I, I told you my opinion.
+With all the years of experience that is very risky.
+Then it's not my rule to say, you know, I'm indicative rule but you know like I tell like as a indicative thing.
+So if you say it is doable and you believe it's doable, you know, you know like then finally and you are persuaded with this, then proceed.
+So you, you make the project for you know, like what pleases you.
+But finally if there is no project ready, there's no marks.
+Yeah.
+So it's risky.
+So before you proceed, please discuss this with Salman and let Salman and you send me an email and having Salman.
+Well how about this idea?
+But I just remove everything cognitive,.
+If.
+You know what I mean.
+Just like.
+So it still does the, I guess wouldn't have to do like this but just literally just so it just.
+You talk to it and you play word based games and it adjusts, it adjusts the difficulty based on how it's inferring how you're doing.
+We could just make it play one game.
+So what's the point?
+I still couldn't understand what you like to delete.
+It's still a game that I, I will not prepare for like these details.
+But most importantly when you speak about cognitive architecture, you know and, and yes.
+So I just won't, I'll just completely, we'll just, I'll just completely ignore the content.
+Yeah.
+As I said again, I'm not a against it but just because it's project team project.
+So please get Salman involved.
+Let Salman, I mean I think Salman has gone back to Saudi Arabia.
+Yeah, but I mean, because it's finally.
+It's like he's coming back again.
+Yeah.
+I mean, the thing is, it's just like.
+Because it's not individual.
+Alfie, you.
+You started together.
+So this is.
+If you went to Saudi Arabia, just like.
+I imagine there is email that can be exchanged between you, but it cannot say, like, I will.
+I don't need to have a conflict that you are saying, I work on cognitive architecture.
+And then he says, no, it's very difficult.
+No, this is a problem now.
+I don't want to have this problem.
+So whether you agree, both of you on the same project, yes or no?
+Maybe he didn't think of it as much like he didn't think of it properly, but he didn't.
+He.
+He did agree to this.
+Yes, yes, but I mean, like, then you have to meet and you have to discuss or even online.
+Meet online.
+You can arrange a meeting online.
+I don't imagine that he will.
+He.
+He would have quit.
+But there should be a.
+A meeting online.
+Speak online.
+Yeah, just.
+Yeah, like arrange a meeting on Zoom or teams, for example, and try to handle this.
+Agree on a topic together.
+But please, I don't want to reach the final moment where I have somebody saying difficult.
+Some kind of someone saying, like, I want to work on this other one saying difficult.
+Then this will be kind of clear conflict in managing the.
+Yeah, so please speak to him.
+Speak to him and tell me by email that we agreed on.
+Yeah.
+So when's the deadline?
+So they send the email.
+I mean, no, like you.
+You.
+Like you.
+Our deadline is our project deadline.
+So it means, like, you agree on the topic.
+So if you'd like to use cognitive architecture.
+Yeah, I mean, like, in deciding what cognitive.
+I'm gonna go straight into next week.
+Okay, so next week, Friday.
+Yeah.
+So tell me if you both agree and the both should be in the same email agreeing to use cognitive architecture and the balls agree and I'm fine.
+How much?
+How so what's the difference in terms of the marks we'd get if.
+And I cannot say something like this, you know.
+I know, but I mean.
+I mean, what.
+Basically what I'm essentially saying is how.
+Much difference if the project is.
+No, the project is running, but it's.
+Sorry, just give me one second.
+It's just like, say, so this game Adaptive Zone of Engagement or just a simple storytelling robot?
+Yeah, well, like, like, as I said, the majority of colleagues is making something on the.
+On the range of games as well.
+So now I will work on this general range of fz.
+For example, doing projects well, it works well.
+They interact well, they will get high marks.
+So now if you are trying to make it so difficult to get something beyond this, it is risky because I'm saying you can get good mark with a normal project easier.
+Now if you will take this, you don't care about marks and you are taking it for your pleasure and for your own scientific satisfaction.
+It's fine.
+I am supporting, but please have both agreements.
+Give me both agreements.
+Yeah, I'll just.
+I'll just give you.
+I'll just send you a good email by Friday.
+If it didn't work.
+We understand that if the project didn't work.
+I told you, if the project worked, I will be.
+It will be a big surprise for me and a good surprise for me.
+And I would be appreciating this.
+I'm telling you there is big work.
+Just take you.
+I know you might not be able to tell me this, but just like, what is what?
+Why won't it work?
+What?
+Why won't it work?
+For example, like the amount of work, given the recent.
+How recent is your experience with it and the challenge of writing reports and making everything like this and the filming and many things like this.
+And also dealing with the robot and the technical problems that will appear with the robot and the robot will work or not, will not work, etc.
+Etc.
+Etc.
+This will consume time and we need only two hours.
+So you will not work each day 10 hours on the robot, we work only two hours.
+So if you have 10 hours and a limited access to robot in absolute way, for example, yeah, you stay 24 hours working on it, but we have limited time.
+Yeah.
+I mean, yeah.
+So I guess.
+Okay, this I tell you from my experience, if you are still convinced that it will work, then I'll be happy to follow your intuition given that I informed you clearly about my risk.
+But I need.
+I need Salman to be saying okay in email, written saying okay.
+If he says okay, do you say okay?
+Then go ahead.
+Yeah.
+So.
+So you.
+You would prefer a storytelling robot?
+I prefer something you can do.
+Something you can.
+You know, I'll be definitely.
+Surely I'll be able to do these.
+Storytelling robot or a social skills trainer.
+Yeah.
+So there should be context etc and something doable.
+That's fine.
+If you'd like to make the complex one and you're certain you will do it, I'm fine.
+So what I'm here for is to tell you it is doable or not doable or not within the given time, within the logistic problems that might appear within the difficulties, etc.
+Etc.
+Etc.
+Okay.
+Okay.
+Thank you.
+No worries.
+Thanks.

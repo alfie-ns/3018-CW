@@ -1,0 +1,7 @@
+- [X] Remove cognitive architecture framing
+- [X] Replace 5 game types with countdown-style NUMBERS/LETTERS
+- [X] Remove personality system (default to supportive)
+- [X] Remove mid-game feedback parsing
+- [X] Add adaptation self-evaluation (evaluate_adaptation method)
+- [ ] Test on Pepper robot
+- [ ] Film demo video

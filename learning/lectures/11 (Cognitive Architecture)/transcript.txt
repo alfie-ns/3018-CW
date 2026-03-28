@@ -1,0 +1,651 @@
+I will take your questions the task in the lab.
+So thanks for those who communicated your role to me.
+Today.
+We are almost home to have after this lecture, half a lecture to reach the end of this module the past, which is about cognitive architectures.
+So the purpose, as I said, we try to highlight basics about cognitive architectures for knowledge.
+While we each this area, each part, as I said, each part of this module itself is a research area.
+So there are people, for example, who do spend their life in developing cognitive architectures.
+Same as for example, each part of the modules that we have studied, like facial expression, speech.
+So each area is itself area of specialty.
+So cognitive architecture, we understand that from the cognitive robotics perspective, we need to create systems that allows us to have or simulate cognitive functionalities that humans have and allow a robot or a system to react in a similar way.
+So from previous introduction about cognitive robotics, we understood that the basic building blocks of a cognitive agent is to have a memory, is to have ability to do planning unit for planning unit, unit for perception unit for several units like this.
+So any cognitive architecture try to use these units and then propose how they will communicate.
+What are the rules, what are the regulations, as we will see in the last lecture, so that we can allow saying, for example, I can have a cognitive architecture that's suitable for any task for navigation.
+Another one says, for example, I have a cognitive architecture that is more suitable for human robot interaction and so on.
+So it is itself just like a framework, so you need to give it knowledge.
+So it is just something like framework you download from anywhere.
+It's not something that's plug and play.
+You have to give it knowledge about what you need to do.
+So you have to understand the basics to be able to interact.
+When you have a cognitive architecture, deal with cognitive architecture to go to each of the modules or units of the cognitive architecture of the framework to be able to deal it and give it the knowledge it needs, the information that it needs, so that you can have the performance you need.
+So the chief characteristic of a cognitive agent is, is the ability to act effectively in a world under uncertain, under specified dynamic and possibly collaborating with other agents.
+So to achieve goals adaptively and robustly in these circumstances, we require complex system.
+It's complex system that can construct model of the way the world works, use them to guide actions prospectively and update them dynamically.
+So if I'm speaking about several units, you will think, okay, I have knowledge, I have to update it, for example from interaction that happens with the environment.
+So simply speaking, think about it like you think you'd like to make, let's say I say I would like to make a robot and you develop the robot and you'd like to make for example, particular task, whichever task.
+You will think about all these basic units at some extent.
+You'll think certainly about reasoning, you will think about, you'll think about perception, you'll think about learning, you'll think about different modules.
+Cognitive architecture just put all these units together in one framework so that if we know how that's work or the relationship between the different subunits, we can understand then how to deal with it to achieve a particular target.
+So there is nothing more specific or nothing specific about it just than just we try to put units together.
+So instead of thinking about each unit itself independently, we try to put them have general understanding of all together.
+Okay.
+Another relevant definition is like cognitive architecture is a software framework that integrates all the elements required for a system to exhibit characteristic attributes of a cognitive agent.
+So to design a cognitive architecture requires the specification of the formalism for all process processes and knowledge representation used by.
+So you need to understand the formalism of the all processes you have to understand.
+Let's say if I say I will use ACT R, there is a.
+For example, there is a cognitive architecture called act.
+I have to understand how it is used, which language it is, all the formalism, the structure, the regulations, the rules, sorry are specified so that I can use to update them with my own rules and so give it my knowledge so that it gets ready to be used within a robot system.
+The cognitive architecture integrates core cognitive abilities so that these abilities can be dynamically coordinated.
+The cognitive abilities, as we see, as we saw from the in the introduction session, perception, attention, accentuation, memory, learning, reasoning, meta reasoning and prospection.
+And we have said that prospection is like simulating feature, scenario.
+You're predicting the goal.
+So from kind of interaction you or the experience you gain through interaction you might say ah, if I, I'm just situation, for example, you say if I will do this reaction my colleague or my friend or my robot or whichever might be happy or sad because I had a similar experience about this before.
+So this is a prospection.
+You start in your mind imagining what will happen and then what will be the reaction or consequences of your reaction.
+Act, sorry, action and then that will create a reaction.
+Start thinking about this.
+So this is what's called prospection and you build the prospection in your mind and this is a part of what's called also the theory of mind.
+So there is a branch in cognitive science called the theory of mind.
+So theory of mind in general is like as implies different things.
+But one of the things like as it can understand, for example, human emotion by inferring them from facial expressions or from speech.
+And from speech I can see the tonality and understand if the person is happy or sad.
+Same for facial expressions to understand if the person is happy or sad.
+The agent should be also having this kind of ability.
+Or for example, if I'm listening to you and you are speaking about something and from what, what you said, I understood your plan is to do do X, Y, Z. I inferred your intent.
+Okay, so it's like theory of mind is like how these kind of predictions can be done between a robot and a human.
+Same way it happens between a human and a human.
+That it implies higher level functions like prospection.
+If, for example, you are able to see the blood prospection.
+We are able to have prospection.
+Can robots have prospection?
+Can robots think about simulate?
+So do you understand how difficult it is just a simple thing like this.
+How can robots simulate an event and think about your reaction and for example, predicting potential outcomes.
+So that should the robot go this way or not go this way?
+You know, so this is itself a very like, you know, like one line.
+But this is very difficult.
+Very, very difficult.
+How can the robot have this perspective?
+How can the robot be simulating this, the experience?
+You know, so this is kind of also there is active research in this area.
+So we understand that cognitive architectures allow agents to exhibit flexible context sensitive behavior, respectively selecting and controlling actions that are required to achieve the goals.
+And flexible context sensitive means like understanding the context.
+How do you understand the context?
+Now we are at the end of the module, so you probably had.
+We spoke about the word context before.
+So.
+So if I have a robot here, the robot would like to have understand the context around what kind of signals should the robot collect from the environment?
+There is no wrong answer.
+Just in fact, What are the signals that the robot can connect?
+Signals mean the information.
+What can see.
+What can see.
+Yes, very good.
+What can see?
+For example, so I observe there are students or for example, let's say I have to prove some students are silent, some students are laughing, or some group of students are laughing.
+Group of students are laughing.
+Okay, so how do I understand that they are laughing?
+Detected the phrase detected their eyes, detected their mouth.
+And I found that the mouth is open.
+Do you remember what kind of.
+When I say about, for example, understand the facial expressions, I was saying there is a specific coding for this, can you remind me the name that studies the actions of the face that can encode emotions?
+Remind me.
+We have went through this.
+It has a specific name, something coding.
+Emotional coding.
+It has a more specific name.
+Nothing comes your mind.
+Fax coding.
+Fax coding Facial action units of facial action coding system.
+So the fax coding tells you what units of the face moves for humans.
+So it tells you, for example, there is a unit here and there is a unit here that move, for example, when the person is smiling.
+And same for the eyebrows go up.
+One unit in the eyebrow that goes up or goes down to make a motion.
+And these are the units that we try to, if we'd like to express emotion on the robot, we try to create all these, try to transfer all these kind of action units to the robot.
+But there will be a difficulty, for example, if the robot doesn't have, for example, a control point in the eyebrow to take it up to express, for example, surprise or astonishment.
+So we don't have this control point.
+So the robot cannot take the eyebrow up.
+So we understand we have limitation here.
+So there are some kind of facial action areas.
+If I'd like to model the robot, I consider them.
+If I'd like to understand the human emotion, I look at the them.
+So the basic, for example, for understanding the.
+The emotion, for example of laughing, I understand that there will be people smiling.
+So the action unit here and here are, for example, like.
+Instead of having their position like an X and Y, they are more widely and the mouth is open.
+So these are the things that the old can perceive and understand that there are.
+There are, you know, like people are, for example, happy or playing.
+And then if there is one guy, for example, or group of other people who are not doing the same thing.
+So there is a context understanding that there is group happy, group laughing, group not laughing.
+For example, if there are voices, everything you studied is what the robot will collect.
+For example, voices coming, coming, collect the information, the background information.
+There is image coming from the environment.
+Static images will be taken that there are PCs or dynamic images, for example, for people or like, sorry, dynamic videos or shots for people moving around.
+All this information is what the robot will collect and understand the context.
+How we understand the context by analyzing it.
+Okay.
+And by reasoning.
+So we can extract information.
+Okay, you can realize facts here.
+And this is actually something from the.
+What's considered one of the, like, high cognitive or high level cognitive functionalities that a woman should be aware of or be able to do.
+When we speak about cognitive agents, cognitive architecture should be also be able to develop autonomously so that it provides that the performance improves over time.
+And this is a very critical thing.
+How can actually it improves over time, which means that there is nothing fixed.
+We understand the cognitive architecture allows us to for example increase.
+It's if I say I am a human and I'm doing, I have like group of functionalities that allow me to navigate, but my capability to navigate now is not my capability to navigate when I was a child.
+My language ability to communicate in language now is not like when I was a child.
+So the ability of the cognitive architecture, if I'd like to simulate particular development or particular action, this also means the ability to evolve over time.
+How to evolve over time?
+Because rules, I have rules and I have knowledge.
+So there should be ability to learn from the knowledge and improve.
+Okay.
+The performance over time.
+Okay.
+So if I'm having for example a cognitive architecture for navigation and the robot still not performing well, I expect after using it over months, considering the developmental aspect of it and having more interaction with the environment and learning more that this is a chair and this is a table, for example, it will have ability to move better like a child at the beginning, colliding with everything.
+And after some point the child will be able to move more autonomously.
+To this end.
+There was three approaches or there are three approaches for defining cognitive architectures, types of cognitive architectures, what's called cognitivist system, hybrid system and emergent system.
+In the lab, when I, when I was working in Japan, the lab name was called Immersion Robotics.
+So they there the, you know, influenced by the animes and that robot that looks like humans and exactly copy of a human.
+And that robot should learn the same way that language learn.
+And actually part of my research is also influenced by this direction of research that emergence.
+So how you have very basic level of knowledge and.
+And how this emerges to having higher level of knowledge.
+So for example, one of my PhD students she was working, she's still working on understanding the meaning of words by interaction with the environment like children.
+So I understand that this is a cub, this is a ball and we understand like the type of each word.
+And then can we start linking between these words by learning grana?
+So the same way the child can learn the meaning of words by interacting with the environment and then they start learning grammar.
+So that if you find a child developing at the age of 2, 3, 4, 5, they start linking words and create a phrase.
+And between, after the c, after they construct the phrase, they construct the sentence, for example, so can we have this capability in the moment?
+So this is for example, research direction that I'm adopting, for example, for language development.
+Okay, so let's speak about the cognitive cognitive architecture, which is an attempt to create unified or put unified theories of cognition in one framework.
+Why I say theories, why not theory?
+Why a lot of theories and why unified?
+Does this go back to how there were many definitions of cognition as well?
+We understand like, you know, how.
+Well, I couldn't remember two classes ago when we spoke about cognition, what does it mean cognition?
+Huge amount of definition, Cognitive, cognitive agent or cognitive robot, Huge amount of definitions.
+So there are actually unified theories of cognition is like theories, because we understand that there are a lot of theories related to attention, related to memory, problems solving, decision making, the learning.
+A lot of theories exist and unified.
+Unified because, you know, let's say it's a less disputed or the most famous, let's say or less accurate.
+So if we have some theories, normal theories that we understand about how learning should be, how learning should be done, how memory should be working, how problem solving skills, and then can we put this all in a framework, encapsulate this all in the framework so that the framework can be working, inspired by these functionalities from the aspect of psychology or cognitive science or neuroscience.
+If we can put this together in one framework and take this framework to worlds, this is a cognitive approach.
+So it's an encapsulation of scientific hypothesis about these aspects of human cognition that are relatively constant over time and relatively independent of task.
+So it's not emergent relatively constant over time.
+So it means like, it's not something that depends on emergence, it's not something that depend on absolute development in that sense.
+So and also it is independent of a task, which means like remember what I told you I give you, if I give you a cognitive architecture, I give you a cognitive architecture, you download it.
+But you should understand the formalism, the rules, etc.
+So that you adapt this to your task.
+But that I will not make a cognitive architecture for one task only.
+It doesn't make sense.
+And like next lecture we will see how many cognitive architectures exist.
+Too many.
+Too many tens and tens and tens of cognitive architectures.
+Certainly the more famous you'll be, the more tasks you can walk independently so that I can download it and use it for my task, you download and use it for your task, you can download and use it for task, for your task, and so on.
+So independent and constant over time, which means like you have basic rules that run for the Cognitive approach, you can make some light improvements through the interaction of the environment, but don't expect it to be emerging like the emergent approach.
+Okay, so don't expect it to have it like for example, to develop, let's say, similar to a child growing up from age 2 to age 10.
+But it have some kind of basic building blocks that are relatively constant over time.
+So the generic computational model, which is a cognitive cognitive architecture, not domain specific and not task specific.
+Now the easy thing to think about it is the easy way to think about it.
+We say that knowledge provides the required specificity, meaning that cognitive architecture plus knowledge means cognitive model.
+This means cognitive architecture is a framework.
+You bring your knowledge and put it inside the cognitive architecture.
+You, you have a cognitive model.
+You take your cognitive model and put it inside a robot.
+You have cognitive model, the cognitive robot.
+The robot is a framework container you put a cognitive model becomes a cognitive robot, and the cognitive model itself is a container.
+You take your architecture, you take your knowledge and put it inside the cognitive architecture.
+It become cognitive model.
+So just things you are putting inside things.
+But Lehman, in 1998, Lehman and colleagues, they have defined it a little bit differently.
+What is the difference between main difference here between this equation and that equation, or this presentation of equation and that one multiplies instead.
+Multiplies.
+What does the mean?
+Multiplies Y multiplies Y naught plus it scales a lot more with the amount of content, I guess.
+Other sorts.
+He said that the content, the specific information that an agent is processing at any given time and the effect of the architecture on behavior is not simply additive to the effect of the content.
+I understand there is architecture and the architecture represents the rules that I have.
+Let's say I'm speaking about chess game.
+Okay?
+Chess game.
+So this architecture is a rule about the chess game, chess engine, and the content is about the port position.
+Okay, so now if I'd like to have a behavior like by moving the chess piece, it will consider the architecture, the rules, what are the rules of the, of the game and it will consider the content.
+Where is the position board.
+So for example, if I have my, my piece of chess in this position, should I move it to X position or Y position, opposite position.
+This depends on the rules, what the rules allow, and the current game board.
+So it simply says the behavior here is not separately depend like separately or cannot present it separately like cognitive architecture plus knowledge.
+So have one and add it to the other one.
+Simply, this is the first one separately, but behavior is more depending on both of them.
+The behavior of function to move the chess is not depending separately on architecture, on the rules and separately on the position on the board, but on both together.
+When you have this kind of relationship, both together and not separately, you use the multiplication.
+Is this clear to you?
+Okay.
+Okay.
+So the knowledge certainly is.
+Is typically determined by the designer.
+So you give it explicitly or the system is able to infer it.
+Okay.
+And adapted and augmented by machine learning.
+So this is the information, simply the information that you give the system.
+You give the system information, the system learn from this information.
+This is a knowledge.
+And the machine learning techniques can still augment the knowledge and make it able to.
+Whether you know you have less information and the system, machine learning can lead to refined knowledge and maximize it.
+Like for example, as I said before, like transfer learning.
+And so you don't need, for example, for X disorder or X disease, I don't need to have a lot of data to be able to diagnose or detect it.
+I can go simply, for example, I don't need to.
+Let's speak about ping pong and tennis.
+You don't need to have a lot of information about ping pong to create an expert system about ping pong.
+No, I just.
+If I have a lot of information about tennis, I train the system of tennis.
+And if I have very tiny amount of information about ping pong, I just refine the train system in them.
+Refine a train system of them.
+Easy.
+You see what I mean?
+So you don't need this.
+Machine learning can make some kind of adaptation and make some type of augmentation of your knowledge.
+So we can say that the overall structure in a cognitive system, it has essential modules, it has essential relations between these modules and essential algorithmic and represent representational details in each module.
+So for example, we can have for example episodic memory on the right.
+So the episodic memory is a long term memory that encodes, stores and retrieves specific episodes that the agent of the, of the agent spastic spreads.
+So I expect that episodic memory, which is very, you know, important memory for human road interaction, is very good for the prospection of the future, can retrieve, you know, some kind of encode and store and retrieve.
+So your brain is like encoding, encode, store and retrieve like a shelf.
+You put knowledge on the shelf, you encode them, you give them a code, you put them on the shelf in your brain and they get your knowledge back from the shelf to be able to use it.
+There is semantic memory.
+This is actually responsible for knowledge, facts, concepts.
+There is Procedural memory, which is about sensory information and there is input and output, you know, just commitment to formalizing for representations of processing.
+So it's like you receive some information whichever, so it in turns go to the input outputs and input output gives them the suitable representation of all encoding that can be used in the different memories that exist.
+Okay.
+Working memory, this is a short term memory used in tasks like decision making.
+Okay.
+And the cognitive map.
+The cognitive map models a variety of cognitive functions, special reasoning, planning and navigation.
+So there is a lot of basic building blocks that you can find in cognitive approach.
+A lot of memories, a lot of information represented like this.
+And this is a part of Cognitves framework.
+We will see that next time.
+So we have basic building blocks.
+So you will see or should see in our next lecture.
+Memory is kind of memories, semantic, episodic, you know, cognitive, procedural memory, different things like that.
+And this is a part by the way of gmu GMU Beta architecture.
+So this is one of the architectures that already exist and this is a copy of them, part of the system.
+You might find another system using different kind of way of communication or connection between modules, all modules.
+But you'll find should find episodic memory, you should find semantics.
+These are the very, very, very basic building blocks.
+Now for the emergence, which I personally like a lot that's focused on development.
+So from primitive state to state.
+So there are actually two different views of development, the individual one and the social one.
+Individual one is like you have your own experience of development and you touch, start touching the environment, learning, interacting with the environment and the people around.
+And then you start developing with individual approach, it started developing, you know, like through linguistically or through making actions, etc.
+So if you give a baby a cup with a handle, certainly the baby will try and figure out beginning touch the cup, but at some point it will be able to put the hand around the handle, inside the handle, for example, and catch it better.
+So the development of the action being done, this is actually learning happening over and over a period of time, for example language.
+So there is a lot of, you know, like our brain goes, we understand that our sense cells and our brain biologically grows and this helps to estimate better information and you know, like develop more.
+So this is kind of individual perspective that you develop and the study has a development happening within the individual context, but there is also the social context.
+This doesn't mean that one is wrong with respect to one.
+That means like I am, I'm not telling you.
+Try to choose whether you are like they are not opponents.
+Like the individual and the social, they are not opponents, but they are complementary.
+So one is focusing on one point, another one is focusing on another point, the social one.
+Simply, it focuses on how social factors catch cognitive development.
+How many of us here, the system says something like, you know, like children can learn from each other, for example.
+And that's why, for example, nurseries exist.
+So if you think that children can learn by themselves, that's exactly correct.
+But also children go and learn from each other.
+So a nurse, you find children learning and learning motor skills or learning language skills from each other.
+So this is actually the social perspective.
+And not only this, not only this.
+Like if you are, let's say, trying to learn language.
+So if I'm an individual person, okay, I can try to learn language.
+Let's say.
+Let's say I'm isolated.
+So I saw an orange and I'm isolated.
+I probably will encode the word orange in any internal representation I give, like xyz.
+But then suddenly I moved, for example, as an agent to a community that speaks English.
+So I understood, like them, that this XYZ is called an orange.
+Or if I move to Germany, or if I move to France, each community has different way of code.
+So I started to link what I have learned as internal representation to social, using the social factor of social knowledge to the social side.
+So this helped certainly me to improve my knowledge.
+Because if I understand that this is called orange, I'll be able to build on this and increase my development, language development, for example, because I will hear this word existing in different interactions and so on and so forth.
+So we have two leaders in the theory of cognition, Jean Piaget and Levy.
+We got a scheme.
+So Jean Piaget was more from the individual side of development.
+So he's saying that he proposes a theory.
+Again, I'm saying that we don't deny one theory on the other one with respect to the other one, but they complement each other.
+So Piaget theory proposes that cognitive development occurs if four distinct stages digitized emphasizes a continual development through social interaction.
+So the focus on individual versus social factors in Piageteri emphasizes the role of individual factors such as biological maturation for brain.
+For example, the biological maturation and experience in shaping cognitive development.
+In contrast, vigotus muscitaria, social and cultural factors such as social interaction and language in shading.
+So one is focusing on one area, other one is focusing on another area.
+So which one is more related to cognitivist approaches of cognitive cognitive architecture?
+Which one do you think I'm saying that nothing is wrong.
+This is one team and this is another team.
+We don't say one over the other one.
+But from this definition of two, if I will tell you, cognitivist cognitive architecture will be more near to the first one or the second one.
+First one.
+B more.
+Okay, correct.
+So the cognitive is actually architecture or cognitive architecture.
+Sorry, it is the systems.
+Sorry, I'm speaking about immersion.
+I said cognitive.
+Excuse me, I'm speaking about the emergence.
+Okay, but ph.
+Important.
+So the cognitive architecture is a system.
+Is the system pure genetic configuration.
+So simply speaking, it is about what we have inherited as innate skill.
+And how do we develop this?
+So certainly you have some kind of innate skills that you have been born with and you try to develop these innate skills.
+Okay, somehow.
+So, for example, one of the innate skills that we have something called the language faculty, that scientists call it like language faculty.
+So we have the ability to, for example, when we receive, all children are like this, we receive a signal.
+And they say this is a novel.
+So one of the language faculties or innate skills is that children can receive or babies, infants can receive that signal.
+I said this is an apple.
+They received I cost you and they received what my speech?
+What I said this is an apple.
+What they can do.
+What is the innate skill here is that they can cut.
+They can understand that if I give right here.
+So if I, for example, receive like this is an apple.
+And they receive the signal.
+Right here's the speech.
+So from the initial that they can predict, make a cut between the words and the acoustic features.
+So they can understand that there is acoustic feature here and acoustic feature here and acoustic feature here, acoustic feature here.
+But they don't understand which one belongs to which one, which one belongs to which words.
+So this is one of the language faculties that we are learners, like from the innate scale skill.
+Certainly there is a way to, for example, there is innate skill related to, for example, adaptation.
+So the child or the infant can also have innate skill about adaptation, about doing primary action, very basic primary action, for example, and a very basic perception.
+And then how do you these skills, the ondochenesis of it, how it can be grown and developed.
+So simply the emergent cognitive architecture, we give a strong form of focus on the autonomy preserving anticipation and battery adaptive scale construction and the morphology of the physical body body in which the architecture is because we care for the action.
+So if I speak here about perception action, certainly I care for the morphology.
+This means that when you care for the body, the dual example, the dualism is, for example, one kind of, you know, like a kind of research area in cognition sense that there is a separation between mind and body.
+No, there is no separation between mind and body.
+Both are connected.
+So, for example, we cannot say that emergent cognitive approach or cognitive architecture adopt this principle.
+No, it rejects it because it relieves like it involves action.
+Okay?
+This reliefs with what you think, with what you perceive.
+See?
+So to put them together.
+So it rejects dualism and functionalism.
+So that creates cognitive mechanisms independently of the physical.
+So what this means physical platform and what it perceives, etc, is one system, not separate systems.
+Okay, so it rejects these two.
+Now we come to the cognitive architectures part.
+So probably we can take a break here, okay.
+Until 15.
+So let's come back at 15.
+Yeah, give me.
+Give me a.
+Give me until today.
+Yeah, sorry for this.
+I'll just remove.
+I'll add a few projects of robotics but actually it's also as well open like I'm if somebody would like to make some work or project robotics because like I will not include all the.
+Let's say the projects in the world.
+So let's say for example, I.
+This is looks good, but I probably prefer something different.
+So if for example in this area there is a topic that you are open to speak to me because I would not include everything come and speak to me.
+So I will add one or two and remove one and we'll remove one of the health care.
+But also if you have something that are in mind and in my area of interest, I'm more than happy to chat with you about.
+Yeah.
+Where will you put that?
+Sorry, I will do my best today place updated but you know, I'm not restricted.
+These are the project that come to my mind.
+Yeah.
+If there is other, you know, other interest.
+Something more like I'd like to work more on more in health care, but different topic, you know, or more in different areas that might be of interest to me.
+Feel free to propose.
+Yeah.
+Yeah.
+Okay, thank you.
+The list on the actual project.
+Okay.
+Yeah, thank you.
+But most of the topics that exist already have teams.
+I mean have teams working on it.
+The ones that are already on this list.
+Yeah, yeah, they already have people working on it.
+So it's like it will be not only one person working to be like group.
+Okay.
+I think it was.
+It should have been filtered first.
+This should have been filtered first.
+Oh yeah, sure.
+I mean like.
+Yeah, because I think it includes.
+I didn't see it, but I think it includes some people from September already chosen.
+Yeah.
+So not all topic.
+All the topics here are available because like you just to see in the dealing who's available teacher.
+Yeah.
+And those are just to go and check the topics.
+Yeah.
+As this is what I'm doing now.
+Yeah.
+Because this list is basically useless because you don't know which ones you've got or not.
+So always would have been better not to have.
+It's.
+Okay.
+So did you all look in the phone?
+Okay, So we can say here that the cognitiveist or cognitive architecture extreme branches.
+One branch is related to framework in which we input knowledge.
+So we speak here about memories.
+We speak about four monies and we terms of what we encode the memory.
+We speak about the formalisms memories that for example, something that will not improve, that will not develop.
+For example because it has episodic memories.
+It has a lot of memories like that.
+We speak about formalisms for learning.
+That's about the hardware itself or program for programming.
+We have the phenology basis for development, the emergent one.
+Formalism for autonomy, formalism for development.
+You know, we have also image skills, core knowledge, so we understand the basic concepts.
+If we try to, according to our application, look at cognitiveness, do we need our robot or our knowledge to be developed?
+If we don't need it to be developed, we look at cognitive.
+If we'd like to get to be developed, we look at emergent.
+And in emergence, just the purpose is to know where to look.
+So you look at the category one or category two, okay.
+And there are plenty here in the.
+Plenty here.
+So it's not ended.
+The story is not ended.
+Just to know which cognitiveist approach or scholarship I should take like for example comp.
+3003 when we speak about reinforcement learning and I showed you the last two, three slides about different paradigms of reinforcement learning and where to look at according to your task.
+For example, if it's model free or model not, or model dependent or different keywords like this.
+And each term encapsulates a lot of approaches of reinforcement learning and how many reinforcement learning approaches we have?
+Plenty.
+Okay, so I was showing you a figure just to guide you where to look at computer application.
+Then after this you say okay, I exist in the circle or the square.
+Then you have to look at all the reinforcement learning approaches that exist in this area.
+You have to say, okay, what is the best for my approach, for my use case similar here, but there is as well the hybrid.
+The hybrid cognitive architecture as we understand it is has like a little bit some of both.
+So hybrid cognitive architecture aim to combine the symbolic rule based processing of the cognitive architecture with the parallel distributed processing of emergent architecture.
+You know, like when I say this is like means like across many interconnected processing units such as neurons or artificial nodes in your network.
+For example, the hypercognitive architecture might use symbolic representation to encode abstract concepts and rules, but also incorporates neural network.
+So it takes some, for example like corporate neural network or other parallel processing technique.
+So it takes some kind of basic, one basic thing from knowledge, for example from cognitive approach.
+And it tries to take also a processing architecture from the emergent and put them together.
+So the architecture might also include mechanisms for learning adaptation.
+So you might have hybrid that takes cognitive storage, but try to add mechanisms for adaptation like reinforcement learning, for example, or evolutionary algorithm.
+So reinforcement learning Evolutionary algorithm typically should be in the emergent one, but you can encapsulate both together.
+So it takes a little bit one of here and one of here.
+So people who developed it, they said, okay, why don't we.
+We are.
+Why we are separate.
+We try to take some approaches from here, plus the knowledge that we have in the first one, and we put them together.
+Okay, I said something here about symbolic.
+Symbolic processing and symbolic representation.
+What does it mean?
+Sympolic?
+Simple.
+Hi.
+What does it mean?
+Simple.
+Simple.
+Simpleness.
+So what does it mean?
+Simple.
+So simple.
+Speaking about the philosophy of AI, simple is ever sink that doesn't have its any concept or any representation that doesn't have clear reference to the world.
+It's called a concept, it's called simple.
+This includes words, for example, language.
+The nearest example where I can clarify to you.
+So I am just a born in life, I'm new agent, I'm coming to your life and I'm infant and I see my mom telling me this is an orange.
+With my innate capability, I received the acoustic signal and I was able to cut the signal and I was able to separate between.
+I heard something called this.
+I don't know what this is.
+What does it mean?
+This or orange.
+But I also received their acoustic signal.
+As long as you don't know what does it mean for use your symbols.
+So what you will try to do, you will try to process these symbols to understand their meaning.
+How do you understand the meaning of these symbols?
+Not to make them symbols, is when you connect them to the world and make grounding.
+Grounding to simplify it is something like a simple that has no, still no clear meaning.
+And then you.
+It was flying and then you ground it to knowledge.
+And this grounding to knowledge includes two things, whether the characteristics of this object.
+So when I say orange, what When I ground it through information from the world, it means circular object that can have orange color and has a specific touch features, you know, haptic features.
+Okay, so if I tell you orange now I updated the symbol that's called orange.
+I opened your brain, your mind, and I put inside the bag that's called orange the features of the world.
+Okay, so this is the first part.
+And because you hear it from the mom saying orange, so you associate the 3D object that you found that you cut with a knife and eat and it has this kind of features and color to the word orange.
+So the word orange itself, okay, is a symbol that is related to now a real percept from the world.
+If for example, let's Say if I said to you Japanese word or a Chinese word.
+But you know Chinese.
+So Japanese word that no one knows but me.
+This is for you a simple.
+Because you don't know what does it mean?
+If you are still born new agent, you will not need.
+You will need to connect it to the environment.
+You will need to connect it to the environment.
+So you will need exactly to do like the child.
+See what does it mean this object and what is connected to the features in real world.
+So you understand that it has this 3D shape and color.
+But because you already know other languages, what do you need to do is like open the dictionary and search as a simple and what does it mean in English.
+Then you go to your mind, open the bag simple and update the title.
+It means a simple or like orange in English.
+But it means in Japanese XYZ or it means Chinese xyz.
+Okay, so now symbolic.
+It deals with the world in this way.
+A lot of things, a lot of concepts, a lot of words are considered as symbols until you have connection between them and real world information or real world.
+So pardon.
+They call this direction of research.
+Good.
+All the fashion artificial intelligence.
+The symbolic AI we call it good old fashioned artificial intelligence.
+So go of AI Good old fashioned artificial intelligence that space on symbols and that consider the knowledge is represented as samples and try to build the connections between them symbols.
+Okay, so connection between words.
+Words are symbols.
+Connect between words as symbols.
+Okay, so this is just additional information for your own idea or for your attention.
+But you know, just, you know, we understand this is I'm speaking also about sophisticated things.
+Don't worry about about these things.
+Good.
+Now the core cognitive abilities we have.
+Okay, now this is will be one of the basic slides that we will have to take that will take highlight next lecture.
+And actually this is one of the very, very important papers and justice 40 years of cognitive architectures core cognitive activities.
+This is a study review paper that published in 2020 and highlighted all the architecture that have been discussed over the 40 years ranges and between 2020 and now.
+And so we speak about different cognitive capabilities.
+The prospection is not included in this reference, unfortunately.
+So in this reference it focus on the other cognitive capabilities, but not prospection.
+Okay, so as we highlighted before in the introduction, we highlight again the prospect.
+The perception makes use of many sensory vision addition, you know, tactile information.
+So the perception transforms raw input into the system internal representation.
+The attention reduces the information.
+A cognitive system has to process by selecting relevant information and filter take out everything.
+So when I say Selective mechanism.
+Selective mechanism.
+Choose one entity from me.
+So I will not look for example on your body behavior.
+I will look at your gaze only because I'm interested in the gates I'm selected.
+So I will look at an attention.
+I will look at your gates.
+I would like for example you look to person one or person two.
+I don't know, I don't care if what you do with your hands.
+But I will look to your eyes for example looking at person one or person two.
+Now this is attention.
+Or for example, you'd like to give me a message through gaze.
+So I'll be looking at you.
+I to understand the message that you're trying to give me.
+This is called the attention.
+So I'd be focusing on for example the gaze only.
+And so there's selective mechanism.
+There is a restrictive mechanism.
+I choose something entities for many.
+Okay, so this priming what to look for or where to look for it and suppress it.
+Like you suppress some entities from it yet like features, for example objects location that are not relevant.
+So if I'd like to focus on particular area and I don't want the other area.
+So just delete, delete them.
+So you make the environment empty except from that table of that table.
+Just as a state.
+For action.
+We define certainly what the agent should do next.
+And it relates to planning.
+So we understand an action or an agent doing actions.
+There will be a planning agent will be planning before so determines sequence of steps to read certain goal prior to execution of plan of the plan and dynamic action selection.
+The dynamic action selection can be probabilistic, for example, can be random, can be redefined, you know, according to whichever strategy you take.
+So you do plan and you choose the action among the different strategies to do that.
+Memory we have short term memory like sensory memory, like recent receptors, for example percepts.
+It's a short term working memory information relevant to current tasks.
+We have episodic memory, we have semantic memory, general knowledge about the world.
+We have procedural memory, motor skills, global memory, and so on and so forth and so forth.
+So when you find these actually knowledge like these different memories.
+What I'm trying to do is like to try to make you thinking about the problem.
+If you are having a hobot and you'd like to create cognitive architecture more systematic.
+So you have knowledge in your brain, in your mind.
+So which knowledge to put in which memory.
+That's what you need to do which one which memory.
+But think about your.
+Or what you are trying to do with coding for architecture to put it in the system which memory we put which kind of memories we put in which kind of memory.
+Okay, so we try to systematize the process in some sense.
+After that it is the role of the framework itself to be the communication and use memory here and update the memory here etc as we will see next time.
+So for the learning the ability of the system to improve performance over time, okay, through the acquisition of knowledge of skills.
+And we have the declarative and non declarative.
+The declarative explicit knowledge acquisition.
+Declarative is like supervised unsupervised reinforcement learning and so on and so forth.
+So the example of the declarative learning is like you include learning like for example, if the goal is to travel and if you are in a car then press the gas be down.
+So this is the that explicit knowledge.
+However, if I'm telling you non declarative is like include for example learning to ride a bike, developing emotor skills for a spot or learning to associate a certain smell with particular emotion, you know, magnet.
+So reasoning, okay, as we have highlighted before, we have different forms of logical deduction, induction and abduction.
+Okay, so the reasoning focuses on the practical object of finding the next best action to perform the reasoning.
+And the meta reasoning is a part of metacognition.
+When you reason about the reason.
+So now you are reasoning I, I have in this, I'm this situation, which action should I take?
+You have action, you understand the context.
+You have action one, action to action three.
+So you reason and the take action one and then meta reasoning, you come after that and say that why did I do like that why did I take action one, not action two?
+And they started the same thing.
+Like in an exam you say ah, why did I make answer A but I could have made answer B and start blaming yourself.
+So we always just do this.
+Metacognition met easily in like, you know, unconsciously.
+So the abduction reasoning is a type of reasoning in which the best possible explanation is sold for giving observation of or sets of observations.
+For example, if we observe that there is a water on the floor, we might use abduction reasoning to conclude that the water was spilled even though we didn't observe someone doing it something.
+Deduction deductive reasoning is a type of logical meaning in which a conclusion is drawn from one or more premises.
+For example, if we know that all cats are mammals and that Fluffy is a cat, then we can logically conclude that fluffing the mammal the same thing.
+If for example X person all humans would die.
+Okay, so it means like for example a new Die kind of deduction at some age and induction in like, you know, inductive reasoning is a type of reasoning for example in which are made based on observations or specific instance.
+For example, if we observe that every cat has ever seen has been we have ever seen seen every cat we have ever seen has been black and white.
+We might generalize that all cats are black and white even though they might not be strictly trivial.
+So different kind of reasoning, different kind of generalization that you might do.
+The metacognition is refers to the ability of a corporation cognitive system.
+The ability that the cognitive refers to the ability of a cognitive system has to monitor its internal cognitive processes reasonable.
+So meta cognition is needed for social cognition if the agent is to form a theory of mind, also known as perspective taking.
+The ability to confer the cognitive states of our other agents etc.
+As we have explained the prospection the capacity to anticipate the future.
+Okay, and this is one of the hallmarks attributes of cooperation.
+That's actually what you are doing for any of your steps.
+It's probably one of those who are joining the masters and you join the masters for a reason.
+So probably you have done a lot of prospection thinking about what will be the outcome of this.
+For example, if you do this is table that stable, for example, how this can be beneficial to you.
+So there this was for example, having a prospection.
+Okay, so this is one of the capabilities that's not easy to do with a cognitive overzer, you know.
+So it is a central action since actions are co directed and guided by prospective information.
+Okay, so you start doing these simulations and you try to think about the outcomes and connect these outcomes together to think.
+Okay, should I when I make decision, should I take route A and route B?
+These are all cognitive functionalities abilities that we can learn.
+So this is for today what we'll do next time it will be a shorter session and we'll just highlight more practicalities about cognitive architectures and we will continue after this supporting coursework.
+So near to.
+As I said we have we will have a session today probably we can speak in the session today about how we will work on the next period of.
+So do you have any question for now?
+So if not, thank you so much.

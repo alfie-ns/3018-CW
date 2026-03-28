@@ -1,0 +1,1347 @@
+
+    
+Could be for anyone instead of just for.
+Yeah, but I guess that primarily.
+Primarily.
+Primarily vulnerable people.
+Normally, Normally you have six sessions is what is planned for now.
+So what I recommend you is like to do the.
+Something that is looks, you know, like a small project doable, but also allows you to work in six weeks.
+Not in six weeks, in six sessions.
+So it's like we will have lecture finished, we have workshop session and we have additional session if needed for Wednesday for the group of masters.
+So we have like in two consecutive weeks.
+So all the six sessions are in two continuity for weeks.
+So first of all, the duration, the things that I will think of in two weeks after springtime, would you be able to make.
+Have hands on the robot and start working on the installation regardless of your work with Calligraph or you will work with the API?
+Yeah, yeah.
+I mean I could.
+If we could come in and use the pepper robot and maybe like, I don't know, I don't know how.
+How much we can use the Pepperon.
+Would we have to get test subjects to come here?
+Yeah, but actually this will require me also to be present here.
+Yeah, yeah.
+You know, so I. I think if you can think of alternative idea because like, I think the bringing people here to test this will be so complete.
+Complicated.
+Yeah.
+So logistically, logistically it will be so complicated.
+A very brilliant idea.
+But logistically to bring people like 10 persons to make it.
+This for me looks more like you'd like to publish a research paper which is excellent and brilliant, but it will require more time and it will require, you know, like more preparation than two sessions.
+I understand as well that you might be also stuck with other coursework.
+So the purpose here is I really, I really like the idea.
+First time that I hear this idea.
+So I really like what you're saying.
+Just the.
+I'll speak about time constraints and while you are dealing with the robot itself, there will be things that are always not working.
+So you might find from experience, you might find something that you are trying to use, but it doesn't work, doesn't work there for whichever reason.
+So there's also.
+It's taking time.
+In addition to this, you would be also expected to make filming for your.
+For your experience, experiment, etc.
+Etc.
+So what, like film the note but like film was testing those.
+This test objects do you mean, Sorry,
+filming the robot, like in whichever interaction scenario you are doing or whichever game or whichever task you're doing.
+For example, making it.
+Filming it so that one can see that the robot is doing the Task intended as supposed to be.
+So I would recommend to you a little bit make it without needing external persons to come, because this was decades of time.
+They would not need to come at the same time we are available.
+And it will require, you know, like having people interacting with a robot without it required, the protocol required.
+Like we have some kind of initiation giving people initiation for interacting with the robot.
+So yeah, it will require some preparation
+in advance about just the general, like assistant that also need people.
+General assistant is fine, but try not to too much simplify it.
+For example, when you say general assistant using imported AI, okay, are you doing just for reminder of things we can
+also add, like, we can do more research to add more features for it.
+So not just like.
+So for example, just to remind us that's just what came off of my head.
+But like we can add more features.
+So it's not just AI, it's like we're actually developing something more.
+Okay.
+Like for example, yeah, something like it can be added on top of this integrated with ChatGPT or whichever.
+OpenAI.
+This is certainly something that is easy to do within the context of experiment.
+Yeah, no, but it wouldn't just be chatgpt.
+Just chatgpt.
+That would just be.
+It would just be like the OpenAI API integrated into what we're trying to do.
+Like, yeah, just that it will be the brain of the robot, but it's not like the whole brain.
+What kind of addition, the scenario that you will do, let's say if you will use ChatGPT as a system, what is the task you're trying to do?
+It requires a little bit thinking about the task you'd like to use ChatGPT for.
+So for example, for example, some people use the ChatGPT before with emotional recognition, for example, and they made, for example, X story or y story involving ChatGPT, for example, with emotion, with emotion recognition, for example.
+So this was a task of one of your colleagues.
+So what you will do so plausibly, like when you use ChatGPT, that's fine.
+Or open AI, it's fine.
+Now what you will do with it.
+Yeah.
+Okay.
+And also think about when you're trying to think about planning process, when the robot will be speaking, you need to accompany.
+Normally a robot should be explaining something with ChatGPT.
+So the robot should be making behavior like gesture behavior.
+Okay.
+So think about all the parameters that you are not only generating answers from the robot, you are also implementing gestures.
+Okay.
+So the speeches that will be coming from the robot should be accompanied by body gestures.
+Yeah, yeah, yeah, yeah, yeah.
+It wouldn't just be like the response is the response.
+It would be like.
+So it would not be only oral.
+So the robot is explaining something to be more convincing.
+Now what is the frame that you can put this inside the real scenario?
+The what scenario?
+So, so the scenarios of the interaction away from complicating it with, for example, with subjective, real subjective experiments.
+So would you do for example a particular game or a particular interaction scenario in X condition or Y condition?
+That's something you have to think of.
+So you are not making critique I think as a masters, but at least you have seen examples of previous HRI papers that you have seen.
+For example, they might create whichever scenario.
+Like for example scenario of a game.
+Like you might find a paper making complete experiment about for Hanoi Tower, for example.
+Or X or X or X game or Y game.
+So the point is, what are you trying scenario of interaction?
+You think of potential that involves open AI.
+What if we make it find stuff like for example, for example a phone or something and it goes through the room and looks for it.
+So can it not be like an assistant type of thing?
+Well, like for walking.
+I don't prefer.
+It's possible.
+Especially.
+Especially if you will depend on the features of the.
+If you will depend on the camera of the robot.
+Okay.
+You know, like in order to depend on the camera of the robot.
+Actually this is also what something was tried before and.
+You know, like the robot is limited where you will put it.
+So you, for example, you put a piece of bolt somewhere here in the room and it can, if it will bring it, how it will bring it, how it would grasp it or how it will move.
+Like it has it.
+It doesn't have income like this.
+This was creating too much risk in previous projects where the robot will falling down, you know.
+So like the physical robot we'll be using is only Pepper robot.
+But even Pepper robot cannot be used for the example to do something like this.
+Okay.
+So I would recommend to have the robot in static form without being moving.
+Yeah, I mean it wouldn't this side it wouldn't have to be moving.
+It would just be talking to them,
+talking to people without really moving from place to place.
+Because it would create with some kind of unstability issues that the robot might work, might fall down or something like that.
+So I really recommend not to make something like that.
+Okay, so what could be the other things that you can have that involves but also allows you to integrate, you know, other features for human robot interaction in a bit of context,
+what would you suggest?
+Like we can.
+I give you, I give you opportunity to think.
+Okay.
+We still have time, so probably try to think together what could be a potential idea and think about one idea and one additional idea.
+Okay.
+So that you have like when we have like let's say discussion next time we can decide, okay, that's a good project.
+Or if you have an additional idea, we can think about what could be the other alternative.
+Or we can modify this with that so that you, this is your project, this is your idea.
+And if finally, if you know there is a problem of coming with ideas, we can think more at the end.
+How can I support the brainstorming?
+But you know, I think you are able to bring an idea just to modify a little bit and you'll be able to put this robot in a context, some context that is doable in this specific period of time.
+And what is the period of time?
+The period of time is two weeks, six sessions.
+Six.
+Okay, so how, when?
+So even after, after, after, after spring break.
+Yeah.
+We have two lectures, I think after
+two lectures, two workshops and if needed two additional workshops.
+Then we need to do the.
+Our project.
+Yeah.
+So the spring break, we need to actually develop it.
+Yeah.
+Like normally, Normally like the people like students take, need the robot just at the last part.
+But most of the workers like we agree on the project.
+So people, for example, say we will do some kind of speech processing or computer vision or chairman.
+So they try to decide.
+It's just, I want to make.
+Sorry to cut you off.
+Yeah.
+So they try to develop the basic part of the work and then they try to put it together on their own, for example.
+So it's like I never last years, never take, never took six sessions, for example.
+All six sessions, I think more than enough.
+Okay.
+If there is any time needed, extra 30 minutes, etc, one hour, we can manage, you know, but within these sessions
+I just want to do a cognitive robot.
+So can we not do that?
+Sorry.
+I want to make it like the idea to be a cognitive type of robot.
+What do you like to do with this?
+What do you mean when you say cognitive robot?
+What kind of task?
+Just like with a pmpo and whereas I.
+Well, like, I would not stop you if you'd like to use pomdp.
+I've just indicated difficulties and I indicated a problem of evaluation.
+So you have different challenges in evaluation.
+You have challenges in time.
+So if you are thinking that it's still valid, please make your idea clear in writing and telling what you will evaluate, how you evaluate, what do you need so that we can discuss if it's feasible or not feasible by the time of experiment.
+We're planning to send you prior to us talking about it here.
+Can I give you an email explaining or maybe in that email with other ideas as well.
+Yeah but if you'd like to PMDP really invest time on thinking about it.
+Think about how you create it.
+You'll create it from scratch or solve all the mathematical side like from scratch or would you have some depend on some model what is the parameter that you are trying for for care for attention for whichever how you will test it subjectively or objectively.
+If objectively how if subjectively how and if you need resources like subject degree how many person when they will come you know there are.
+What's the minimum amount of people that we need to evaluate it?
+Well like human orbital interaction requires people to.
+To make something like I have never seen like sort of less than 20 for example.
+But, but, but it's understandable that a student project but the fact is will bring people to interact with the Roman.
+Put this as a last step.
+You speak here about several challenges that I am sure they will take more time than this.
+Yeah, it's better to develop something without other people.
+I will I'm sure pretty sure that they will take more time than this.
+However I will not stop you.
+It means that if you think the idea is doable, write it down clearly.
+What are for example the challenges how you will develop.
+What are you going to measure?
+How you will measure.
+Write it down clearly.
+Send it to me.
+Yeah.
+Otherwise also send other ideas and then happy to discuss with you.
+Yeah.
+Yeah.
+Okay.
+Okay.
+Thank you.
+Thank you.
+So what are you thinking?
+I don't know.
+Shane can't do that just because of the people.
+Like we actually add people.
+It's going to take way longer.
+Yeah.
+Just people around the people are not going to like take half an hour of their time to actually start.
+Yeah, true.
+You might think they would have done like realistically
+maybe like I don't know 20 people.
+So it's a lot.
+Absolutely.
+Yeah.
+Surely we never need 20 people.
+Yeah.
+So I think sp something without people it's like something we can develop without needing the other people.
+We can just test it in other ways from us.
+Like have you got an idea?
+So I was thinking about the personal assistant kind of thing because it's going to be easier but we can also add tasks for like other features to include.
+So it's not just simple, it's also got other features with it.
+Yeah, it's Like a personal assistant, but like very personal to that one person.
+Yeah.
+We can make it like add history, you know?
+Yeah, yeah.
+Learn about this person, an individual kind of thing, as a memory.
+Yeah, I'm pretty sure like that that's what kind of a PMPDP will do.
+Kind of like.
+Yeah, it's more like an individual, I think.
+It learns history.
+What you use.
+Like for example, this person you clubs at 7pm all that.
+But also has chat duty as a personal assistant.
+So it's not just for us to.
+We not need too much people.
+Speak a lot.
+Too much people.
+Testing is going to take a lot and we're going to.
+It's going to take a lot to find the.
+Going to take us a week or two.
+So.
+Yeah.
+So what do you think?
+I don't know what you really want to do.
+New projects, like new ideas.
+Yeah, yeah.
+We have a week to decide.
+Okay.
+So first let me.
+But we can like start with open because we already developed it.
+Yeah.
+Integrating the open AI into it so easily.
+Yeah, we do.
+I could do that.
+Like.
+Like kind of the pepper.
+It's really not that hard to do that.
+It's just thinking.
+We need to think about.
+Yeah, yeah.
+We can add like for example, alarm looking at the history.
+So it learns about the person.
+Yeah.
+So we can have that person wakes up at this time.
+That person usually eats food at this time, all that stuff.
+For example, I can ask when did I wake up yesterday?
+He's going to say, I woke up at this time.
+But can we actually add the memory for it?
+Oh, because.
+Yeah, ducks.
+Because you can just do that with a conversational loop.
+But.
+But then it would.
+But then I'd have like a.
+A proper database where then like put in.
+Yeah.
+I don't know.
+I just got an idea.
+So for example.
+For example, me, you, and two others, we can be like, okay.
+To know who that person is.
+Yes.
+It like recognizes who it's talking to.
+For example, when it talks to you, it says your name.
+It talks to me.
+Says my name.
+Yeah, some kind of.
+So it knows who's the owner.
+For example.
+For example, let's say it's my personal assistant.
+It would call me with my name.
+Call you with your name.
+It's going to know that you're not the owner.
+I'm the owner.
+For example, some kind of stuff like that.
+And also just know more things about that specific person.
+Yeah.
+So it doesn't study the other person, just studies you.
+Yeah.
+Some kind of like something with that kind of line.
+Yeah.
+So it's not too simple.
+It also has some kind of thing working with it.
+Yeah, yeah, yeah.
+What's good?
+This isn't recording, but it's transcribing.
+Not exactly.
+What.
+No, it's not for what we're talk.
+All the ideas we're having is being transcribed and like the wet things he told us to do in the email got that transcribed as well.
+So when you speak what.
+So I'll be able to send him like the email exactly how he would want one.
+I would not need too much.
+Gonna use libraries for example or like already made.
+Yeah, I'm sure.
+I'm sure he'd prefer one that we've made ourselves.
+I don't think, I really don't think it will take that long.
+Yeah, yeah, that went honestly, honestly,
+we
+could do that in a week.
+Well, I don't want like something to be too much for you because you're going to be doing a lot of work.
+I want something that's not too much for you.
+Yeah, no, I appreciate that but I think we'll be able to do it.
+I'll be able to do it.
+Well, if you think.
+Yeah, you can take some time, make some research trying to develop and then we can description like this, figure out what to do.
+For example, take care of the making given the task like John knowing who's a person, the manners, all that stuff, what kind of stuff to say and you can work on.
+Yeah, so.
+So I didn't even hear you.
+So what would be.
+What would you do if in that scenario or the what bit?
+I mean that would take.
+Yeah, I mean but it's just like I've done it, I've done.
+I've used the OpenAI API like over 10 times.
+It's really.
+It wouldn't be that wouldn't be that difficult.
+Yeah, I can just develop it a bit more.
+Yeah, yeah, yeah, yeah.
+I could give you.
+I can give you like the start.
+Start of it.
+Yeah, maybe have you ever used get?
+You.
+You have used get because it's comp 2000.
+But maybe I'll make a get.
+Maybe I'll make a repo that we both have access to.
+Yeah,
+yeah.
+But we should have two different parts of it so we don't interfere with each other's work.
+Because then do you know about like when you try to push and then it doesn't let you push because there's conflicts.
+That is stressful.
+Or I can just create a new file and call it for example.
+Yeah, exactly.
+There'll be like a fight with Your name and fight with my name.
+Yeah.
+Or just like, an advancement, like after the development.
+So you can have, like, the structure of it.
+Like, we started with this, then we ended up with this, then we end.
+Yeah.
+So 1, 2, 3.
+Yeah, yeah.
+Like, yeah, yeah, yeah.
+So, yeah, that's a good idea.
+Yeah.
+And for the results and the report, we can also work on that as well.
+So you said you're gonna take a conclusion, I'll do the introduction.
+Yeah, yeah.
+I can't remember exactly.
+I know.
+That's like.
+So, like, you'll do the introduction, I'll do the background.
+It will be you and.
+It'll be me and you doing the method and setup, and then you and me doing the results.
+And I'll come and me doing a conclusion and then.
+Yeah, that's right.
+Cool.
+I just don't want you to do all the work.
+So it's not too much of you.
+Yeah, it won't be too much.
+But I appreciate you saying that.
+Because I was in a group last year.
+Some of them, like, given, what, 2003.
+No.
+Is it the year project?
+Yeah, the 40 credit module, I think that was 2003.
+Group of four, two of them.
+We're not doing any work.
+I mean, it's good that we all got our own grades, I think.
+Didn't we?
+I mean, we didn't get the exact same grade.
+Yeah.
+For that one.
+But this one the same grade.
+So I'm trying to help, really.
+Oh, yeah.
+Oh, yeah, yeah, yeah, yeah.
+So I know it's painful when someone does all the work, the other one doesn't do anything, so.
+Yeah, no, but that's like.
+So if he ever feels too much, you can give me anything.
+Yeah.
+Cheers.
+Okay.
+And then the first.
+10.
+Develop.
+Yes.
+Rotating this.
+So what are those two ideas?
+Yeah, facial recognition and open AI.
+And we can add the task, small task with it.
+Is that going to be enough?
+Yeah, I think.
+Yeah, they should be.
+Right, that's fine.
+But the thing is, the problem is the Roblox camera is not fast.
+That's a problem.
+So if we can tell face recognition or not.
+I don't know, Maybe I'll ask him to see if he thinks that we'll be able to.
+We can make the robot smile, for example.
+If he sees someone smiling, can smile back.
+Yep.
+If you do not smile, it's not gonna smile.
+Yeah.
+Oh, yeah.
+I was also thinking like, the robe will have like different preset personalities.
+Like if it's.
+So if it's more like.
+If it's more like caring or if it's more like straightforward and like.
+Yeah, no worries.
+Which software are you guys planning to use?
+Is it the one we are using?
+The virtual.
+Well, the thing is you can just do it all in python and SSH into the robot.
+That's probably what I'm.
+I'm thinking of doing.
+Just.
+Just do it.
+Code.
+Visual studio code.
+Yeah, yeah,
+Sorry.
+Well, I don't know.
+We haven't really got one yet.
+I mean, we haven't.
+We're making one.
+I did have an idea, but we can't do that.
+Yeah.
+So I think about eight.
+I think facial recognition.
+So like identifying emotions.
+Just happy, sad.
+So if I'm happy, it can smile back or something like that.
+Or the camera.
+Yeah.
+With the pepper over here to do that.
+Yes.
+But this is still like, you know, you are using particularly.
+This is similar, like.
+So for example, here they are using making complete card game.
+Another project is about making another game by cups, you know, and stuff like this.
+And the robot will be observing and involving in the game, you know, so this is valid project, for example.
+So still.
+Okay, you'll have for example, this model.
+Let's say you'll take the model of the workshop and add it on board.
+Still, what is the context?
+So I would like your project to be, you know, something that's still doable, but also a little bit add the.
+A level of maturity similar to other projects.
+So you need a little bit more context.
+What is the context about something specific?
+Yeah, what is the context?
+You will do this.
+Like you spoke about open AI voice, spoke about the component of facial expression.
+Then what is the umbrella that will encapsulate all this context?
+Like an assistant, like a personal assistant, like an individual.
+So for example, we're thinking about this as well.
+So we can add as an individual for assistant for an individual.
+So it can learn stuff about the individual that's going to take for the testing that it's going to take.
+Because it's just us two.
+It would be able to know like it would be able to know what.
+It would be able to be more personal to him and more personal to me.
+Call him by his name.
+Calls me by my name.
+Something you'll be able to do.
+Yeah, but that's also.
+You take your time.
+Yeah.
+You need story to put this in of interactive.
+So I give you examples.
+Yeah.
+So they will use cameras.
+You will use for example your colleagues cameras and the complete setup for a game for stuff like that.
+So a little bit try to secure you have the component put this in a context to take your level of complexity a little bit more level up.
+Still do what we're doing within this time and but still also doesn't look like very easy thing when you just do what is a context, what is the story, what is.
+You know how we will be using the facial expression and speech together.
+In which context.
+This is the context will be your basic topic.
+Yeah.
+So.
+So think about it.
+Yeah, think about it.
+What you like, exactly what you're going to do, you know, because after this I will ask you or now I'm asking you to develop like kind of a diagram for example.
+So he said we need to create like a scenario kind of thing, like a task or like one simple thing.
+Like you got to do a specific thing for example for that like the cards for like something like a task,
+not like something too big, not like general assistant.
+Yeah, yeah.
+So he said we can add the OpenAI, we can add the facial recognition.
+But.
+But what is it going to do?
+So I was asking ChatGPT.
+He said for example we can add him as a receptionist.
+Open eyed.
+You're happy, you seem in a great mood.
+How can I help you?
+Hey, everything okay?
+What about like, what about like a therapist?
+A therapist?
+But that's gonna be too complicated.
+No, because that's basically what this is.
+It's just like, just change it a little bit.
+We can add that all the ideas.
+So first idea can be receptionist.
+For example, how can I help you?
+For example, I want to do this, this, this.
+Ask any questions.
+For example, how can I.
+Any questions you got.
+You can also detect your facial recognition.
+So if you're sapped, it's going to be oh for examp.
+It's going to change the what it says.
+So it's going to say like hey, everything okay?
+I'm here for you to help.
+Angry.
+I'll try to help you Quick, what's the issue if you're happy?
+I was going to say like you seem in a good mood, how can I help you?
+So what it says depends on your, on your facial expression.
+Yeah, you go.
+I mean yeah, so that's the first idea.
+Second idea, Frustrations and currents.
+Mental health companion.
+I mean that's kind of similar to a therapist.
+I think that'll be a good idea.
+Smart retail assistant.
+We can also make it as a game assistant.
+So for example, yeah, everyone's doing games
+like no, no, no, no, not a game.
+For example, like a game assist interactive game robot.
+So if you, for example, you're happy, it celebrates.
+If you look frust frustrated, it gives you hints.
+If yeah.
+Can give you dialogues.
+For example I can generate like puzzles.
+Generate puzzles for you to answer an idea.
+Then if you take too long.
+So if you seem frustrated it's gonna be like oh, he's not happy.
+It will give you hints.
+Yeah, kind of thing.
+If you get it right, it's gonna be, it's gonna be like celebrating.
+Yeah, that's like a specific talent.
+Specifically.
+Yeah, I mean spatial recognition and has a specific, like something specific.
+It's going to do.
+Yeah, I mean something specific instead of a git repo, you could actually just do this all in the Google Doc because it's shared.
+Yeah, we can add ideas now.
+Yeah.
+Game.
+I think the game one is the easiest one like the one he's going to actually say yes to.
+So for example game interactive gaming robot.
+So it gives you a puzzle or a game.
+If you play a game with it, generate's their game.
+If you seem happy, for example, like Mike makes gestures with it.
+Check out the gestures celebrates with you.
+If you seem frustrated, they give you hints.
+So it's not just simple, it's actually
+like more complicated and maybe you can like infer like what games it kind of thinks should be doing.
+Yeah.
+Okay, let's say a puzzle game or a wording game or for example spelling game kind of thing.
+You know if I get.
+Yeah, it's gonna be like oh no you're wrong.
+If I take too long, if I seem frustrated, it's gonna be like it's gonna give me a hint.
+Oh yeah.
+Or maybe if you can't do it it will think of something easier.
+Yeah.
+Do instead see that kind of like
+that kind of in the line.
+Yeah.
+That just makes it easier.
+You know he accepts it.
+So it's something specific.
+It's not something too broad that we have no scenario.
+Yeah.
+Cuz that's what he said when he left the specific scenario.
+Cuz if you're going to use open air, you're going to use face recognition, you need the task, you need a scenario that's going to work.
+Yeah.
+I mean but why isn't a like a healthcare robot scenario?
+Do you think healthcare is going to need more time to test it?
+You want something like simple, we can test it at one time, you know?
+Yeah, yeah.
+So I think the game would be the game ones good idea agree to.
+Yeah.
+So we can write that down and we can develop it like add more ideas on it.
+You get what I mean?
+Yeah.
+We still have a week to think about something until next Friday.
+Yeah.
+Because in the spring break we actually need to work on it.
+Yeah.
+And that seems like a good idea that users to open AI and use facial recognition.
+Yeah, yeah, yeah.
+Maybe we should just do that then the game robot.
+But maybe let's, let's think we're gonna do that and then I'll have, I'll do a bit more of a research but that's probably like what we should do.
+Yeah.
+So we can have that as a plan one.
+We can add other ideas.
+Yeah.
+I'll just write in here Plan 1 Get a gaming robot.
+But I forgot the other if you can remember so where it would be, This changes how.
+Changes how hard you.
+How you feel.
+I don't know if you can just think.
+If you can just think of anything, just put them.
+Just go in the good dock and.
+Okay, I have another idea as well.
+So you can write down the first idea so we can finish it.
+So it's gaming robot.
+We can add the like features with it.
+Yeah.
+So it generates games.
+What that's specific to that person or.
+No, anything just like random games.
+Like, for example, can go to spelling games, like puzzle games.
+Like.
+Yeah, makes it on the fly.
+Yeah, yeah.
+We can have it as facial recognition.
+So emotion does it go through that one as well?
+So for example, when it detects like you're nervous, you're frustrated, you're happy kind of thing, whatever.
+Frustrated or nervous.
+Yeah, because you're not gonna be nervous playing again.
+Yeah,
+Yeah.
+So if you're frustrated, it gives you hints.
+Oh, really said that.
+Happy, frustrated.
+Yeah.
+If you frustrate, it gives you hints.
+Yeah.
+If you're happy, it celebrates.
+What else we can add with it generates more than one game, like general games, stuff like that.
+Other idea is.
+What is it?
+Storytelling robot.
+So it tells a story that changes based on your reaction.
+Oh, yeah.
+No, maybe it like tells a story like the goal.
+Trying to help the user somehow.
+Yeah, yeah.
+Makes him happy.
+Yeah.
+We can add it as idea too.
+Oh, yeah.
+If you're.
+So for example, if you look bored.
+Okay, so the first thing, monster stories.
+If you can think of anything, just type it in.
+All right, so.
+These are all like, these, These can all be like cognitive.
+Did you like ask.
+Did you say like these kind of cognitive?
+No, not asking us.
+I can ask.
+Yeah,
+Social skills trainer.
+So if you do not.
+Yeah, that's good idea.
+Try smiling more.
+Eye contact.
+Keep eye contact.
+You seem.
+Yeah,
+yeah.
+Social skills training.
+Yeah, The text eye contact detects like how.
+How approachable they look.
+Yeah, I'll just keep eye contact, you know.
+So for another one, detect emotions.
+Yeah,
+gestures, like hand gestures.
+Yeah.
+If you look like closed up, closed off.
+Is that what you mean?
+Yeah, like if you sat down like that.
+If you sat down like that, comfortable, you look and it gives feedback.
+Gives feedback.
+Try smiling more.
+You seem disengaged.
+Such stuff like that.
+Fix your posture.
+Yeah.
+Okay, so we have three ideas now.
+I think he's gonna go with the first one.
+So just ask him now.
+Like.
+Yeah, when he comes back.
+Yeah.
+So you have three ideas and solve a specific task and.
+Yeah,
+I think the social skills trainer would be the best one.
+But it might be him.
+It might be.
+He might think that's too much.
+Create scams, generate scams.
+Online facial recognition.
+Happy, frustrated if you're for you can write if you're frustrated, give us hints.
+If you're happy, celebrate it.
+So it's not just using the verbal, it's also using new hands.
+But I think it should still give you hints if you're happy but like not hints.
+That hints to how you can enhance.
+I mean if you ask for a hint but if it seems like you're all right, you're doing what you're just thinking, it's not going to give a hand.
+Yeah, yeah.
+The process of thinking.
+Yeah.
+So you can set a timer for example it takes more than two minutes or something like that.
+Yeah.
+Unless person says like to know not given us.
+Yeah.
+That would decide how hard it will make it.
+Yeah.
+And if you.
+Keep answering develop something harder.
+Yeah, you just write that down.
+So I think that should be a great idea actually being too much with gaming one.
+Yeah, yeah.
+Because we're using more than the aspect of just ChatGPT using facial recognition and we're using some.
+You basically said.
+You basically tell their so that's why
+I'm trying to do it like we can just develop it first then we can try to develop the PR lose marks, you know.
+Yeah, yeah.
+Because what I'm going to use beyond.
+I mean it shouldn't be.
+Yeah.
+It won't be in a proposal.
+Yeah, yeah but we can propose it as the this because if we say
+like
+so I think it's just better to go with this first then we develop this and if it works fine we can try to add that one.
+Yeah.
+You know just like a extra marker I think but a bonus.
+Yeah.
+Well hopefully this is.
+Yeah I'll be able to think of more ideas.
+Yeah, yeah.
+We have a way to think about stuff.
+How can I go out the plan the scenarios figure out the scenarios and stuff while you develop the code for this.
+Do you want me to do the facial recognition or what would be comfortable.
+Whoever you think you're good at, you can take that, you can give me the rest.
+Yeah, I mean the thing is.
+Yeah we can.
+Do that.
+This one does not have frustrated.
+We can add like other stuff.
+Oh yeah, the library that has frustrated nervous stuff like that.
+Those are closed libraries for the case recognition somewhere called.
+Yeah, yeah I think I use that as well.
+What in the report?
+Yeah,
+Yeah, yeah, Yeah I got 80 on that.
+No, I'm not trying to flex just.
+Like for the game and whatever.
+Yeah.
+Cuz I think if you want to get good marks you want to develop like not in the coding yet in the features.
+Yeah, yeah, yeah, yeah.
+Cuz that's going to get us the marks.
+Yeah.
+It's not going to take too long.
+Yeah.
+It's just about ideas, creativity.
+Yeah.
+Okay let's talk
+maybe like just how if he just thinks it finds it hard to like adjust
+if it's too
+hard then it'll make one easier.
+Yeah.
+If you.
+Yeah.
+If you do not answer.
+Easier if too hard.
+Would you rather or guess the number?
+I'm just gonna.
+He said like the diagram of what's going on happen.
+So we have the camera emotion then game logic open AI and how about depends on his moves for example his side.
+It can give him games to cheer him up.
+He's going to sub break now.
+Yeah
+yeah.
+Yeah.
+And the diagram we have a camera, sex to face emotions, game logic, open AI response.
+Then the robot speaks and reacts.
+Yeah.
+You rightly can you fight that now?
+Yeah.
+I think that's like where I feel the game robot.
+Yeah yeah good.
+Oh yeah.
+Before speeds things up.
+Yeah.
+Then there'll be a different personality if it's.
+If it's angry it's like not saying not being like so not being like oh no worries.
+Being like I don't know, cheer up or something.
+It's just like a bit more.
+It's just like different.
+It's just a different personality to a nice one.
+Like a not nice personality.
+Oh actually you can add something that's going to get us how it looks.
+Robot personality.
+Yeah, yeah, yeah.
+For example fun sarcastic stuff like that.
+Yeah that's what I mean like different personalities.
+Yeah.
+Let's use more.
+I think that.
+I think I have good ideas.
+Yeah yeah surely.
+And what I do is like I'll.
+I'll be like.
+Like kind of imitate it from the lecture that he taught us.
+Be like oh maybe not like which I don't know about cite.
+Maybe not citing the lecture like lecture is not very.
+Information.
+Can you send me that document on email?
+Which one?
+So it's easier to go on it from my laptop.
+I'll try to create the diagram for the inputs and outputs.
+Yep.
+We should have a.
+We should have a section for the diagram and in the end I can make the diagram in late in light.
+Yeah yeah I'll just like have a plan for it just now.
+Yeah just like to figure out what's going to happen.
+It.
+I think I've given it to you.
+I mean I think I mean I think I've given anyone can you know the edit.
+Oh yeah.
+That you will get it now.
+Input is going to be the Facebook.
+And this you should also diagram should also have these things.
+So what it perceives.
+I know why it perceives like why it's attentive.
+What what's why it anticipates.
+Hopefully just lets us do this then we're one week ahead.
+Yeah.
+Taking already developed and start.
+It.
+Maybe like if they seem upset give them something that will like cheer them up.
+Yeah.
+So I think we have an idea.
+A good idea.
+Yeah.
+We have to think more of more of these.
+Yeah.
+Yeah.
+So how can react?
+Have you got any idea, any ideas of gaming robots?
+So it's frustrated, it gets angry.
+Makes getting easier.
+Wait, what?
+Say that again.
+Sorry.
+So creating a robot.
+Creating a robot.
+Yeah.
+That has open AI and facial recognition.
+So to see the emotions and for example sees you as sad it can distract you gives you like a game.
+But if you're sad they're going to give you like an easier game.
+If like half these can give you a game.
+But also if it's frustrating, give you hints is you angry celebrates with the gestures.
+Plays on gestures and gestures.
+Yeah.
+At the same time you hold the game so it doesn't get too boring.
+Yeah.
+Oh okay, that's cool.
+But you like what you're trying to
+figure out more ideas.
+I think you'll like that.
+Hopefully.
+I think it's.
+It sounds decent.
+I don't know how this course work's going to work.
+Do you are you like designing a robot
+scenario?
+Okay.
+But you do you have like, you've got some hardware already.
+You got like a ready built robot.
+Well, they have a robot.
+I can have a robot.
+Oh okay, that's cool.
+And we're using already like ready libraries and modules so like the OpenAI the facial recognition.
+We're already working on facial recognition.
+So already like kind of ready stuff.
+Yeah.
+We just need to make it like a bit harder so meet the requirement.
+Okay.
+So that sounds.
+That sounds decent.
+Decent.
+Does it make get more.
+Yeah,
+I reckon he won't give us ideas.
+So like if frustrated he gives hints.
+Get angry easier get happy, celebrate.
+Yeah but we just need that proof.
+Yeah.
+Think of anymore.
+Yeah.
+We have either gaming or the game one or the storytelling robot.
+So if you're bored, gives you like some eye pass more action to the story.
+If it sees you scared, then turns it down.
+If it sees you happy, continues depending on your emotion changes in the soul.
+Yeah.
+All social skill training.
+So it takes eye contact, for example, and it takes emotions, gestures and it gives you feedback.
+So like you need to develop your eye contact skills, stuff like that.
+So that's the idea.
+But we're working on the game one more because just covers one specific task or scenario.
+Yeah, no, I think that does sound like a good idea.
+What kind of game?
+Is there like a specific game?
+You
+anything like that?
+Stuff like that?
+Yeah,
+maybe like dynamically think of games like make.
+Dynamically make the games.
+Yeah, we can add like some.
+Yeah, you can add some games and games just already exist in OpenAI.
+So I think if we go to ChatGPT, it's going to give us some games like that.
+I mean I presume you can ask it to play pretty much anything and it will.
+Yeah, yeah.
+It's good in that regard, I guess like the peony issue that is.
+It's a bit limited in how creative you guys can be.
+Yeah.
+It won't just be like, just chat respond.
+That's it.
+Try make it.
+Yeah, yeah.
+There will be things they could do.
+We're not relying on trying to see facial recognition, we're making a task with it.
+Have you guys worked with the OpenAI API before?
+I actually used it in my project last year.
+Oh, really made a game and what I done is have a AI assistant for the game that like talks to them about the game and like gives them hints about the game and stuff.
+It like knows it like I like.
+It gives like a dynamically constructed response because of what I mean, it will know.
+What if you just won what you just cleared?
+No worries.
+So this, this kind of seems like a natural progression of that then it could be good in that regard.
+Yeah, yeah.
+Hopefully Mayor will let us do this.
+Yeah.
+I guess your, your contribution really is in how you're processing it.
+Almost directly takes ChatGPT's output and feed it back to the user.
+And it would be something close to like overhearing.
+I guess not because you have to.
+I've never worked with what's the robot again?
+So I don't know how difficult it would be to translate what CHPD is giving you to an action.
+Yeah, it's actually not that hard cuz you can just SSH into the robot and just run piping code on it.
+Yeah, yeah, Yeah, no, yeah.
+Whenever we ask any question, it gives
+and what, what kind of
+actions?
+How do you feel?
+How do you tell people what to do in Python code?
+Is it semantic?
+Are you saying like pick up this or do you have to.
+We didn't actually make it pick up anything.
+Because he, he was like.
+But I know what you mean.
+Would you want it to like be able to pick up stuff?
+So that's like.
+I don't think it will need to if it's just maybe like.
+I don't know.
+Because it'd just be like think just talking.
+Maybe just like talking game.
+I don't know.
+Okay.
+Yeah.
+Yeah.
+No, it's just like I would do that.
+I would think like.
+Yeah, but I don't think Amir wants us to move the robot at all.
+Just standing like if you're going to do it.
+Anything.
+Okay.
+That's quite limiting any though.
+Anyway.
+Yeah.
+So we got a great task.
+That's why we thought about the game mode.
+I mean at the end of the day this is like a project within a module.
+So I guess the scope's kind of limited to what you can do.
+Yeah.
+And I guess if you guys do have like bigger ideas for this project, you could always explain your dissertation work.
+I guess project actually had to look at way.
+There was nowhere we can do that.
+Like because of the testings as well.
+We needed to add like test it on.
+Oh, okay.
+And you don't have the time for that.
+Yeah.
+You'd have the university with one here like filling out all sorts of forms and stuff.
+I know it's for the elderly as well.
+Yeah.
+Yeah.
+I might go see if Amir's.
+He's usually in his office.
+Came out like a big N essentially.
+Yes.
+Yeah.
+Yeah.
+But I, I, I eventually got it got it working.
+But you said you used the models
+from the previous one, so it might
+be easy just to do that.
+So I think like for me, I ran everything to the end last week.
+The week.
+So I had the one like the on waste from the from the previous exercise.
+Those ones were able to load.
+Yeah.
+So I think after you just cal down locally, then that way I can able to access the I able to assess the way I've come and then.
+Yeah.
+Sort of like play around with it.
+Yeah.
+Yeah.
+So next week we'll see.
+Okay.
+All right, cool.
+Sorry, do you know where his office is.
+It?
+Hello.
+Sorry.
+It.
+Here.
+Yeah, he had it running.
+I. I'm not entirely sure.
+So you didn't see an example of some.
+I did see.
+I saw one.
+Where
+here?
+Yeah.
+Yeah.
+So he run it on his machine.
+Yeah.
+Okay.
+Yeah.
+So we've figured something to actually make the workshop run.
+Yeah.
+Yeah, yeah, yeah.
+I can do you me to run it.
+Yeah.
+Okay.
+Yeah.
+Okay.
+So.
+So frustrated.
+Yeah.
+Like if force slash.
+Process.
+So we thought about something specific that has open AI and also has facial recognition.
+So the smaller games Gener generates games, for example puzzle games.
+Puzzles, spelling games
+dynamically make the game.
+What does that mean dynamically?
+So like if it's like if they find it, if they.
+It will like see if it they.
+If they seem like bored, like it's too easy, it'll make it harder.
+Yeah, yeah.
+So if frustrated gives hints.
+If for example angry gives him an easier game.
+If happy celebrates with him with like gestures, smiles or like so we're adding the gestures with it.
+So it's not just spell but it's
+also interactive and how you will decide that it's.
+So if I'm angry.
+Yeah, easier game.
+So I'm playing puzzle and if I'm angry, easier game.
+So it's like to calm him down.
+Something more convincing than E angry take easier game.
+If someone loses, he doesn't like to lose, for example but like give him an easier game after, you know, so he actually gets the approval.
+So he's not angry to make up for it.
+Yeah, yeah.
+I mean these ideas don't have to be stick but like will it be that like in general a gaming robot?
+Basically, yeah.
+If he keeps getting it just to hard the game because now it just covers a specific like specific scenario.
+Okay.
+We also add OpenAI and we also add facial recognition.
+So there's unlimited games, Any kind of games.
+Yes, yes.
+I'm just trying to see.
+I like the idea of adapt.
+Adaptability here.
+I'm just trying, trying to find a more story around how to make it more convincing from the point of like for example, you can ask as a person, which level do you like to play?
+That's easy.
+Oh yeah.
+Yeah.
+But if you'd like to make it based on emotion so you will see if the person is okay.
+Okay.
+You'd like to see if the person looks sad, for example.
+Give them like easy stuff so he answers over and gets happy.
+Okay.
+Also if he's bored, give him something to distract him.
+Okay.
+So like keep him keep some girls is not code.
+Yeah.
+So why don't you choose Depend like I'll tell you something.
+Depend on depending on the level of engagement.
+I don't know which which game you choose but for example, you might have a game that has some level of engagement and if the person is engaged with you, like he looks like, you can distinguish a person, engaged or not from how the person looks active or how his eyes or how his speech looks like.
+But you need to think about it and if the person is engaged, that's fine.
+If the person doesn't look like engaged, you try to for if the person is engaged, you try to adapt what the robot would say.
+If the person doesn't look engaged, try to say something.
+I'm still alone.
+Roughly speaking about the idea, try to say something to encourage him.
+For example, why don't you try to be more engaged with me?
+Or something like this.
+Like sometimes as you use robot as coach for people who have stroke in a heart stroke and they'd like to rehabilitation.
+So if they found the person doing exercises and the person was for example lost attention.
+So they try to use their robert to say like, like, you know, like be motivated, don't lose, you know, like don't lose your attention.
+Be more engaged.
+Something like that.
+Yeah, yeah, yeah.
+So if you make it based on this idea and make some story around engagement, how you will measure engagement somehow from speech.
+You think about it from speech or facial expressions or from his response.
+So try to think about the scenario here at this point.
+But if you the person is engaged with you, the robot will say something.
+If the person is not engaged, the robot will say something else.
+Yeah.
+Okay.
+About the point of easy level or not easy level.
+That is good idea.
+However, how you will decide that it is easy or not easy based on facial expressions only.
+Maybe it could also be based on like how they're playing the game so far.
+Maybe if for example they take longer time achievement like for example they, they progress slowly.
+So for example you might try to reduce the difficulty level.
+So you might decide that the person needs a little bit lower level.
+Unlike if the person increase or if the person is replying fast or something like this.
+Yeah.
+So now the game you choose should be fulfilling all these conditions.
+Yeah.
+Like dynamic.
+The game like dynamic adaptive.
+Yeah, yeah.
+So fulfilling all these conditions so that allow all these things to happen.
+But the story seems okay.
+Cool.
+There's not an open AI like create puzzles and stuff like that.
+So you have unlimited puzzles to solve as well.
+Yeah.
+So for example if we use an OpenAI for the puzzle sources so we can have puzzles, spellings, spelling spending like a trivia kind of thing.
+Ask a question like about random stuff for example like football or like questions about Plymouth or questions or stuff like that.
+Or geography and he can give like depends on my interest, for example I'll be like trivia on geography for example.
+And it sees like my engagement.
+Of course if I'm bored, if I'm happy, if I'm sad and chooses like
+stuff like that so how you use OpenAI to generate puzzles.
+So if I go like on ChatGPT right now, create me a puzzle, for example, for like a.
+Like a questionnaire for like geography, it's gonna give me like loads of lists of questions about football, for example.
+Loads of questions, yeah.
+And like, that prompt can be like dynamically based on like, if just many different things.
+Not just like, you don't just ask it make me a game.
+It would just make any game.
+It would make a game for that person, not for that exact person, but just like kind of just a game that helps them.
+So it's not limited to one game.
+You have multiple games.
+So you have an open source of any kind of questions you have.
+So it's all about like, questions and the robot says a question and the person answers.
+Yeah, all like puzzles, for example, or like spirit spelling, like spelling quizzes.
+Like you have an open source of games.
+So, so like in your interaction, you try to say, okay, for example, hi, what do you like?
+For example, I have these kind of games, x1, x2, x3, x4, x5, 6.
+And then the person choose, I'd like to play x1, for example, and Royce1 start speaking.
+And then you will see the person, how the person is answering, good or not.
+And then you try to reduce.
+But what is.
+What is the way that you will reduce the difficulty?
+Because like, if it's coming from ChatGPT, how you quantify the point of increasing difficulty or reducing difficulty, you just like,
+each time it would just be like each time it's just done, the prompt to it would just be dynamic, but based on what it.
+Like what it like infers if you finding how you're finding it.
+Basically, yeah.
+So if I can go to trajectory right now, give me like a hard question about football, for example.
+It has to understand that the person is replying.
+Need to reduce the speed.
+I need to reduce the difficulty or increase the difficulty because he's replying, for example, slowly or he's not.
+Yeah, yeah, yeah.
+So how you will measure this and deposit in the prompt to ChatGPT to change the level of difficulty.
+You understand what I'm saying?
+Yeah, yeah, yeah, yeah.
+I mean, there's like problems we can do to actually.
+But what you will measure from here, what you will measure, like if the person is saying, for example, so like
+measure like how they look, how they
+answer, how they answer or how the answer is one of them.
+But you might say we will decide if the person is advanced level or not advanced level for whichever.
+Like you might say we will in employ facial recognition.
+We will make whatever.
+So how you will.
+What are the factors or what are the parameters that you will measure and how you will put them together and pass it to the prompt so that Chat GPT or Open Air changes the output based on the property.
+Yeah, so this is the engineering part you need to think about.
+So the time they take the.
+The expressions.
+I am saying.
+Yeah, I'm giving example.
+So you need to think, but think realistically.
+Which means like don't suppose because like don't say something and it doesn't realistic.
+You might.
+If you tell me facial expression, I will tell you.
+Are you sure that facial expression really is an important factor?
+So yeah, think what is it?
+Maybe like one thing that you will
+consider one or two or whichever.
+Like think well and see what is a prompt that you will pass to ChatGPT so that when OpenAI changes its output based on what you will give.
+Yeah, yeah, yeah.
+And you make the diagram.
+So you show what is the task of your as a group.
+What is your task if each one of you.
+Okay.
+So you have to clarify the task.
+So it should be clear probably next time bring the task you thought about here more like, what is the context more like in general, like that context is like more or less.
+Fine.
+But try to make it more detailed.
+What will be the contribution of each person?
+Try to make the figures that I asked you about with blocks and arrows.
+So blocks and arrows.
+So saying what would be the input here?
+Okay.
+For example, the human is saying speech.
+So the input will be speech.
+And this will go to 3 blocks, 6 blocks, X1, X2 X3 game 1, game 2, game 3, game 4, game 5, game 6.
+And after this it R1 arrow goes out.
+If it will be game 1 or game 2 or game 3 or game 4 and you know, try to present it as a figure.
+Okay.
+Indicating what's the rule of each one of you.
+Yeah, yeah.
+Okay.
+And next time we can see it.
+Yeah.
+That it looks fine but that, you know, like I still need to know what is how you will control the prompt.
+Yeah.
+Okay.
+How you increase the difficulty or not difficulty, you know, and how the robot will react when you increase the difficulty.
+For example, it will involve for example facial expressions or.
+And if it will involve visual expressions.
+For example, let's say when I speak about robot will say something and generate gestures.
+Do you know how to generate gestures?
+For example, you have to think about it.
+Generate gesture aligned with speech.
+Yeah.
+Okay.
+So you have to search.
+Don't suppose something Saying that the robot will do without knowing if it can do or not.
+So think about all these sub points and next time we can have a chat about.
+Yeah, so do you.
+So should I not send you like a.
+Like a email about all these things?
+Like try to prepare it in document and next time.
+Yeah, print out.
+Yeah, like next time I can see it on your PC if it's written in front of you clearly, I can just see there.
+Yeah.
+Okay, thank you.
+So we can just do some more research on how we can develop it.
+Yeah, that's good that I've got that all transcribed because.
+Yeah, like now we know exactly what we need to do, what he wants us to do.
+And we need to do the task now so we can know who's doing coding.
+Yeah.
+So for example, for the prompts and stuff.
+I can work on that.
+Did you download train the model?
+Yeah, you can figure it out after we like lay down the task.
+Task.
+We can figure out who does.
+Thank you.
+So.
+Yeah, so what should we just like loud.
+We have to do it right now obviously.
+Yeah.
+But like when we go back home, like you can think about the tasks and the coding.
+Oh, I mean we need to create, you know.
+Yeah.
+So.
+So that.
+That's report related T. And then code related.
+What you saying?
+Making a prompts.
+I mean I can help you that.
+Because we'll make the proms dynamic.
+Yeah, we can like both work on the stuff.
+Yeah.
+Game logics.
+Do you want to do that?
+Yeah.
+And like.
+And I'll just write the code the rest.
+What else do we have?
+We have the facial recognition.
+We have the.
+Yeah, I mean I've got all that.
+I've already got to code for that.
+So.
+Yeah,
+If download, if you, if you got the.
+Is that Android then you have docs like pre installed.
+I think if that's Android.
+Oh yeah.
+We just download docs from the app store and then you can just like say if you think of something you can just go on your phone quickly and just type it in here.
+I. I'll do the same life I think or something.
+I'll just put it in.
+Wait.
+Does the pepper robot support A.I.
+sorry,
+Internet.
+Yeah,
+I think so.
+Yeah.
+Because it just connects to the computer and the computer connect to the Internet.
+That's good.
+Yeah, that's right.
+And I'll just put like, like general code, kind of see the general code architecture.
+So after I finish it, I'll give.
+I send it to you and you can lay it all down, all that stuff.
+Yeah, yeah, yeah.
+Seems perfect.
+Yeah.
+It sounds great.
+Okay.
+Yeah, I think that's as well.
+Kind of have an idea.
+So now we can just do some research, actually work on it and if you have any more ideas or anything.
+Yeah, I'll find like peer reviewed things about this.
+There's definitely people who already done stuff like that.
+Go and check.
+That's all good.
+Yeah.
+All right.
+You got any questions, send me anything?
+Yes, the same.
+Just.
+Yeah, just.
+Yeah, let's try get this done before next week's Friday.
+Yeah, yeah, we need to do some research here.
+Right, A bit.

@@ -1,25 +1,21 @@
 """
 GAZE: Game-Adaptive Zone of Engagement
 
-- [X] ideas in proposal google doc
-- [X] intergrate ws-10 for facial recognition and emotion detection
-- [X] Generates games with openai on the fly
-- [X] Facial recognition (Happy? frustrated?) if frustrated give hints if happy celebrate via /ws-10
-- [X] If bored speeds it up
-- [X] If angry - no worries lets try another game ( easier)
-- [X] If answers are correct, it gives harder puzzles.
-- [X] Make easier if too hard
-- [X] If sad games to cheer him up
-- [X] Camera - detects face ( emotions) - game logic - open ai generates response - robot speaks and reacts.
-- [X] Robot personality - funny , sarcastic , serious.
-- [X] Games - puzzles, riddles, trivia, memory games, word games, math games, etc.
-- [X] Use openai to generate games and responses based on the user's emotions and performance.
-- [X] timer to track how long the user has been playing and adjust the game difficulty accordingly.
-- [X] scoring system to track the user's progress and provide feedback on their performance.
-- [X] reward system to encourage the user to keep playing and improving their skills.
-- [X] feedback system to allow the user to provide feedback on the games to change robot's considerations and personality.
-- [X] feature to allow the user to customise the robot's personality and game preferences.
-- [X] feature to allow the user to save their progress and continue playing later.
+Adaptive countdown-style game host for the Pepper robot.
+Novelty: multi-signal emotional inference — the system weighs facial expression,
+response time, and answer correctness together to infer the user's true state,
+rather than trusting any single signal in isolation.
+
+- [X] Integrate WS-10 for facial recognition and emotion detection
+- [X] Generate countdown-style games (numbers / letters) with OpenAI on the fly
+- [X] Multi-signal state inference (expression + performance + engagement)
+- [X] Adaptive difficulty adjustment based on inferred state
+- [X] Hints and encouragement when user is struggling
+- [X] Re-engagement intervention when user is disengaged
+- [X] Scoring and reward system with milestone announcements
+- [X] Adaptation self-evaluation (did the previous adaptation actually help?)
+- [X] Save progress and continue later
+- [X] Gestures aligned with speech and emotional context
 """
 
 import os
@@ -126,36 +122,14 @@ class InferredState(Enum):
     FRUSTRATED  = "frustrated"
 
 class GameType(Enum):
-    TRIVIA     = "trivia"
-    RIDDLES    = "riddles"
-    WORD_GAMES = "word_games"
-    SPELLING   = "spelling"
-    MATHS      = "maths"
+    NUMBERS = "numbers"
+    LETTERS = "letters"
 
-class Personality(Enum):
-    ENCOURAGING = "encouraging"
-    SARCASTIC   = "sarcastic"
-    SERIOUS     = "serious"
-
-PERSONALITY_PROMPTS = {
-    Personality.ENCOURAGING: (
-        "Your personality is warm, encouraging, and supportive. "
-        "Celebrate every small win. Use phrases like 'You've got this!' and "
-        "'Brilliant effort!' Genuinely cheer the user on."
-    ),
-    Personality.SARCASTIC: (
-        "Your personality is playfully sarcastic and witty. "
-        "Use dry humour and gentle teasing — never mean-spirited. "
-        "Think friendly banter, not cruelty. If they get one wrong just take this piss kindly "
-        "joke about it lightly. If they get one right, act surprised."
-    ),
-    Personality.SERIOUS: (
-        "Your personality is calm, focused, and matter-of-fact. "
-        "No jokes, no fluff. Deliver questions seriously and cleanly, acknowledge "
-        "correct answers briefly, and move on efficiently. "
-        "Think quiz show host, not children's entertainer."
-    ),
-}
+DEFAULT_TONE_PROMPT = (
+    "Your personality is warm, encouraging, and supportive. "
+    "Celebrate every small win. Use phrases like 'You've got this!' and "
+    "'Brilliant effort!' Genuinely cheer the user on."
+)
 
 @dataclass
 class RoundResult:
@@ -199,20 +173,14 @@ class AdaptiveEngine:
       Camera=Sad     + slow + low correctness       → struggling.  Ease off.
       Camera=Happy   + fast correct answers         → thriving.   Ramp up.
 
-    Cognitive mapping:
-      Perceive   ---> raw signals arrive
-      Attend     ---> focus on attentiveness, emotion, performance
-      Anticipate ---> assess how user finds current difficulty
-      Plan       ---> decide next action (difficulty, game switch, encouragement)
-      Predict    ---> consider how chosen action will affect user
-      Learn      ---> track what worked across rounds (episodic memory)
-      Adapt      ---> refine decisions each subsequent round
+    The adaptive engine also evaluates whether its previous adaptation
+    actually worked, feeding that evaluation into the next round's prompt.
     """
 
     def __init__(self):
         self.history: list[RoundResult]   = []
         self.current_difficulty            = Difficulty.MEDIUM
-        self.current_game                  = GameType.TRIVIA
+        self.current_game                  = GameType.NUMBERS
         self.consecutive_silences          = 0
         self.consecutive_correct           = 0
         self.consecutive_wrong             = 0
@@ -413,10 +381,10 @@ class AdaptiveEngine:
         return None
 
     def _pick_different_game(self) -> GameType:
-        """Pick a game type different from current, preferring least-played."""
-        candidates = [g for g in GameType if g != self.current_game]
-        candidates.sort(key=lambda g: self.games_played.get(g, 0))
-        return candidates[0]
+        """Toggle between the two countdown game variants."""
+        if self.current_game == GameType.NUMBERS:
+            return GameType.LETTERS
+        return GameType.NUMBERS
 
     def get_session_summary(self) -> dict:
         if not self.history:
@@ -434,17 +402,110 @@ class AdaptiveEngine:
             "final_difficulty":   self.current_difficulty.name,
         }
 
+    # ── adaptation self-evaluation ──
+
+    def evaluate_adaptation(self) -> Optional[str]:
+        """
+        Evaluate whether the previous round's adaptation actually worked.
+
+        Compares the inferred state and performance before and after the
+        last adaptation decision, returning a natural-language evaluation
+        that is fed into the next prompt so the LLM can adjust accordingly.
+        """
+        if len(self.strategy_log) < 2 or len(self.history) < 2:
+            return None
+
+        prev_strategy = self.strategy_log[-2]
+        curr_strategy = self.strategy_log[-1]
+        prev_round    = self.history[-2]
+        curr_round    = self.history[-1]
+
+        prev_state  = prev_strategy["state"]
+        curr_state  = curr_strategy["state"]
+        prev_action = prev_strategy["action"]
+
+        evaluations = []
+
+        # did a difficulty decrease help a struggling/frustrated user?
+        if prev_state in ("struggling", "frustrated"):
+            if curr_round.correct and not prev_round.correct:
+                evaluations.append(
+                    "Previous adaptation WORKED: lowered difficulty and user "
+                    "answered correctly this round (was incorrect before)."
+                )
+            elif not curr_round.correct:
+                evaluations.append(
+                    "Previous adaptation DID NOT HELP YET: user still struggling "
+                    "despite easier difficulty. Consider providing more support."
+                )
+
+        # did a difficulty increase overshoot for a thriving user?
+        if prev_state == "thriving" and prev_action["difficulty"] == "HARD":
+            if curr_round.correct:
+                evaluations.append(
+                    "Previous adaptation WORKED: increased difficulty and user "
+                    "is still performing well."
+                )
+            elif not curr_round.correct:
+                evaluations.append(
+                    "Previous adaptation OVERSHOT: increased difficulty but user "
+                    "got it wrong. May need to ease back."
+                )
+
+        # did a re-engagement attempt work for a disengaged user?
+        if prev_state == "disengaged":
+            if curr_state != "disengaged":
+                evaluations.append(
+                    "Previous adaptation WORKED: user was disengaged but is now "
+                    f"{curr_state}. Re-engagement was effective."
+                )
+            else:
+                evaluations.append(
+                    "Previous adaptation DID NOT HELP: user remains disengaged. "
+                    "Try a different approach or switch game type."
+                )
+
+        # did a game switch help?
+        if prev_action.get("switch"):
+            if curr_state in ("thriving", "comfortable"):
+                evaluations.append(
+                    "Game switch WORKED: user transitioned to a positive state."
+                )
+            elif curr_state in ("struggling", "frustrated", "disengaged"):
+                evaluations.append(
+                    "Game switch DID NOT HELP: user is still in a negative state."
+                )
+
+        # did encouragement speed up response?
+        if (prev_action.get("encouragement")
+                and prev_state in ("struggling", "frustrated")
+                and curr_round.response_time < prev_round.response_time):
+            evaluations.append(
+                "Encouragement appears effective: user responded faster this round."
+            )
+
+        if not evaluations:
+            return None
+
+        return ("Adaptation evaluation from previous round:\n"
+                + "\n".join(f"- {e}" for e in evaluations))
+
 
 #  DYNAMIC PROMPT CONSTRUCTION
 # ----------------------------
 
 GAME_DESCRIPTIONS = {
-    GameType.TRIVIA:     "a general-knowledge trivia question",
-    GameType.RIDDLES:    "a lateral-thinking riddle",
-    GameType.WORD_GAMES: "a word game (anagram, synonym/antonym, or definition challenge)",
-    GameType.SPELLING:   ("a Countdown-style challenge: give the user a set of random letters "
-                          "and ask them to form the longest word possible"),
-    GameType.MATHS:      "a mental arithmetic or number-sequence puzzle",
+    GameType.NUMBERS: (
+        "a Countdown-style numbers round: give the user a set of numbers "
+        "(e.g. 25, 50, 75, 100 and some small numbers 1-10) and a target number. "
+        "The user must combine the given numbers using +, -, *, / to reach the target. "
+        "Make sure the target is reachable from the given numbers"
+    ),
+    GameType.LETTERS: (
+        "a Countdown-style letters round: give the user a set of 9 random letters "
+        "(a mix of vowels and consonants) and ask them to form the longest word possible "
+        "using only those letters. Each letter can only be used once"
+    ),
 }
 
 DIFFICULTY_DESCRIPTIONS = {
@@ -465,7 +526,7 @@ TONE_INSTRUCTIONS = {
 def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
                       user_answer: str = "", is_first_round: bool = False,
                       user_game_choice: str = "",
-                      personality: Personality = Personality.ENCOURAGING,
+                      adaptation_eval: Optional[str] = None,
                       reward_message: Optional[str] = None) -> str:
     """
     Dynamically construct the OpenAI prompt from live metrics.
@@ -473,8 +534,8 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
     """
     parts = []
 
-    # ── personality ──
-    parts.append(PERSONALITY_PROMPTS[personality])
+    # ── tone ──
+    parts.append(DEFAULT_TONE_PROMPT)
 
     # ── reward milestone ──
     if reward_message:
@@ -549,6 +610,9 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
             f"Generate {GAME_DESCRIPTIONS[decision.game_type]} at "
             f"{DIFFICULTY_DESCRIPTIONS[decision.difficulty]} difficulty."
         )
+
+    if adaptation_eval:
+        parts.append(f"--- ADAPTATION FEEDBACK ---\n{adaptation_eval}")
 
     # ── response format ──
     parts.append(
@@ -704,7 +768,7 @@ def _split_into_sentences(text: str) -> list[str]:
 
     OpenAI frequently returns dialogue as a single unbroken block. Without
     splitting, Pepper rattles off the entire paragraph without breathing,
-    thereby ruining the illusion of a cognitive companion. This function
+    thereby ruining the illusion of a conversational companion. This function
     splits at sentence terminators (. ? !) whilst preserving abbreviations
     and decimal numbers.
     """
@@ -907,36 +971,9 @@ m.setStiffnesses("Arms", 0.0)
 }
 
 
-def nao_gesture(ssh, gesture_type: str,
-                personality: Personality = Personality.ENCOURAGING):
-    """
-    Execute a gesture on Pepper aligned to the game context AND personality.
-    Serious personality  → slower, calmer motions (duration x1.8).
-    Sarcastic personality → sharper, snappier motions (duration x0.7).
-    Encouraging personality → default timing (unchanged).
-
-    This prevents cognitive dissonance wherein a 'Serious' robot executes
-    a highly animated celebration, or an 'Encouraging' robot moves stiffly.
-    """
+def nao_gesture(ssh, gesture_type: str):
+    """Execute a gesture on Pepper aligned to the game context."""
     code = GESTURE_CODE.get(gesture_type, GESTURE_CODE["neutral"])
-
-    # dynamically scale motion durations to match personality
-    if personality == Personality.SERIOUS:
-        # slower, more restrained movements — calm and deliberate
-        code = code.replace("[1.0]", "[1.8]")
-        code = code.replace("[0.3]", "[0.55]")
-        code = code.replace("[0.5]", "[0.9]")
-        code = code.replace("[1.2]", "[2.0]")
-        code = code.replace("[1.5]", "[2.5]")
-    elif personality == Personality.SARCASTIC:
-        # sharper, quicker movements — snappy and theatrical
-        code = code.replace("[1.0]", "[0.7]")
-        code = code.replace("[0.3]", "[0.2]")
-        code = code.replace("[0.5]", "[0.35]")
-        code = code.replace("[1.2]", "[0.85]")
-        code = code.replace("[1.5]", "[1.05]")
-    # encouraging = default timing, no modification needed
-
     try:
         nao_run(ssh, code)
     except Exception:
@@ -1122,11 +1159,10 @@ def parse_game_choice(text: str) -> Optional[GameType]:
     """Parse the user's verbal game choice into a GameType."""
     lower = text.lower()
     mappings = {
-        GameType.TRIVIA:     ["trivia", "quiz", "general knowledge", "questions"],
-        GameType.RIDDLES:    ["riddle", "riddles", "brain teaser", "lateral"],
-        GameType.WORD_GAMES: ["word", "anagram", "synonym", "definition", "vocabulary"],
-        GameType.SPELLING:   ["spelling", "countdown", "letters", "letter"],
-        GameType.MATHS:      ["math", "maths", "number", "arithmetic", "calculation"],
+        GameType.NUMBERS: ["number", "numbers", "maths", "math", "arithmetic",
+                           "calculation", "countdown numbers"],
+        GameType.LETTERS: ["letter", "letters", "word", "words", "spelling",
+                           "countdown letters", "vocabulary"],
     }
     for game_type, keywords in mappings.items():
         if any(kw in lower for kw in keywords):
@@ -1135,69 +1171,10 @@ def parse_game_choice(text: str) -> Optional[GameType]:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-#  PERSONALITY PARSING + FEEDBACK
-# ══════════════════════════════════════════════════════════════════════════════
-
-def parse_personality_choice(text: str) -> Optional[Personality]:
-    """Parse user's verbal personality preference."""
-    lower = text.lower()
-    mappings = {
-        Personality.ENCOURAGING: ["encouraging", "nice", "friendly", "kind", "supportive", "warm"],
-        Personality.SARCASTIC:   ["sarcastic", "funny", "witty", "cheeky", "humour", "humor"],
-        Personality.SERIOUS:     ["serious", "focused", "professional", "no nonsense", "straight"],
-    }
-    for personality, keywords in mappings.items():
-        if any(kw in lower for kw in keywords):
-            return personality
-    return None
-
-
-def parse_feedback(text: str) -> dict:
-    """
-    Parse mid-game feedback from the user's speech.
-    Detects personality change requests and game preference changes.
-    Returns dict with any detected feedback.
-    """
-    lower = text.lower()
-    feedback = {}
-
-    # personality change requests
-    personality_triggers = {
-        Personality.SARCASTIC:   ["be funnier", "be sarcastic", "more funny", "more sarcastic",
-                                  "be witty", "be cheeky", "make it funny"],
-        Personality.ENCOURAGING: ["be nicer", "be encouraging", "be kind", "be supportive",
-                                  "be warmer", "more encouraging", "be friendly"],
-        Personality.SERIOUS:     ["be serious", "be professional", "stop joking",
-                                  "no more jokes", "be focused", "more serious"],
-    }
-    for personality, triggers in personality_triggers.items():
-        if any(t in lower for t in triggers):
-            feedback["personality"] = personality
-            break
-
-    # game change requests
-    game_triggers = {
-        GameType.TRIVIA:     ["switch to trivia", "play trivia", "do trivia", "trivia please"],
-        GameType.RIDDLES:    ["switch to riddles", "play riddles", "do riddles", "riddle please"],
-        GameType.WORD_GAMES: ["switch to word", "play word", "do word game", "word game please"],
-        GameType.SPELLING:   ["switch to spelling", "play spelling", "do countdown", "spelling please"],
-        GameType.MATHS:      ["switch to maths", "play maths", "do maths", "math please",
-                              "switch to math", "play math"],
-    }
-    for game_type, triggers in game_triggers.items():
-        if any(t in lower for t in triggers):
-            feedback["game"] = game_type
-            break
-
-    return feedback
-
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  SAVE / LOAD SESSION
 # ══════════════════════════════════════════════════════════════════════════════
 
-def save_session(engine: AdaptiveEngine, personality: Personality,
-                 preferred_game: Optional[GameType] = None):
+def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None):
     """Save session progress to disk so the user can continue later."""
     data = {
         "total_correct":    engine.total_correct,
@@ -1206,7 +1183,6 @@ def save_session(engine: AdaptiveEngine, personality: Personality,
         "game_switches":    engine.game_switch_count,
         "last_difficulty":  engine.current_difficulty.value,
         "last_game":        engine.current_game.value,
-        "personality":      personality.value,
         "preferred_game":   preferred_game.value if preferred_game else None,
         "rounds_played":    len(engine.history),
         "rewards_given":    list(engine.rewards_given),
@@ -1239,22 +1215,21 @@ def load_session() -> Optional[dict]:
         return None
 
 
-def restore_engine(save_data: dict) -> tuple[AdaptiveEngine, Personality]:
-    """Restore engine state and personality from saved data."""
+def restore_engine(save_data: dict) -> AdaptiveEngine:
+    """Restore engine state from saved data."""
     engine = AdaptiveEngine()
     engine.total_correct    = save_data.get("total_correct", 0)
     engine.best_streak      = save_data.get("best_streak", 0)
     engine.game_switch_count = save_data.get("game_switches", 0)
     engine.current_difficulty = Difficulty(save_data.get("last_difficulty", 2))
-    engine.current_game     = GameType(save_data.get("last_game", "trivia"))
+    engine.current_game     = GameType(save_data.get("last_game", "numbers"))
     engine.rewards_given    = set(save_data.get("rewards_given", []))
     for g_val, count in save_data.get("games_played", {}).items():
         try:
             engine.games_played[GameType(g_val)] = count
         except ValueError:
             pass
-    personality = Personality(save_data.get("personality", "encouraging"))
-    return engine, personality
+    return engine
 
 
 def delete_save():
@@ -1283,7 +1258,7 @@ LED_COLOURS = {
 def main():
     print("=" * 60)
     print("  GAZE — Game-Adaptive Zone of Engagement")
-    print("  Cognitive Robotics System for Pepper Robot")
+    print("  Adaptive Game System for Pepper Robot")
     print("=" * 60)
 
     # ── load facial expression model ──
@@ -1311,7 +1286,6 @@ def main():
     energy_threshold = nao_calibrate_ambient(ssh)
 
     # ── check for saved session ──
-    personality    = Personality.ENCOURAGING     # default
     preferred_game = None
     engine         = AdaptiveEngine()
     resumed        = False
@@ -1320,16 +1294,15 @@ def main():
     if save_data:
         prev_rounds = save_data.get("rounds_played", 0)
         prev_correct = save_data.get("total_correct", 0)
-        prev_personality = save_data.get("personality", "encouraging")
 
         welcome_back = (
-            f"Welcome back! Last time you played {prev_rounds} rounds, "
-            f"got {prev_correct} correct, and I was in {prev_personality} mode. "
+            f"Welcome back! Last time you played {prev_rounds} rounds "
+            f"and got {prev_correct} correct. "
             "Want to continue where you left off, or start fresh?"
         )
         nao_track_face(ssh, enable=True)
         nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
-        nao_gesture(ssh, "wave", personality)
+        nao_gesture(ssh, "wave")
         nao_say(ssh_tts, welcome_back)
         print(f"\nRobot: {welcome_back}")
 
@@ -1345,68 +1318,33 @@ def main():
         lower_resume = resume_text.lower()
         if any(w in lower_resume for w in ["continue", "resume", "yes", "carry on",
                                             "keep going", "where I left", "left off"]):
-            engine, personality = restore_engine(save_data)
+            engine = restore_engine(save_data)
             resumed = True
-            print(f"  Restored: {save_data.get('rounds_played', 0)} rounds, "
-                  f"personality={personality.value}")
+            print(f"  Restored: {save_data.get('rounds_played', 0)} rounds")
         else:
             delete_save()
             print("  Starting fresh.")
 
     # ── OpenAI conversation history (game context continuity) ──
     conversation = [{"role": "system", "content": (
-        "You are a Pepper robot game host called GAZE. You play interactive games "
-        "with users and adapt based on their emotional state and performance. "
-        "Always respond in the exact JSON format requested. Keep dialogue concise "
-        "and natural — 2-3 sentences max. "
-        + PERSONALITY_PROMPTS[personality]
+        "You are a Pepper robot game host called GAZE. You play interactive "
+        "countdown-style games with users and adapt based on their emotional state "
+        "and performance. Always respond in the exact JSON format requested. "
+        "Keep dialogue concise and natural — 2-3 sentences max. "
+        + DEFAULT_TONE_PROMPT
     )}]
 
     if not resumed:
         # ── startup sequence ──
         nao_track_face(ssh, enable=True)
         nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
-        nao_gesture(ssh, "wave", personality)
-
-        # ── ask personality preference ──
-        personality_prompt = (
-            "Hello! I'm GAZE, your game host. "
-            "Before we start, how would you like me to be? "
-            "Encouraging and supportive, sarcastic and witty, or serious and focused?"
-        )
-        nao_say(ssh_tts, personality_prompt)
-        print(f"\nRobot: {personality_prompt}")
-
-        print("\nListening for personality choice...")
-        nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        nao_record(ssh, energy_threshold)
-
-        if check_audio_volume():
-            personality_text = transcribe()
-            print(f"Heard: {personality_text}")
-            chosen_personality = parse_personality_choice(personality_text)
-            if chosen_personality:
-                personality = chosen_personality
-                print(f"  Personality: {personality.value}")
-            else:
-                print("  Defaulting to encouraging.")
-        else:
-            print("  No response — defaulting to encouraging.")
-
-        # update system prompt with chosen personality
-        conversation[0]["role"] = "system"
-        conversation[0]["content"] = (
-            "You are a Pepper robot game host called GAZE. You play interactive games "
-            "with users and adapt based on their emotional state and performance. "
-            "Always respond in the exact JSON format requested. Keep dialogue concise "
-            "and natural — 2-3 sentences max. "
-            + PERSONALITY_PROMPTS[personality]
-        )
+        nao_gesture(ssh, "wave")
 
         # ── ask game preference ──
         game_prompt = (
-            "Great! Now, what would you like to play? "
-            "I've got trivia, riddles, word games, spelling challenges, and maths puzzles."
+            "Hello! I'm GAZE, your game host. "
+            "What would you like to play? "
+            "I've got a numbers round or a letters round, like Countdown!"
         )
         nao_say(ssh_tts, game_prompt)
         print(f"\nRobot: {game_prompt}")
@@ -1424,8 +1362,8 @@ def main():
             chosen_game = parse_game_choice(game_choice_text)
 
         if chosen_game is None:
-            chosen_game = GameType.TRIVIA
-            print("  Defaulting to trivia.")
+            chosen_game = GameType.NUMBERS
+            print("  Defaulting to numbers.")
         else:
             print(f"  Selected: {chosen_game.value}")
 
@@ -1454,8 +1392,7 @@ def main():
 
     prompt    = build_game_prompt(engine, first_decision,
                                   is_first_round=True,
-                                  user_game_choice=game_choice_text,
-                                  personality=personality)
+                                  user_game_choice=game_choice_text)
     game_data = generate_game_response(prompt, conversation)
     conversation.append({"role": "assistant", "content": json.dumps(game_data)})
 
@@ -1465,7 +1402,7 @@ def main():
     # deliver first question with gesture
     gesture_thread = threading.Thread(
         target=nao_gesture,
-        args=(ssh, game_data.get("gesture", "neutral"), personality),
+        args=(ssh, game_data.get("gesture", "neutral")),
         daemon=True,
     )
     gesture_thread.start()
@@ -1517,29 +1454,6 @@ def main():
                 print("User wants to stop.")
                 break
 
-            # ── FEEDBACK: mid-game personality/game changes ──────────────
-            feedback = parse_feedback(user_answer)
-            if "personality" in feedback:
-                old_p = personality
-                personality = feedback["personality"]
-                # update system prompt
-                conversation[0]["content"] = (
-                    "You are a Pepper robot game host called GAZE. You play interactive games "
-                    "with users and adapt based on their emotional state and performance. "
-                    "Always respond in the exact JSON format requested. Keep dialogue concise "
-                    "and natural — 2-3 sentences max. "
-                    + PERSONALITY_PROMPTS[personality]
-                )
-                print(f"  Personality changed: {old_p.value} → {personality.value}")
-                personality_ack = f"Got it! Switching to {personality.value} mode."
-                nao_say(ssh_tts, personality_ack)
-                print(f"Robot: {personality_ack}")
-
-            if "game" in feedback:
-                engine.current_game = feedback["game"]
-                engine.game_switch_count += 1
-                print(f"  User requested game switch to: {feedback['game'].value}")
-
             # ── PROCESS LAYER ────────────────────────────────────────────
             # check answer + adaptive engine infers state + decides
 
@@ -1576,13 +1490,19 @@ def main():
             if reward_msg:
                 print(f"  REWARD: {reward_msg}")
 
+            # ── ADAPTATION SELF-EVALUATION ──────────────────────────────
+            # evaluate whether the previous round's adaptation worked
+            adaptation_eval = engine.evaluate_adaptation()
+            if adaptation_eval:
+                print(f"  {adaptation_eval}")
+
             # ── GENERATE LAYER ───────────────────────────────────────────
             # construct dynamic prompt from live metrics → OpenAI
 
             prompt    = build_game_prompt(engine, decision,
                                           user_answer=user_answer,
-                                          personality=personality,
-                                          reward_message=reward_msg)
+                                          reward_message=reward_msg,
+                                          adaptation_eval=adaptation_eval)
             game_data = generate_game_response(prompt, conversation)
             conversation.append({"role": "user",      "content": f"User answered: {user_answer}"})
             conversation.append({"role": "assistant",  "content": json.dumps(game_data)})
@@ -1604,7 +1524,7 @@ def main():
             # gesture and speech run in parallel
             gesture_thread = threading.Thread(
                 target=nao_gesture,
-                args=(ssh, gesture_type, personality), daemon=True
+                args=(ssh, gesture_type), daemon=True
             )
             gesture_thread.start()
             nao_say(ssh_tts, current_question)
@@ -1615,7 +1535,7 @@ def main():
             # ── PROGRESSIVE SAVE ──────────────────────────────────────────
             # auto-save after every round so data survives unexpected crashes
             # (laptop dies, SSH timeout, etc.) — protects report data
-            save_session(engine, personality, preferred_game)
+            save_session(engine, preferred_game)
 
     except KeyboardInterrupt:
         print("\n\nInterrupted.")
@@ -1625,7 +1545,7 @@ def main():
     # ══════════════════════════════════════════════════════════════════════
 
     # save session so user can continue later
-    save_session(engine, personality, preferred_game)
+    save_session(engine, preferred_game)
 
     summary = engine.get_session_summary()
     print(f"\n{'=' * 60}")
@@ -1661,7 +1581,7 @@ def main():
     else:
         farewell = "Thanks for stopping by! See you next time!"
 
-    nao_gesture(ssh, "wave", personality)
+    nao_gesture(ssh, "wave")
     nao_say(ssh_tts, farewell)
     print(f"\nRobot: {farewell}")
 

@@ -32,6 +32,9 @@ header-includes:
 ---
 # TODO
 
+- [ ] EMERGENT COGNITIVE ARCHITECTURE
+- [ ] cite Iuliia Kotseruba1 · John K. Tsotsos1
+
 ## Mentor
 
 Scenario 1) patient takes meds = + 100 points
