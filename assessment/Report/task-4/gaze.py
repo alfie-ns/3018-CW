@@ -1,7 +1,8 @@
 """
-GAZE: Game-Adaptive Zone of Engagement
+GAZE: Game-Adaptive Zone of Engagement (Therapeutic variant)
 
-Adaptive countdown-style game host for the Pepper robot.
+Adaptive countdown-style game host for the Pepper robot with graduated
+therapeutic interventions (reminiscence, reframing, mindfulness).
 Novelty: multi-signal emotional inference — the system weighs facial expression,
 response time, and answer correctness together to infer the user's true state,
 rather than trusting any single signal in isolation.
@@ -10,6 +11,7 @@ rather than trusting any single signal in isolation.
 - [X] Generate countdown-style games (numbers / letters) with OpenAI on the fly
 - [X] Multi-signal state inference (expression + performance + engagement)
 - [X] Adaptive difficulty adjustment based on inferred state
+- [X] Graduated therapeutic interventions (reminiscence -> reframing -> mindfulness)
 - [X] Hints and encouragement when user is struggling
 - [X] Re-engagement intervention when user is disengaged
 - [X] Scoring and reward system with milestone announcements
@@ -125,6 +127,29 @@ class GameType(Enum):
     NUMBERS = "numbers"
     LETTERS = "letters"
 
+class TherapyType(Enum):
+    """
+    Graduated therapeutic interventions, escalating with sustained distress.
+
+    The system monitors consecutive negative states (struggling, frustrated,
+    disengaged) and selects the appropriate intervention level:
+      REMINISCENCE → mild:     cite the user's own past successes (confidence therapy)
+      REFRAMING    → moderate: empathetic check-in with choice to talk or switch
+      MINDFULNESS  → severe:   guided breathing exercise with physical robot motions
+    """
+    REMINISCENCE = "reminiscence"   # 2 consecutive negative states
+    REFRAMING    = "reframing"      # 3 consecutive negative states
+    MINDFULNESS  = "mindfulness"    # 4+ consecutive negative states
+    NONE         = "none"
+
+# therapeutic escalation thresholds
+THERAPY_REMINISCENCE_THRESHOLD = 2   # consecutive negative rounds before reminiscence
+THERAPY_REFRAMING_THRESHOLD    = 3   # consecutive negative rounds before reframing
+THERAPY_MINDFULNESS_THRESHOLD  = 4   # consecutive negative rounds before mindfulness
+THERAPY_COOLDOWN               = 3   # rounds to wait after a therapy intervention
+
+NEGATIVE_STATES = {InferredState.STRUGGLING, InferredState.FRUSTRATED, InferredState.DISENGAGED}
+
 DEFAULT_TONE_PROMPT = (
     "Your personality is warm, encouraging, and supportive. "
     "Celebrate every small win. Use phrases like 'You've got this!' and "
@@ -156,6 +181,7 @@ class AdaptiveDecision:
     give_hint:          bool
     give_encouragement: bool
     tone:               str     # "encouraging" | "celebratory" | "calm" | "energetic" | "neutral"
+    therapy_break:      TherapyType = TherapyType.NONE  # therapeutic intervention to execute
 
 
 
@@ -165,7 +191,7 @@ class AdaptiveDecision:
 class AdaptiveEngine:
     """
     The brain of GAZE.  Takes all three input signals and *infers* the user's
-    real state — crucially, it does NOT just trust the camera.
+    real state 
 
     Examples of multi-signal reasoning:
       Camera=Angry   + fast correct answers        → fine, resting face.  Carry on.
@@ -192,6 +218,10 @@ class AdaptiveEngine:
         self.total_correct                 = 0
         self.best_streak                   = 0
         self.rewards_given: set[str]       = set()
+        # therapeutic intervention tracking
+        self.consecutive_negative          = 0       # consecutive struggling/frustrated/disengaged rounds
+        self.rounds_since_therapy          = 999     # cooldown counter (starts high so first therapy is not blocked)
+        self.therapy_count                 = 0       # total interventions this session
 
     # ── properties --
 
@@ -325,6 +355,15 @@ class AdaptiveEngine:
             self.current_game      = new_game
             self.game_switch_count += 1
 
+        # ── therapeutic escalation tracking ──
+        if state in NEGATIVE_STATES:
+            self.consecutive_negative += 1
+        else:
+            self.consecutive_negative = 0
+        self.rounds_since_therapy += 1
+
+        therapy = self._check_therapy_needed()
+
         # episodic memory — log strategy for the learning layer
         self.strategy_log.append({
             "round":  self.round_number,
@@ -332,15 +371,62 @@ class AdaptiveEngine:
             "action": {"difficulty": new_difficulty.name,
                        "switch": switch_game,
                        "hint": give_hint,
-                       "encouragement": give_encouragement},
+                       "encouragement": give_encouragement,
+                       "therapy": therapy.value},
         })
 
         return AdaptiveDecision(
             difficulty=new_difficulty, game_type=self.current_game,
             inferred_state=state, switch_game=switch_game,
             give_hint=give_hint, give_encouragement=give_encouragement,
-            tone=tone,
+            tone=tone, therapy_break=therapy,
         )
+
+    # ── therapeutic intervention logic ──
+
+    def _check_therapy_needed(self) -> TherapyType:
+        """
+        Determine whether a therapeutic intervention should fire this round.
+
+        Graduated escalation:
+          2 consecutive negative states → reminiscence (cite past success)
+          3 consecutive negative states → reframing (empathetic check-in)
+          4+ consecutive negative states → mindfulness (guided breathing)
+
+        Respects a cooldown period so the robot does not bombard the user
+        with back-to-back interventions, which would feel patronising
+        rather than supportive.
+        """
+        if self.rounds_since_therapy < THERAPY_COOLDOWN:
+            return TherapyType.NONE
+
+        if self.consecutive_negative >= THERAPY_MINDFULNESS_THRESHOLD:
+            return TherapyType.MINDFULNESS
+        if self.consecutive_negative >= THERAPY_REFRAMING_THRESHOLD:
+            return TherapyType.REFRAMING
+        if self.consecutive_negative >= THERAPY_REMINISCENCE_THRESHOLD:
+            return TherapyType.REMINISCENCE
+
+        return TherapyType.NONE
+
+    def mark_therapy_given(self):
+        """Reset therapy counters after an intervention is delivered."""
+        self.consecutive_negative = 0
+        self.rounds_since_therapy = 0
+        self.therapy_count += 1
+
+    def find_past_success(self) -> Optional[RoundResult]:
+        """
+        Search episodic memory for the user's most recent correct answer.
+
+        Used by the reminiscence intervention to cite a specific past
+        success, thereby grounding the affirmation in real evidence
+        rather than generic encouragement.
+        """
+        for r in reversed(self.history):
+            if r.correct:
+                return r
+        return None
 
     def record_round(self, result: RoundResult):
         """Store a completed round in history (semantic memory)."""
@@ -400,6 +486,7 @@ class AdaptiveEngine:
             "game_switches":      self.game_switch_count,
             "best_streak":        self.best_streak,
             "final_difficulty":   self.current_difficulty.name,
+            "therapy_interventions": self.therapy_count,
         }
 
     # ── adaptation self-evaluation ──
@@ -981,6 +1068,227 @@ def nao_gesture(ssh, gesture_type: str):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  THERAPEUTIC INTERVENTIONS
+#  Graduated responses that break the game loop to address the user's
+#  emotional state directly — shifting Pepper from game host to supportive
+#  companion, analogous to assistive robots in stroke rehabilitation.
+#
+#  Escalation:
+#    1- sustained negative signals detected (consecutive_negative crosses threshold)
+#    2- predict that continuing the game will worsen the user's state
+#    3- select appropriate intervention level (graduated escalation)
+#    4- deliver intervention (physical, conversational, or affirmative)
+#    5- log intervention outcome for the episodic memory layer
+# ══════════════════════════════════════════════════════════════════════════════
+
+BREATHING_EXERCISE_CODE = """
+from naoqi import ALProxy
+import time
+
+m    = ALProxy("ALMotion",  "127.0.0.1", 9559)
+leds = ALProxy("ALLeds",   "127.0.0.1", 9559)
+tts  = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
+
+m.setStiffnesses("Arms", 1.0)
+
+# rest position — arms at sides, palms down
+rest = ["LShoulderPitch","LShoulderRoll","LElbowRoll","LHand",
+        "RShoulderPitch","RShoulderRoll","RElbowRoll","RHand"]
+rest_angles = [1.2, 0.2, -0.5, 0.0,   1.2, -0.2, 0.5, 0.0]
+
+# raised position — arms rise slowly as user inhales
+raised_angles = [0.2, 0.3, -0.2, 0.8,   0.2, -0.3, 0.2, 0.8]
+
+tts.say("Let's take a moment together. Follow my arms.")
+time.sleep(0.5)
+
+for cycle in range(3):
+    # INHALE — arms rise, LEDs fade to calming blue
+    tts.say("Breathe in...")
+    leds.fadeRGB("FaceLeds", 0x000040FF, 2.0)
+    m.angleInterpolation(rest, raised_angles, [2.5]*8, True)
+    time.sleep(0.5)
+
+    # HOLD
+    tts.say("Hold...")
+    time.sleep(1.5)
+
+    # EXHALE — arms lower, LEDs fade to soft green
+    tts.say("And breathe out...")
+    leds.fadeRGB("FaceLeds", 0x0000FF40, 2.0)
+    m.angleInterpolation(rest, rest_angles, [3.0]*8, True)
+    time.sleep(0.5)
+
+tts.say("Well done. Feeling a bit better? Let's ease back in.")
+leds.fadeRGB("FaceLeds", 0x00FFFFFF, 1.0)
+m.setStiffnesses("Arms", 0.0)
+"""
+
+
+def therapy_mindfulness(ssh, ssh_tts):
+    """
+    Mindfulness intervention (severe — 4+ consecutive negative states).
+
+    Pauses the game entirely. Pepper physically guides the user through
+    three cycles of deep breathing, raising and lowering its arms in sync
+    with verbal cues whilst fading its chest LEDs between calming blue
+    (inhale) and soft green (exhale).
+
+    This is the most intensive intervention, reserved for sustained
+    frustration or disengagement wherein continuing the game would
+    worsen the user's state.
+    """
+    print("  [THERAPY] Mindfulness breathing exercise")
+    try:
+        nao_run(ssh, BREATHING_EXERCISE_CODE)
+    except Exception as e:
+        # fallback if motor control fails — still deliver the verbal exercise
+        print(f"  [THERAPY] Motor fallback: {e}")
+        nao_say(ssh_tts,
+                "Let's take a quick breather. "
+                "Breathe in slowly... hold it... and breathe out. "
+                "Once more. Breathe in... hold... and out. "
+                "Good. Feeling a bit better? Let's ease back in.")
+
+
+def therapy_reframing(ssh_tts, engine: 'AdaptiveEngine',
+                      conversation: list) -> str:
+    """
+    Cognitive reframing check-in (moderate — 3 consecutive negative states).
+
+    The robot acknowledges the user's visible emotional state using
+    empathetic mirroring, then offers an explicit choice: talk about it
+    or switch to something different. This uses the LLM to generate a
+    natural, tone-appropriate response rather than a canned script.
+
+    Returns the robot's spoken reframing dialogue for logging.
+    """
+    print("  [THERAPY] Cognitive reframing check-in")
+
+    # build a reframing prompt for the LLM
+    recent_expressions = [r.facial_expression for r in engine.history[-3:]]
+    recent_states      = [r.inferred_state.value for r in engine.history[-3:]]
+
+    reframe_prompt = (
+        f"{DEFAULT_TONE_PROMPT}\n\n"
+        "IMPORTANT: The user has been struggling for several rounds. "
+        "Their recent emotional states were: "
+        f"{', '.join(recent_states)}. "
+        "Their recent facial expressions were: "
+        f"{', '.join(recent_expressions)}.\n\n"
+        "Pause the game. Acknowledge how the user appears to be feeling "
+        "using empathetic mirroring (e.g. 'I can see these have been "
+        "quite tough'). Do NOT be condescending. Then offer exactly two "
+        "choices: 1) chat about how they're finding it for a moment, or "
+        "2) switch to something completely different to clear their head.\n\n"
+        "Keep it to 2-3 sentences. Be genuine.\n\n"
+        "Respond with a JSON object (no markdown):\n"
+        '  "dialogue": string — what the robot says\n'
+        '  "gesture": string — one of: "calm", "encourage", "neutral"'
+    )
+
+    messages = conversation + [{"role": "user", "content": reframe_prompt}]
+    try:
+        resp = client.chat.completions.create(
+            model="gpt-4.1",
+            messages=messages,
+            temperature=0.7,
+            timeout=API_TIMEOUT,
+        )
+        content = resp.choices[0].message.content.strip()
+        if content.startswith("```"):
+            content = content.split("\n", 1)[1] if "\n" in content else content[3:]
+            if content.endswith("```"):
+                content = content[:-3]
+            content = content.strip()
+        data = json.loads(content)
+        dialogue = data.get("dialogue", "")
+    except Exception:
+        dialogue = (
+            "I can see these have been quite tough. "
+            "Would you like to chat about it for a second, "
+            "or shall we try something completely different to clear your head?"
+        )
+
+    nao_say(ssh_tts, dialogue)
+    print(f"  [THERAPY] Robot: {dialogue}")
+    return dialogue
+
+
+def therapy_reminiscence(ssh_tts, engine: 'AdaptiveEngine'):
+    """
+    Episodic reminiscence affirmation (mild — 2 consecutive negative states).
+
+    Searches the engine's episodic memory for the user's most recent
+    correct answer and cites it specifically to combat negative self-talk.
+    The robot actively reminds the user of their demonstrated competence
+    using concrete evidence from the session history.
+
+    This is the lightest intervention — a brief affirmation woven into the
+    game flow rather than a full pause.
+    """
+    print("  [THERAPY] Episodic reminiscence affirmation")
+
+    past_win = engine.find_past_success()
+
+    if past_win:
+        rounds_ago = engine.round_number - past_win.round_number
+        dialogue = (
+            f"Hey, remember {rounds_ago} round{'s' if rounds_ago != 1 else ''} ago "
+            f"when you got that {past_win.game_type.value} question right? "
+            f"You clearly know your stuff. Take your time with this one."
+        )
+    elif engine.best_streak >= 2:
+        dialogue = (
+            f"You had a streak of {engine.best_streak} correct answers earlier. "
+            "You've got the ability; this is just a tricky patch. "
+            "Take your time."
+        )
+    else:
+        dialogue = (
+            "These are tough questions, and you're still here giving it a go. "
+            "That takes determination. Let's take this next one together."
+        )
+
+    nao_say(ssh_tts, dialogue)
+    print(f"  [THERAPY] Robot: {dialogue}")
+    return dialogue
+
+
+def execute_therapy(therapy_type: TherapyType, ssh, ssh_tts,
+                    engine: 'AdaptiveEngine', conversation: list) -> Optional[str]:
+    """
+    Dispatch the appropriate therapeutic intervention based on type.
+
+    Returns the therapy dialogue for logging, or None if no therapy was needed.
+    This function is called from the main game loop between the PROCESS
+    and GENERATE layers, thereby pausing the standard question cycle
+    to address the user's emotional state directly.
+    """
+    if therapy_type == TherapyType.NONE:
+        return None
+
+    print(f"\n  {'*' * 20} THERAPEUTIC INTERVENTION: {therapy_type.value.upper()} {'*' * 20}")
+
+    if therapy_type == TherapyType.MINDFULNESS:
+        therapy_mindfulness(ssh, ssh_tts)
+        engine.mark_therapy_given()
+        return "[mindfulness breathing exercise]"
+
+    elif therapy_type == TherapyType.REFRAMING:
+        dialogue = therapy_reframing(ssh_tts, engine, conversation)
+        engine.mark_therapy_given()
+        return dialogue
+
+    elif therapy_type == TherapyType.REMINISCENCE:
+        dialogue = therapy_reminiscence(ssh_tts, engine)
+        engine.mark_therapy_given()
+        return dialogue
+
+    return None
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  AUDIO ANALYSIS + TRANSCRIPTION
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -1342,8 +1650,7 @@ def main():
 
         # ── ask game preference ──
         game_prompt = (
-            "Hello! I'm GAZE, your game host. "
-            "What would you like to play? "
+            "Great! Now, what would you like to play? "
             "I've got a numbers round or a letters round, like Countdown!"
         )
         nao_say(ssh_tts, game_prompt)
@@ -1484,6 +1791,36 @@ def main():
                 expression_confidence=expr_conf,
                 inferred_state=decision.inferred_state,
             ))
+
+            # ── THERAPEUTIC INTERVENTION LAYER ─────────────────────────
+            # checks whether sustained negative states warrant pausing
+            # the game to address the user's emotional state directly
+            if decision.therapy_break != TherapyType.NONE:
+                therapy_dialogue = execute_therapy(
+                    decision.therapy_break, ssh, ssh_tts,
+                    engine, conversation
+                )
+                if therapy_dialogue:
+                    # log the intervention in conversation context so the
+                    # LLM knows a therapy break just occurred
+                    conversation.append({
+                        "role": "assistant",
+                        "content": json.dumps({
+                            "therapy_intervention": decision.therapy_break.value,
+                            "dialogue": therapy_dialogue,
+                        })
+                    })
+
+                    # after mindfulness or reframing, listen for user response
+                    if decision.therapy_break in (TherapyType.MINDFULNESS,
+                                                  TherapyType.REFRAMING):
+                        print("  Listening for post-therapy response...")
+                        nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
+                        nao_record(ssh, energy_threshold)
+                        if check_audio_volume():
+                            therapy_response = transcribe()
+                            print(f"  Heard: {therapy_response}")
+                            # therapy response logged for context
 
             # ── REWARD CHECK ─────────────────────────────────────────────
             reward_msg = engine.check_reward()

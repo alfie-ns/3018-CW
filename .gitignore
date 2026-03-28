@@ -1,7 +1,7 @@
 **/.DS_Store
 .DS_Store
 venv/
-assessment/Report/task-4/crams/__pycache__
+assessment/Report/task-4/__pycache__
 assessment/Report/task-4/proposal.pdf
 *.h5
 .env
