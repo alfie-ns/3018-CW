@@ -345,6 +345,13 @@ The novelty herein is therefore multi-signal emotional inference: the system sim
 
 GAZE operates across four sequential layers: 1- INPUT captures three simultaneous signals from the user; 2- PROCESS fuses these via the AdaptiveEngine to infer the user's true emotional-cognitive state; 3- GENERATE constructs a dynamic prompt and dispatches it to OpenAI GPT-4.1 for game and dialogue generation; 4- OUTPUT delivers speech, gestures, and LED feedback on Pepper in parallel. The system runs on a laptop (Python 3.13) connected to Pepper via SSH (paramiko); two dedicated SSH connections are maintained (one for motor, LED, and camera commands; a second exclusively for text-to-speech), thereby enabling gesture and speech to execute concurrently without blocking. All robot-side code executes as Python 2 snippets via `nao_run()`, which escapes the code string and runs it remotely via `exec_command()`. This architectural split means computationally intensive processing (the facial-expression CNN inference, OpenAI API calls, and the entire adaptive-engine decision logic) runs on the laptop, whilst Pepper handles only physical I/O.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.82\textwidth]{task-4/SYSTEM-DIAGRAM.png}
+\caption{GAZE system architecture (adapted from the project proposal). Three input channels feed the AdaptiveEngine (PROCESS), which infers user-state and constructs a dynamic prompt for OpenAI GPT-4.1 (GENERATE); the resultant dialogue, gesture tag, and game-state update are delivered via Pepper's speech, motor, and LED subsystems (OUTPUT) concurrently. The loop circulates to the next round, now adapted.}
+\label{fig:system-diagram}
+\end{figure}
+
 ### 2.3.2 Input Layer: Three Simultaneous Signals
 
 **1- Facial Expression (vision-based).** A pre-trained CNN from Workshop 10 classifies the user's expression into one of seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a 48$\times$48 greyscale face region. The Haar cascade (`haarcascade_frontalface_default.xml`) detects faces via `detectMultiScale(gray, 1.3, 5)`; the largest detected face is selected *(the user sitting directly opposite Pepper)*. Pepper's camera captures a JPEG via `ALPhotoCapture`, transferred to the laptop via SFTP and fed through the same preprocessing pipeline utilised in the workshop: greyscale conversion $\rightarrow$ face detection $\rightarrow$ ROI crop and resize to 48$\times$48 $\rightarrow$ reshape to (1, 48, 48, 1). The model returns both the predicted emotion label and a confidence score; the label feeds into state inference, whilst the confidence is logged for post-session analysis.
@@ -357,7 +364,104 @@ GAZE operates across four sequential layers: 1- INPUT captures three simultaneou
 
 The AdaptiveEngine's `infer_state()` method weighs six signals simultaneously to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. The three raw inputs (facial expression, response time, current-round correctness) are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count *(rounds where the user said nothing, "skip", or "I don't know")*, and consecutive wrong-answer streak length. This is the core novelty and wherein multi-signal fusion operates; the inference rules combine these signals in non-obvious, cross-modal ways. For instance: if the camera reads *Angry* but the user answers quickly and correctly, the engine infers *Comfortable* *(it is merely their resting face)*; if the camera reads *Neutral* but response time exceeds the 30-second baseline and rolling correctness falls below 50\%, the triple conjunction triggers *Disengaged*; and if the user has answered incorrectly three rounds consecutively and the camera reads *Sad* or *Fear*, the engine infers *Frustrated* regardless of response speed. Fong, Nourbakhsh and Dautenhahn (2003, p. 148) identify "emotion recognition" as a key capability for socially interactive robots, yet most implementations rely on a single modality; GAZE's weighted multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness that Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations.
 
-The `decide()` function then maps the inferred state to concrete adaptive actions: difficulty adjustment (easy, medium, hard), game switching (numbers $\leftrightarrow$ letters when the user is frustrated or disengaged), hint provision, encouragement, and tone selection. This maps onto the mutual-adaptation paradigm identified by Nikolaidis, Hsu and Srinivasa (2017, p. 625), wherein the robot adjusts its strategy based on an evolving model of the user rather than following a fixed policy.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    every node/.style={font=\sffamily\scriptsize},
+    raw/.style={rectangle, rounded corners=2pt, draw=blue!60, fill=blue!8,
+                minimum width=2.8cm, minimum height=0.5cm, align=center},
+    der/.style={rectangle, rounded corners=2pt, draw=orange!70, fill=orange!10,
+                minimum width=2.8cm, minimum height=0.5cm, align=center},
+    eng/.style={rectangle, rounded corners=5pt, draw=black!70, fill=gray!10, thick,
+                minimum width=2.2cm, minimum height=2.8cm, align=center,
+                font=\sffamily\small\bfseries},
+    st/.style={rectangle, rounded corners=2pt, draw=black!50,
+               minimum width=2.2cm, minimum height=0.5cm, align=center},
+    >=Stealth,
+]
+% Raw inputs
+\node[font=\sffamily\tiny\bfseries, text=blue!60] at (0, 2.6) {RAW (per-round)};
+\node[raw] (e) at (0, 2)   {Facial Expression};
+\node[raw] (t) at (0, 1.2) {Response Time};
+\node[raw] (c) at (0, 0.4) {Current Correctness};
+\node[raw] (a) at (0,-0.4) {Answer Text};
+% Derived
+\node[font=\sffamily\tiny\bfseries, text=orange!70] at (0, -1.4) {DERIVED (temporal)};
+\node[der] (rc) at (0,-2.1) {Rolling Correctness};
+\node[der] (cs) at (0,-2.9) {Consec. Silences};
+\node[der] (cw) at (0,-3.7) {Consec. Wrong Streak};
+% Engine
+\node[eng] (eng) at (5.2, -0.5) {\texttt{infer\_state()}\\[3pt]{\scriptsize Cross-modal}\\{\scriptsize weighted rules}};
+% States
+\node[font=\sffamily\tiny\bfseries, text=black!50] at (10, 2.3) {INFERRED STATE};
+\node[st, fill=green!12, draw=green!50!black]  (s1) at (10, 1.6) {THRIVING};
+\node[st, fill=white, draw=gray]               (s2) at (10, 0.6) {COMFORTABLE};
+\node[st, fill=yellow!15, draw=yellow!70!black] (s3) at (10,-0.4) {STRUGGLING};
+\node[st, fill=orange!15, draw=orange!70]       (s4) at (10,-1.4) {FRUSTRATED};
+\node[st, fill=blue!8, draw=blue!50]            (s5) at (10,-2.4) {DISENGAGED};
+% Arrows: raw to engine
+\foreach \n in {e,t,c,a} \draw[->,black!40,thick] (\n.east) -- (eng.west |- \n);
+% Arrows: derived to engine
+\draw[->,black!40,thick] (rc.east) -| ([xshift=-2mm]eng.south west);
+\draw[->,black!40,thick] (cs.east) -| (eng.south);
+\draw[->,black!40,thick] (cw.east) -| ([xshift=2mm]eng.south east);
+% Arrows: engine to states
+\foreach \n in {s1,s2,s3,s4,s5} \draw[->,black!40,thick] (eng.east) -- (\n.west);
+\end{tikzpicture}
+\caption{Multi-signal inference pipeline. Three raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; it is merely their resting face) to classify the user into one of five states. The derived signals detect temporal trends that instantaneous readings alone would miss.}
+\label{fig:multi-signal}
+\end{figure}
+
+The cross-modal inference rules are shown in Listing~\ref{lst:infer} (extracted from `gaze.py`, lines 239--270):
+
+\begin{lstlisting}[caption={Multi-signal inference rules (excerpt from \texttt{gaze.py}).}, label=lst:infer]
+# thriving: performing well regardless of resting face
+if (correctness >= CORRECTNESS_CEILING
+        and response_time < RESPONSE_TIME_BASELINE * 0.5):
+    return InferredState.THRIVING
+
+# camera says Angry but fast + correct (*@$\rightarrow$@*) they're fine
+if expression == "Angry" and correct \
+        and response_time < RESPONSE_TIME_BASELINE * 0.6:
+    return InferredState.COMFORTABLE
+
+# disengaged: multiple signals pointing to checked-out
+if self.consecutive_silences >= SILENCE_THRESHOLD:
+    return InferredState.DISENGAGED
+if (expression == "Neutral"
+        and response_time > RESPONSE_TIME_BASELINE
+        and correctness < 0.5):
+    return InferredState.DISENGAGED
+
+# frustrated: struggling + negative expression
+if expression in ("Angry", "Disgust") \
+        and correctness < CORRECTNESS_FLOOR:
+    return InferredState.FRUSTRATED
+if self.consecutive_wrong >= 3 \
+        and expression in ("Angry", "Sad", "Fear"):
+    return InferredState.FRUSTRATED
+\end{lstlisting}
+
+The `decide()` function then maps the inferred state to concrete adaptive actions: difficulty adjustment (easy, medium, hard), game switching (numbers $\leftrightarrow$ letters when the user is frustrated or disengaged), hint provision, encouragement, and tone selection. This maps onto the mutual-adaptation paradigm identified by Nikolaidis, Hsu and Srinivasa (2017, p. 625), wherein the robot adjusts its strategy based on an evolving model of the user rather than following a fixed policy. Table~\ref{tab:state-action} summarises the full state-to-action mapping.
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l c c c c c}
+\toprule
+\textbf{Inferred State} & \textbf{Difficulty} & \textbf{Game Switch} & \textbf{Hint} & \textbf{Tone} & \textbf{LED Colour} \\
+\midrule
+Thriving    & $\uparrow$ ramp up     & No  & No  & Energetic    & \textcolor{green!60!black}{Green} \\
+Comfortable & $\uparrow$ if $>$70\%  & No  & No  & Neutral      & White \\
+Struggling  & $\downarrow$ ease off  & No  & Yes & Encouraging  & \textcolor{yellow!80!black}{Yellow} \\
+Frustrated  & $\downarrow\downarrow$ Easy & After 4 wrong & Yes & Calm & \textcolor{orange}{Orange} \\
+Disengaged  & ---                    & After 3 silent & No & Energetic & \textcolor{blue!60}{Blue} \\
+\bottomrule
+\end{tabular}
+\caption{State-to-action mapping. The adaptive engine translates each inferred state into a specific combination of difficulty adjustment, game-type switch, hint provision, tone selection, and LED colour. Arrows indicate direction of difficulty change relative to the current level.}
+\label{tab:state-action}
+\end{table}
 
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
@@ -455,7 +559,22 @@ GAZE: multi-signal emotional inference *(facial expression, response time, answe
 
 Notwithstanding, several limitations warrant honesty: The facial-expression CNN was not fine-tuned for this deployment context; it is the Workshop 10 model trained on a general facial-expression dataset, and confidence scores under poor lighting or non-frontal angles are expectedly low. The multi-signal inference thresholds (correctness floor of 0.4, response-time baseline of 30 seconds) are hand-coded rather than learned, prioritising interpretability over optimisation; a deliberate design choice, albeit one that limits adaptability to novel user populations. Conversation history grows unboundedly across rounds, and extended sessions may therefore approach OpenAI's token limits. Future work could formalise the hand-coded inference rules as a Partially Observable Markov Decision Process wherein the user's true emotional-cognitive state is a latent variable inferred via belief-space planning (Kaelbling, Littman and Cassandra, 1998, p. 120), and fine-tune the expression model on in-session Pepper captures to improve classification accuracy within the specific deployment environment.
 
-## 2.6 References (5%)
+## 2.6 Task-4 References (5%)
+
+- [ ] verify all references
+
+### Alfie's
+
+- Ahn, M., Brohan, A., Brown, N., et al. (2022) 'Do As I Can, Not As I Say: Grounding Language in Robotic Affordances', *arXiv preprint arXiv:2204.01691*. Available at: https://arxiv.org/abs/2204.01691 (Accessed: 24 March 2026).
+- Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251--275. Available at: https://ieeexplore.ieee.org/document/6483596 (Accessed: 20 March 2026).
+- Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3--4), pp. 143--166. Available at: https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf (Accessed: 18 March 2026).
+- Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387--12406. Available at: https://link.springer.com/article/10.1007/s10462-023-10448-w (Accessed: 20 March 2026).
+- Ji, Z., Lee, N., Frieske, R., et al. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), pp. 1--38. Available at: https://dl.acm.org/doi/10.1145/3571730 (Accessed: 22 March 2026).
+- Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1--2), pp. 99--134. Available at: https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf (Accessed: 13 March 2026).
+- Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5--7), pp. 618--634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
+- Sciutti, A., Beetz, M., Inamura, T., et al. (2023) 'The Present and the Future of Cognitive Robotics', *IEEE Robotics \& Automation Magazine*, 30(3), pp. 160--163. Available at: https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092 (Accessed: 18 March 2026).
+- Smedegaard, C. V. (2019) 'Reframing the Role of Novelty within Social HRI: From Noise to Information', in *Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19)*, pp. 411--420. Available at: https://dl.acm.org/doi/10.1109/HRI.2019.8673219 (Accessed: 22 March 2026).
+- Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics \& Automation Magazine*, 14(1), pp. 35--42. Available at: https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf (Accessed: 25 March 2026).
 
 ## 2.7. Appendix
 
