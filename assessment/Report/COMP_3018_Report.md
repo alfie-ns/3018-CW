@@ -34,6 +34,7 @@ header-includes:
 
 - [ ] if enough time: ermengent cognitive robot architecture
 - [ ] cite Iuliia Kotseruba1 · John K. Tsotsos1
+- [ ] use 'inference' natrually, i.e., not so perfect that it is likely ai generated but instead slightly not 100% correct like a human would do, ygm?
 
 ## Mentor
 
@@ -52,11 +53,11 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 
 - [ ] **Most critical:** verify all page numbers and sentences manually
 - [ ] **Most critical:** verify all links to papers manually
-
 - [ ] do all page number TODOs
 - [ ] implement loads of peer-reviewed papers everywhere again
 
 ## General:
+
 - [ ] ensure no overused complex words
 - [ ] Download Bemelmans and Broadbent via Plymouth library
 - [ ] Run past Gemini
@@ -129,7 +130,7 @@ However, most-current assistive robots operate at what Sciutti et al. (2023, p. 
 
 - [ ] ## 1.2. Literature Review
 
-Cognitive robotics, as defined by Sciutti et al. (2023, p. 160) and introduced within the module (Lecture 9, slides 4-5), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
+Cognitive robotics, as defined by Sciutti et al. (2023, p. 160) and introduced within the module (Lecture 9, slides 4-5), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(which treats the robot as purely engineered)* and from social robotics *(which addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that draws inference on *why* the patient is smiling, and adjusts its future strategy accordingly, is cognitive.
 
 Vernon, Metta and Sandini (2007, p. TODO) synthesise the field's definitional plurality into a core cycle (Lecture 9, slide 14). The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 distinct definitions of cognition (Lecture 9, slide 13), yet as Aly explained, the common thread across all is: "we anticipate, we learn, we adapt, and we intersect this with perception and action to create autonomy." This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention; Lecture 11, slide 19)*, anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state from observable behaviour.
 
@@ -163,7 +164,7 @@ Three challenges impede the deployment of cognitively-capable assistive robots. 
 
 Secondly, the measurement problem: trust, cognitive load, and emotional state are not directly observable; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only modest variance, whilst Broadbent, Stafford and MacDonald (2009, p. TODO) note that acceptance itself depends on matching robot behaviour to user expectations rather than trust alone. Desai et al. (2013, p. 256) further demonstrate that trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into inappropriate action selection. Nikolaidis, Hsu and Srinivasa (2017, p. 627), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner.
 
-Finally, adaptation without exploitation: a robot that infers cognitive load could, in principle, time its medication requests to coincide with periods of high vulnerability, thereby maximising compliance at the expense of user autonomy. The reward function governing the POMDP's policy should therefore encode ethical constraints alongside clinical objectives, ensuring that the optimisation target is genuine adherence rather than coerced compliance.
+Finally, adaptation without exploitation: a robot that runs inference on cognitive load could, in principle, time its medication requests to coincide with periods of high vulnerability, thereby maximising compliance at the expense of user autonomy. The reward function governing the POMDP's policy should therefore encode ethical constraints alongside clinical objectives, ensuring that the optimisation target is genuine adherence rather than coerced compliance.
 
 ### 1.4.2 Ethical Implications
 
@@ -425,7 +426,7 @@ if (correctness >= CORRECTNESS_CEILING
 
 # camera says Angry but fast + correct (*@$\rightarrow$@*) they're fine
 
-if expression == "Angry" and correct 
+if expression == "Angry" and correct
     and response_time < RESPONSE_TIME_BASELINE * 0.6:
     return InferredState.COMFORTABLE
 
@@ -440,7 +441,7 @@ if (expression == "Neutral"
 
 # frustrated: struggling + negative expression
 
-if expression in ("Angry", "Disgust") 
+if expression in ("Angry", "Disgust")
     and correctness < CORRECTNESS_FLOOR:
     return InferredState.FRUSTRATED
 if self.consecutive_wrong >= 3

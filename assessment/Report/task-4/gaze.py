@@ -18,22 +18,27 @@ rather than trusting any single signal in isolation.
 - [X] Gestures aligned with speech and emotional context
 """
 
-import os
-import re
-import json
-import time
-import wave
-import struct
-import tempfile
-import threading
-import numpy as np
-import cv2
-import paramiko
+# stdlib
+import os, re, json, time, wave, struct, tempfile, threading, subprocess
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
+
+# data + vision
+import numpy as np
+import cv2
+
+# networking
+import paramiko
+
+# audio
+import sounddevice as sd
+
+# environment + API
 from dotenv import load_dotenv
 from openai import OpenAI
+
+# ML
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
 
@@ -60,8 +65,14 @@ VOLUME_THRESHOLD = 500
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
-# false when connected ti pepper; true for testing when no Pepper's camera
+# false when connected to pepper; true for testing when no Pepper's camera
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
+
+# full local mode — runs entire game loop on Mac without any Pepper connection
+# uses local webcam, Mac microphone, and macOS TTS instead of Pepper hardware
+LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
+if LOCAL_MODE:
+    USE_LOCAL_CAMERA = True      # local mode implies local camera
 
 # paths to pre-trained facial expression model (WS-10)
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
@@ -877,6 +888,65 @@ ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
 
 
 # ══════════════════════════════════════════════════════════════════════════════
+#  LOCAL MODE HELPERS (Mac — no Pepper required)
+# ══════════════════════════════════════════════════════════════════════════════
+
+LOCAL_SAMPLE_RATE = 16000   # match Pepper's recording format for Whisper
+
+
+def local_record(max_secs: float = RECORD_MAX_SECS):
+    """
+    Record audio from the Mac's built-in microphone to LOCAL_WAV.
+
+    Uses sounddevice to capture at 16 kHz mono — the same format Pepper
+    produces — so downstream code (volume check, Whisper) works identically.
+    """
+    print(f"  Recording from Mac mic (up to {max_secs}s, press Ctrl+C to stop early)...")
+    try:
+        audio = sd.rec(
+            int(max_secs * LOCAL_SAMPLE_RATE),
+            samplerate=LOCAL_SAMPLE_RATE,
+            channels=1, dtype="int16",
+        )
+        sd.wait()
+    except KeyboardInterrupt:
+        sd.stop()
+        audio = audio[:sd.get_stream().read_available]
+
+    # write to the same LOCAL_WAV path that Whisper reads from
+    with wave.open(LOCAL_WAV, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)          # 16-bit
+        wf.setframerate(LOCAL_SAMPLE_RATE)
+        wf.writeframes(audio.tobytes())
+    print("  Recording saved.")
+
+
+def local_say(text: str):
+    """Speak text using macOS built-in TTS (the 'say' command)."""
+    try:
+        subprocess.run(["say", text], check=True, timeout=30)
+    except Exception:
+        pass    # terminal output already covers this
+
+
+def say(ssh_tts, text):
+    """Dispatch TTS to local or Pepper depending on mode."""
+    if LOCAL_MODE:
+        local_say(text)
+    else:
+        nao_say(ssh_tts, text)
+
+
+def record(ssh, energy_threshold):
+    """Dispatch audio recording to local or Pepper depending on mode."""
+    if LOCAL_MODE:
+        local_record()
+    else:
+        nao_record(ssh, energy_threshold)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
 #  GESTURE MAPPING
 #  Each gesture is a motion sequence aligned to the game/emotional context.
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1275,15 +1345,22 @@ def main():
     else:
         print("  Using Pepper's camera for expression detection.")
 
-    # ── connect to Pepper ──
-    print(f"\nConnecting to Pepper at {NAO_IP}...")
-    ssh     = ssh_connect()
-    ssh_tts = ssh_connect()         # dedicated TTS connection
-    print("  Connected.")
+    # ── connect to Pepper (skipped in local mode) ──
+    ssh     = None
+    ssh_tts = None
+    energy_threshold = DEFAULT_ENERGY_THRESHOLD
 
-    # ── calibrate ambient noise level ──
-    print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
-    energy_threshold = nao_calibrate_ambient(ssh)
+    if LOCAL_MODE:
+        print("\n  LOCAL MODE — skipping Pepper connection.")
+    else:
+        print(f"\nConnecting to Pepper at {NAO_IP}...")
+        ssh     = ssh_connect()
+        ssh_tts = ssh_connect()         # dedicated TTS connection
+        print("  Connected.")
+
+        # ── calibrate ambient noise level ──
+        print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
+        energy_threshold = nao_calibrate_ambient(ssh)
 
     # ── check for saved session ──
     preferred_game = None
@@ -1300,15 +1377,17 @@ def main():
             f"and got {prev_correct} correct. "
             "Want to continue where you left off, or start fresh?"
         )
-        nao_track_face(ssh, enable=True)
-        nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
-        nao_gesture(ssh, "wave")
-        nao_say(ssh_tts, welcome_back)
+        if not LOCAL_MODE:
+            nao_track_face(ssh, enable=True)
+            nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
+            nao_gesture(ssh, "wave")
+        say(ssh_tts, welcome_back)
         print(f"\nRobot: {welcome_back}")
 
         print("\nListening for continue/fresh...")
-        nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        nao_record(ssh, energy_threshold)
+        if not LOCAL_MODE:
+            nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
+        record(ssh, energy_threshold)
 
         resume_text = ""
         if check_audio_volume():
@@ -1336,9 +1415,10 @@ def main():
 
     if not resumed:
         # ── startup sequence ──
-        nao_track_face(ssh, enable=True)
-        nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
-        nao_gesture(ssh, "wave")
+        if not LOCAL_MODE:
+            nao_track_face(ssh, enable=True)
+            nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
+            nao_gesture(ssh, "wave")
 
         # ── ask game preference ──
         game_prompt = (
@@ -1346,12 +1426,13 @@ def main():
             "What would you like to play? "
             "I've got a numbers round or a letters round, like Countdown!"
         )
-        nao_say(ssh_tts, game_prompt)
+        say(ssh_tts, game_prompt)
         print(f"\nRobot: {game_prompt}")
 
         print("\nListening for game choice...")
-        nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        nao_record(ssh, energy_threshold)
+        if not LOCAL_MODE:
+            nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
+        record(ssh, energy_threshold)
 
         game_choice_text = ""
         chosen_game      = None
@@ -1379,7 +1460,7 @@ def main():
             f"We're playing {engine.current_game.value} at "
             f"{engine.current_difficulty.name.lower()} difficulty."
         )
-        nao_say(ssh_tts, resume_msg)
+        say(ssh_tts, resume_msg)
         print(f"\nRobot: {resume_msg}")
 
     # ── first round ──
@@ -1400,13 +1481,14 @@ def main():
     current_question = game_data.get("dialogue", "")
 
     # deliver first question with gesture
-    gesture_thread = threading.Thread(
-        target=nao_gesture,
-        args=(ssh, game_data.get("gesture", "neutral")),
-        daemon=True,
-    )
-    gesture_thread.start()
-    nao_say(ssh_tts, current_question)
+    if not LOCAL_MODE:
+        gesture_thread = threading.Thread(
+            target=nao_gesture,
+            args=(ssh, game_data.get("gesture", "neutral")),
+            daemon=True,
+        )
+        gesture_thread.start()
+    say(ssh_tts, current_question)
     print(f"\nRobot: {current_question}")
     print(f"(Answer: {current_answer})")
 
@@ -1434,8 +1516,9 @@ def main():
 
             # 3. listen for verbal answer
             print("Listening...")
-            nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-            nao_record(ssh, energy_threshold)
+            if not LOCAL_MODE:
+                nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
+            record(ssh, energy_threshold)
 
             response_time = time.time() - question_start
 
@@ -1457,7 +1540,8 @@ def main():
             # ── PROCESS LAYER ────────────────────────────────────────────
             # check answer + adaptive engine infers state + decides
 
-            nao_set_leds(ssh, "EarLeds", 0x000000FF, 0.3)  # blue = thinking
+            if not LOCAL_MODE:
+                nao_set_leds(ssh, "EarLeds", 0x000000FF, 0.3)  # blue = thinking
 
             correct = (check_answer(user_answer, current_answer, current_question)
                        if user_answer else False)
@@ -1515,19 +1599,20 @@ def main():
 
             gesture_type = game_data.get("gesture", "neutral")
 
-            # LED colour reflects inferred state
-            nao_set_leds(
-                ssh, "FaceLeds",
-                LED_COLOURS.get(decision.inferred_state, 0x00FFFFFF), 0.5
-            )
+            if not LOCAL_MODE:
+                # LED colour reflects inferred state
+                nao_set_leds(
+                    ssh, "FaceLeds",
+                    LED_COLOURS.get(decision.inferred_state, 0x00FFFFFF), 0.5
+                )
 
-            # gesture and speech run in parallel
-            gesture_thread = threading.Thread(
-                target=nao_gesture,
-                args=(ssh, gesture_type), daemon=True
-            )
-            gesture_thread.start()
-            nao_say(ssh_tts, current_question)
+                # gesture and speech run in parallel
+                gesture_thread = threading.Thread(
+                    target=nao_gesture,
+                    args=(ssh, gesture_type), daemon=True
+                )
+                gesture_thread.start()
+            say(ssh_tts, current_question)
 
             print(f"\nRobot: {current_question}")
             print(f"(Answer: {current_answer})")
@@ -1581,17 +1666,19 @@ def main():
     else:
         farewell = "Thanks for stopping by! See you next time!"
 
-    nao_gesture(ssh, "wave")
-    nao_say(ssh_tts, farewell)
+    if not LOCAL_MODE:
+        nao_gesture(ssh, "wave")
+    say(ssh_tts, farewell)
     print(f"\nRobot: {farewell}")
 
     # cleanup
     if local_camera is not None:
         local_camera.release()
-    nao_track_face(ssh, enable=False)
-    nao_set_leds(ssh, "FaceLeds", 0x00000000, 0.5)
-    ssh.close()
-    ssh_tts.close()
+    if not LOCAL_MODE:
+        nao_track_face(ssh, enable=False)
+        nao_set_leds(ssh, "FaceLeds", 0x00000000, 0.5)
+        ssh.close()
+        ssh_tts.close()
     print("\nGAZE disconnected.")
 
 

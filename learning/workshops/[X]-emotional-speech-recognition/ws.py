@@ -120,4 +120,4 @@ for i, row in enumerate(cm): # print values for each instance of confusion matri
 print("Therefore:")
 print("First row: `calm` as is the highest (most classified)")
 print("Second row: `disgust` is most classified")
-print("Third row: fearful (79)
+print("Third row: fearful (79)")
