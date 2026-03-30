@@ -77,7 +77,7 @@ if LOCAL_MODE:
 
 # paths to pre-trained models
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
-WORKSHOP_DIR  = os.path.join(SCRIPT_DIR, "..", "..", "learning", "workshops")
+WORKSHOP_DIR  = os.path.join(SCRIPT_DIR, "..", "..", "..", "learning", "workshops")
 MODEL_JSON    = os.path.join(WORKSHOP_DIR, "[X]-facial-expression-detection", "model.json")
 MODEL_WEIGHTS = os.path.join(WORKSHOP_DIR, "[X]-facial-expression-detection", "model_weights.weights.h5")
 HAAR_CASCADE  = os.path.join(WORKSHOP_DIR, "[X]-ws-10", "haarcascade_frontalface_default.xml")
@@ -1001,35 +1001,86 @@ ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
 #  LOCAL MODE HELPERS (Mac — no Pepper required)
 # ══════════════════════════════════════════════════════════════════════════════
 
-LOCAL_SAMPLE_RATE = 16000   # match Pepper's recording format for Whisper
+LOCAL_SAMPLE_RATE = 16000   # Whisper expects 16 kHz; we resample from native rate
+
+
+LOCAL_SILENCE_RMS   = 100     # RMS below this = silence on Mac mic
+LOCAL_SILENCE_SECS  = 1.5    # seconds of post-speech silence to stop recording
+LOCAL_MIN_SECS      = 1.0    # minimum recording before silence detection kicks in
+LOCAL_NO_SPEECH_MAX = 5.0    # stop if no speech detected at all after this many seconds
 
 
 def local_record(max_secs: float = RECORD_MAX_SECS):
     """
-    Record audio from the Mac's built-in microphone to LOCAL_WAV.
+    Record audio from the Mac's built-in microphone to LOCAL_WAV with
+    silence detection mirroring Pepper's dynamic recording behaviour.
 
-    Uses sounddevice to capture at 16 kHz mono — the same format Pepper
-    produces — so downstream code (volume check, Whisper) works identically.
+    Records at the device's native sample rate then resamples to 16 kHz
+    for Whisper compatibility via librosa.
     """
-    print(f"  Recording from Mac mic (up to {max_secs}s, press Ctrl+C to stop early)...")
-    try:
-        audio = sd.rec(
-            int(max_secs * LOCAL_SAMPLE_RATE),
-            samplerate=LOCAL_SAMPLE_RATE,
-            channels=1, dtype="int16",
-        )
-        sd.wait()
-    except KeyboardInterrupt:
-        sd.stop()
-        audio = audio[:sd.get_stream().read_available]
+    # use the mic's native rate to avoid unsupported-rate hangs
+    dev_info    = sd.query_devices(kind="input")
+    native_rate = int(dev_info["default_samplerate"])
+    chunk_size  = int(native_rate * SILENCE_POLL_SECS)
 
-    # write to the same LOCAL_WAV path that Whisper reads from
+    buffer = []
+    speech_detected = False
+    silence_start = None
+    elapsed = 0.0
+
+    print(f"  Recording from Mac mic (up to {max_secs}s, stops after silence)...")
+
+    def _callback(indata, frames, time_info, status):
+        buffer.append(indata.copy())
+
+    with sd.InputStream(samplerate=native_rate, channels=1, dtype="int16",
+                        blocksize=chunk_size, callback=_callback):
+        while elapsed < max_secs:
+            time.sleep(SILENCE_POLL_SECS)
+            elapsed += SILENCE_POLL_SECS
+
+            if not buffer:
+                continue
+            data = buffer[-1]
+
+            rms = (np.mean(data.astype(np.float64) ** 2)) ** 0.5
+            print(f"\r    [{elapsed:.1f}s] RMS: {rms:.0f} {'▓' if rms > LOCAL_SILENCE_RMS else '░'}", end="", flush=True)
+
+            if elapsed < LOCAL_MIN_SECS:
+                if rms > LOCAL_SILENCE_RMS:
+                    speech_detected = True
+                continue
+
+            if not speech_detected and elapsed >= LOCAL_NO_SPEECH_MAX:
+                break
+
+            if rms > LOCAL_SILENCE_RMS:
+                speech_detected = True
+                silence_start = None
+            else:
+                if speech_detected and silence_start is None:
+                    silence_start = elapsed
+                if speech_detected and silence_start is not None:
+                    if (elapsed - silence_start) >= LOCAL_SILENCE_SECS:
+                        break
+
+    print()
+
+    # concatenate all buffered audio at native rate
+    if buffer:
+        audio_native = np.concatenate(buffer).flatten().astype(np.float32) / 32768.0
+        # resample to 16 kHz for Whisper
+        audio_16k = librosa.resample(audio_native, orig_sr=native_rate, target_sr=LOCAL_SAMPLE_RATE)
+        audio_int16 = (audio_16k * 32768.0).astype(np.int16)
+    else:
+        audio_int16 = np.zeros((0,), dtype=np.int16)
+
     with wave.open(LOCAL_WAV, "wb") as wf:
         wf.setnchannels(1)
-        wf.setsampwidth(2)          # 16-bit
+        wf.setsampwidth(2)
         wf.setframerate(LOCAL_SAMPLE_RATE)
-        wf.writeframes(audio.tobytes())
-    print("  Recording saved.")
+        wf.writeframes(audio_int16.tobytes())
+    print(f"  Recording saved ({elapsed:.1f}s).")
 
 
 def local_say(text: str):
@@ -1293,9 +1344,6 @@ def generate_game_response(prompt: str, conversation: list) -> dict:
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
     """
-    Use OpenAI to judge correctness — handles paraphrasing, partial answers,
-    and pronunciation quirks from speech-to-text.
-
     Falls back to a simple string-containment check if the API call fails,
     thereby ensuring the game loop never stalls on answer verification.
     """

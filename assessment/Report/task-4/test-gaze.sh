@@ -2,20 +2,18 @@
 # Run gaze.py in local mode (no Pepper required).
 # Uses Mac webcam, mic, and TTS instead.
 
-set -euo pipefail
 cd "$(dirname "$0")"
+rm -rf __pycache__
 
 export GAZE_LOCAL_MODE=true
 export GAZE_LOCAL_CAMERA=true
 
-# load .env for OPENAI_API_KEY
 if [ -f .env ]; then
     set -a
     source .env
     set +a
 fi
 
-# override back to local mode (in case .env has false)
 export GAZE_LOCAL_MODE=true
 export GAZE_LOCAL_CAMERA=true
 
@@ -24,10 +22,19 @@ if [ -z "${OPENAI_API_KEY:-}" ]; then
     exit 1
 fi
 
-# check speech model exists
 if [ ! -f speech_emotion_model.pkl ]; then
     echo "Speech emotion model not found. Training it now..."
-    python train_speech_model.py
+    python "[ ]-gaze-train_speech_model.py"
 fi
 
-python gaze.py
+cleanup() {
+    pkill -9 -f "python.*gaze" 2>/dev/null
+    pkill -9 -f "test-gaze" 2>/dev/null
+    echo ""
+    echo "GAZE killed."
+    exit 0
+}
+trap cleanup INT TERM
+
+python -u gaze.py &
+wait $!
