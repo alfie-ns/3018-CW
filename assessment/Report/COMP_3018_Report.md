@@ -32,6 +32,175 @@ header-includes:
 ---
 # TODO
 
+### VERIFY PAGE NUMBERS (check each against the actual PDF)
+
+#### Vernon, Metta and Sandini (2007) -- PDF NOT in papers/ folder; download from: https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf
+
+| OK?   | Line(s)  | Section    | Citation as written           | Go to page... | You should see...                                                                                    |
+| ----- | -------- | ---------- | ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [ ] | 298, 304 | S1.1, S1.2 | Vernon et al. (2007, p. TODO) | Try p. 155    | Section "What is Cognition?"; cognition cycle diagram (anticipate, learn, adapt + perception/action) |
+| - [ ] | 306      | S1.2       | Vernon et al. (2007, p. TODO) | Try p. 163    | Memory section; episodic vs semantic memory distinction (Tulving's taxonomy)                         |
+
+#### Sciutti et al. (2023) -- `papers/Sciutti et al. (2023) - The Present and the Future of Cognitive Robotics.pdf`
+
+| OK?   | Line(s)            | Section   | Citation as written                                                                 | Go to page... | You should see...                                                                                                                 |
+| ----- | ------------------ | --------- | ----------------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 298, 304, 314, 509 | S1.1-S2.2 | Sciutti et al. (2023, p. 160)                                                       | p. 160        | "flexible, context-sensitive action, knowing what they are doing and why"; "reason about their actions and modify their behavior" |
+| - [ ] | 302                | S1.2      | Sciutti et al. (2023, p. 160) -- "intersection of Robotics, AI, Cognitive Sciences" | p. 160        | CHECK: this exact phrase may NOT be here; may come from Sandini, Sciutti & Vernon (2021) encyclopaedia entry instead              |
+| - [ ] | 350                | S1.5      | Sciutti et al. (2023, pp. 162-163)                                                  | pp. 162-163   | CHECK: "integrating machine learning techniques with model-based approaches" -- may only be on p. 162, not spanning 163           |
+
+#### Tapus, Matarić and Scassellati (2007) -- `papers/Tapus, Matarić and Scassellati (2007) - Socially Assistive Robotics.pdf`
+
+| OK?   | Line(s) | Section | Citation as written          | Go to page... | You should see...                                                     |
+| ----- | ------- | ------- | ---------------------------- | ------------- | --------------------------------------------------------------------- |
+| - [ ] | 312     | S1.3.1  | Tapus et al. (2007, p. TODO) | Try p. 35     | PARO listed: "robotic animal toys, such as a seal (i.e., PARO [2])"   |
+| - [ ] | 509     | S2.2    | Tapus et al. (2007, p. 35)   | p. 35         | "helping human users through social rather than physical interaction" |
+
+#### Wada and Shibata (2007) -- PDF NOT in papers/ folder
+
+| OK?   | Line(s)  | Section        | Citation as written             | Go to page... | You should see...                                                                                  |
+| ----- | -------- | -------------- | ------------------------------- | ------------- | -------------------------------------------------------------------------------------------------- |
+| - [ ] | 312, 342 | S1.3.1, S1.4.2 | Wada and Shibata (2007, p. 974) | p. 974        | NEEDS MANUAL CHECK -- download PDF; look for PARO reducing agitation / mood improvement in elderly |
+
+#### Bemelmans et al. (2012) -- PDF NOT in papers/ folder
+
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                            |
+| ----- | ------- | ------- | -------------------------------- | ------------- | -------------------------------------------------------------------------------------------- |
+| - [ ] | 312     | S1.3.1  | Bemelmans et al. (2012, p. TODO) | ??            | NEEDS MANUAL CHECK -- download PDF; find reduced cortisol / increased social engagement data |
+
+#### Fong, Nourbakhsh and Dautenhahn (2003) -- `papers/Fong, Nourbakhsh and Dautenhahn (2003) - A Survey of Socially Interactive Robots.pdf`
+
+| OK?   | Line(s)  | Section      | Citation as written        | Go to page... | You should see...                                                                                                                                      |
+| ----- | -------- | ------------ | -------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [ ] | 314      | S1.3.1       | Fong et al. (2003, p. 145) | p. 145        | Section 1.2; Breazeal's four classes of social robots; "shallow models of social cognition" under Social Interface                                     |
+| - [ ] | 326      | S1.3.3       | Fong et al. (2003, p. 149) | p. 149        | Section 2.3 Embodiment; "mutual perturbation" / "perturbatory channels"                                                                                |
+| - [ ] | 509, 538 | S2.2, S2.3.3 | Fong et al. (2003, p. 148) | p. 148        | CHECK: p. 148 covers design issues, NOT emotion recognition. Try p. 155 (human-oriented perception listing) or p. 156 (speech/facial emotion analysis) |
+
+#### Lee and See (2004) -- `papers/Lee and See (2004) - Trust in Automation Designing for Appropriate Reliance.pdf`
+
+| OK?   | Line(s) | Section | Citation as written       | Go to page... | You should see...                                                                                                                                         |
+| ----- | ------- | ------- | ------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 318     | S1.3.2  | Lee and See (2004, p. 54) | p. 54         | Definition in italics: "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability" |
+
+#### Hancock et al. (2011) -- `papers/Hancock et al. (2011) - A Meta-Analysis of Factors Affecting Trust in Human-Robot Interaction.pdf`
+
+| OK?   | Line(s)  | Section        | Citation as written                                                         | Go to page... | You should see...                                                                               |
+| ----- | -------- | -------------- | --------------------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| - [ ] | 320, 334 | S1.3.2, S1.4.1 | Hancock et al. (2011, p. 522) -- performance strongest predictor            | p. 522        | Table 1; "performance factors were more strongly associated (r = +0.34)"; Cohen's d = +0.71     |
+| - [ ] | 318      | S1.3.2         | Hancock et al. (2011, p. 522) -- "observation cannot reliably disambiguate" | p. 522        | CHECK: this POMDP-style claim may NOT appear anywhere in Hancock et al.; possibly misattributed |
+| - [ ] | 334      | S1.4.1         | Hancock et al. (2011, p. 522) -- "29 studies, modest variance"              | pp. 520-522   | 29 studies stated on p. 520; overall r = +0.26 on p. 521; paper uses "moderate" not "modest"    |
+
+#### Chen et al. (2020) -- `papers/Chen et al. (2020) - Trust-Aware Decision Making for Human-Robot Collaboration.pdf`
+
+| OK?   | Line(s) | Section | Citation as written      | Go to page...          | You should see...                                                                                                      |
+| ----- | ------- | ------- | ------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 320     | S1.3.2  | Chen et al. (2020, p. 6) | p. 6 (article page :6) | Section 3.4 "Maximizing team performance"; Fig. 3 (Trust-POMDP model); "We maintain a belief b over the human's trust" |
+
+#### Garcez and Lamb (2023) -- `papers/Garcez and Lamb (2023) - Neurosymbolic AI The 3rd Wave.pdf`
+
+| OK?   | Line(s)       | Section            | Citation as written              | Go to page...                                                                          | You should see...                                                                                                              |
+| ----- | ------------- | ------------------ | -------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| - [ ] | 320, 511, 663 | S1.3.2, S2.2, S2.5 | Garcez and Lamb (2023, p. 12389) | Local PDF is arXiv preprint (pp. 1-28); p. 12389 = journal page 3 of published version | CHECK against published*AI Review* version (journal pp. 12387-12406). On ~p. 3: third wave / neural-symbolic labour division |
+
+#### Nikolaidis, Hsu and Srinivasa (2017) -- `papers/Nikolaidis, Hsu and Srinivasa (2017) - Human-Robot Mutual Adaptation in Collaborative Tasks.pdf`
+
+| OK?   | Line(s)  | Section        | Citation as written              | Go to page... | You should see...                                                                               |
+| ----- | -------- | -------------- | -------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| - [ ] | 320, 624 | S1.3.2, S2.3.3 | Nikolaidis et al. (2017, p. 625) | p. 625        | "69 samples"; "U = 180, p = 0.048"; MOMDP mutual-adaptation condition                           |
+| - [ ] | 334      | S1.4.1         | Nikolaidis et al. (2017, p. 627) | p. 627        | MOMDP discussion; r = -0.066 (no correlation between trustworthiness and inferred adaptability) |
+
+#### Brooks (1991) -- PDF NOT in papers/ folder; download from: https://people.csail.mit.edu/brooks/papers/representation.pdf
+
+| OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                                                                    |
+| ----- | ------- | ------- | ---------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 326     | S1.3.3  | Brooks (1991, p. TODO) | ??            | NEEDS MANUAL CHECK -- find argument that intelligence emerges from physical interaction, not abstract representation |
+
+#### Matarić et al. (2007) -- PDF NOT in papers/ folder; download from: https://pmc.ncbi.nlm.nih.gov/articles/PMC1821334/
+
+| OK?   | Line(s) | Section | Citation as written             | Go to page... | You should see...                                                                                           |
+| ----- | ------- | ------- | ------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
+| - [ ] | 326     | S1.3.3  | Matarić et al. (2007, p. TODO) | ??            | NEEDS MANUAL CHECK -- find stroke survivors engaging more with embodied robot than screen-based alternative |
+
+#### Tapus, Ţăpuş and Matarić (2008) -- PDF NOT in papers/ folder; download from: https://link.springer.com/article/10.1007/s11370-008-0017-4
+
+| OK?   | Line(s) | Section | Citation as written                          | Go to page... | You should see...                                                                                                |
+| ----- | ------- | ------- | -------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 326     | S1.3.3  | Tapus, Ţăpuş and Matarić (2008, p. TODO) | ??            | NEEDS MANUAL CHECK -- find adaptive personality matching (interaction distance/speed) improving task performance |
+
+#### Papadimitriou and Tsitsiklis (1987) -- `papers/Papadimitriou and Tsitsiklis (1987) - The Complexity of Markov Decision Processes.pdf`
+
+| OK?   | Line(s) | Section | Citation as written                         | Go to page... | You should see...                                          |
+| ----- | ------- | ------- | ------------------------------------------- | ------------- | ---------------------------------------------------------- |
+| - [ ] | 332     | S1.4.1  | Papadimitriou and Tsitsiklis (1987, p. 448) | p. 448        | Theorem 6: "The partially observed problem is PSPACE-hard" |
+
+#### Pineau, Gordon and Thrun (2003) -- `papers/Pineau, Gordon and Thrun (2003) - Point-Based Value Iteration An Anytime Algorithm for POMDPs.pdf`
+
+| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                     |
+| ----- | ------- | ------- | ----------------------------- | ------------- | --------------------------------------------------------------------- |
+| - [ ] | 332     | S1.4.1  | Pineau et al. (2003, p. 1025) | p. 1025       | First page / abstract: "Point-Based Value Iteration (PBVI) algorithm" |
+
+#### Kaelbling, Littman and Cassandra (1998) -- `papers/Kaelbling, Littman and Cassandra (1998) - Planning and Acting in Partially Observable Stochastic Domains.pdf`
+
+| OK?   | Line(s)  | Section      | Citation as written             | Go to page... | You should see...                                                                                                                              |
+| ----- | -------- | ------------ | ------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 332, 663 | S1.4.1, S2.5 | Kaelbling et al. (1998, p. 120) | p. 120        | CHECK: p. 120 is the tiger problem (Section 5.1, toy example). For POMDP framework definition try p. 105; for belief-state planning try p. 108 |
+
+#### Silver and Veness (2010) -- `papers/Silver and Veness (2010) - Monte-Carlo Planning in Large POMDPs.pdf`
+
+| OK?   | Line(s) | Section | Citation as written            | Go to page... | You should see...                                                     |
+| ----- | ------- | ------- | ------------------------------ | ------------- | --------------------------------------------------------------------- |
+| - [ ] | 332     | S1.4.1  | Silver and Veness (2010, p. 1) | p. 1          | Abstract: "Monte-Carlo algorithm for online planning in large POMDPs" |
+
+#### Broadbent, Stafford and MacDonald (2009) -- PDF NOT in papers/ folder; download from: https://link.springer.com/article/10.1007/s12369-009-0030-6
+
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                |
+| ----- | ------- | ------- | -------------------------------- | ------------- | ------------------------------------------------------------------------------------------------ |
+| - [ ] | 334     | S1.4.1  | Broadbent et al. (2009, p. TODO) | ??            | NEEDS MANUAL CHECK -- find acceptance depending on matching robot behaviour to user expectations |
+
+#### Desai et al. (2013) -- `papers/Desai et al. (2013) - Impact of Robot Failures and Feedback on Real-Time Trust.pdf`
+
+| OK?   | Line(s)  | Section        | Citation as written         | Go to page... | You should see...                                                                                                                                                        |
+| ----- | -------- | -------------- | --------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [ ] | 334, 538 | S1.4.1, S2.3.3 | Desai et al. (2013, p. 256) | p. 256        | CHECK: local PDF is conference format with no printed page numbers. Verify against HRI 2013 proceedings. Look for: trust drops after reliability failures, slow recovery |
+
+#### Wachter, Mittelstadt and Floridi (2017) -- `papers/Wachter, Mittelstadt and Floridi (2017) - Why a Right to Explanation Does Not Exist in the GDPR.pdf`
+
+| OK?   | Line(s) | Section | Citation as written            | Go to page...                                     | You should see...                                                                                                        |
+| ----- | ------- | ------- | ------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| - [ ] | 340     | S1.4.2  | Wachter et al. (2017, p. TODO) | Try p. 76 (abstract) or p. 82 (Section 3 heading) | p. 76: "GDPR does not implement a right to explanation"; p. 82: Section heading "Why there is no 'right to explanation'" |
+
+#### Sharkey (2014) -- `papers/Sharkey (2014) - Robots and Human Dignity.pdf`
+
+| OK?   | Line(s) | Section | Citation as written           | Go to page...                   | You should see...                                                                                                                                             |
+| ----- | ------- | ------- | ----------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 342     | S1.4.2  | Sharkey (2014, p. 6 (VERIFY)) | Manuscript p. 6 = journal p. 68 | "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences..." in Nordenfelt Dignity of Identity context |
+
+#### Sharkey and Sharkey (2012) -- `papers/Sharkey and Sharkey (2012) - Granny and the Robots Ethical Issues in Robot Care for the Elderly.pdf`
+
+| OK?   | Line(s) | Section | Citation as written               | Go to page... | You should see...                                                                               |
+| ----- | ------- | ------- | --------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| - [ ] | 350     | S1.5    | Sharkey and Sharkey (2012, p. 27) | p. 27         | Abstract/introduction; concerns about reducing human contact. Detailed argument is on pp. 30-31 |
+
+#### Ahn et al. (2022) -- `papers/Ahn et al. (2022) - Do As I Can Not As I Say Grounding Language in Robotic Affordances.pdf`
+
+| OK?   | Line(s) | Section | Citation as written     | Go to page... | You should see...                                                                                                       |
+| ----- | ------- | ------- | ----------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 511     | S2.2    | Ahn et al. (2022, p. 1) | p. 1          | Abstract: "constrain the model to propose natural language actions that are both feasible and contextually appropriate" |
+
+#### Smedegaard (2019) -- `papers/Smedegaard (2019) - Reframing the Role of Novelty within Social HRI from Noise to Information.pdf`
+
+| OK?   | Line(s)  | Section    | Citation as written     | Go to page...               | You should see...                                                                                                                    |
+| ----- | -------- | ---------- | ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| - [ ] | 511, 663 | S2.2, S2.5 | Smedegaard (2019, p. 4) | p. 4 (= proceedings p. 414) | Novelty as "original feature of experience". CHECK: the novelty-fading engagement claim may be stronger on p. 2 (proceedings p. 412) |
+
+#### Ji et al. (2023) -- `papers/Ji et al. (2023) - Survey of Hallucination in Natural Language Generation.pdf`
+
+| OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                        |
+| ----- | ------- | ------- | ---------------------- | ------------- | ------------------------------------------------------------------------ |
+| - [ ] | 647     | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | "deep learning based generation is prone to hallucinate unintended text" |
+
+---
+
 - [ ] if enough time: ermengent cognitive robot architecture
 - [ ] cite Iuliia Kotseruba1 · John K. Tsotsos1
 - [ ] use 'inference' natrually, i.e., not so perfect that it is likely ai generated but instead slightly not 100% correct like a human would do, ygm?

@@ -5,18 +5,24 @@ Adaptive countdown-style game host for the Pepper robot.
 Multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
 + answer correctness, cross-validated so no single signal is trusted alone.
 
+- [ ] adaptive words or numbers based on inferred user state somehow???
 - [X] WS-10 CNN facial-expression detection (7-class, 48x48 greyscale)
 - [X] WS-08 MLP speech-emotion recognition (MFCC/chroma/mel features)
-- [X] Countdown-style games (numbers / letters) via OpenAI
-- [X] Multi-signal state inference (face + voice + time + correctness)
-- [X] Adaptive difficulty, hints, encouragement, game switching
-- [X] Adaptation self-evaluation (did the previous adaptation help?)
-- [X] Scoring, reward milestones, session save/resume
-- [X] Gestures, LEDs, and speech aligned to inferred state
-- [X] Local testing mode (GAZE_LOCAL_MODE)
+- [X] countdown-like games (numbers/letters) 
+- [X] multi-signal state inference (face + voice + time + correctness)
+- [X] adaptive difficulty, hints, encouragement, game switching
+- [X] adaptation self-evaluation (did the previous adaptation help?)
+- [X] scoring, reward milestones, session save/resume
+- [X] gestures, LEDs, and speech aligned to inferred state
+- [X] local testing mode (GAZE_LOCAL_MODE)
+- [X] dynamic LLM game generation & answer verification (OpenAI/GPT)
+- [X] whisper transcription with strict network timeout fallbacks
+- [X] ambient noise calibration & dynamic silence detection
+- [X] natural TTS sentence-level pacing
+
 """
 
-# stdlib
+# standard library
 import os, re, json, time, wave, struct, tempfile, threading, subprocess
 from dataclasses import dataclass, field
 from enum import Enum
@@ -34,7 +40,7 @@ import sounddevice as sd
 import librosa
 import soundfile as sf
 
-# environment + API
+# venv + API
 from dotenv import load_dotenv
 from openai import OpenAI
 
@@ -1824,7 +1830,7 @@ def main():
         print(f"  {k}: {v}")
 
     # farewell — adaptive to performance
-    if summary.get("rounds", 0) > 0:
+    if summary.get("rounds", 0) > 0: # if at least one round was played proceed with feedback otherwise farewell
         acc = summary["accuracy"]
         streak_note = (f" Your best streak was {summary['best_streak']} in a row!"
                        if summary["best_streak"] >= 3 else "")
