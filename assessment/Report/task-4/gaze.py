@@ -2,20 +2,18 @@
 GAZE: Game-Adaptive Zone of Engagement
 
 Adaptive countdown-style game host for the Pepper robot.
-Novelty: multi-signal emotional inference — the system weighs facial expression,
-response time, and answer correctness together to infer the user's true state,
-rather than trusting any single signal in isolation.
+Multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
++ answer correctness, cross-validated so no single signal is trusted alone.
 
-- [X] Integrate WS-10 for facial recognition and emotion detection
-- [X] Generate countdown-style games (numbers / letters) with OpenAI on the fly
-- [X] Multi-signal state inference (expression + performance + engagement)
-- [X] Adaptive difficulty adjustment based on inferred state
-- [X] Hints and encouragement when user is struggling
-- [X] Re-engagement intervention when user is disengaged
-- [X] Scoring and reward system with milestone announcements
-- [X] Adaptation self-evaluation (did the previous adaptation actually help?)
-- [X] Save progress and continue later
-- [X] Gestures aligned with speech and emotional context
+- [X] WS-10 CNN facial-expression detection (7-class, 48x48 greyscale)
+- [X] WS-08 MLP speech-emotion recognition (MFCC/chroma/mel features)
+- [X] Countdown-style games (numbers / letters) via OpenAI
+- [X] Multi-signal state inference (face + voice + time + correctness)
+- [X] Adaptive difficulty, hints, encouragement, game switching
+- [X] Adaptation self-evaluation (did the previous adaptation help?)
+- [X] Scoring, reward milestones, session save/resume
+- [X] Gestures, LEDs, and speech aligned to inferred state
+- [X] Local testing mode (GAZE_LOCAL_MODE)
 """
 
 # stdlib
@@ -33,12 +31,15 @@ import paramiko
 
 # audio
 import sounddevice as sd
+import librosa
+import soundfile as sf
 
 # environment + API
 from dotenv import load_dotenv
 from openai import OpenAI
 
 # ML
+import joblib
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
 
@@ -61,7 +62,7 @@ REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
-VOLUME_THRESHOLD = 500
+VOLUME_THRESHOLD = 500  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
@@ -74,12 +75,13 @@ LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
     USE_LOCAL_CAMERA = True      # local mode implies local camera
 
-# paths to pre-trained facial expression model (WS-10)
+# paths to pre-trained models
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
 WORKSHOP_DIR  = os.path.join(SCRIPT_DIR, "..", "..", "learning", "workshops")
 MODEL_JSON    = os.path.join(WORKSHOP_DIR, "[X]-facial-expression-detection", "model.json")
 MODEL_WEIGHTS = os.path.join(WORKSHOP_DIR, "[X]-facial-expression-detection", "model_weights.weights.h5")
 HAAR_CASCADE  = os.path.join(WORKSHOP_DIR, "[X]-ws-10", "haarcascade_frontalface_default.xml")
+SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 
 # adaptive engine thresholds
 RESPONSE_TIME_BASELINE = 30.0   # seconds — beyond this, user is slow
@@ -92,6 +94,8 @@ MAX_ROUNDS             = 20     # natural session end
 # persistent session save file
 SAVE_FILE = os.path.join(SCRIPT_DIR, "gaze_save.json")
 
+if not os.getenv("OPENAI_API_KEY", "").strip():
+    raise SystemExit("ERROR: OPENAI_API_KEY not set. Add it to .env")
 client = OpenAI()
 
 
@@ -115,6 +119,75 @@ class FacialExpressionModel:
         idx = np.argmax(preds)
         return self.EMOTIONS[idx], float(preds[0][idx])
 
+
+#  SPEECH EMOTION MODEL (WS-08)
+# --------------------------------
+
+class SpeechEmotionModel:
+    """
+    Pre-trained MLP for vocal emotion classification (WS-08).
+
+    Extracts MFCC, chroma, and mel spectrogram features from a WAV file
+    and classifies the speaker's emotional state. This provides a second,
+    independent modality alongside the facial expression CNN — thereby
+    preventing over-reliance on any single sensor.
+    """
+
+    EMOTIONS = ["calm", "happy", "fearful", "disgust"]
+
+    def __init__(self, model_path):
+        self.model = joblib.load(model_path)
+
+    @staticmethod
+    def extract_features(wav_path: str):
+        """Extract the same MFCC/chroma/mel feature vector used in WS-08 training."""
+        with sf.SoundFile(wav_path) as sound_file:
+            audio = sound_file.read(dtype="float32")
+            sample_rate = sound_file.samplerate
+
+        if audio.ndim > 1:
+            audio = audio.mean(axis=1)
+
+        n_fft = 2048
+        if len(audio) < n_fft:
+            return None
+
+        stft = np.abs(librosa.stft(audio, n_fft=n_fft))
+
+        mfccs  = np.mean(librosa.feature.mfcc(
+            y=audio, sr=sample_rate, n_mfcc=40).T, axis=0).flatten()
+        chroma = np.mean(librosa.feature.chroma_stft(
+            S=stft, sr=sample_rate).T, axis=0).flatten()
+        mel    = np.mean(librosa.feature.melspectrogram(
+            y=audio, sr=sample_rate).T, axis=0).flatten()
+
+        return np.concatenate([mfccs, chroma, mel])
+
+    def predict(self, wav_path: str) -> tuple[str, float]:
+        """Return (emotion_label, confidence) from a WAV file."""
+        features = self.extract_features(wav_path)
+        if features is None:
+            return "neutral", 0.0
+
+        features = features.reshape(1, -1)
+        label = self.model.predict(features)[0]
+        proba = self.model.predict_proba(features)[0]
+        confidence = float(np.max(proba))
+        return label, confidence
+
+
+def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
+    """
+    Classify the vocal emotion from a recorded WAV file.
+    Returns ("neutral", 0.0) if the model is unavailable or audio is too short.
+    """
+    if speech_model is None:
+        return "neutral", 0.0
+    try:
+        return speech_model.predict(wav_path)
+    except Exception as e:
+        print(f"  [Speech emotion fallback] {e}")
+        return "neutral", 0.0
 
 
 #  ENUMS AND DATA CLASSES
@@ -154,6 +227,8 @@ class RoundResult:
     response_time:         float
     facial_expression:     str
     expression_confidence: float
+    vocal_emotion:         str
+    vocal_emotion_confidence: float
     inferred_state:        InferredState
     timestamp:             float = field(default_factory=time.time)
 
@@ -225,10 +300,21 @@ class AdaptiveEngine:
     # ── multi-signal state inference --
 
     def infer_state(self, expression: str, response_time: float,
-                    correct: bool, answer_text: str) -> InferredState:
+                    correct: bool, answer_text: str,
+                    vocal_emotion: str = "neutral") -> InferredState:
         """
         Weigh ALL signals together to determine the user's actual state.
-        The camera classifies the expression; this method assesses reality.
+
+        Four independent signals are cross-validated:
+          1- facial expression  (visual modality — CNN, WS-10)
+          2- vocal emotion      (audio modality — MLP, WS-08)
+          3- response time      (behavioural)
+          4- answer correctness (performance)
+
+        Neither modality is trusted in isolation — the camera may misread
+        a resting face, and the voice model may misclassify background noise.
+        Cross-referencing both against performance data yields a more robust
+        inference than any single signal alone.
         """
         correctness = self.rolling_correctness()
         is_silent   = (not answer_text.strip()
@@ -247,11 +333,14 @@ class AdaptiveEngine:
             self.consecutive_wrong  += 1
             self.consecutive_correct = 0
 
-        # ── thriving: performing well regardless of resting face ──
+        # ── thriving: performing well, voice confirms positive state ──
         if (correctness >= CORRECTNESS_CEILING
                 and response_time < RESPONSE_TIME_BASELINE * 0.5):
             return InferredState.THRIVING
-        # camera says Angry but fast + correct → they're fine
+        # voice happy + correct + fast → thriving even if face is neutral
+        if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
+            return InferredState.THRIVING
+        # camera says Angry but fast + correct → they're fine (resting face)
         if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
             return InferredState.COMFORTABLE
 
@@ -263,10 +352,15 @@ class AdaptiveEngine:
                 and correctness < 0.5):
             return InferredState.DISENGAGED
 
-        # ── frustrated: struggling + negative expression ──
+        # ── frustrated: both modalities agree on negative state ──
         if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
             return InferredState.FRUSTRATED
         if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
+            return InferredState.FRUSTRATED
+        # voice fearful/disgust + face negative + low correctness → frustrated
+        if (vocal_emotion in ("fearful", "disgust")
+                and expression in ("Angry", "Sad", "Fear", "Disgust")
+                and correctness < CORRECTNESS_FLOOR):
             return InferredState.FRUSTRATED
 
         # ── struggling: declining performance + negative signals ──
@@ -276,6 +370,14 @@ class AdaptiveEngine:
             return InferredState.STRUGGLING
         if expression == "Fear" and not correct:
             return InferredState.STRUGGLING
+        # voice fearful + not correct → struggling (even if face is neutral)
+        if vocal_emotion == "fearful" and not correct:
+            return InferredState.STRUGGLING
+
+        # ── cross-modal override: voice calm + performing OK → comfortable ──
+        # prevents false negatives where camera reads a frown but voice is calm
+        if vocal_emotion == "calm" and correctness >= 0.5:
+            return InferredState.COMFORTABLE
 
         # ── default: comfortable ──
         return InferredState.COMFORTABLE
@@ -284,9 +386,11 @@ class AdaptiveEngine:
 
     def decide(self, expression: str, expression_conf: float,
                response_time: float, correct: bool,
-               answer_text: str) -> AdaptiveDecision:
+               answer_text: str,
+               vocal_emotion: str = "neutral") -> AdaptiveDecision:
         """Return what to do next based on inferred state."""
-        state       = self.infer_state(expression, response_time, correct, answer_text)
+        state       = self.infer_state(expression, response_time, correct, answer_text,
+                                       vocal_emotion)
         correctness = self.rolling_correctness()
 
         new_difficulty     = self.current_difficulty
@@ -569,13 +673,15 @@ def build_game_prompt(engine: AdaptiveEngine, decision: AdaptiveDecision,
         correctness       = engine.rolling_correctness()
         avg_time          = engine.avg_response_time()
         recent_expressions = [r.facial_expression for r in engine.history[-3:]]
+        recent_vocal       = [r.vocal_emotion for r in engine.history[-3:]]
 
         parts.append(
             f"--- LIVE METRICS ---\n"
             f"Round: {engine.round_number}\n"
             f"Rolling correctness (last {CORRECTNESS_WINDOW}): {correctness:.0%}\n"
             f"Avg response time: {avg_time:.1f}s\n"
-            f"Recent expressions: {', '.join(recent_expressions) if recent_expressions else 'N/A'}\n"
+            f"Recent facial expressions: {', '.join(recent_expressions) if recent_expressions else 'N/A'}\n"
+            f"Recent vocal emotions: {', '.join(recent_vocal) if recent_vocal else 'N/A'}\n"
             f"Inferred state: {decision.inferred_state.value}\n"
             f"Difficulty: {decision.difficulty.name}"
         )
@@ -654,8 +760,12 @@ def ssh_connect():
 def nao_run(ssh, code):
     """Execute a Python 2 snippet on Pepper via SSH."""
     escaped = code.replace("'", "'\\''")
-    _, stdout, _ = ssh.exec_command(f"python -c '{escaped}'", timeout=CMD_TIMEOUT)
-    return stdout.read().decode().strip()
+    try:
+        _, stdout, _ = ssh.exec_command(f"python -c '{escaped}'", timeout=CMD_TIMEOUT)
+        return stdout.read().decode().strip()
+    except Exception as e:
+        print(f"  [SSH fallback] exec_command failed: {e}")
+        return ""
 
 
 def nao_calibrate_ambient(ssh) -> int:
@@ -1264,6 +1374,7 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
                 "correct":     r.correct,
                 "time":        round(r.response_time, 1),
                 "expression":  r.facial_expression,
+                "vocal":       r.vocal_emotion,
                 "state":       r.inferred_state.value,
             }
             for r in engine.history
@@ -1331,11 +1442,21 @@ def main():
     print("  Adaptive Game System for Pepper Robot")
     print("=" * 60)
 
-    # ── load facial expression model ──
+    # ── load facial expression model (WS-10) ──
     print("\nLoading facial expression model...")
     face_model   = FacialExpressionModel(MODEL_JSON, MODEL_WEIGHTS)
     face_cascade = cv2.CascadeClassifier(HAAR_CASCADE)
-    print("  Model loaded.")
+    print("  Facial model loaded.")
+
+    # ── load speech emotion model (WS-08) ──
+    speech_model = None
+    if os.path.exists(SPEECH_MODEL):
+        print("Loading speech emotion model...")
+        speech_model = SpeechEmotionModel(SPEECH_MODEL)
+        print("  Speech model loaded.")
+    else:
+        print(f"  Speech emotion model not found at {SPEECH_MODEL} — vocal signal disabled.")
+        print("  Run train_speech_model.py to generate it.")
 
     # ── local camera (dev/testing) ──
     local_camera = None
@@ -1479,6 +1600,8 @@ def main():
 
     current_answer   = game_data.get("answer", "")
     current_question = game_data.get("dialogue", "")
+    if not current_question.strip():
+        current_question = "Welcome! Let's get started with a fun challenge!"
 
     # deliver first question with gesture
     if not LOCAL_MODE:
@@ -1502,7 +1625,7 @@ def main():
             print(f"\n{'─' * 40} Round {round_num} {'─' * 40}")
 
             # ── INPUT LAYER ──────────────────────────────────────────────
-            # all three signals captured simultaneously
+            # all four signals captured: face, voice, time, correctness
 
             # 1. start timer
             question_start = time.time()
@@ -1521,6 +1644,10 @@ def main():
             record(ssh, energy_threshold)
 
             response_time = time.time() - question_start
+
+            # 4. vocal emotion (extracted from the same audio before transcription)
+            vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
+            print(f"  Vocal emotion: {vocal_emo} ({vocal_conf:.2f})")
 
             user_answer = ""
             if check_audio_volume():
@@ -1548,7 +1675,8 @@ def main():
             print(f"  Correct: {correct}")
 
             decision = engine.decide(
-                expression, expr_conf, response_time, correct, user_answer
+                expression, expr_conf, response_time, correct, user_answer,
+                vocal_emotion=vocal_emo
             )
             print(f"  Inferred state: {decision.inferred_state.value}")
             print(f"  Difficulty: {decision.difficulty.name}")
@@ -1566,6 +1694,8 @@ def main():
                 response_time=response_time,
                 facial_expression=expression,
                 expression_confidence=expr_conf,
+                vocal_emotion=vocal_emo,
+                vocal_emotion_confidence=vocal_conf,
                 inferred_state=decision.inferred_state,
             ))
 
@@ -1593,6 +1723,8 @@ def main():
 
             current_answer   = game_data.get("answer", "")
             current_question = game_data.get("dialogue", "")
+            if not current_question.strip():
+                current_question = "Let me think of a good one... Here we go!"
 
             # ── OUTPUT LAYER ─────────────────────────────────────────────
             # robot speaks + gestures + LEDs — all aligned to inferred state
@@ -1612,7 +1744,11 @@ def main():
                     args=(ssh, gesture_type), daemon=True
                 )
                 gesture_thread.start()
-            say(ssh_tts, current_question)
+            # animated speech for positive states; plain TTS otherwise
+            if not LOCAL_MODE and gesture_type in ("celebrate", "encourage"):
+                nao_say_animated(ssh_tts, current_question)
+            else:
+                say(ssh_tts, current_question)
 
             print(f"\nRobot: {current_question}")
             print(f"(Answer: {current_answer})")

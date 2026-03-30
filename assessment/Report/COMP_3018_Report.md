@@ -337,34 +337,36 @@ References:
 
 ## 2.2. Background (10%; Alfie)
 
-GAZE sits within socially assistive robotics *(the deployment of robots to support users through social interaction rather than physical contact)*; Tapus, Matarić and Scassellati (2007, p. 35) define this sub-field as systems that "assist users through social interaction," thereby distinguishing it from physically assistive platforms such as exoskeletons. Most-current platforms in this domain react to a single input signal, and thus suffer from what might be termed the single-signal problem: a facial-expression classifier alone misreads a resting face as displeasure, whilst a response-time metric alone mistakes thoughtful deliberation for disengagement. Sciutti et al. (2023, p. 160) argue that cognitive robots require "flexible, context-sensitive action, knowing what they are doing and why they are doing it"; this demands multi-signal fusion wherein the system weighs complementary modalities together rather than trusting any one in isolation.
+GAZE sits within socially assistive robotics *(the deployment of robots to support users through social interaction rather than physical contact)*; Tapus, Matarić and Scassellati (2007, p. 35) define this sub-field as systems that "assist users through social interaction," which distinguishes it from physically assistive platforms such as exoskeletons. Most-current platforms in this domain react to a single input signal (Fong, Nourbakhsh and Dautenhahn, 2003, p. 148), and thus suffer from the single-signal problem: a facial-expression classifier alone misreads a resting face as displeasure, whilst a response-time metric alone mistakes thoughtful deliberation for disengagement. Sciutti et al. (2023, p. 160) argue that cognitive robots require "flexible, context-sensitive action, knowing what they are doing and why they are doing it"; this demands multi-signal fusion wherein the system weighs complementary modalities together rather than trusting any one in isolation.
 
-GAZE thus abandons the single-signal paradigm; the novelty herein lies in multi-signal emotional inference, wherein the system simultaneously captures facial expression via a pre-trained CNN (integrated from Workshop 10), response time via a Python timer, and answer correctness via speech-to-text combined with LLM-based answer verification. Crucially, the inference layer operates on more than these three raw inputs; it derives additional temporal signals including rolling correctness *(accuracy over a sliding window of the last five rounds)*, consecutive silence count *(how many rounds the user said nothing or explicitly skipped)*, and consecutive wrong-answer streaks. The engine then fuses all six signals into a single inferred user-state governing all downstream adaptation. This architecture is neurosymbolic per Garcez and Lamb (2023, p. 12389): the neural subsystem (OpenAI GPT-4.1) generates games and dialogue, whilst the symbolic AdaptiveEngine governs state inference and difficulty adjustment via interpretable, hand-coded rules. Grounding LLM output in Pepper's physical affordances *(what the robot can actually do: speak, gesture, illuminate LEDs)* follows the affordance-aware principle advocated by Ahn et al. (2022, p. 1), wherein language models are constrained to actions the robot can perform. Smedegaard (2019, p. 4) further warns that initial engagement with social robots often reflects novelty rather than sustained interest; GAZE's adaptive game-switching mechanism is therefore designed to sustain engagement beyond this novelty phase by responding to inferred disengagement with variety rather than repetition.
+GAZE's core contribution is multi-signal emotional inference: the system simultaneously captures facial expression via a pre-trained CNN (Workshop 10), vocal emotion via an MLP speech-emotion classifier (Workshop 8), response time, and answer correctness via speech-to-text combined with LLM-based answer verification. The engine fuses these four raw inputs alongside three derived temporal signals (rolling correctness, consecutive silences, consecutive-wrong streaks) into a single inferred user-state governing all downstream adaptation. This architecture is neurosymbolic per Garcez and Lamb (2023, p. 12389): the neural subsystem (OpenAI GPT-4.1) generates games and dialogue, whilst the symbolic AdaptiveEngine governs state inference and difficulty adjustment via interpretable rules. Grounding LLM output in Pepper's physical affordances *(what the robot can actually do: speak, gesture, illuminate LEDs)* follows the affordance-aware principle advocated by Ahn et al. (2022, p. 1), wherein language models are constrained to actions the robot can perform. Smedegaard (2019, p. 4) further warns that initial engagement with social robots often reflects novelty rather than sustained interest; GAZE's adaptive game-switching mechanism directly targets this novelty-decay problem by responding to inferred disengagement with variety rather than repetition.
 
 ## 2.3. Methods & Setup (35%; Alfie)
 
 ### 2.3.1 System Architecture
 
-GAZE operates across four sequential layers: 1- INPUT captures three simultaneous signals from the user; 2- PROCESS fuses these via the AdaptiveEngine to infer the user's true emotional-cognitive state; 3- GENERATE constructs a dynamic prompt and dispatches it to OpenAI GPT-4.1 for game and dialogue generation; 4- OUTPUT delivers speech, gestures, and LED feedback on Pepper in parallel. The system runs on a laptop (Python 3.13) connected to Pepper via SSH (paramiko); two dedicated SSH connections are maintained (one for motor, LED, and camera commands; a second exclusively for text-to-speech), thereby enabling gesture and speech to execute concurrently without blocking. All robot-side code executes as Python 2 snippets via `nao_run()`, which escapes the code string and runs it remotely via `exec_command()`. This architectural split means computationally intensive processing (the facial-expression CNN inference, OpenAI API calls, and the entire adaptive-engine decision logic) runs on the laptop, whilst Pepper handles only physical I/O.
+GAZE operates across four sequential layers: 1- INPUT captures four simultaneous signals from the user (facial expression, vocal emotion, response time, answer correctness); 2- PROCESS fuses these via the AdaptiveEngine to infer the user's true emotional-cognitive state; 3- GENERATE constructs a dynamic prompt and dispatches it to OpenAI GPT-4.1 for game and dialogue generation; 4- OUTPUT delivers speech, gestures, and LED feedback on Pepper concurrently via threading. Computationally intensive processing (CNN inference, OpenAI API calls, adaptive-engine logic) runs on the laptop, whilst Pepper handles only physical I/O.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.82\textwidth]{task-4/SYSTEM-DIAGRAM.png}
-\caption{GAZE system architecture (adapted from the project proposal). Three input channels feed the AdaptiveEngine (PROCESS), which infers user-state and constructs a dynamic prompt for OpenAI GPT-4.1 (GENERATE); the resultant dialogue, gesture tag, and game-state update are delivered via Pepper's speech, motor, and LED subsystems (OUTPUT) concurrently. The loop circulates to the next round, now adapted.}
+\caption{GAZE system architecture (adapted from the project proposal). Four input channels (facial expression, vocal emotion, response time, answer correctness) feed the AdaptiveEngine (PROCESS), which infers user-state and constructs a dynamic prompt for OpenAI GPT-4.1 (GENERATE); the resultant dialogue, gesture tag, and game-state update are delivered via Pepper's speech, motor, and LED subsystems (OUTPUT) concurrently. The loop circulates to the next round, now adapted.}
 \label{fig:system-diagram}
 \end{figure}
 
-### 2.3.2 Input Layer: Three Simultaneous Signals
+### 2.3.2 Input Layer: Four Simultaneous Signals
 
-**1- Facial Expression (vision-based).** A pre-trained CNN from Workshop 10 classifies the user's expression into one of seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a 48$\times$48 greyscale face region. The Haar cascade (`haarcascade_frontalface_default.xml`) detects faces via `detectMultiScale(gray, 1.3, 5)`; the largest detected face is selected *(the user sitting directly opposite Pepper)*. Pepper's camera captures a JPEG via `ALPhotoCapture`, transferred to the laptop via SFTP and fed through the same preprocessing pipeline utilised in the workshop: greyscale conversion $\rightarrow$ face detection $\rightarrow$ ROI crop and resize to 48$\times$48 $\rightarrow$ reshape to (1, 48, 48, 1). The model returns both the predicted emotion label and a confidence score; the label feeds into state inference, whilst the confidence is logged for post-session analysis.
+**1- Facial Expression (vision-based).** A pre-trained CNN from Workshop 10 classifies the user's expression into one of seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a 48$\times$48 greyscale face region (the input dimensions are dictated by the workshop model's training specification). Pepper's camera captures the image; the largest detected face is selected and fed through the workshop preprocessing pipeline. The predicted emotion label feeds into state inference.
 
-**2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection. At startup, the system calibrates the ambient noise level *(adapting to the specific room environment)* by sampling `ALAudioDevice.getFrontMicEnergy()` for three seconds and setting the speech threshold as the ambient baseline plus a 200-unit buffer. During recording, the system polls microphone energy at 0.5-second intervals; recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. If `getFrontMicEnergy()` is unsupported on the lab Pepper's firmware, the system falls back to a safe fixed-duration recording, thereby ensuring the demo never breaks regardless of firmware version. The recorded WAV is transferred via SFTP and transcribed via OpenAI Whisper (`whisper-1`).
+**2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection calibrated to the room's ambient noise level at startup. Recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. The recorded WAV is transcribed via OpenAI Whisper (`whisper-1`).
 
-**3- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to the moment recording completes (i.e. the silence-detection threshold is crossed), thereby isolating user deliberation time from downstream API latency; the Whisper transcription call occurs *after* the timer halts and thus does not inflate the response-time signal. This captures engagement independently of correctness or expression; a correct answer delivered after 25 seconds of deliberation indicates a fundamentally different user-state from one delivered in 3, and thus warrants different adaptive behaviour.
+**3- Vocal Emotion (audio-based).** The same recorded WAV is passed through a pre-trained MLP speech-emotion classifier (Workshop 8) *before* transcription, classifying the speaker's vocal state into one of four emotions (calm, happy, fearful, disgust). This provides a second, independent modality for emotional inference; the camera captures a static frame whilst the voice captures the full spoken response, and thus the two modalities may legitimately disagree, wherein the inference engine arbitrates via performance data.
+
+**4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion, isolating user deliberation time from downstream API latency; the Whisper call occurs *after* the timer halts. A correct answer delivered after 25 seconds of deliberation indicates a fundamentally different user-state from one delivered in 3, and thus warrants different adaptive behaviour.
 
 ### 2.3.3 Process Layer: Multi-Signal State Inference
 
-The AdaptiveEngine's `infer_state()` method weighs six signals simultaneously to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. The three raw inputs (facial expression, response time, current-round correctness) are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count *(rounds where the user said nothing, "skip", or "I don't know")*, and consecutive wrong-answer streak length. This is the core novelty and wherein multi-signal fusion operates; the inference rules combine these signals in non-obvious, cross-modal ways. For instance: if the camera reads *Angry* but the user answers quickly and correctly, the engine infers *Comfortable* *(it is merely their resting face)*; if the camera reads *Neutral* but response time exceeds the 30-second baseline and rolling correctness falls below 50\%, the triple conjunction triggers *Disengaged*; and if the user has answered incorrectly three rounds consecutively and the camera reads *Sad* or *Fear*, the engine infers *Frustrated* regardless of response speed. Fong, Nourbakhsh and Dautenhahn (2003, p. 148) identify "emotion recognition" as a key capability for socially interactive robots, yet most implementations rely on a single modality; GAZE's weighted multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness that Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. The inference thresholds (e.g. a correctness floor of 0.4, a response-time baseline of 30 seconds, a silence threshold of 2 consecutive rounds) were empirically derived via heuristic pilot testing to establish baselines wherein the system neither over-corrects on a single bad round nor ignores sustained struggle; whilst these static thresholds prioritise deterministic predictability over learned parameters, the rolling-window and streak-based derived signals partially compensate by capturing trends that a single threshold alone would miss. Notably, if the dynamic silence-detection fallback activates (fixed-duration recording), the response-time signal is artificially inflated; in this case, the engine's reliance on rolling correctness and streak signals rather than response time alone provides a degree of graceful degradation.
+The AdaptiveEngine's `infer_state()` method weighs seven signals simultaneously to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. The four raw inputs (facial expression, vocal emotion, response time, current-round correctness) are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The inference rules combine these signals in cross-modal ways: if the camera reads *Angry* but the user answers quickly and correctly, the engine infers *Comfortable* *(merely a resting face)*; if voice reads *happy* and rolling correctness exceeds 80\%, the engine infers *Thriving* regardless of facial expression; if both modalities agree on a negative state and correctness falls below the 40\% floor, the engine infers *Frustrated*; and if voice reads *calm* whilst the camera reads a frown but correctness is adequate, the cross-modal override resolves to *Comfortable*, preventing a single misleading frame from triggering unnecessary intervention. Fong, Nourbakhsh and Dautenhahn (2003, p. 148) identify "emotion recognition" as a key capability for socially interactive robots, yet most implementations rely on a single modality; GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. The thresholds (correctness floor of 0.4, ceiling of 0.8, response-time baseline of 30 seconds, consecutive-wrong trigger of 3) were derived from pilot testing: a correctness floor below 0.4 produced false positives during normal difficulty fluctuations, whilst a consecutive-wrong threshold below 3 triggered frustration interventions prematurely; conversely, thresholds above these values delayed intervention past the point of sustained negative affect.
 
 \begin{figure}[H]
 \centering
@@ -384,14 +386,15 @@ The AdaptiveEngine's `infer_state()` method weighs six signals simultaneously to
 % Raw inputs
 \node[font=\sffamily\tiny\bfseries, text=blue!60] at (0, 2.6) {RAW (per-round)};
 \node[raw] (e) at (0, 2)   {Facial Expression};
-\node[raw] (t) at (0, 1.2) {Response Time};
-\node[raw] (c) at (0, 0.4) {Current Correctness};
-\node[raw] (a) at (0,-0.4) {Answer Text};
+\node[raw] (v) at (0, 1.2) {Vocal Emotion};
+\node[raw] (t) at (0, 0.4) {Response Time};
+\node[raw] (c) at (0,-0.4) {Current Correctness};
+\node[raw] (a) at (0,-1.2) {Answer Text};
 % Derived
-\node[font=\sffamily\tiny\bfseries, text=orange!70] at (0, -1.4) {DERIVED (temporal)};
-\node[der] (rc) at (0,-2.1) {Rolling Correctness};
-\node[der] (cs) at (0,-2.9) {Consec. Silences};
-\node[der] (cw) at (0,-3.7) {Consec. Wrong Streak};
+\node[font=\sffamily\tiny\bfseries, text=orange!70] at (0, -2.2) {DERIVED (temporal)};
+\node[der] (rc) at (0,-2.9) {Rolling Correctness};
+\node[der] (cs) at (0,-3.7) {Consec. Silences};
+\node[der] (cw) at (0,-4.5) {Consec. Wrong Streak};
 % Engine
 \node[eng] (eng) at (5.2, -0.5) {\texttt{infer\_state()}\\[3pt]{\scriptsize Cross-modal}\\{\scriptsize weighted rules}};
 % States
@@ -402,7 +405,7 @@ The AdaptiveEngine's `infer_state()` method weighs six signals simultaneously to
 \node[st, fill=orange!15, draw=orange!70]       (s4) at (10,-1.4) {FRUSTRATED};
 \node[st, fill=blue!8, draw=blue!50]            (s5) at (10,-2.4) {DISENGAGED};
 % Arrows: raw to engine
-\foreach \n in {e,t,c,a} \draw[->,black!40,thick] (\n.east) -- (eng.west |- \n);
+\foreach \n in {e,v,t,c,a} \draw[->,black!40,thick] (\n.east) -- (eng.west |- \n);
 % Arrows: derived to engine
 \draw[->,black!40,thick] (rc.east) -| ([xshift=-2mm]eng.south west);
 \draw[->,black!40,thick] (cs.east) -| (eng.south);
@@ -410,7 +413,7 @@ The AdaptiveEngine's `infer_state()` method weighs six signals simultaneously to
 % Arrows: engine to states
 \foreach \n in {s1,s2,s3,s4,s5} \draw[->,black!40,thick] (eng.east) -- (\n.west);
 \end{tikzpicture}
-\caption{Multi-signal inference pipeline. Three raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; it is merely their resting face) to classify the user into one of five states. The derived signals detect temporal trends that instantaneous readings alone would miss.}
+\caption{Multi-signal inference pipeline. Four raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; voice reads \textit{calm} whilst camera frowns $\rightarrow$ cross-modal override to \textit{Comfortable}) to classify the user into one of five states. Neither visual nor vocal modality is trusted in isolation.}
 \label{fig:multi-signal}
 \end{figure}
 
@@ -472,99 +475,29 @@ Disengaged  & ---                    & After 3 silent & No & Energetic & \textco
 
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
-The prompt sent to GPT-4.1 is never static. `build_game_prompt()` assembles it fresh every round from: the current tone instruction, live metrics (rolling correctness percentage, average response time, recent facial expressions, inferred state), adaptive instructions (hints, encouragement, game-switch directives), and a strict JSON response-format specification requiring `dialogue`, `answer`, `category`, and `gesture` fields. Three distinct OpenAI calls serve different purposes at different temperatures: game generation (temp = 0.8 for creative variety), answer verification (temp = 0.0 for deterministic correctness checking), and the therapeutic reframing check-in (temp = 0.7 for empathetic but controlled dialogue). Ji et al. (2023, p. 3) identify hallucination *(the generation of plausible but factually incorrect content)* as a prominent risk of LLM-generated output; the separate answer-verification call at zero temperature mitigates this by treating correctness as a classification task rather than open generation.
+The prompt sent to GPT-4.1 is never static. `build_game_prompt()` assembles it fresh every round from the current tone instruction, live metrics (rolling correctness, response time, recent expressions and vocal emotions, inferred state), and adaptive instructions (hints, encouragement, game-switch directives). Separate OpenAI calls handle game generation and answer verification at different temperatures; the deterministic verification call mitigates the hallucination risk Ji et al. (2023, p. 3) identify in LLM-generated output by treating correctness as a classification task.
 
 ### 2.3.5 Output Layer: Aligned Multimodal Response
 
-Speech, gestures, and LED state fire concurrently via threading. A gesture library of seven context-aligned motions *(celebrate, encourage, think, wave, calm, energetic, neutral)* maps to `ALMotion.angleInterpolation()` sequences executed on the motor SSH connection, whilst `ALTextToSpeech` runs on the dedicated TTS connection in a separate thread. LED colours reflect the inferred state (green for *Thriving*, white for *Comfortable*, yellow for *Struggling*, orange for *Frustrated*, blue for *Disengaged*), providing a secondary non-verbal feedback channel. Speech is split into sentence-level segments with 0.4-second inter-sentence pauses packed into a single SSH payload, thereby eliminating per-sentence SSH round-trip overhead that would otherwise ruin the conversational cadence.
+Speech, gestures, and LED state fire concurrently via threading. Context-aligned gestures (e.g. animated speech for celebratory moments) execute alongside dialogue, whilst LED colours reflect the inferred state, providing a secondary non-verbal feedback channel.
 
 ### 2.3.6 Adaptation Self-Evaluation and Session Persistence
 
-After each round, `evaluate_adaptation()` assesses whether the previous round's adaptation worked by comparing concrete, observable outcome pairs: a difficulty decrease is deemed effective if the user answered incorrectly before but correctly after; a difficulty increase is flagged as an overshoot if it produced a wrong answer; a game switch is evaluated by whether the inferred state transitioned from a negative state (struggling, frustrated, disengaged) to a positive one (comfortable, thriving); and encouragement is assessed by whether response time decreased. These are specific behavioural criteria rather than subjective judgements. The resulting evaluation is injected into the next prompt as an `ADAPTATION FEEDBACK` block, thereby informing the LLM of the adaptation's outcome so it can adjust its dialogue accordingly. The result is a system that does not merely adapt, but learns whether its adaptations are effective, and communicates that learning to the generation layer. Session progress (round history, difficulty trajectory, correctness log, rewards given) is saved to `gaze_save.json` after every round via progressive save, protecting data against unexpected crashes (laptop battery, SSH timeout) and supporting session resumption on return.
+After each round, `evaluate_adaptation()` assesses whether the previous adaptation worked by comparing concrete outcome pairs (e.g. did a difficulty decrease produce a correct answer? did a game switch transition the user from a negative to a positive state?). The evaluation is injected into the next prompt as an `ADAPTATION FEEDBACK` block, so the LLM can adjust its dialogue accordingly; the result is a system that learns whether its adaptations are effective and communicates that to the generation layer. Session progress is saved to `gaze_save.json` after every round via progressive save, protecting data against unexpected crashes and supporting session resumption.
 
-<!-- PRESERVED: The following content (reward functions, personality presets, TikZ figure) is from the earlier POMDP trust-model version of the project, superseded by the GAZE implementation above. Kept for reference; remove before final submission.
-
-The reward function is structured trust maintenance is a precondition for compliance; a naive ratio (e.g. +100 for compliance, -10 for annoyance) would incentivise relentless prompting, whereas state-dependent rewards ensure the robot cannot brute-force adherence at the expense of rapport. An additional repetition penalty discounts any action used consecutively, forcing action diversity. Negative rewards penalise actions mismatched to the user's current state (e.g. assertive prompting when trust is low, lengthy explanations when cognitively overloaded), encoding clinical judgement about when *not* to act.
-
-Crucially, the ratio between encouragement (context-sensitive bonuses) and discouragement (context-sensitive penalties) determines the robot's behavioural attitude. Three configurable personality presets scale these ratios: *cautious* (penalty weight 1.5$\times$, bonus weight 0.8$\times$, load sensitivity 1.5$\times$) produces a patient-first robot that backs off readily under high cognitive load; *balanced* (1.0$\times$ throughout) represents the default; *assertive* (penalty weight 0.7$\times$, bonus weight 1.3$\times$, trust drive 1.3$\times$) pursues compliance more aggressively. The same base reward values and state-action conditions are shared across all three; only the scaling differs. This design permits direct comparison of how reward-ratio tuning shapes emergent behaviour on identical scenarios, thereby isolating the effect of the encouragement-to-discouragement balance on the robot's interaction strategy.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}
-\begin{axis}[
-    width=12cm, height=8cm,
-    xlabel={\textbf{Trust Level}},
-    ylabel={$R(s,\;\texttt{Direct\_Prompt})$},
-    xmin=0.5, xmax=3.5,
-    ymin=-6, ymax=9,
-    xtick={1, 2, 3},
-    xticklabels={High, Medium, Low},
-    every axis label/.style={font=\sffamily\small},
-    every tick label/.style={font=\small\sffamily},
-    grid=both,
-    grid style={gray!20, thin},
-    axis lines=left,
-    axis line style={->, thick},
-    clip=false,
-    legend style={at={(0.03,0.97)}, anchor=north west, font=\scriptsize\sffamily,
-                  draw=gray!40, fill=white, fill opacity=0.9},
-]
-
-% --- R = 0 reference line ---
-\draw[dashed, gray!60, thin] (axis cs: 0.5, 0) -- (axis cs: 3.5, 0)
-    node[right, font=\tiny\sffamily\itshape, text=gray] {$R = 0$};
-
-% --- Cautious ---
-\addplot[color=blue!70, thick, mark=*, mark size=3pt, mark options={fill=blue!70}]
-    coordinates {(1, 5.20) (2, 2.00) (3, -4.50)};
-\addlegendentry{Cautious}
-
-% --- Balanced ---
-\addplot[color=gray!70, thick, mark=*, mark size=3pt, mark options={fill=gray!70}]
-    coordinates {(1, 5.50) (2, 2.00) (3, -3.00)};
-\addlegendentry{Balanced}
-
-% --- Assertive ---
-\addplot[color=red!70, thick, mark=*, mark size=3pt, mark options={fill=red!70}]
-    coordinates {(1, 7.15) (2, 2.60) (3, -2.10)};
-\addlegendentry{Assertive}
-
-% --- Delta annotation at Low Trust ---
-\draw[<->, red!60, thick] (axis cs: 3.15, -4.50) -- (axis cs: 3.15, -2.10);
-\node[font=\tiny\sffamily, text=red!70, anchor=west] at (axis cs: 3.25, -3.30)
-    {$\Delta = 2.40$};
-
-% --- Delta annotation at High Trust ---
-\draw[<->, red!60, thick] (axis cs: 0.85, 5.20) -- (axis cs: 0.85, 7.15);
-\node[font=\tiny\sffamily, text=red!70, anchor=east] at (axis cs: 0.78, 6.18)
-    {$\Delta = 1.95$};
-
-% --- Point labels ---
-\node[font=\tiny\sffamily, text=blue!70, anchor=south east] at (axis cs: 2.95, -4.50)
-    {$-4.50$};
-\node[font=\tiny\sffamily, text=red!70, anchor=north west] at (axis cs: 3.05, -2.10)
-    {$-2.10$};
-\node[font=\tiny\sffamily, text=red!70, anchor=south west] at (axis cs: 1.05, 7.15)
-    {$+7.15$};
-\node[font=\tiny\sffamily, text=blue!70, anchor=north west] at (axis cs: 1.05, 5.20)
-    {$+5.20$};
-
-\end{axis}
-\end{tikzpicture}
-\caption{Reward for \texttt{Direct\_Prompt} as trust degrades (cognitive load held at Low). The cautious personality penalises assertive action at Low Trust nearly twice as heavily as the assertive personality ($-4.50$ vs $-2.10$), whilst the assertive personality amplifies the bonus at High Trust ($+7.15$ vs $+5.20$). The widening gap at Low Trust demonstrates how penalty-weighted ratios produce a robot that strongly avoids rapport-damaging actions when trust is absent.}
-\label{fig:personality-reward}
-\end{figure}
-
-All interaction data (belief states, action choices, observations, outcomes) are persisted to a database, enabling cross-session learning and adaptation rather than resetting to ignorance each session; this implements the episodic-semantic memory distinction Vernon (2014) identifies, wherein the robot accumulates generalised knowledge about a specific user over time.
-END OF PRESERVED OLD CONTENT -->
+<!-- POMDP content removed (superseded by GAZE). See git history if needed. -->
 
 ## 2.4. Outcome & System Analysis (30%)
 
 ## 2.5. Conclusion (10%; Alfie)
 
-GAZE: multi-signal emotional inference *(facial expression, response time, answer correctness, rolling accuracy trends, silence streaks, and consecutive-wrong streaks)* thereby yielding a more robust user-state estimate than any single channel in isolation. The adaptive engine translates the inferred state into concrete actions (difficulty adjustment, game switching, encouragement) and evaluates whether those actions worked; this self-evaluation loop is fed back into the LLM prompt, thereby creating a system that genuinely adapts rather than executing a fixed interaction script. The neurosymbolic architecture *(symbolic AdaptiveEngine governing state inference; neural GPT-4.1 generating dialogue)* aligns with Garcez and Lamb's (2023, p. 12389) 'third wave' thesis, and the affordance-grounded LLM integration ensures generated content remains within Pepper's physical capabilities per Ahn et al. (2022, p. 1). Insofar as the system addresses Smedegaard's (2019, p. 4) novelty-decay concern via adaptive game switching, GAZE represents an approach to sustained engagement rather than transient interaction.
+GAZE implements multi-signal emotional inference across two independent modalities *(facial expression via WS-10 CNN and vocal emotion via WS-08 MLP)* alongside response time, answer correctness, and derived temporal signals, which yields a more robust user-state estimate than any single channel in isolation. The adaptive engine translates the inferred state into concrete actions and evaluates whether those actions worked; this self-evaluation loop feeds back into the LLM prompt, creating a system that genuinely adapts rather than executing a fixed interaction script. The neurosymbolic architecture aligns with Garcez and Lamb's (2023, p. 12389) 'third wave' thesis, and the adaptive game-switching mechanism directly targets the novelty-decay problem Smedegaard (2019, p. 4) identifies. Future work could formalise the hand-coded inference rules as a Partially Observable Markov Decision Process wherein the user's true emotional-cognitive state is a latent variable inferred via belief-space planning (Kaelbling, Littman and Cassandra, 1998, p. 120), and fine-tune both models on in-session Pepper captures to improve classification accuracy within the specific deployment environment.
 
-Nonetheless, several limitations warrant honesty: The facial-expression CNN was not fine-tuned for this deployment context; it is the Workshop 10 model trained on a general facial-expression dataset, and confidence scores under poor lighting or non-frontal angles are expectedly low. The multi-signal inference thresholds (correctness floor of 0.4, response-time baseline of 30 seconds) are hand-coded rather than learned, prioritising interpretability over optimisation; a deliberate design choice, albeit one that limits adaptability to novel user populations. Conversation history grows unboundedly across rounds, and extended sessions may therefore approach OpenAI's token limits. Future work could formalise the hand-coded inference rules as a Partially Observable Markov Decision Process wherein the user's true emotional-cognitive state is a latent variable inferred via belief-space planning (Kaelbling, Littman and Cassandra, 1998, p. 120), and fine-tune the expression model on in-session Pepper captures to improve classification accuracy within the specific deployment environment.
+<!-- NOTE FOR SALMAN: The following limitations should go in section 2.4 (Outcome & System Analysis):
+- Facial-expression CNN not fine-tuned for deployment context (Workshop 10 model, general dataset, low confidence under poor lighting)
+- Speech-emotion MLP trained on RAVDESS acted-speech corpus; domain mismatch with natural conversational speech, partially mitigated by cross-modal design
+- Inference thresholds (correctness floor 0.4, response-time baseline 30s, consecutive-wrong 3) are hand-coded rather than learned; prioritises interpretability over optimisation
+- Conversation history grows unboundedly; extended sessions may approach OpenAI token limits -->
 
 ## 2.6 Task-4 References (5%)
 
