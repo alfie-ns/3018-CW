@@ -1,6 +1,11 @@
 """
 GAZE: Game-Adaptive Zone of Engagement
 
+
+- [ ] PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INTENDED DESIGN AND FEATURES OF THIS CODE.
+
+
+
 Adaptive countdown-style game host for the Pepper robot.
 Multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
 + answer correctness, cross-validated so no single signal is trusted alone.
@@ -16,7 +21,7 @@ Multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
 - [X] gestures, LEDs, and speech aligned to inferred state
 - [X] local testing mode (GAZE_LOCAL_MODE)
 - [X] dynamic LLM game generation & answer verification (OpenAI/GPT)
-- [X] whisper transcription with strict network timeout fallbacks
+- [X] whisper transcription with network timeout fallbacks
 - [X] ambient noise calibration & dynamic silence detection
 - [X] natural TTS sentence-level pacing
 
@@ -877,9 +882,10 @@ try:
 
         time.sleep({SILENCE_POLL_SECS})
 
-except Exception:
+except Exception as e:
     # firmware fallback — getFrontMicEnergy() unsupported on this Pepper
     # fall back to a safe fixed-duration recording so the demo never breaks
+    print("  [Silence detection failed: " + str(e) + "] Falling back to fixed-duration recording")
     time.sleep({RECORD_MAX_SECS})
 
 rec.stopMicrophonesRecording()
@@ -935,8 +941,8 @@ try:
         tts.say(sentence)
         if i < len(sentences) - 1:
             time.sleep(0.4)
-except Exception:
-    pass
+except Exception as e:
+    print("  [TTS failed] " + str(e))
 """)
 
 
@@ -948,7 +954,8 @@ def nao_say_animated(ssh, text):
 from naoqi import ALProxy
 ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
 """)
-    except Exception:
+    except Exception as e:
+        print(f"  [Animated speech failed] {e}")
         nao_say(ssh, text)
 
 
@@ -985,11 +992,11 @@ t.stopTracker()
 t.unregisterAllTargets()
 try:
     ALProxy("ALFaceDetection","127.0.0.1",9559).unsubscribe("gaze_face")
-except:
-    pass
+except Exception as e:
+    print("  [Face unsubscribe failed] " + str(e))
 """)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"  [Face tracking failed] {e}")
 
 
 def nao_set_leds(ssh, group, colour, duration=1.0):
@@ -999,8 +1006,8 @@ def nao_set_leds(ssh, group, colour, duration=1.0):
 from naoqi import ALProxy
 ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
 """)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"  [LED failed] {e}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1093,8 +1100,8 @@ def local_say(text: str):
     """Speak text using macOS built-in TTS (the 'say' command)."""
     try:
         subprocess.run(["say", text], check=True, timeout=30)
-    except Exception:
-        pass    # terminal output already covers this
+    except Exception as e:
+        print(f"  [Local TTS failed] {e}")
 
 
 def say(ssh_tts, text):
@@ -1213,8 +1220,8 @@ def nao_gesture(ssh, gesture_type: str):
     code = GESTURE_CODE.get(gesture_type, GESTURE_CODE["neutral"])
     try:
         nao_run(ssh, code)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"  [Gesture failed: {gesture_type}] {e}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1231,7 +1238,8 @@ def check_audio_volume() -> bool:
             samples = struct.unpack(f"<{len(raw) // 2}h", raw)
             rms = (sum(s * s for s in samples) / len(samples)) ** 0.5
             return rms > VOLUME_THRESHOLD
-    except Exception:
+    except Exception as e:
+        print(f"  [Volume check failed] {e}")
         return True
 
 
@@ -1267,14 +1275,17 @@ def capture_and_classify(ssh, face_model, face_cascade,
     if local_camera is not None:
         ret, frame = local_camera.read()
         if not ret:
+            print("  [Local camera failed] cv2.VideoCapture.read() returned False")
             return "Neutral", 0.0
     else:
         try:
             nao_capture_image(ssh)
             frame = cv2.imread(LOCAL_IMG)
             if frame is None:
+                print(f"  [Image read failed] cv2.imread returned None for {LOCAL_IMG}")
                 return "Neutral", 0.0
-        except Exception:
+        except Exception as e:
+            print(f"  [Camera capture failed] {e}")
             return "Neutral", 0.0
 
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -1328,8 +1339,9 @@ def generate_game_response(prompt: str, conversation: list) -> dict:
 
         return json.loads(content)
 
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
         # API responded but returned malformed JSON — use raw text as dialogue
+        print(f"  [OpenAI returned malformed JSON] {e}")
         return {
             "dialogue": content,
             "answer":   "",
@@ -1340,7 +1352,7 @@ def generate_game_response(prompt: str, conversation: list) -> dict:
         # network timeout, API outage, or any other failure
         print(f"  [API fallback] OpenAI call failed: {e}")
         return {
-            "dialogue": "Hmm, let me think about that one. Let's try another!",
+            "dialogue": f"The OpenAI API call failed: {e}. Let me try again next round!",
             "answer":   "",
             "category": "fallback",
             "gesture":  "think",
@@ -1446,7 +1458,8 @@ def load_session() -> Optional[dict]:
     try:
         with open(SAVE_FILE, "r") as f:
             return json.load(f)
-    except (json.JSONDecodeError, IOError):
+    except (json.JSONDecodeError, IOError) as e:
+        print(f"  [Save file corrupt] {e}")
         return None
 
 
@@ -1462,8 +1475,8 @@ def restore_engine(save_data: dict) -> AdaptiveEngine:
     for g_val, count in save_data.get("games_played", {}).items():
         try:
             engine.games_played[GameType(g_val)] = count
-        except ValueError:
-            pass
+        except ValueError as e:
+            print(f"  [Restore skipped invalid game type: {g_val}] {e}")
     return engine
 
 
@@ -1574,10 +1587,14 @@ def main():
                                             "keep going", "where I left", "left off"]):
             engine = restore_engine(save_data)
             resumed = True
-            print(f"  Restored: {save_data.get('rounds_played', 0)} rounds")
+            restore_msg = f"Restoring your previous session — {save_data.get('rounds_played', 0)} rounds on record."
+            say(ssh_tts, restore_msg)
+            print(f"\nRobot: {restore_msg}")
         else:
             delete_save()
-            print("  Starting fresh.")
+            fresh_msg = "No worries, starting fresh! Your previous save has been cleared."
+            say(ssh_tts, fresh_msg)
+            print(f"\nRobot: {fresh_msg}")
 
     # ── OpenAI conversation history (game context continuity) ──
     conversation = [{"role": "system", "content": (
@@ -1619,7 +1636,9 @@ def main():
 
         if chosen_game is None:
             chosen_game = GameType.NUMBERS
-            print("  Defaulting to numbers.")
+            default_msg = "I didn't catch a game choice, so I'll start with numbers!"
+            say(ssh_tts, default_msg)
+            print(f"\nRobot: {default_msg}")
         else:
             print(f"  Selected: {chosen_game.value}")
 
@@ -1655,7 +1674,7 @@ def main():
     current_answer   = game_data.get("answer", "")
     current_question = game_data.get("dialogue", "")
     if not current_question.strip():
-        current_question = "Welcome! Let's get started with a fun challenge!"
+        current_question = "OpenAI returned empty dialogue. Let me try again next round!"
 
     # deliver first question with gesture
     if not LOCAL_MODE:
@@ -1706,9 +1725,14 @@ def main():
             user_answer = ""
             if check_audio_volume():
                 user_answer = transcribe()
-                print(f"Heard: {user_answer}")
+                if user_answer:
+                    print(f"Heard: {user_answer}")
+                else:
+                    print("  [Whisper returned empty transcription]")
+                    say(ssh_tts, "Sorry, I couldn't make out what you said. I'll treat that as a pass.")
             else:
                 print("(No response detected)")
+                say(ssh_tts, "I didn't hear a response, so I'll move on.")
 
             # exit keywords
             if user_answer.lower().strip() in [
@@ -1778,7 +1802,7 @@ def main():
             current_answer   = game_data.get("answer", "")
             current_question = game_data.get("dialogue", "")
             if not current_question.strip():
-                current_question = "Let me think of a good one... Here we go!"
+                current_question = "OpenAI returned empty dialogue. Let me try again next round!"
 
             # ── OUTPUT LAYER ─────────────────────────────────────────────
             # robot speaks + gestures + LEDs — all aligned to inferred state
