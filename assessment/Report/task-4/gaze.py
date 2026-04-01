@@ -1070,6 +1070,8 @@ def local_record(max_secs: float = RECORD_MAX_SECS):
             data = buffer[-1]
 
             rms = (np.mean(data.astype(np.float64) ** 2)) ** 0.5
+            global _last_rms
+            _last_rms = rms
             print(f"\r    [{elapsed:.1f}s] RMS: {rms:.0f} {'▓' if rms > LOCAL_SILENCE_RMS else '░'}", end="", flush=True)
 
             if elapsed < LOCAL_MIN_SECS:
@@ -1301,19 +1303,42 @@ def capture_and_classify(ssh, face_model, face_cascade,
             print(f"  [Camera capture failed] {e}")
             return "Neutral", 0.0
 
+    global _last_emotion
+
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
     if len(faces) == 0:
-        return "Neutral", 0.0      # no face → default
+        emotion, conf = "Neutral", 0.0
+    else:
+        # largest detected face
+        x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+        roi     = gray[y:y+h, x:x+w]
+        resized = cv2.resize(roi, (48, 48))
+        inp     = resized[np.newaxis, :, :, np.newaxis]     # (1, 48, 48, 1)
+        emotion, conf = face_model.predict(inp)
 
-    # largest detected face
-    x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
-    roi     = gray[y:y+h, x:x+w]
-    resized = cv2.resize(roi, (48, 48))
-    inp     = resized[np.newaxis, :, :, np.newaxis]     # (1, 48, 48, 1)
+        # draw face box on preview
+        if DEBUG_PREVIEW:
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    return face_model.predict(inp)
+    _last_emotion = emotion
+
+    # ── live debug preview ──
+    if DEBUG_PREVIEW:
+        label = f"{emotion} ({conf:.0%})"
+        cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8, (0, 255, 0), 2)
+        # RMS bar
+        bar_w = int(min(_last_rms / 200.0, 1.0) * 300)
+        cv2.rectangle(frame, (10, 45), (10 + bar_w, 60),
+                      (0, 200, 255) if _last_rms > LOCAL_SILENCE_RMS else (100, 100, 100), -1)
+        cv2.putText(frame, f"RMS: {_last_rms:.0f}", (10, 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
+        cv2.imshow("GAZE Debug", frame)
+        cv2.waitKey(1)
+
+    return emotion, conf
 
 
 # ══════════════════════════════════════════════════════════════════════════════
