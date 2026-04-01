@@ -5,6 +5,13 @@
 cd "$(dirname "$0")"
 rm -rf __pycache__
 
+# resolve the Semester 2 .venv regardless of where the script lives
+VENV_PYTHON="$(cd ../../../.. && pwd)/.venv/bin/python"
+if [ ! -x "$VENV_PYTHON" ]; then
+    echo "ERROR: cannot find .venv python at $VENV_PYTHON"
+    exit 1
+fi
+
 export GAZE_LOCAL_MODE=true
 export GAZE_LOCAL_CAMERA=true
 
@@ -24,7 +31,7 @@ fi
 
 if [ ! -f speech_emotion_model.pkl ]; then
     echo "Speech emotion model not found. Training it now..."
-    python "[ ]-gaze-train_speech_model.py"
+    "$VENV_PYTHON" train_speech_model.py
 fi
 
 cleanup() {
@@ -36,5 +43,5 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-python -u gaze.py &
+"$VENV_PYTHON" -u gaze.py &
 wait $!

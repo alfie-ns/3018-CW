@@ -33,26 +33,34 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 
+print("[boot] stdlib loaded", flush=True)
+
 # data + vision
 import numpy as np
 import cv2
+print("[boot] numpy + opencv loaded", flush=True)
 
 # networking
 import paramiko
+print("[boot] paramiko loaded", flush=True)
 
 # audio
 import sounddevice as sd
 import librosa
 import soundfile as sf
+print("[boot] audio stack loaded", flush=True)
 
 # venv + API
 from dotenv import load_dotenv
 from openai import OpenAI
+print("[boot] openai loaded", flush=True)
 
 # ML
 import joblib
+print("[boot] loading tensorflow (this is slow on first run)...", flush=True)
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
+print("[boot] tensorflow loaded", flush=True)
 
 load_dotenv()
 
@@ -76,6 +84,11 @@ LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 500  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
+
+# live debug preview (local mode only)
+DEBUG_PREVIEW = LOCAL_MODE
+_last_rms = 0.0          # shared with recording thread for overlay
+_last_emotion = ""        # updated by capture_and_classify
 
 # false when connected to pepper; true for testing when no Pepper's camera
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
@@ -1017,7 +1030,7 @@ ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
 LOCAL_SAMPLE_RATE = 16000   # Whisper expects 16 kHz; we resample from native rate
 
 
-LOCAL_SILENCE_RMS   = 100     # RMS below this = silence on Mac mic
+LOCAL_SILENCE_RMS   = 40      # RMS below this = silence on Mac mic
 LOCAL_SILENCE_SECS  = 1.5    # seconds of post-speech silence to stop recording
 LOCAL_MIN_SECS      = 1.0    # minimum recording before silence detection kicks in
 LOCAL_NO_SPEECH_MAX = 5.0    # stop if no speech detected at all after this many seconds
