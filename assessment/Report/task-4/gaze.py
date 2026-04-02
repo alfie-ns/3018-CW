@@ -274,8 +274,8 @@ class AdaptiveDecision:
 
 class AdaptiveEngine:
     """
-    The brain of GAZE.  Takes all three input signals and *infers* the user's
-    real state — crucially, it does NOT just trust the camera.
+    Takes all three input signals and *infers* the user's real state
+    — crucially, it does NOT just trust the camera.
 
     Examples of multi-signal reasoning:
       Camera=Angry   + fast correct answers        → fine, resting face.  Carry on.
@@ -296,8 +296,8 @@ class AdaptiveEngine:
         self.consecutive_wrong             = 0
         self.games_played: dict[GameType, int] = {g: 0 for g in GameType}
         self.game_switch_count             = 0
-        # episodic memory — what strategies worked (learning layer)
-        self.strategy_log: list[dict]      = []
+        # tracks what adaptation was applied each round (used by evaluate_adaptation)
+        self.adaptation_log: list[dict]    = []
         # reward system — milestones already announced
         self.total_correct                 = 0
         self.best_streak                   = 0
@@ -464,8 +464,8 @@ class AdaptiveEngine:
             self.current_game      = new_game
             self.game_switch_count += 1
 
-        # episodic memory — log strategy for the learning layer
-        self.strategy_log.append({
+        # log this round's adaptation for evaluate_adaptation()
+        self.adaptation_log.append({
             "round":  self.round_number,
             "state":  state.value,
             "action": {"difficulty": new_difficulty.name,
@@ -482,7 +482,7 @@ class AdaptiveEngine:
         )
 
     def record_round(self, result: RoundResult):
-        """Store a completed round in history (semantic memory)."""
+        """Store a completed round in history."""
         self.history.append(result)
         self.games_played[result.game_type] = (
             self.games_played.get(result.game_type, 0) + 1
@@ -551,11 +551,11 @@ class AdaptiveEngine:
         last adaptation decision, returning a natural-language evaluation
         that is fed into the next prompt so the LLM can adjust accordingly.
         """
-        if len(self.strategy_log) < 2 or len(self.history) < 2:
+        if len(self.adaptation_log) < 2 or len(self.history) < 2:
             return None
 
-        prev_strategy = self.strategy_log[-2]
-        curr_strategy = self.strategy_log[-1]
+        prev_strategy = self.adaptation_log[-2]
+        curr_strategy = self.adaptation_log[-1]
         prev_round    = self.history[-2]
         curr_round    = self.history[-1]
 
@@ -1799,7 +1799,7 @@ def main():
             if decision.switch_game:
                 print(f"  Switching to: {decision.game_type.value}")
 
-            # record round (semantic memory)
+            # record this round
             engine.record_round(RoundResult(
                 round_number=round_num,
                 game_type=engine.current_game,
