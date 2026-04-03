@@ -1,15 +1,18 @@
 """
 GAZE: Game-Adaptive Zone of Engagement
 
+Adaptive countdown-style game host ran on Pepper robot.
+Novelty: multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
++ answer correctness, ... cross-validated so no single signal is trusted alone.
 
-- [ ] PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INTENDED DESIGN AND FEATURES OF THIS CODE.
+TODO: REMOVE-BEFORE-SUBMISSION: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INTENDED DESIGN AND FEATURES OF THIS CODE.
 
+CRITICAL:
+- [ ] offload simpler tasks e.g. choosing which game to a mini AI for speed??
 
+FUNDAMENTAL:
 
-Adaptive countdown-style game host for the Pepper robot.
-Multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
-+ answer correctness, cross-validated so no single signal is trusted alone.
-
+- [ ] user-volume should indicate emotinal signals
 - [ ] adaptive words or numbers based on inferred user state somehow???
 - [X] WS-10 CNN facial-expression detection (7-class, 48x48 greyscale)
 - [X] WS-08 MLP speech-emotion recognition (MFCC/chroma/mel features)
@@ -24,6 +27,11 @@ Multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
 - [X] whisper transcription with network timeout fallbacks
 - [X] ambient noise calibration & dynamic silence detection
 - [X] natural TTS sentence-level pacing
+
+NICE-TO-HAVE:
+- [ ] make web-search capabilities
+- [ ] make vision capabilities  
+- [ ] capability to fetch time and date if the AI determines its useful, encode this ability into system prompt 
 
 """
 
@@ -85,11 +93,6 @@ VOLUME_THRESHOLD = 500  # RMS amplitude; below this the WAV is silence/ambient n
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
-# live debug preview (local mode only)
-DEBUG_PREVIEW = LOCAL_MODE
-_last_rms = 0.0          # shared with recording thread for overlay
-_last_emotion = ""        # updated by capture_and_classify
-
 # false when connected to pepper; true for testing when no Pepper's camera
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
 
@@ -98,6 +101,15 @@ USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
 LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
     USE_LOCAL_CAMERA = True      # local mode implies local camera
+
+# live debug preview (local mode only)
+DEBUG_PREVIEW = LOCAL_MODE
+_last_rms = 0.0          # shared with recording thread for overlay
+_last_emotion = ""        # updated by capture_and_classify
+
+# shared state for continuous preview thread
+_preview_lock  = threading.Lock()
+_preview_state = {"emotion": "Neutral", "confidence": 0.0}
 
 # paths to pre-trained models
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
@@ -253,6 +265,7 @@ class RoundResult:
     expression_confidence: float
     vocal_emotion:         str
     vocal_emotion_confidence: float
+    volume_rms:            float           # speech loudness (arousal signal)
     inferred_state:        InferredState
     timestamp:             float = field(default_factory=time.time)
 
@@ -323,27 +336,37 @@ class AdaptiveEngine:
 
     # ── multi-signal state inference --
 
+    # volume thresholds for arousal mapping (RMS of 16-bit PCM)
+    VOLUME_QUIET = 200     # below this → low arousal (quiet/disengaged)
+    VOLUME_LOUD  = 2000    # above this → high arousal (excited/frustrated)
+
     def infer_state(self, expression: str, response_time: float,
                     correct: bool, answer_text: str,
-                    vocal_emotion: str = "neutral") -> InferredState:
+                    vocal_emotion: str = "neutral",
+                    volume_rms: float = 0.0) -> InferredState:
         """
         Weigh ALL signals together to determine the user's actual state.
 
-        Four independent signals are cross-validated:
+        Five independent signals are cross-validated:
           1- facial expression  (visual modality — CNN, WS-10)
           2- vocal emotion      (audio modality — MLP, WS-08)
           3- response time      (behavioural)
           4- answer correctness (performance)
+          5- speech volume/RMS  (arousal indicator)
 
         Neither modality is trusted in isolation — the camera may misread
         a resting face, and the voice model may misclassify background noise.
-        Cross-referencing both against performance data yields a more robust
-        inference than any single signal alone.
+        Cross-referencing all five signals against performance data yields
+        a more robust inference than any single signal alone.
         """
         correctness = self.rolling_correctness()
         is_silent   = (not answer_text.strip()
                        or answer_text.strip().lower() in
                        ["", "i don't know", "skip", "pass", "next"])
+
+        # volume-based arousal: loud → high arousal, quiet → low arousal
+        high_arousal = volume_rms > self.VOLUME_LOUD
+        low_arousal  = 0 < volume_rms < self.VOLUME_QUIET
 
         # track streaks
         if is_silent:
@@ -375,11 +398,19 @@ class AdaptiveEngine:
                 and response_time > RESPONSE_TIME_BASELINE
                 and correctness < 0.5):
             return InferredState.DISENGAGED
+        # quiet voice + neutral face + slow → disengaged (low arousal confirms)
+        if (low_arousal and expression == "Neutral"
+                and response_time > RESPONSE_TIME_BASELINE * 0.8):
+            return InferredState.DISENGAGED
 
         # ── frustrated: both modalities agree on negative state ──
         if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
             return InferredState.FRUSTRATED
         if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
+            return InferredState.FRUSTRATED
+        # loud voice + negative face + failing → frustrated (high arousal confirms)
+        if (high_arousal and expression in ("Angry", "Disgust", "Fear")
+                and correctness < CORRECTNESS_FLOOR):
             return InferredState.FRUSTRATED
         # voice fearful/disgust + face negative + low correctness → frustrated
         if (vocal_emotion in ("fearful", "disgust")
@@ -411,10 +442,11 @@ class AdaptiveEngine:
     def decide(self, expression: str, expression_conf: float,
                response_time: float, correct: bool,
                answer_text: str,
-               vocal_emotion: str = "neutral") -> AdaptiveDecision:
+               vocal_emotion: str = "neutral",
+               volume_rms: float = 0.0) -> AdaptiveDecision:
         """Return what to do next based on inferred state."""
         state       = self.infer_state(expression, response_time, correct, answer_text,
-                                       vocal_emotion)
+                                       vocal_emotion, volume_rms=volume_rms)
         correctness = self.rolling_correctness()
 
         new_difficulty     = self.current_difficulty
@@ -1044,9 +1076,11 @@ def local_record(max_secs: float = RECORD_MAX_SECS):
     Records at the device's native sample rate then resamples to 16 kHz
     for Whisper compatibility via librosa.
     """
-    # use the mic's native rate to avoid unsupported-rate hangs
+    # explicitly select the default input device (matches test-mic.py behaviour)
     dev_info    = sd.query_devices(kind="input")
+    dev_index   = dev_info["index"]
     native_rate = int(dev_info["default_samplerate"])
+    sd.default.device = (dev_index, None)
     chunk_size  = int(native_rate * SILENCE_POLL_SECS)
 
     buffer = []
@@ -1243,19 +1277,24 @@ def nao_gesture(ssh, gesture_type: str):
 #  AUDIO ANALYSIS + TRANSCRIPTION
 # ══════════════════════════════════════════════════════════════════════════════
 
-def check_audio_volume() -> bool:
-    """Return True when the recorded WAV is loud enough to process."""
+def measure_volume() -> float:
+    """
+    Compute RMS amplitude of the recorded WAV (both local and Pepper paths).
+
+    Repurposed as the 5th emotional signal: speaking volume correlates with
+    arousal — loud speech suggests excitement or frustration (high arousal),
+    quiet speech suggests disengagement or sadness (low arousal).
+    """
     try:
         with wave.open(LOCAL_WAV, "rb") as wf:
             raw = wf.readframes(wf.getnframes())
             if len(raw) < 2:
-                return False
+                return 0.0
             samples = struct.unpack(f"<{len(raw) // 2}h", raw)
-            rms = (sum(s * s for s in samples) / len(samples)) ** 0.5
-            return rms > VOLUME_THRESHOLD
+            return (sum(s * s for s in samples) / len(samples)) ** 0.5
     except Exception as e:
-        print(f"  [Volume check failed] {e}")
-        return True
+        print(f"  [Volume measurement failed] {e}")
+        return 0.0
 
 
 def transcribe() -> str:
@@ -1280,13 +1319,77 @@ def transcribe() -> str:
 #  FACIAL EXPRESSION PIPELINE
 # ══════════════════════════════════════════════════════════════════════════════
 
+def _preview_thread_loop(camera, face_model, face_cascade):
+    """
+    Continuous camera preview (daemon thread).
+
+    Reads frames, runs face detection + classification, updates the shared
+    _preview_state, and renders the debug window. Runs independently of the
+    game loop so the preview never freezes between rounds.
+    """
+    global _last_emotion
+    while True:
+        ret, frame = camera.read()
+        if not ret:
+            time.sleep(0.03)
+            continue
+
+        gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+        if len(faces) == 0:
+            emotion, conf = "Neutral", 0.0
+        else:
+            x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+            roi     = gray[y:y+h, x:x+w]
+            resized = cv2.resize(roi, (48, 48))
+            inp     = resized[np.newaxis, :, :, np.newaxis]
+            emotion, conf = face_model.predict(inp)
+            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+        # update shared state for capture_and_classify to read
+        with _preview_lock:
+            _preview_state["emotion"]    = emotion
+            _preview_state["confidence"] = conf
+        _last_emotion = emotion
+
+        # draw overlay
+        label = f"{emotion} ({conf:.0%})"
+        cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                    0.8, (0, 255, 0), 2)
+        bar_w = int(min(_last_rms / 200.0, 1.0) * 300)
+        cv2.rectangle(frame, (10, 45), (10 + bar_w, 60),
+                      (0, 200, 255) if _last_rms > LOCAL_SILENCE_RMS else (100, 100, 100), -1)
+        cv2.putText(frame, f"RMS: {_last_rms:.0f}", (10, 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
+        cv2.imshow("GAZE Debug", frame)
+        cv2.waitKey(30)
+
+
+def start_preview_thread(camera, face_model, face_cascade):
+    """Launch the continuous preview as a daemon thread."""
+    t = threading.Thread(target=_preview_thread_loop,
+                         args=(camera, face_model, face_cascade),
+                         daemon=True)
+    t.start()
+    return t
+
+
 def capture_and_classify(ssh, face_model, face_cascade,
                          local_camera=None) -> tuple[str, float]:
     """
     Capture a face image and classify the expression.
     Uses Pepper's camera by default; local webcam if GAZE_LOCAL_CAMERA=true.
     Returns (emotion_label, confidence).
+
+    In DEBUG_PREVIEW mode with a local camera, reads from the continuous
+    preview thread instead of capturing a new frame (avoids duplicate reads).
     """
+    # local mode with preview thread running — just read shared state
+    if DEBUG_PREVIEW and local_camera is not None:
+        with _preview_lock:
+            return _preview_state["emotion"], _preview_state["confidence"]
+
     if local_camera is not None:
         ret, frame = local_camera.read()
         if not ret:
@@ -1303,42 +1406,17 @@ def capture_and_classify(ssh, face_model, face_cascade,
             print(f"  [Camera capture failed] {e}")
             return "Neutral", 0.0
 
-    global _last_emotion
-
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 
     if len(faces) == 0:
-        emotion, conf = "Neutral", 0.0
-    else:
-        # largest detected face
-        x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
-        roi     = gray[y:y+h, x:x+w]
-        resized = cv2.resize(roi, (48, 48))
-        inp     = resized[np.newaxis, :, :, np.newaxis]     # (1, 48, 48, 1)
-        emotion, conf = face_model.predict(inp)
+        return "Neutral", 0.0
 
-        # draw face box on preview
-        if DEBUG_PREVIEW:
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-
-    _last_emotion = emotion
-
-    # ── live debug preview ──
-    if DEBUG_PREVIEW:
-        label = f"{emotion} ({conf:.0%})"
-        cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                    0.8, (0, 255, 0), 2)
-        # RMS bar
-        bar_w = int(min(_last_rms / 200.0, 1.0) * 300)
-        cv2.rectangle(frame, (10, 45), (10 + bar_w, 60),
-                      (0, 200, 255) if _last_rms > LOCAL_SILENCE_RMS else (100, 100, 100), -1)
-        cv2.putText(frame, f"RMS: {_last_rms:.0f}", (10, 75),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
-        cv2.imshow("GAZE Debug", frame)
-        cv2.waitKey(1)
-
-    return emotion, conf
+    x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+    roi     = gray[y:y+h, x:x+w]
+    resized = cv2.resize(roi, (48, 48))
+    inp     = resized[np.newaxis, :, :, np.newaxis]     # (1, 48, 48, 1)
+    return face_model.predict(inp)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1568,6 +1646,10 @@ def main():
     if USE_LOCAL_CAMERA:
         local_camera = cv2.VideoCapture(0)
         print("  Using local webcam for expression detection.")
+        # start continuous preview thread so the debug window never freezes
+        if DEBUG_PREVIEW:
+            start_preview_thread(local_camera, face_model, face_cascade)
+            print("  Preview thread started.")
     else:
         print("  Using Pepper's camera for expression detection.")
 
@@ -1615,10 +1697,11 @@ def main():
             nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
         record(ssh, energy_threshold)
 
-        resume_text = ""
-        if check_audio_volume():
-            resume_text = transcribe()
-            print(f"Heard: {resume_text}")
+        resume_text = transcribe()
+        if resume_text:
+            print(f"  Heard: {resume_text}")
+        else:
+            print("  Heard: (silence)")
 
         lower_resume = resume_text.lower()
         if any(w in lower_resume for w in ["continue", "resume", "yes", "carry on",
@@ -1664,13 +1747,14 @@ def main():
             nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
         record(ssh, energy_threshold)
 
-        game_choice_text = ""
+        game_choice_text = transcribe()
         chosen_game      = None
 
-        if check_audio_volume():
-            game_choice_text = transcribe()
-            print(f"Heard: {game_choice_text}")
+        if game_choice_text:
+            print(f"  Heard: {game_choice_text}")
             chosen_game = parse_game_choice(game_choice_text)
+        else:
+            print("  Heard: (silence)")
 
         if chosen_game is None:
             chosen_game = GameType.NUMBERS
@@ -1736,7 +1820,7 @@ def main():
             print(f"\n{'─' * 40} Round {round_num} {'─' * 40}")
 
             # ── INPUT LAYER ──────────────────────────────────────────────
-            # all four signals captured: face, voice, time, correctness
+            # all five signals captured: face, voice, volume, time, correctness
 
             # 1. start timer
             question_start = time.time()
@@ -1760,16 +1844,16 @@ def main():
             vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
             print(f"  Vocal emotion: {vocal_emo} ({vocal_conf:.2f})")
 
-            user_answer = ""
-            if check_audio_volume():
-                user_answer = transcribe()
-                if user_answer:
-                    print(f"Heard: {user_answer}")
-                else:
-                    print("  [Whisper returned empty transcription]")
-                    say(ssh_tts, "Sorry, I couldn't make out what you said. I'll treat that as a pass.")
+            # 5. speech volume (arousal indicator — 5th signal)
+            vol_rms = measure_volume()
+            print(f"  Volume RMS: {vol_rms:.0f}")
+
+            # always transcribe — matches working-robot-lab-code.py pattern
+            user_answer = transcribe()
+            if user_answer:
+                print(f"  Heard: {user_answer}")
             else:
-                print("(No response detected)")
+                print("  Heard: (silence)")
                 say(ssh_tts, "I didn't hear a response, so I'll move on.")
 
             # exit keywords
@@ -1792,7 +1876,7 @@ def main():
 
             decision = engine.decide(
                 expression, expr_conf, response_time, correct, user_answer,
-                vocal_emotion=vocal_emo
+                vocal_emotion=vocal_emo, volume_rms=vol_rms
             )
             print(f"  Inferred state: {decision.inferred_state.value}")
             print(f"  Difficulty: {decision.difficulty.name}")
@@ -1812,6 +1896,7 @@ def main():
                 expression_confidence=expr_conf,
                 vocal_emotion=vocal_emo,
                 vocal_emotion_confidence=vocal_conf,
+                volume_rms=vol_rms,
                 inferred_state=decision.inferred_state,
             ))
 
