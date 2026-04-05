@@ -62,11 +62,6 @@ header-includes:
 | ----- | -------- | -------------- | ------------------------------- | ------------- | -------------------------------------------------------------------------------------------------- |
 | - [ ] | 312, 342 | S1.3.1, S1.4.2 | Wada and Shibata (2007, p. 974) | p. 974        | NEEDS MANUAL CHECK -- download PDF; look for PARO reducing agitation / mood improvement in elderly |
 
-#### Bemelmans et al. (2012) -- PDF NOT in papers/ folder
-
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                            |
-| ----- | ------- | ------- | -------------------------------- | ------------- | -------------------------------------------------------------------------------------------- |
-| - [ ] | 312     | S1.3.1  | Bemelmans et al. (2012, p. TODO) | ??            | NEEDS MANUAL CHECK -- download PDF; find reduced cortisol / increased social engagement data |
 
 #### Fong, Nourbakhsh and Dautenhahn (2003) -- `papers/Fong, Nourbakhsh and Dautenhahn (2003) - A Survey of Socially Interactive Robots.pdf`
 
@@ -228,7 +223,7 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 ## General:
 
 - [ ] ensure no overused complex words
-- [ ] Download Bemelmans and Broadbent via Plymouth library
+- [ ] Download Broadbent via Plymouth library
 - [ ] Run past Gemini
 - [ ] decides the reward based on what it oberserves = inferring the reward
 - [ ] discuss POMDP maths
@@ -291,13 +286,13 @@ Cross-check with Gemini.
 
 # 1- Task (3) Literature Review
 
-- [X] ## 1.1. Introduction
+- [X] [X] ## 1.1. Introduction
 
-Ageing populations and a shrinking care workforce positioned **assistive robotics** *(human-supportive robots within physical, cognitive, and social realms of impairment affecting daily-living activities)*; a prominent technological response to a widening care gap. The field spans physical prosthetics; surgical assistance; neurodivergent support; exoskeletal rehabilitation, and social companionship; this essay however focuses on *socially* assistive robotics ($SAR$), a subfield wherein the robot assists via social engagement rather than physical manipulation (Tapus, Matarić and Scassellati, 2007, p. 35), {TODO IF I AM PARAPHRASING HERE I NEED TO QUOTE STUFF} as it is here that the most active research and ethical tension currently converge. 
+Ageing populations and a shrinking care workforce positioned **assistive robotics** *(human-supportive robots within physical, cognitive, and social realms of impairment affecting daily-living activities)*; a prominent technological response to a widening care gap. The field spans physical prosthetics; surgical assistance; neurodivergent support; exoskeletal rehabilitation, and social companionship; this essay however focuses on *socially* assistive robotics ($SAR$), an assistive-robot subfield wherein the robot "focuses on helping human users through social rather than physical interaction" (Tapus, Matarić and Scassellati, 2007, Abstract), as here most active research and ethical tension currently converge.
 
-Robots now administer medication reminders, facilitate rehabilitation exercises, and therapeutically companionate in clinical and domestic settings. Responding with: reduced caregiver burden; improved patient outcomes in controlled trials, and increased social engagement among isolated elderly residents.
+Robots now administer medication reminders, facilitate rehabilitation exercises, and therapeutically companionate in clinical and domestic settings: reduced caregiver burden, improved patient outcomes wherein residents became "more active and more communicative, both with each other and their caregivers" (Wada and Shibata, 2007, p. 973), and increased "social interaction" among elderly residents (Wada and Shibata, 2007, p. 972, Abstract).
 
-However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) call the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots should be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. TODO) formalise this requirement via a cognition cycle (the agent anticipates, learns, and adapts, intersecting these processes with perception and action to achieve autonomy). This essay contends that assistive robotics should graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer; not vice versa) if it is to deliver sustained, personalised support. The following sections survey the theoretical foundations thereof: evaluate prominent applications through this cognitive lens, discuss challenges and ethical implications, and identify future directions.
+However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) call the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots should be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. 151) formalise this requirement via a "virtuous cycle that is embedded in an ongoing process of action and perception" (the agent anticipates $\to$ learns $\to$ adapts to achieve autonomy). This essay contends that assistive robotics should graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer; not vice versa) if it is to deliver sustained, personalised support. The following sections survey the theoretical foundations thereof: evaluate prominent applications through this cognitive lens, discuss challenges and ethical implications, and identify future directions.
 
 - [ ] ## 1.2. Literature Review
 
@@ -311,7 +306,7 @@ Memory, moreover, is not monolithic. Vernon, Metta and Sandini (2007, p. TODO) d
 
 ### 1.3.1 Therapeutic and Emotional Support
 
-The PARO therapeutic seal robot represents one of the most-widely deployed platforms within socially assistive robotics (Tapus, Matarić and Scassellati, 2007, p. TODO). Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and auditory processing to modulate its behaviour in response to touch and voice. Clinical trials report reduced cortisol levels and increased social engagement among residents (Bemelmans et al., 2012, p. TODO), thus the platform has been adopted in care homes across Japan, Europe, and the United States.
+The PARO therapeutic seal robot represents one of the most-widely deployed platforms within socially assistive robotics (Tapus, Matarić and Scassellati, 2007, p. TODO). Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and auditory processing to modulate its behaviour in response to touch and voice. Clinical trials report reduced cortisol levels and increased social engagement among residents (TODO: Find a different paper to back the cortisol/social engagement claim specifically -- something like Wada et al.'s earlier work or another PARO clinical trial), thus the platform has been adopted in care homes across Japan, Europe, and the United States.
 
 Notwithstanding these benefits, PARO operates at the reactive layer. It possesses no theory of mind (it cannot infer *why* a patient is agitated: loneliness, pain, confusion) nor episodic memory of what calmed this patient previously. A cognitively-equipped therapeutic robot, by contrast, would anticipate mood shifts via prospection *(forward simulation of likely emotional trajectories)*, recall that music soothed this patient yesterday via episodic memory, and adapt its strategy via metacognition when interventions produce diminishing returns. Insofar as PARO's effectiveness plateaus because it cannot personalise its responses over time, the cognitive gap is not merely theoretical but potentially clinically consequential. Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy: PARO occupies the 'social interface' level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the 'socially intelligent' level. The distance between these levels is the cognitive deficit assistive robotics should close.
 
@@ -331,7 +326,7 @@ Embodied cognition becomes essential. Brooks (1991, p. TODO) argues that intelli
 
 ### 1.4.1 Challenges
 
-Three challenges impede the deployment of cognitively-capable assistive robots. Firstly, computational intractability: solving POMDPs exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025; Kaelbling, Littman and Cassandra, 1998, p. 120) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple unobserved variables (trust, load, emotion) require tracking simultaneously.
+Tapus, Matarić and Scassellati (2007, *.pdf*-p. 6) projected that by 2012 SAR systems would demonstrate "marked improvement in learning/training/recovery of the user"; yet PARO, the most-deployed platform nearly twenty years later, *still* cannot remember yesterday's session. Three challenges explain this stalled trajectory. Firstly, computational intractability: solving $POMDPs$ exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448 {TODO VERIFY}), and the belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025; Kaelbling, Littman and Cassandra, 1998, p. 120) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple unobserved variables (trust, load, emotion) require tracking simultaneously.
 
 Secondly, the measurement problem: trust, cognitive load, and emotional state are not directly observable; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only modest variance, whilst Broadbent, Stafford and MacDonald (2009, p. TODO) note that acceptance itself depends on matching robot behaviour to user expectations rather than trust alone. Desai et al. (2013, p. 256) further demonstrate that trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into inappropriate action selection. Nikolaidis, Hsu and Srinivasa (2017, p. 627), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner.
 
@@ -418,7 +413,6 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 
 **REMOVE: one checkmark for working link second for insight gathered**
 
-- [ ] [ ] Bemelmans, R., Gelderblom, G. J., Jonker, P. and de Witte, L. (2012) 'Socially assistive robots in elderly care: a systematic review into effects and effectiveness', *Journal of the American Medical Directors Association*, 13(2), pp. 114-120. Available at: https://pubmed.ncbi.nlm.nih.gov/21450215/ (Accessed: 25 March 2026).
 - [ ] [ ] Broadbent, E., Stafford, R. and MacDonald, B. (2009) 'Acceptance of Healthcare Robots for the Older Population: Review and Future Directions', *International Journal of Social Robotics*, 1(4), pp. 319-330. Available at: https://link.springer.com/article/10.1007/s12369-009-0030-6 (Accessed: 25 March 2026).
 - [ ] [ ] Brooks, R. A. (1991) 'Intelligence without representation', *Artificial Intelligence*, 47(1-3), pp. 139-159. Available at: https://people.csail.mit.edu/brooks/papers/representation.pdf (Accessed: 24 March 2026).
 - [ ] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23. Available at: https://arxiv.org/abs/1801.04099 (Accessed: 15 March 2026).
@@ -438,7 +432,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [ ] [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems (NeurIPS 23)*, pp. 2164-2172. Available at: https://proceedings.neurips.cc/paper/2010/file/edfbe1afcf9246bb0d40eb4d8027d90f-Paper.pdf (Accessed: 24 March 2026).
 - [ ] [ ] Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics & Automation Magazine*, 14(1), pp. 35-42. Available at: https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf (Accessed: 25 March 2026).
 - [ ] [ ] Tapus, A., Ţăpuş, C. and Matarić, M. J. (2008) 'User-robot personality matching and assistive robot behavior adaptation for post-stroke rehabilitation therapy', *Intelligent Service Robotics*, 1(2), pp. 169-183. Available at: https://link.springer.com/article/10.1007/s11370-008-0017-4 (Accessed: 26 March 2026).
-- [ ] [ ] Vernon, D., Metta, G. and Sandini, G. (2007) 'A Survey of Artificial Cognitive Systems: Implications for the Autonomous Development of Mental Capabilities in Computational Agents', *IEEE Transactions on Evolutionary Computation*, 11(2), pp. 151-180. Available at: https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf (Accessed: 13 March 2026).
+- [X] [ ] Vernon, D., Metta, G. and Sandini, G. (2007) 'A Survey of Artificial Cognitive Systems: Implications for the Autonomous Development of Mental Capabilities in Computational Agents', *IEEE Transactions on Evolutionary Computation*, 11(2), pp. 151-180. Available at: [https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf](https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf) (Accessed: 13 March 2026).
 - [ ] [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99. Available at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2903469 (Accessed: 22 March 2026).
 - [ ] [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980. Available at: https://ieeexplore.ieee.org/document/4339551 (Accessed: 18 March 2026).
 
@@ -688,13 +682,10 @@ GAZE implements multi-signal emotional inference across two independent modaliti
 - Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251--275. Available at: https://ieeexplore.ieee.org/document/6483596 (Accessed: 20 March 2026).
 
 - [ ] Ekman, P. and Friesen, W.V. (1971) 'Constants Across Cultures in the Face and Emotion', *Journal of Personality and Social Psychology*, 17(2), pp. 124--129. Available at: [http://www.communicationcache.com/uploads/1/0/8/8/10887248/constants_across_cultures_in_the_face_and_emotion.pdf](http://www.communicationcache.com/uploads/1/0/8/8/10887248/constants_across_cultures_in_the_face_and_emotion.pdf) (Accessed: 2 April 2026). **VERIFY: p. 124 cross-cultural consistency claim -- confirm exact page. DOI: 10.1037/h0030377**
-
 - [ ] El Ayadi, M., Kamel, M.S. and Karray, F. (2011) 'Survey on speech emotion recognition: Features, classification schemes, and databases', *Pattern Recognition*, 44(3), pp. 572--587. Available at: [https://www.sciencedirect.com/science/article/pii/S0031320310004619](https://www.sciencedirect.com/science/article/pii/S0031320310004619) (Accessed: 2 April 2026). **VERIFY: p. 574 MFCCs as most discriminative features -- confirm exact page. DOI: 10.1016/j.patcog.2010.09.020**
 
 - Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3--4), pp. 143--166. Available at: https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf (Accessed: 18 March 2026).
-
 - Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387--12406. Available at: https://link.springer.com/article/10.1007/s10462-023-10448-w (Accessed: 20 March 2026).
-
 - Ji, Z., Lee, N., Frieske, R., et al. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), pp. 1--38. Available at: https://dl.acm.org/doi/10.1145/3571730 (Accessed: 22 March 2026).
 
 - [ ] Li, S. and Deng, W. (2020) 'Deep Facial Expression Recognition: A Survey', *IEEE Transactions on Affective Computing*, 13(3), pp. 1195--1215. Available at: [http://www.whdeng.cn/Li_Deng_Survey.pdf](http://www.whdeng.cn/Li_Deng_Survey.pdf) (Accessed: 2 April 2026). **VERIFY: p. 1196 "standard classification target" claim -- confirm exact page. DOI: 10.1109/TAFFC.2020.2981446**
@@ -704,11 +695,8 @@ GAZE implements multi-signal emotional inference across two independent modaliti
 - [ ] Poria, S., Cambria, E., Bajpai, R. and Hussain, A. (2017) 'A review of affective computing: From unimodal analysis to multimodal fusion', *Information Fusion*, 37, pp. 98--125. Available at: [https://dspace.stir.ac.uk/bitstream/1893/25490/1/affective-computing-review.pdf](https://dspace.stir.ac.uk/bitstream/1893/25490/1/affective-computing-review.pdf) (Accessed: 2 April 2026). **VERIFY: p. 99 fusion outperforms single modality claim -- confirm exact page. DOI: 10.1016/j.inffus.2017.02.003**
 
 - Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5--7), pp. 618--634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
-
 - Sciutti, A., Beetz, M., Inamura, T., et al. (2023) 'The Present and the Future of Cognitive Robotics', *IEEE Robotics \& Automation Magazine*, 30(3), pp. 160--163. Available at: https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092 (Accessed: 18 March 2026).
-
 - Smedegaard, C. V. (2019) 'Reframing the Role of Novelty within Social HRI: From Noise to Information', in *Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19)*, pp. 411--420. Available at: https://dl.acm.org/doi/10.1109/HRI.2019.8673219 (Accessed: 22 March 2026).
-
 - Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics \& Automation Magazine*, 14(1), pp. 35--42. Available at: https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf (Accessed: 25 March 2026).
 
 ## 2.7. Appendix
