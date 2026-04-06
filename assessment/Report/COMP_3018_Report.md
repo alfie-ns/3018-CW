@@ -62,7 +62,6 @@ header-includes:
 | ----- | -------- | -------------- | ------------------------------- | ------------- | -------------------------------------------------------------------------------------------------- |
 | - [ ] | 312, 342 | S1.3.1, S1.4.2 | Wada and Shibata (2007, p. 974) | p. 974        | NEEDS MANUAL CHECK -- download PDF; look for PARO reducing agitation / mood improvement in elderly |
 
-
 #### Fong, Nourbakhsh and Dautenhahn (2003) -- `papers/Fong, Nourbakhsh and Dautenhahn (2003) - A Survey of Socially Interactive Robots.pdf`
 
 | OK?   | Line(s)  | Section      | Citation as written        | Go to page... | You should see...                                                                                                                                      |
@@ -739,4 +738,4 @@ ChatGPT & General conversations via web-search AI about prevalent papers to read
 \end{tabular}
 
 - [X] I understand that the ownership and responsibility for the academic integrity of this submitted assessment falls with me, the student.
-- [X] I confirm that all details provide above are an accurate description of how AI was used for this assessment.
+- [X] I confirm that all details provided above are an accurate description of how AI was used for this assessment.
