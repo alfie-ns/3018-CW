@@ -251,7 +251,7 @@ DEFAULT_TONE_PROMPT = (
     "'Brilliant effort!' Genuinely cheer the user on."
 )
 
-@dataclass
+@dataclass # decorator for round results and adaptive decisions
 class RoundResult:
     """Record of a single game round."""
     round_number:          int
@@ -291,10 +291,10 @@ class AdaptiveEngine:
     — crucially, it does NOT just trust the camera.
 
     Examples of multi-signal reasoning:
-      Camera=Angry   + fast correct answers        → fine, resting face.  Carry on.
-      Camera=Neutral + long silence + low accuracy → disengaged.  Intervene.
-      Camera=Sad     + slow + low correctness       → struggling.  Ease off.
-      Camera=Happy   + fast correct answers         → thriving.   Ramp up.
+      Camera=Angry   + fast correct answers        -> fine, resting face.  Carry on.
+      Camera=Neutral + long silence + low accuracy -> disengaged.  Intervene.
+      Camera=Sad     + slow + low correctness       -> struggling.  Ease off.
+      Camera=Happy   + fast correct answers         -> thriving.   Ramp up.
 
     The adaptive engine also evaluates whether its previous adaptation
     actually worked, feeding that evaluation into the next round's prompt.
@@ -325,7 +325,7 @@ class AdaptiveEngine:
     def rolling_correctness(self) -> float:
         recent = self.history[-CORRECTNESS_WINDOW:]
         if not recent:
-            return 0.5                  # no data → assume middle
+            return 0.5                  # no data -> assume middle
         return sum(1 for r in recent if r.correct) / len(recent)
 
     def avg_response_time(self) -> float:
@@ -337,17 +337,17 @@ class AdaptiveEngine:
     # ── multi-signal state inference --
 
     # volume thresholds for arousal mapping (RMS of 16-bit PCM)
-    VOLUME_QUIET = 200     # below this → low arousal (quiet/disengaged)
-    VOLUME_LOUD  = 2000    # above this → high arousal (excited/frustrated)
+    VOLUME_QUIET = 200     # below this -> low arousal (quiet/disengaged)
+    VOLUME_LOUD  = 2000    # above this -> high arousal (excited/frustrated)
 
-    def infer_state(self, expression: str, response_time: float,
+    def y(self, expression: str, response_time: float,
                     correct: bool, answer_text: str,
                     vocal_emotion: str = "neutral",
                     volume_rms: float = 0.0) -> InferredState:
         """
         Weigh ALL signals together to determine the user's actual state.
 
-        Five independent signals are cross-validated:
+        Five independent cross-validated signals:
           1- facial expression  (visual modality — CNN, WS-10)
           2- vocal emotion      (audio modality — MLP, WS-08)
           3- response time      (behavioural)
@@ -364,7 +364,7 @@ class AdaptiveEngine:
                        or answer_text.strip().lower() in
                        ["", "i don't know", "skip", "pass", "next"])
 
-        # volume-based arousal: loud → high arousal, quiet → low arousal
+        # volume-based arousal: loud -> high arousal, quiet -> low arousal
         high_arousal = volume_rms > self.VOLUME_LOUD
         low_arousal  = 0 < volume_rms < self.VOLUME_QUIET
 
@@ -384,10 +384,10 @@ class AdaptiveEngine:
         if (correctness >= CORRECTNESS_CEILING
                 and response_time < RESPONSE_TIME_BASELINE * 0.5):
             return InferredState.THRIVING
-        # voice happy + correct + fast → thriving even if face is neutral
+        # voice happy + correct + fast -> thriving even if face is neutral
         if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
             return InferredState.THRIVING
-        # camera says Angry but fast + correct → they're fine (resting face)
+        # camera says Angry but fast + correct -> they're fine (resting face)
         if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
             return InferredState.COMFORTABLE
 
@@ -398,7 +398,7 @@ class AdaptiveEngine:
                 and response_time > RESPONSE_TIME_BASELINE
                 and correctness < 0.5):
             return InferredState.DISENGAGED
-        # quiet voice + neutral face + slow → disengaged (low arousal confirms)
+        # quiet voice + neutral face + slow -> disengaged (low arousal confirms)
         if (low_arousal and expression == "Neutral"
                 and response_time > RESPONSE_TIME_BASELINE * 0.8):
             return InferredState.DISENGAGED
@@ -408,11 +408,11 @@ class AdaptiveEngine:
             return InferredState.FRUSTRATED
         if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
             return InferredState.FRUSTRATED
-        # loud voice + negative face + failing → frustrated (high arousal confirms)
+        # loud voice + negative face + failing -> frustrated (high arousal confirms)
         if (high_arousal and expression in ("Angry", "Disgust", "Fear")
                 and correctness < CORRECTNESS_FLOOR):
             return InferredState.FRUSTRATED
-        # voice fearful/disgust + face negative + low correctness → frustrated
+        # voice fearful/disgust + face negative + low correctness -> frustrated
         if (vocal_emotion in ("fearful", "disgust")
                 and expression in ("Angry", "Sad", "Fear", "Disgust")
                 and correctness < CORRECTNESS_FLOOR):
@@ -425,11 +425,11 @@ class AdaptiveEngine:
             return InferredState.STRUGGLING
         if expression == "Fear" and not correct:
             return InferredState.STRUGGLING
-        # voice fearful + not correct → struggling (even if face is neutral)
+        # voice fearful + not correct -> struggling (even if face is neutral)
         if vocal_emotion == "fearful" and not correct:
             return InferredState.STRUGGLING
 
-        # ── cross-modal override: voice calm + performing OK → comfortable ──
+        # ── cross-modal override: voice calm + performing OK -> comfortable ──
         # prevents false negatives where camera reads a frown but voice is calm
         if vocal_emotion == "calm" and correctness >= 0.5:
             return InferredState.COMFORTABLE
@@ -1811,7 +1811,7 @@ def main():
     print(f"(Answer: {current_answer})")
 
     # ══════════════════════════════════════════════════════════════════════
-    #  CORE GAME LOOP — INPUT → PROCESS → GENERATE → OUTPUT
+    #  CORE GAME LOOP — INPUT -> PROCESS -> GENERATE -> OUTPUT
     # ══════════════════════════════════════════════════════════════════════
 
     try:
@@ -1912,7 +1912,7 @@ def main():
                 print(f"  {adaptation_eval}")
 
             # ── GENERATE LAYER ───────────────────────────────────────────
-            # construct dynamic prompt from live metrics → OpenAI
+            # construct dynamic prompt from live metrics -> OpenAI
 
             prompt    = build_game_prompt(engine, decision,
                                           user_answer=user_answer,
