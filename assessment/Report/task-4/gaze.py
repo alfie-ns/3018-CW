@@ -246,7 +246,7 @@ class GameType(Enum):
     LETTERS = "letters"
 
 DEFAULT_TONE_PROMPT = (
-    "Your personality is warm, encouraging, and supportive. "
+    "Your personality is: warm, supportive and encouraging"
     "Celebrate every small win. Use phrases like 'You've got this!' and "
     "'Brilliant effort!' Genuinely cheer the user on."
 )
@@ -288,13 +288,6 @@ class AdaptiveDecision:
 class AdaptiveEngine:
     """
     Takes all three input signals and *infers* the user's real state
-    — crucially, it does NOT just trust the camera.
-
-    Examples of multi-signal reasoning:
-      Camera=Angry   + fast correct answers        -> fine, resting face.  Carry on.
-      Camera=Neutral + long silence + low accuracy -> disengaged.  Intervene.
-      Camera=Sad     + slow + low correctness       -> struggling.  Ease off.
-      Camera=Happy   + fast correct answers         -> thriving.   Ramp up.
 
     The adaptive engine also evaluates whether its previous adaptation
     actually worked, feeding that evaluation into the next round's prompt.
@@ -391,7 +384,7 @@ class AdaptiveEngine:
         if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
             return InferredState.COMFORTABLE
 
-        # ── disengaged: multiple signals pointing to checked-out ──
+        # ── disengaged: multiple signals pointing to checked-out (Stroke-ward insight, Dr. Amir) ──
         if self.consecutive_silences >= SILENCE_THRESHOLD:
             return InferredState.DISENGAGED
         if (expression == "Neutral"
