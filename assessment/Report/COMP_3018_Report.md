@@ -36,7 +36,7 @@ header-includes:
 
 ### VERIFY PAGE NUMBERS (check each against the actual PDF)
 
-#### Vernon, Metta and Sandini (2007) -- PDF NOT in papers/ folder; download from: https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf
+#### Vernon, Metta and Sandini (2007) -- `papers/Vernon, Metta and Sandini (2007) - A Survey of Artificial Cognitive Systems.pdf`
 
 | OK?   | Line(s)  | Section    | Citation as written           | Go to page... | You should see...                                                                                    |
 | ----- | -------- | ---------- | ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
@@ -58,7 +58,7 @@ header-includes:
 | - [ ] | 312     | S1.3.1  | Tapus et al. (2007, p. TODO) | Try p. 35     | PARO listed: "robotic animal toys, such as a seal (i.e., PARO [2])"   |
 | - [ ] | 509     | S2.2    | Tapus et al. (2007, p. 35)   | p. 35         | "helping human users through social rather than physical interaction" |
 
-#### Wada and Shibata (2007) -- PDF NOT in papers/ folder
+#### Wada and Shibata (2007) -- `papers/Wada and Shibata (2007) - Living With Seal Robots.pdf`
 
 | OK?   | Line(s)  | Section        | Citation as written             | Go to page... | You should see...                                                                                  |
 | ----- | -------- | -------------- | ------------------------------- | ------------- | -------------------------------------------------------------------------------------------------- |
@@ -105,19 +105,19 @@ header-includes:
 | - [ ] | 320, 624 | S1.3.2, S2.3.3 | Nikolaidis et al. (2017, p. 625) | p. 625        | "69 samples"; "U = 180, p = 0.048"; MOMDP mutual-adaptation condition                           |
 | - [ ] | 334      | S1.4.1         | Nikolaidis et al. (2017, p. 627) | p. 627        | MOMDP discussion; r = -0.066 (no correlation between trustworthiness and inferred adaptability) |
 
-#### Brooks (1991) -- PDF NOT in papers/ folder; download from: https://people.csail.mit.edu/brooks/papers/representation.pdf
+#### Brooks (1991) -- `papers/Brooks (1991).pdf`
 
 | OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                                                                    |
 | ----- | ------- | ------- | ---------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------- |
 | - [ ] | 326     | S1.3.3  | Brooks (1991, p. TODO) | ??            | NEEDS MANUAL CHECK -- find argument that intelligence emerges from physical interaction, not abstract representation |
 
-#### Matarić et al. (2007) -- PDF NOT in papers/ folder; download from: https://pmc.ncbi.nlm.nih.gov/articles/PMC1821334/
+#### Matarić et al. (2007) -- `papers/Mataric et al. (2007).pdf`
 
 | OK?   | Line(s) | Section | Citation as written             | Go to page... | You should see...                                                                                           |
 | ----- | ------- | ------- | ------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
 | - [ ] | 326     | S1.3.3  | Matarić et al. (2007, p. TODO) | ??            | NEEDS MANUAL CHECK -- find stroke survivors engaging more with embodied robot than screen-based alternative |
 
-#### Tapus, Ţăpuş and Matarić (2008) -- PDF NOT in papers/ folder; download from: https://link.springer.com/article/10.1007/s11370-008-0017-4
+#### Tapus, Ţăpuş and Matarić (2008) -- `papers/Tapus, Tapus and Mataric (2008).pdf`
 
 | OK?   | Line(s) | Section | Citation as written                          | Go to page... | You should see...                                                                                                |
 | ----- | ------- | ------- | -------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
@@ -147,7 +147,7 @@ header-includes:
 | ----- | ------- | ------- | ------------------------------ | ------------- | --------------------------------------------------------------------- |
 | - [ ] | 332     | S1.4.1  | Silver and Veness (2010, p. 1) | p. 1          | Abstract: "Monte-Carlo algorithm for online planning in large POMDPs" |
 
-#### Broadbent, Stafford and MacDonald (2009) -- PDF NOT in papers/ folder; download from: https://link.springer.com/article/10.1007/s12369-009-0030-6
+#### Broadbent, Stafford and MacDonald (2009) -- `papers/Broadbent et al. (2009).pdf`
 
 | OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                |
 | ----- | ------- | ------- | -------------------------------- | ------------- | ------------------------------------------------------------------------------------------------ |
@@ -297,11 +297,11 @@ However, most-current assistive robots operate at what Sciutti et al. (2023, p. 
 
 - [ ] ## 1.2. Literature Review
 
-*Cognitive robotics:* defined by Sciutti et al. (2023, p. 160), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot" (cf. Lecture 9, slides 4-5). This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is thus *cognitive*.
+*Cognitive robotics:* defined by Sciutti et al. (2023, p. 160), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is thus *cognitive*.
 
 - [ ] verify following lecture slides
 
-Vernon, Metta and Sandini (2007, p. TODO) synthesise the field's definitional plurality into a core cycle (cf. Lecture 9, slide 14). The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 definitions of cognition, yet the common thread therein is: anticipation, learning, and adaptation, intersected with perception and action to create autonomy (cf. Lecture 9, slide 13). This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention; Lecture 11, slide 19)*, anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, TODO: verify p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state from observable behaviour.
+Vernon, Metta and Sandini (2007, p. TODO) synthesise the field's definitional plurality into a core cycle. The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 definitions of cognition, yet the common thread therein is: anticipation, learning, and adaptation, intersected with perception and action to create autonomy. This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, TODO: verify p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state from observable behaviour.
 
 Furthermore, memory is not monolithic. Vernon, Metta and Sandini (2007, p. TODO) distinguish *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*. For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is precisely what assistive robotics demands.
 
@@ -416,7 +416,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 
 **REMOVE: one checkmark for working link second for insight gathered**
 
-- [ ] [ ] Broadbent, E., Stafford, R. and MacDonald, B. (2009) 'Acceptance of Healthcare Robots for the Older Population: Review and Future Directions', *International Journal of Social Robotics*, 1(4), pp. 319-330. Available at: https://link.springer.com/article/10.1007/s12369-009-0030-6 (Accessed: 25 March 2026).
+- [ ] [ ] Broadbent, E., Stafford, R. and MacDonald, B. (2009) 'Acceptance of Healthcare Robots for the Older Population: Review and Future Directions', *International Journal of Social Robotics*, 1(4), pp. 319-330. Available at: https://www.researchgate.net/publication/220397395_Acceptance_of_Healthcare_Robots_for_the_Older_Population_Review_and_Future_Directions (Accessed: 25 March 2026).
 - [ ] [ ] Brooks, R. A. (1991) 'Intelligence without representation', *Artificial Intelligence*, 47(1-3), pp. 139-159. Available at: https://people.csail.mit.edu/brooks/papers/representation.pdf (Accessed: 24 March 2026).
 - [ ] [ ] Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23. Available at: https://arxiv.org/abs/1801.04099 (Accessed: 15 March 2026).
 - [ ] [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251-275. Available at: https://ieeexplore.ieee.org/document/6483596 (Accessed: 20 March 2026).
@@ -434,7 +434,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [ ] [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. Available at: https://philarchive.org/rec/SHAGAT (Accessed: 22 March 2026).
 - [ ] [ ] Silver, D. and Veness, J. (2010) 'Monte-Carlo planning in large POMDPs', in *Advances in Neural Information Processing Systems (NeurIPS 23)*, pp. 2164-2172. Available at: https://proceedings.neurips.cc/paper/2010/file/edfbe1afcf9246bb0d40eb4d8027d90f-Paper.pdf (Accessed: 24 March 2026).
 - [ ] [ ] Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics & Automation Magazine*, 14(1), pp. 35-42. Available at: https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf (Accessed: 25 March 2026).
-- [ ] [ ] Tapus, A., Ţăpuş, C. and Matarić, M. J. (2008) 'User-robot personality matching and assistive robot behavior adaptation for post-stroke rehabilitation therapy', *Intelligent Service Robotics*, 1(2), pp. 169-183. Available at: https://link.springer.com/article/10.1007/s11370-008-0017-4 (Accessed: 26 March 2026).
+- [ ] [ ] Tapus, A., Ţăpuş, C. and Matarić, M. J. (2008) 'User-robot personality matching and assistive robot behavior adaptation for post-stroke rehabilitation therapy', *Intelligent Service Robotics*, 1(2), pp. 169-183. Available at: https://hal.science/hal-00770108/document (Accessed: 26 March 2026).
 - [X] [ ] Vernon, D., Metta, G. and Sandini, G. (2007) 'A Survey of Artificial Cognitive Systems: Implications for the Autonomous Development of Mental Capabilities in Computational Agents', *IEEE Transactions on Evolutionary Computation*, 11(2), pp. 151-180. Available at: [https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf](https://www.robotcub.org/misc/papers/07_Vernon_Metta_Sandini_IEEE.pdf) (Accessed: 13 March 2026).
 - [ ] [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99. Available at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2903469 (Accessed: 22 March 2026).
 - [ ] [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980. Available at: https://ieeexplore.ieee.org/document/4339551 (Accessed: 18 March 2026).
@@ -512,19 +512,19 @@ References:
 
 ## 2.2. Background (10%; Alfie)
 
-GAZE sits within socially assistive robotics *(the deployment of robots to support users through social interaction rather than physical contact)*; Tapus, Matarić and Scassellati (2007, p. 35) define this sub-field as systems that "assist users through social interaction," which distinguishes it from exoskeletons. Most-current platforms react to a single input signal (Fong, Nourbakhsh and Dautenhahn, 2003, p. 148), and thus suffer from the single-signal problem: a facial-expression classifier alone misreads a resting face as displeasure, whilst a response-time metric alone mistakes thoughtful deliberation for disengagement. Calvo and D'Mello (2010, p. 28) identify "the inherent challenges with unisensory affect detection," the field remains dominated by "mostly unimodal approaches" despite the recognised advantage of multi-channel fusion; Poria et al. (2017, p. 99) further report that multimodal systems were "consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83%." This demands multi-signal fusion (the system weighs complementary channels together instead of trusting any one alone).
+GAZE sits within socially assistive robotics *(the deployment of robots to support users through social interaction rather than physical contact)*; Tapus, Matarić and Scassellati (2007, p. 35) define this sub-field as systems that "assist users through social interaction." Most-current platforms react to a single input signal (Fong, Nourbakhsh and Dautenhahn, 2003, p. 148), suffering the single-signal problem: a facial-expression classifier misreads resting faces as displeasure; a response-time metric mistakes deliberation for disengagement. Calvo and D'Mello (2010, p. 28) identify "the inherent challenges with unisensory affect detection"; Poria et al. (2017, p. 99) report that multimodal systems were "consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83%." This demands multi-signal fusion (the system weighs complementary channels together instead of trusting any one alone).
 
-GAZE's core contribution is multi-signal emotional inference: facial expression (CNN, Workshop 10), vocal emotion (MLP, Workshop 8), response time, and answer correctness (Whisper + LLM verification) are fused alongside three derived temporal signals (rolling correctness, consecutive silences, consecutive-wrong streaks) into a single inferred user-state. The architecture is hybrid: GPT-4.1 generates dialogue whilst a symbolic AdaptiveEngine governs state inference via interpretable rules, grounding LLM output in Pepper's physical affordances as Ahn et al. (2022, p. 1) advocate. Smedegaard (2019, p. 4) warns that initial engagement with social robots often reflects novelty rather than sustained interest; GAZE targets this via adaptive game-switching in response to inferred disengagement.
+GAZE's core contribution is therefore multi-signal emotional inference: facial expression (CNN, Workshop 10), vocal emotion (MLP, Workshop 8), response time, and answer correctness are fused alongside three derived temporal signals into a single inferred user-state. The architecture is hybrid: GPT-4.1 generates dialogue whilst a symbolic AdaptiveEngine governs state inference, grounding output in Pepper's affordances (Ahn et al., 2022, p. 1). Smedegaard (2019, p. 4) warns that engagement with social robots reflects novelty rather than sustained interest; GAZE targets this via adaptive game-switching.
 
-- [ ] Furthermore, GAZE implements selectable personality modes grounded in Tapus, Tapus and Mataric (2008, p. TODO: VERIFY PAGE), who demonstrate that adjusting interaction style to individual user traits improved task performance. Kahn et al. (2008, pp. 97-104) formalise this, proposing that robots should exhibit distinct social personas rather than a single generic affect. GAZE operationalises this via four user-selectable personality modes (Cheeky and Playful, Warm and Wise Mentor, Enthusiastic Coach, Calm and Therapeutic), each injecting a distinct behavioural fragment into the LLM's system prompt. Personality persists across sessions; the system can suggest switching mid-session if emotional signals indicate a mismatch, extending Tapus et al.'s static matching to a dynamic, signal-driven approach.
+- [ ] Furthermore, four selectable personality modes, grounded in Tapus, Tapus and Mataric (2008, p. TODO: VERIFY PAGE) and Kahn et al.'s (2008, pp. 97-104) design patterns for sociality, extend static personality matching to dynamic, signal-driven adaptation.
 
 ## 2.3. Methods & Setup (35%; Alfie)
 
 ### 2.3.1 System Architecture
 
-GAZE operates as a conversational loop rather than a rigid question-answer cycle. Each turn: 1) five emotional signals are captured; 2) the AdaptiveEngine infers user-state; 3) signal context and transcribed speech are sent to GPT-4.1 with function-calling tools; 4) the LLM decides whether to respond conversationally, initiate a game, check an answer, or adjust difficulty by invoking the appropriate tool; 5) the spoken response, gestures, and LED state are delivered on Pepper concurrently via threading. Computation runs on the laptop; Pepper handles physical I/O.
+GAZE operates as a conversational loop rather than a rigid question-answer cycle. Each turn: 1) five emotional signals are captured; 2) the AdaptiveEngine infers user-state; 3) signal context and transcribed speech are sent to GPT-4.1 with function-calling tools; 4) the LLM decides whether to respond conversationally, initiate a game, check an answer, or adjust difficulty; 5) the spoken response, gestures, and LED state are delivered on Pepper concurrently via threading. Computation runs on the laptop; Pepper handles physical I/O. Ensuring all five signals are immediately inferred upon system startup, before the main-conversation loop begins post-personality selection; the dashboard thus reflects live emotional state inference from the moment the user sits down, not solely once gameplay commences.
 
-- [ ] This function-calling architecture is neuro-symbolic: GPT-4.1 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, p. TODO: VERIFY 12389) 'third wave' paradigm, wherein neural and symbolic components share a structured interface. The LLM is thereby grounded in Pepper's capabilities via tool definitions, extending Ahn et al.'s (2022, p. 1) affordance-aware principle from action selection to conversational autonomy.
+- [ ] This function-calling architecture is neuro-symbolic: GPT-4.1 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, p. TODO: VERIFY 12389) 'third wave' paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, p. 1).
 
 \begin{figure}[H]
 \centering
@@ -535,17 +535,17 @@ GAZE operates as a conversational loop rather than a rigid question-answer cycle
 
 ### 2.3.2 Input Layer: Four Simultaneous Signals
 
-**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results (Tables 1-2) show that "particular facial behaviors are universally associated with particular emotions," finding that even members of a preliterate (without written language) culture with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated via cross-modal override.
+**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated via cross-modal override.
 
 **2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection calibrated to the room's ambient noise level at startup. Recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. The recorded WAV is transcribed via OpenAI Whisper (`whisper-1`).
 
-**3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 577) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality: the camera captures a static frame whilst the voice captures the full spoken response, and thus the two may legitimately disagree, wherein the decision logic arbitrates via performance data.
+**3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 577) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality; the two may disagree, wherein decision logic arbitrates.
 
 **4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion; the Whisper call occurs *after* the timer halts, isolating deliberation time from API latency.
 
 ### 2.3.3 Process Layer: Multi-Signal State Inference
 
-The AdaptiveEngine's `infer_state()` method weighs seven signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Four raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The classification rules combine these in cross-modal ways (see Listing~\ref{lst:infer} and Table~\ref{tab:state-action}): neither visual nor vocal modality is trusted in isolation. Fong, Nourbakhsh and Dautenhahn (2003, p. 148) identify "emotion recognition" as a key capability for socially interactive robots, yet most implementations rely on a single modality; GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3) were derived from pilot testing.
+The AdaptiveEngine's `infer_state()` method weighs seven signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Four raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The classification rules combine these in cross-modal ways (see Listing~\ref{lst:infer} and Table~\ref{tab:state-action}): neither visual nor vocal modality is trusted in isolation. GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -592,7 +592,7 @@ The AdaptiveEngine's `infer_state()` method weighs seven signals to classify the
 % Arrows: engine to states
 \foreach \n in {s1,s2,s3,s4,s5} \draw[->,black!40,thick] (eng.east) -- (\n.west);
 \end{tikzpicture}
-\caption{Multi-signal inference pipeline. Four raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; voice reads \textit{calm} whilst camera frowns $\rightarrow$ cross-modal override to \textit{Comfortable}) to classify the user into one of five states. Neither visual nor vocal modality is trusted in isolation.}
+\caption{Multi-signal inference pipeline. Four raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; voice reads \textit{calm} whilst camera frowns $\rightarrow$ cross-modal override to \textit{Comfortable}) to classify the user into one of five states. Neither visual nor vocal modality is trusted in isolation; therefore, the multi-signal novelty.
 \label{fig:multi-signal}
 \end{figure}
 
@@ -631,7 +631,7 @@ if self.consecutive_wrong >= 3
     return InferredState.FRUSTRATED
 \end{lstlisting}
 
-The `decide()` function then maps the inferred state to concrete adaptive actions: difficulty adjustment (easy, medium, hard), game switching (numbers $\leftrightarrow$ letters when the user is frustrated or disengaged), hint provision, encouragement, and tone selection. This maps onto the mutual-adaptation paradigm identified by Nikolaidis, Hsu and Srinivasa (2017, p. 625), wherein the robot adjusts its strategy based on an evolving model of the user rather than following a fixed policy. Table~\ref{tab:state-action} summarises the full state-to-action mapping.
+The `decide()` function then maps the inferred state to concrete adaptive actions: difficulty adjustment (easy, medium, hard), game switching (numbers $\leftrightarrow$ letters when the user is frustrated or disengaged), hint provision, encouragement, and tone selection. This maps onto Nikolaidis, Hsu and Srinivasa's (2017, p. 625) mutual-adaptation paradigm. Table~\ref{tab:state-action} summarises the mapping.
 
 \begin{table}[H]
 \centering

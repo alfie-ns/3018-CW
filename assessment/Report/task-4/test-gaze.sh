@@ -1,16 +1,29 @@
 #!/usr/bin/env bash
 # Run gaze.py in local mode (no Pepper required).
 # Uses Mac webcam, mic, and TTS instead.
+#
+# Setup (first time only):
+#   python3 -m venv .venv
+#   source .venv/bin/activate
+#   pip install -r requirements.txt
+#   echo "OPENAI_API_KEY=sk-..." > .env
 
 cd "$(dirname "$0")"
 rm -rf __pycache__
 
-# resolve the Semester 2 .venv regardless of where the script lives
-VENV_PYTHON="$(cd ../../../.. && pwd)/.venv/bin/python"
-if [ ! -x "$VENV_PYTHON" ]; then
-    echo "ERROR: cannot find .venv python at $VENV_PYTHON"
+# find Python: local .venv -> repo-level .venv -> system python3
+if [ -x ".venv/bin/python" ]; then
+    VENV_PYTHON=".venv/bin/python"
+elif [ -x "$(cd ../../../.. 2>/dev/null && pwd)/.venv/bin/python" ]; then
+    VENV_PYTHON="$(cd ../../../.. && pwd)/.venv/bin/python"
+elif command -v python3 &>/dev/null; then
+    VENV_PYTHON="python3"
+else
+    echo "ERROR: No Python found. Create a venv: python3 -m venv .venv"
     exit 1
 fi
+
+echo "Using Python: $VENV_PYTHON"
 
 export GAZE_LOCAL_MODE=true
 export GAZE_LOCAL_CAMERA=true
