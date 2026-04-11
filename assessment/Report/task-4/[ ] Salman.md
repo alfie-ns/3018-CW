@@ -43,6 +43,26 @@ Contrast the multi-signal system's behaviour against a would-be baseline that on
 
 ---
 
+## Code-to-Report Architecture Map
+
+Use this to reference specific code when writing. Every claim in your section should trace back to a function.
+
+| Code Component | File Location | Report Section | What It Does |
+|---|---|---|---|
+| `SpeechEmotionModel` class | gaze.py lines 175-225 | 2.3.2 (Signal 3) | WS-08 MLP; returns (emotion, confidence) via `predict_proba()` |
+| `capture_and_classify()` | gaze.py lines ~1430-1440 | 2.3.2 (Signal 1) | WS-10 CNN; classifies face into 7 emotions with confidence |
+| `FACE_CONFIDENCE_THRESHOLD` / `VOICE_CONFIDENCE_THRESHOLD` | gaze.py lines ~94-95 | 2.3.2 | If model confidence < 0.5, prediction is overridden to Neutral/neutral — defensive against noisy readings |
+| `AdaptiveEngine.infer_state()` | gaze.py lines ~418-513 | 2.3.3 | 7 signals in, 5 states out; cross-modal rules |
+| `AdaptiveEngine.decide()` | gaze.py lines ~517+ | 2.3.3 | Maps inferred state to difficulty/game-switch/hints/tone |
+| `evaluate_adaptation()` | gaze.py (tool function) | 2.3.6 | Compares outcome pairs; feeds self-evaluation into next LLM call |
+| `build_signal_context()` | gaze.py (conversation loop) | 2.3.4 | Packages 5 live signals into context block for GPT-4.1 |
+| `TOOLS` list (8 function-calling tools) | gaze.py | 2.3.4 | LLM decides which tools to invoke; neuro-symbolic interface |
+| `Personality` enum | gaze.py | 2.2 / 2.5 | 4 modes (Cheeky, Mentor, Coach, Therapeutic); injected into system prompt |
+| `local_calibrate_ambient()` | gaze.py | 2.3.2 (Signal 2) | Dynamic RMS threshold calibration at startup; replaces static VAD |
+| `gaze_save.json` | generated at runtime | 2.4 (your section) | Per-round session log; your primary data source |
+
+---
+
 ## Metrics Available from the Session Log
 
 The `gaze_save.json` file and console output provide per-round data:
@@ -53,7 +73,8 @@ The `gaze_save.json` file and console output provide per-round data:
 | `difficulty` | round log | Difficulty trajectory over the session (ramp up / ease off) |
 | `correct` | round log | Accuracy trends; streak patterns |
 | `response_time` | round log | Engagement trends; does avg time decrease as session progresses? |
-| `facial_expression` | round log | Camera readings vs inferred state (show overrides) |
+| `facial_expression` | round log | Camera readings vs inferred state (show overrides); readings below 0.5 confidence were auto-overridden to Neutral |
+| `vocal_emotion_confidence` | round log | Voice model confidence; readings below 0.5 were auto-overridden to neutral |
 | `inferred_state` | round log | Distribution across 5 states; does the system stabilise at Comfortable? |
 | `accuracy` | session summary | Overall performance |
 | `best_streak` | session summary | Peak engagement |

@@ -92,6 +92,8 @@ REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 500  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
+FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain — treat as Neutral
+VOICE_CONFIDENCE_THRESHOLD = 0.5  # below this, vocal emotion is too uncertain — treat as neutral
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
@@ -2522,7 +2524,11 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
             expression, expr_conf = capture_and_classify(
                 ssh, face_model, face_cascade, local_camera
             )
-            print(f"  Expression: {expression} ({expr_conf:.2f})")
+            if expr_conf < FACE_CONFIDENCE_THRESHOLD:
+                print(f"  Expression: {expression} ({expr_conf:.2f}) — LOW CONFIDENCE, treating as Neutral")
+                expression = "Neutral"
+            else:
+                print(f"  Expression: {expression} ({expr_conf:.2f})")
 
             # ── b. Record audio + measure volume + classify vocal emotion ──
             question_start = time.time()
@@ -2533,7 +2539,11 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
             response_time = time.time() - question_start
 
             vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
-            print(f"  Vocal emotion: {vocal_emo} ({vocal_conf:.2f})")
+            if vocal_conf < VOICE_CONFIDENCE_THRESHOLD:
+                print(f"  Vocal emotion: {vocal_emo} ({vocal_conf:.2f}) — LOW CONFIDENCE, treating as neutral")
+                vocal_emo = "neutral"
+            else:
+                print(f"  Vocal emotion: {vocal_emo} ({vocal_conf:.2f})")
 
             vol_rms = measure_volume()
             print(f"  Volume RMS: {vol_rms:.0f}")
