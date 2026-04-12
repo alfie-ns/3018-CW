@@ -80,7 +80,7 @@ load_dotenv()
 NAO_IP       = os.getenv("NAO_IP", "ROBOT_IP")
 NAO_USER     = "nao"
 NAO_PASS     = "nao"
-RECORD_MAX_SECS    = 12     # hard ceiling — never record longer than this
+RECORD_MAX_SECS    = 12     # hard ceiling; never record longer than this
 RECORD_MIN_SECS    = 2      # minimum recording before silence detection kicks in
 SILENCE_POLL_SECS  = 0.5    # polling interval for silence detection on Pepper
 SILENCE_DURATION   = 1.5    # seconds of silence after speech to trigger stop
@@ -92,15 +92,15 @@ REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 500  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
-FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain — treat as Neutral
-VOICE_CONFIDENCE_THRESHOLD = 0.5  # below this, vocal emotion is too uncertain — treat as neutral
+FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; treat as Neutral
+VOICE_CONFIDENCE_THRESHOLD = 0.5  # below this, vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
 # false when connected to pepper; true for testing when no Pepper's camera
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
 
-# full local mode — runs entire game loop on Mac without any Pepper connection
+# full local mode; runs entire game loop on Mac without any Pepper connection
 # uses local webcam, Mac microphone, and macOS TTS instead of Pepper hardware
 LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
@@ -116,7 +116,7 @@ _preview_lock  = threading.Lock()
 _preview_state = {"emotion": "Neutral", "confidence": 0.0}
 _preview_frame = None    # latest annotated BGR frame for the dashboard
 
-# paths to pre-trained models — checks local models/ first (portable),
+# paths to pre-trained models; checks local models/ first (portable),
 # then falls back to the workshop directory (development repo layout)
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR    = os.path.join(SCRIPT_DIR, "models")
@@ -135,7 +135,7 @@ HAAR_CASCADE  = _find_model("haarcascade_frontalface_default.xml", os.path.join(
 SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 
 # adaptive engine thresholds
-RESPONSE_TIME_BASELINE = 30.0   # seconds — beyond this, user is slow
+RESPONSE_TIME_BASELINE = 30.0   # seconds; beyond this, user is slow
 CORRECTNESS_WINDOW     = 5      # rolling window size
 CORRECTNESS_FLOOR      = 0.4    # below thus ease off
 CORRECTNESS_CEILING    = 0.8    # above thus ramp up
@@ -150,11 +150,11 @@ if not os.getenv("OPENAI_API_KEY", "").strip():
 client = OpenAI()
 
 
-#  FACIAL EXPRESSION MODEL (WS-10)
+# FACIAL EXPRESSION MODEL (WS-10)
 # --------------------------------
 
 class FacialExpressionModel:
-    """Pre-trained CNN — 7-class emotion classifier (48x48 greyscale input)."""
+    """Pre-trained CNN: 7-class emotion classifier (48x48 greyscale input)."""
 
     EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
@@ -171,17 +171,16 @@ class FacialExpressionModel:
         return self.EMOTIONS[idx], float(preds[0][idx])
 
 
-#  SPEECH EMOTION MODEL (WS-08)
+# SPEECH EMOTION MODEL (WS-08)
 # --------------------------------
 
 class SpeechEmotionModel:
     """
     Pre-trained MLP for vocal emotion classification (WS-08).
 
-    Extracts MFCC, chroma, and mel spectrogram features from a WAV file
-    and classifies the speaker's emotional state. This provides a second,
-    independent modality alongside the facial expression CNN — thereby
-    preventing over-reliance on any single sensor.
+    MFCC, chroma and mel-spectrogram features extracted from the WAV,
+    fed into the trained MLP. Lives alongside the face CNN so that no
+    single sensor gets to decide the user's state on its own.
     """
 
     EMOTIONS = ["calm", "happy", "fearful", "disgust"]
@@ -241,7 +240,7 @@ def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
         return "neutral", 0.0
 
 
-#  ENUMS AND DATA CLASSES
+# ENUMS AND DATA CLASSES
 # ------------------------
 
 class Difficulty(Enum):
@@ -366,7 +365,7 @@ class AdaptiveDecision:
 
 
 
-#  ADAPTIVE ENGINE
+# ADAPTIVE ENGINE
 # ----------------
 
 class AdaptiveEngine:
@@ -388,7 +387,7 @@ class AdaptiveEngine:
         self.game_switch_count             = 0
         # tracks what adaptation was applied each round (used by evaluate_adaptation)
         self.adaptation_log: list[dict]    = []
-        # reward system — milestones already announced
+        # reward system; milestones already announced
         self.total_correct                 = 0
         self.best_streak                   = 0
         self.rewards_given: set[str]       = set()
@@ -425,16 +424,16 @@ class AdaptiveEngine:
         Weigh ALL signals together to determine the user's actual state.
 
         Five independent cross-validated signals:
-          1- facial expression  (visual modality — CNN, WS-10)
-          2- vocal emotion      (audio modality — MLP, WS-08)
+          1- facial expression  (visual modality: CNN, WS-10)
+          2- vocal emotion      (audio modality: MLP, WS-08)
           3- response time      (behavioural)
           4- answer correctness (performance)
           5- speech volume/RMS  (arousal indicator)
 
-        Neither modality is trusted in isolation — the camera may misread
-        a resting face, and the voice model may misclassify background noise.
-        Cross-referencing all five signals against performance data yields
-        a more robust inference than any single signal alone.
+        No single signal is trusted in isolation; the camera will read
+        a resting face as Angry, and the voice model will hear a background
+        cough and call it "fearful". Cross-checking all five against how
+        the user is actually performing is what keeps the inference honest.
         """
         correctness = self.rolling_correctness()
         is_silent   = (not answer_text.strip()
@@ -739,7 +738,7 @@ class AdaptiveEngine:
                 + "\n".join(f"- {e}" for e in evaluations))
 
 
-#  DYNAMIC PROMPT CONSTRUCTION
+# DYNAMIC PROMPT CONSTRUCTION
 # ----------------------------
 
 GAME_DESCRIPTIONS = {
@@ -772,8 +771,8 @@ TONE_INSTRUCTIONS = {
 
 
 # --------------------------------------
-#  SSH AND PEPPER ROBOT HELPERS
-#  (adapted from lab-robot-code-fin.py)
+# SSH AND PEPPER ROBOT HELPERS
+# (adapted from lab-robot-code-fin.py)
 # --------------------------------------
 
 def ssh_connect():
@@ -797,15 +796,15 @@ def nao_run(ssh, code):
 
 def nao_calibrate_ambient(ssh) -> int:
     """
-    Calibrate microphone energy threshold to the current room environment.
+    Calibrate the mic energy threshold to whatever room Pepper is in.
 
-    Silently listens for CALIBRATION_SECS seconds via ALAudioDevice,
-    samples the front microphone energy at regular intervals, and returns
-    the ambient baseline + ENERGY_BUFFER as the speech detection threshold.
+    Listen quietly for CALIBRATION_SECS via ALAudioDevice, sample the
+    front-mic energy at regular intervals, and set the speech-detection
+    threshold at ambient + ENERGY_BUFFER.
 
-    This prevents false positives in noisy labs wherein ambient noise
-    exceeds the hardcoded default, and false negatives in quiet rooms
-    wherein the threshold is unnecessarily high.
+    Without this, a noisy lab blows past the hardcoded default and
+    everything looks like speech; a dead-quiet room sits so far below
+    it that genuine speech never registers.
     """
     try:
         raw = nao_run(ssh, f"""
@@ -844,13 +843,13 @@ def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD):
       2- silence persists for SILENCE_DURATION seconds after speech ends, OR
       3- the hard ceiling RECORD_MAX_SECS is reached.
 
-    The energy_threshold is calibrated at startup via nao_calibrate_ambient()
-    so the system adapts to the ambient noise level of the room, thereby
-    preventing false positives in noisy labs and false negatives in quiet ones.
+    The energy_threshold comes from nao_calibrate_ambient() at startup,
+    so the recording adapts to whatever room Pepper is in rather than
+    tripping on a hardcoded default.
 
-    If ALAudioDevice.getFrontMicEnergy() is unsupported on the robot's firmware,
-    the inner loop falls back to a safe fixed-duration recording so the demo
-    never breaks.
+    If getFrontMicEnergy() isn't supported on this particular Pepper's
+    firmware, the inner loop falls back to a fixed-duration recording
+    so the demo never breaks mid-session.
     """
     nao_run(ssh, f"""
 from naoqi import ALProxy
@@ -872,7 +871,7 @@ try:
     while True:
         elapsed = time.time() - start
 
-        # hard ceiling — never exceed max duration
+        # hard ceiling; never exceed max duration
         if elapsed >= {RECORD_MAX_SECS}:
             break
 
@@ -880,7 +879,7 @@ try:
         energy = audio.getFrontMicEnergy()
 
         if elapsed < {RECORD_MIN_SECS}:
-            # minimum recording period — always wait this long
+            # minimum recording period
             if energy > threshold:
                 speech_detected = True
             time.sleep({SILENCE_POLL_SECS})
@@ -899,7 +898,7 @@ try:
         time.sleep({SILENCE_POLL_SECS})
 
 except Exception as e:
-    # firmware fallback — getFrontMicEnergy() unsupported on this Pepper
+    # firmware fallback; getFrontMicEnergy() unsupported on this Pepper
     # fall back to a safe fixed-duration recording so the demo never breaks
     print("  [Silence detection failed: " + str(e) + "] Falling back to fixed-duration recording")
     time.sleep({RECORD_MAX_SECS})
@@ -913,13 +912,12 @@ rec.stopMicrophonesRecording()
 
 def _split_into_sentences(text: str) -> list[str]:
     """
-    Split dialogue into natural sentence-level segments for speech delivery.
+    Split dialogue into sentence-level segments for speech delivery.
 
-    OpenAI frequently returns dialogue as a single unbroken block. Without
-    splitting, Pepper rattles off the entire paragraph without breathing,
-    thereby ruining the illusion of a conversational companion. This function
-    splits at sentence terminators (. ? !) whilst preserving abbreviations
-    and decimal numbers.
+    OpenAI mostly returns dialogue as one unbroken block. Left as-is,
+    Pepper rattles through the whole paragraph without breathing, which
+    instantly kills the companion illusion. Split at (. ? !) whilst
+    preserving abbreviations and decimal numbers.
     """
     # split on sentence-ending punctuation followed by a space or end-of-string
     raw_segments = re.split(r'(?<=[.!?])\s+', text.strip())
@@ -935,12 +933,12 @@ def _split_into_sentences(text: str) -> list[str]:
 
 def nao_say(ssh, text):
     """
-    Speak text on Pepper with natural sentence-level pausing.
+    Speak text on Pepper with sentence-level pausing.
 
-    Packs all sentences into a single SSH payload so Pepper handles the
-    loop and pauses internally. This eliminates the 1-2 second SSH
-    round-trip overhead per sentence that would otherwise ruin the
-    carefully designed 0.4s inter-sentence cadence.
+    All sentences get packed into one SSH payload; Pepper handles the
+    loop and the pauses internally. Sending one sentence per SSH call
+    would burn 1-2 seconds of round-trip per sentence and turn the 0.4s
+    inter-sentence cadence into something choppy and unnatural.
     """
     sentences = _split_into_sentences(text)
     safe_sentences = json.dumps(sentences)
@@ -1026,29 +1024,30 @@ ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
         print(f"  [LED failed] {e}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  LOCAL MODE HELPERS (Mac — no Pepper required)
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# LOCAL MODE HELPERS (Mac; no Pepper required)
+# ------------------------------------------------------------------------------
 
 LOCAL_SAMPLE_RATE = 16000   # Whisper expects 16 kHz; we resample from native rate
 
 
-LOCAL_SILENCE_RMS   = 40      # default RMS; overridden by local_calibrate_ambient()
+LOCAL_SILENCE_RMS   = 40        # default RMS; overridden by local_calibrate_ambient()
 _local_speech_detected = False  # set by local_record(); used as transcription gate
-LOCAL_SILENCE_SECS  = 1.5    # seconds of post-speech silence to stop recording
-LOCAL_MIN_SECS      = 1.0    # minimum recording before silence detection kicks in
-LOCAL_NO_SPEECH_MAX = 5.0    # stop if no speech detected at all after this many seconds
-LOCAL_ENERGY_BUFFER = 50     # margin above ambient baseline for speech detection
+LOCAL_SILENCE_SECS  = 1.5       # seconds of post-speech silence to stop recording
+LOCAL_MIN_SECS      = 1.0       # minimum recording before silence detection kicks in
+LOCAL_NO_SPEECH_MAX = 5.0       # stop if no speech detected at all after this many seconds
+LOCAL_ENERGY_BUFFER = 50        # margin above ambient baseline for speech detection
 
 
 def local_calibrate_ambient() -> int:
     """
-    Calibrate the Mac mic's ambient noise level — mirrors nao_calibrate_ambient().
+    Calibrate the mic's ambient noise level; mirror
+    nao_calibrate_ambient() so local-mode testing behaves like the robot.
 
-    Silently listens for CALIBRATION_SECS seconds and returns the ambient
-    baseline + LOCAL_ENERGY_BUFFER as the speech/silence threshold.
-    This prevents the recording from running for the full max duration
-    in rooms wherein the ambient noise floor exceeds the hardcoded default.
+    Listen quietly for CALIBRATION_SECS and set the speech/silence
+    threshold at ambient + LOCAL_ENERGY_BUFFER. Without this step, the
+    recording runs for its full max duration in any room whose ambient
+    floor sits above the hardcoded default.
     """
     global LOCAL_SILENCE_RMS
     dev_info   = sd.query_devices(kind="input")
@@ -1057,7 +1056,7 @@ def local_calibrate_ambient() -> int:
     chunk_size  = int(native_rate * 0.2)
     samples     = []
 
-    print(f"  Calibrating Mac mic (stay quiet for {CALIBRATION_SECS}s)...")
+    print(f"Calibrating Mac mic (stay quiet for {CALIBRATION_SECS}s)...")
 
     def _cb(indata, frames, time_info, status):
         rms = (np.mean(indata.astype(np.float64) ** 2)) ** 0.5
@@ -1075,15 +1074,25 @@ def local_calibrate_ambient() -> int:
     threshold = ambient + LOCAL_ENERGY_BUFFER
     LOCAL_SILENCE_RMS = threshold
 
-    # also calibrate the transcription gate — VOLUME_THRESHOLD was hardcoded
-    # at 500, which is too high for MacBook built-in mics (ambient ~30-170).
-    # Setting it to 4x the silence threshold ensures Whisper is only called
-    # when genuine speech energy is present, preventing hallucination on quiet audio.
+    # re-tune the transcription gate. VOLUME_THRESHOLD was hardcoded at
+    # 500, which is too high for MacBook built-in mics (their ambient
+    # RMS sits at ~30-170). 4x the silence threshold means Whisper only
+    # fires on real speech energy, not on room tone that it would
+    # otherwise happily hallucinate a sentence into.
     global VOLUME_THRESHOLD
     VOLUME_THRESHOLD = max(LOCAL_SILENCE_RMS * 4, 100)
 
+    # scale the arousal thresholds to the room, not to a fixed value. A
+    # loud speaker in a quiet room is nothing like a quiet speaker in a
+    # noisy lab, and static (200, 2000) would call both "excited". The
+    # max() floors stop us from getting trigger-happy in a near-silent room.
+    AdaptiveEngine.VOLUME_QUIET = max(ambient * 2,  200) # twice as loud as an empty room, thus quiet; 200 enforces an absolute minimum to quiet
+    AdaptiveEngine.VOLUME_LOUD  = max(ambient * 10, 2000)
+
     print(f"  Ambient RMS: {ambient}, silence threshold: {threshold}, "
           f"transcription gate: {VOLUME_THRESHOLD}")
+    print(f"  Arousal thresholds: QUIET={AdaptiveEngine.VOLUME_QUIET}, "
+          f"LOUD={AdaptiveEngine.VOLUME_LOUD}")
     return threshold
 
 
@@ -1193,10 +1202,18 @@ def record(ssh, energy_threshold):
         nao_record(ssh, energy_threshold)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  GESTURE MAPPING
-#  Each gesture is a motion sequence aligned to the game/emotional context.
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------------
+# GESTURE MAPPING
+# ------------------------------------------------------------------------------------
+#  Each gesture is a motion sequence aligned to the game/emotional context:
+#   - celebrate: arms up + small bicep curls, for thriving moments and milestones
+#   - encourage: one arm forward with open hand, for encouragement when struggling
+#   - think: one hand on chin, for thinking moments and when user is taking a while
+#   - wave: friendly wave to re-engage when disengaged
+#   - calm: slow open-arm gesture, for calming down when frustrated
+#   - energetic: quick open-arm raises, for boosting energy when disengaged or thriving
+#   - neutral: resting; no gesture-movements as no need
+# ------------------------------------------------------------------------------------
 
 GESTURE_CODE = {
     "celebrate": """
@@ -1297,17 +1314,18 @@ def nao_gesture(ssh, gesture_type: str):
         print(f"  [Gesture failed: {gesture_type}] {e}")
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  AUDIO ANALYSIS + TRANSCRIPTION
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# AUDIO ANALYSIS + TRANSCRIPTION
+# ------------------------------------------------------------------------------
 
 def measure_volume() -> float:
     """
-    Compute RMS amplitude of the recorded WAV (both local and Pepper paths).
+    RMS amplitude of the recorded WAV (both local and Pepper paths).
 
-    Repurposed as the 5th emotional signal: speaking volume correlates with
-    arousal — loud speech suggests excitement or frustration (high arousal),
-    quiet speech suggests disengagement or sadness (low arousal).
+    Doubles as the 5th signal. Volume roughly maps to arousal: loud is
+    excited-or-furious (volume alone can't tell the two apart), quiet is
+    calm-or-checked-out. The adaptive engine cross-references with
+    face/voice/correctness to disambiguate.
     """
     try:
         with wave.open(LOCAL_WAV, "rb") as wf:
@@ -1323,11 +1341,9 @@ def measure_volume() -> float:
 
 def transcribe() -> str:
     """
-    Transcribe the local WAV with Whisper, gracefully handling API drops.
-
-    Returns an empty string on failure, which the adaptive engine seamlessly
-    interprets as a silent/missed answer via the existing disengagement logic
-    — therefore no additional error handling is needed upstream.
+    Transcribe the local WAV with Whisper. Return "" on failure; the
+    adaptive engine already reads empty input as silence via the
+    disengagement path, so callers don't need to wrap this.
     """
     try:
         with open(LOCAL_WAV, "rb") as fh:
@@ -1339,9 +1355,9 @@ def transcribe() -> str:
         return ""
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  FACIAL EXPRESSION PIPELINE
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# FACIAL EXPRESSION PIPELINE
+# ------------------------------------------------------------------------------
 
 def _preview_thread_loop(camera, face_model, face_cascade):
     """
@@ -1404,7 +1420,7 @@ def capture_and_classify(ssh, face_model, face_cascade,
     In DEBUG_PREVIEW mode with a local camera, reads from the continuous
     preview thread instead of capturing a new frame (avoids duplicate reads).
     """
-    # local mode with preview thread running — just read shared state
+    # local mode with preview thread running; just read shared state
     if DEBUG_PREVIEW and local_camera is not None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
@@ -1438,18 +1454,18 @@ def capture_and_classify(ssh, face_model, face_cascade,
     return face_model.predict(inp)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  OPENAI GAME GENERATION + ANSWER CHECKING
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# OPENAI GAME-GENERATION + ANSWER CHECKING
+# ------------------------------------------------------------------------------
 
-API_TIMEOUT = 10  # seconds — prevents Pepper freezing if OpenAI/network stalls
+API_TIMEOUT = 10  # seconds; prevents Pepper freezing if OpenAI/network stalls
 
 
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
     """
-    Falls back to a simple string-containment check if the API call fails,
-    thereby ensuring the game loop never stalls on answer verification.
+    If the OpenAI call drops, fall back to plain string-containment
+    so the game loop keeps moving rather than hanging on a single answer.
     """
     if not user_answer.strip():
         return False
@@ -1483,9 +1499,9 @@ def check_answer(user_answer: str, correct_answer: str,
         return correct_answer.lower().strip() in user_answer.lower().strip()
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  SAVE / LOAD SESSION
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# SAVE/LOAD SESSIONS
+# ------------------------------------------------------------------------------
 
 def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None):
     """Save session progress to disk so the user can continue later."""
@@ -1553,9 +1569,9 @@ def delete_save():
         os.remove(SAVE_FILE)
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  OPENAI FUNCTION-CALLING TOOLS + CONVERSATION HELPERS
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# OPENAI FUNCTION-CALLING TOOLS + CONVERSATION HELPERS
+# ------------------------------------------------------------------------------
 
 TOOLS = [
     {
@@ -1952,7 +1968,7 @@ def _generate_game_question_internal(game_type_str: str, difficulty_str: str) ->
         resp = client.chat.completions.create(
             model="gpt-4.1",
             messages=[
-                {"role": "system", "content": "You generate countdown-style game questions. Respond only with valid JSON."},
+                {"role": "system", "content": "You generate countdown-style game questions. Respond only with valid JSON."}, # JSON is used for the function call
                 {"role": "user", "content": prompt},
             ],
             temperature=0.8,
@@ -1977,24 +1993,24 @@ def _generate_game_question_internal(game_type_str: str, difficulty_str: str) ->
         }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  LED COLOUR MAP
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# LED COLOUR MAP
+# ------------------------------------------------------------------------------
 
 LED_COLOURS = {
     InferredState.THRIVING:    0x0000FF00,   # green
     InferredState.COMFORTABLE: 0x00FFFFFF,   # white
     InferredState.STRUGGLING:  0x00FFFF00,   # yellow
     InferredState.FRUSTRATED:  0x00FF8000,   # orange
-    InferredState.DISENGAGED:  0x000080FF,   # light blue
+    InferredState.DISENGAGED:  0x000080FF,   # light-blue
 }
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  LIVE DASHBOARD (tkinter — GUI only, no robot logic)
-# ══════════════════════════════════════════════════════════════════════════════
+# ------------------------------------------------------------------------------
+# LIVE DASHBOARD (tkinter-GUI only)
+# ------------------------------------------------------------------------------
 
-# colour palette — maps inferred state to a hex background for the state label
+# colour palette; maps inferred state to a hex background for the state label
 _STATE_COLOURS = {
     InferredState.THRIVING:    "#22c55e",   # green
     InferredState.COMFORTABLE: "#3b82f6",   # blue
@@ -2008,7 +2024,7 @@ class GazeDashboard:
     """
     Live tkinter dashboard for GAZE.
 
-    Updated from the main game loop via refresh() calls — avoids threading
+    Updated from the main game loop via refresh() calls; avoids threading
     issues on macOS by keeping all tkinter operations on the main thread.
     The camera preview updates via a scheduled after() callback that reads
     the latest frame from the preview thread's shared _preview_frame buffer.
@@ -2214,7 +2230,7 @@ class GazeDashboard:
             self._heard_var.set(f"You said: {user_answer if user_answer else '(silence)'}")
             self._answer_var.set(f"Correct:  {correct_answer if correct_answer else '—'}")
             if not correct_answer:
-                # conversation turn, not a game answer — no result to show
+                # conversation turn, not a game answer; no result to show
                 self._result_var.set("—")
                 self._result_label.configure(fg="#94a3b8")
             elif correct:
@@ -2262,7 +2278,7 @@ class GazeDashboard:
         self._on_main(lambda: self._personality_var.set(f"Personality: {name}"))
 
     def _quit(self):
-        """Kill the entire process from the GUI — clean exit."""
+        """Kill the entire process from the GUI; clean exit."""
         print("\n  [Dashboard] Quit requested.")
         self.close()
         os._exit(0)
@@ -2273,91 +2289,15 @@ class GazeDashboard:
         except tk.TclError:
             pass
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  MAIN GAME LOOP
-# ══════════════════════════════════════════════════════════════════════════════
-
-def main():
-    print("=" * 60)
-    print("  GAZE — Game-Adaptive Zone of Engagement")
-    print("  Adaptive Game System for Pepper Robot")
-    print("=" * 60)
-
-    # ── load facial expression model (WS-10) ──
-    print("\nLoading facial expression model...")
-    face_model   = FacialExpressionModel(MODEL_JSON, MODEL_WEIGHTS)
-    face_cascade = cv2.CascadeClassifier(HAAR_CASCADE)
-    print("  Facial model loaded.")
-
-    # ── load speech emotion model (WS-08) ──
-    speech_model = None
-    if os.path.exists(SPEECH_MODEL):
-        print("Loading speech emotion model...")
-        speech_model = SpeechEmotionModel(SPEECH_MODEL)
-        print("  Speech model loaded.")
-    else:
-        print(f"  Speech emotion model not found at {SPEECH_MODEL} — vocal signal disabled.")
-        print("  Run train_speech_model.py to generate it.")
-
-    # ── local camera (dev/testing) ──
-    local_camera = None
-    if USE_LOCAL_CAMERA:
-        local_camera = cv2.VideoCapture(0)
-        print("  Using local webcam for expression detection.")
-        # start continuous preview thread so the debug window never freezes
-        if DEBUG_PREVIEW:
-            start_preview_thread(local_camera, face_model, face_cascade)
-            print("  Preview thread started.")
-    else:
-        print("  Using Pepper's camera for expression detection.")
-
-    # ── connect to Pepper (skipped in local mode) ──
-    ssh     = None
-    ssh_tts = None
-    energy_threshold = DEFAULT_ENERGY_THRESHOLD
-
-    if LOCAL_MODE:
-        print("\n  LOCAL MODE — skipping Pepper connection.")
-        print("\nCalibrating Mac microphone ambient noise level...")
-        local_calibrate_ambient()
-    else:
-        print(f"\nConnecting to Pepper at {NAO_IP}...")
-        ssh     = ssh_connect()
-        ssh_tts = ssh_connect()         # dedicated TTS connection
-        print("  Connected.")
-
-        # ── calibrate ambient noise level ──
-        print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
-        energy_threshold = nao_calibrate_ambient(ssh)
-
-    # ── launch live dashboard ──
-    dashboard = GazeDashboard()
-    print("  Dashboard launched.")
-
-    # ── run conversation loop in a daemon thread so tkinter mainloop stays live ──
-    conv_thread = threading.Thread(
-        target=_conversation_loop,
-        args=(dashboard, face_model, face_cascade, speech_model,
-              local_camera, ssh, ssh_tts, energy_threshold),
-        daemon=True,
-    )
-    conv_thread.start()
-
-    # tkinter mainloop on main thread (required by macOS) — keeps camera
-    # preview and GUI responsive while the conversation loop blocks on I/O
-    dashboard.root.mainloop()
-
-
 def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
                        local_camera, ssh, ssh_tts, energy_threshold):
     """
-    Conversational interaction loop — runs in a daemon thread so tkinter
-    stays responsive.
+    Conversational interaction loop. Run in a daemon thread so the
+    tkinter mainloop stays responsive.
 
-    Replaces the rigid game loop with a free-form conversation wherein
-    the LLM decides when to play games via function calling, thereby
-    making GAZE a companion first and a game host second.
+    The LLM drives the flow via function calling, picking when to spin
+    up a game round rather than being forced into one every turn. That
+    is what lets GAZE sit as a companion first, game host second.
     """
     preferred_game = None
     engine         = AdaptiveEngine()
@@ -2549,12 +2489,12 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
             print(f"  Volume RMS: {vol_rms:.0f}")
 
             # ── c. Transcribe ──
-            # In local mode, use the recording's own speech_detected flag
-            # rather than full-file volume RMS (which averages over silence
-            # and is unreliable on Mac mics with low SNR). This prevents
-            # Whisper hallucination on silence whilst still transcribing
-            # genuine speech that the volume gate would have missed.
-            # On Pepper, use the calibrated volume threshold.
+            # In local mode, trust the recording's own speech_detected flag
+            # instead of the full-file volume RMS. Mac mics with low SNR
+            # average badly across silence, so the RMS gate would either
+            # let Whisper hallucinate a sentence out of room tone, or
+            # throw away quiet-but-real speech. On Pepper, the calibrated
+            # volume threshold is reliable, so the RMS gate is fine there.
             if LOCAL_MODE:
                 if _local_speech_detected:
                     user_text = transcribe()
@@ -2655,7 +2595,7 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
             was_game_answer = game_state.last_answer_checked
             correct = game_state.last_answer_correct if was_game_answer else False
 
-            # EXCEPT when the user just asked for more time — skip the
+            # EXCEPT when the user just asked for more time; skip the
             # engine so it doesn't wrongly count this turn as a miss
             if not game_state.waiting:
                 decision = engine.decide(
@@ -2722,9 +2662,9 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
     except KeyboardInterrupt:
         print("\n\nInterrupted.")
 
-    # ══════════════════════════════════════════════════════════════════════
-    #  SESSION END — save progress + farewell + cleanup
-    # ══════════════════════════════════════════════════════════════════════
+    # ------------------------------------------------------------------------------
+    # SESSION END; save progress + farewell + cleanup
+    # ------------------------------------------------------------------------------
 
     save_session(engine, preferred_game)
 
@@ -2735,7 +2675,7 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
     for k, v in summary.items():
         print(f"  {k}: {v}")
 
-    # farewell — adaptive to performance
+    # farewell; adaptive to performance
     if summary.get("rounds", 0) > 0:
         acc = summary["accuracy"]
         streak_note = (f" Your best streak was {summary['best_streak']} in a row!"
@@ -2778,6 +2718,80 @@ def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
     dashboard.close()
     print("\nGAZE disconnected.")
 
+
+# ------------------------------------------------------------------------------
+#                                     MAIN-GAME LOOP
+# ------------------------------------------------------------------------------
+
+def main():
+    print("=" * 60)
+    print("  GAZE — Game-Adaptive Zone of Engagement")
+    print("  Adaptive Game System for Pepper Robot")
+    print("=" * 60)
+
+    # ── load facial expression model (WS-10) ──
+    print("\nLoading facial expression model...")
+    face_model   = FacialExpressionModel(MODEL_JSON, MODEL_WEIGHTS)
+    face_cascade = cv2.CascadeClassifier(HAAR_CASCADE)
+    print("  Facial model loaded.")
+
+    # ── load speech emotion model (WS-08) ──
+    speech_model = None
+    if os.path.exists(SPEECH_MODEL):
+        print("Loading speech emotion model...")
+        speech_model = SpeechEmotionModel(SPEECH_MODEL)
+        print("  Speech model loaded.")
+    else:
+        print(f"  Speech emotion model not found at {SPEECH_MODEL} — vocal signal disabled.")
+        print("  Run train_speech_model.py to generate it.")
+
+    # ── local camera (dev/testing) ──
+    local_camera = None
+    if USE_LOCAL_CAMERA:
+        local_camera = cv2.VideoCapture(0)
+        print("  Using local webcam for expression detection.")
+        # start continuous preview thread so the debug window never freezes
+        if DEBUG_PREVIEW:
+            start_preview_thread(local_camera, face_model, face_cascade)
+            print("  Preview thread started.")
+    else:
+        print("  Using Pepper's camera for expression detection.")
+
+    # ── connect to Pepper (skipped in local mode) ──
+    ssh     = None
+    ssh_tts = None
+    energy_threshold = DEFAULT_ENERGY_THRESHOLD
+
+    if LOCAL_MODE:
+        print("\n  LOCAL MODE — skipping Pepper connection.")
+        print("\nCalibrating Mac microphone ambient noise level...")
+        local_calibrate_ambient()
+    else:
+        print(f"\nConnecting to Pepper at {NAO_IP}...")
+        ssh     = ssh_connect()
+        ssh_tts = ssh_connect()         # dedicated TTS connection
+        print("  Connected.")
+
+        # ── calibrate ambient noise level ──
+        print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
+        energy_threshold = nao_calibrate_ambient(ssh)
+
+    # ── launch live dashboard ──
+    dashboard = GazeDashboard()
+    print("  Dashboard launched.")
+
+    # ── run conversation loop in a daemon thread so tkinter mainloop stays live ──
+    conv_thread = threading.Thread(
+        target=_conversation_loop,
+        args=(dashboard, face_model, face_cascade, speech_model,
+              local_camera, ssh, ssh_tts, energy_threshold),
+        daemon=True,
+    )
+    conv_thread.start()
+
+    # tkinter mainloop on main thread (required by macOS); keep camera
+    # preview and GUI responsive while the conversation loop blocks on I/O
+    dashboard.root.mainloop()
 
 if __name__ == "__main__":
     main()
