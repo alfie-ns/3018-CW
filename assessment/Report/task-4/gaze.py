@@ -1,3 +1,5 @@
+# REMOVE: **REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.**
+
 """
 GAZE: Game-Adaptive Zone of Engagement
 
@@ -5,7 +7,7 @@ Adaptive countdown-style game host ran on Pepper robot.
 Novelty: multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
 + answer correctness, ... cross-validated so no single signal is trusted alone.
 
-REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.
+
 
 CRITICAL:
 - [ ] offload simpler tasks? to either computation or mini model
