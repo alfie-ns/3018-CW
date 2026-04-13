@@ -1,5 +1,3 @@
-# REMOVE: **REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.**
-
 """
 GAZE: Game-Adaptive Zone of Engagement
 
@@ -10,30 +8,38 @@ Novelty: multi-signal emotional inference: face (WS-10) + voice (WS-08) + respon
 
 
 CRITICAL:
+- **REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.**
+
 - [ ] offload simpler tasks? to either computation or mini model
 
 FUNDAMENTAL:
 
-- [X] adaptive/chosen difficulties
-- [ ] user-volume should indicate emotional signals
-- [ ] adaptive-chosen words or numbers based on inferred user state somehow???
-- [X] WS-10 CNN facial-expression detection (7-class, 48x48 greyscale)
-- [X] WS-08 MLP speech-emotion recognition (MFCC/chroma/mel features)
-- [X] countdown-like games (numbers/letters) 
-- [X] multi-signal state inference (face + voice + time + correctness)
-- [X] adaptive difficulty, hints, encouragement, game switching
-- [X] adaptation self-evaluation (did the previous adaptation help?)
-- [X] scoring, reward milestones, session save/resume
-- [X] gestures, LEDs, and speech aligned to inferred state
-- [X] local testing mode (GAZE_LOCAL_MODE)
-- [X] dynamic LLM game generation & answer verification (OpenAI/GPT)
-- [X] whisper transcription with network timeout fallbacks
-- [X] ambient noise calibration & dynamic silence detection
-- [X] natural TTS sentence-level pacing
+[ ] TODO: seperate clearly mine and Salman's code
+
+Alfie's:
+---------
+- [X] adaptive/chosen difficulties, hints, encouragement, game switching — `AdaptiveEngine.decide()` (returns `AdaptiveDecision`)
+- [X] user-volume indicate emotional signals — `measure_volume()`; `local_calibrate_ambient()` (sets `VOLUME_QUIET`/`VOLUME_LOUD`)
+- [ ] adaptive-chosen words or numbers based on inferred user state somehow??? — `generate_game_question_internal()` + `build_signal_context()`
+- [X] WS-10 CNN facial-expression detection (7-class, 48x48 greyscale) — `FacialExpressionModel.predict()`; `capture_and_classify()`
+- [X] WS-08 MLP speech-emotion recognition (MFCC/chroma/mel features) — `SpeechEmotionModel.predict()`; `classify_speech_emotion()`
+- [X] countdown-like games (numbers/letters) — `GameType` enum; `generate_game_question_internal()`
+- [X] multi-signal state inference (face + voice + time + correctness) — `AdaptiveEngine.infer_state()`
+- [X] adaptation self-evaluation (did the previous adaptation help?) — `AdaptiveEngine.evaluate_adaptation()`
+- [X] local testing mode (GAZE_LOCAL_MODE) — `local_record()`; `local_say()`; `local_calibrate_ambient()`
+- [X] dynamic LLM game generation & answer verification (OpenAI/GPT) — `generate_game_question_internal()`; `check_answer()`
+
+Salman's:
+---------
+- [X] scoring, reward milestones, session save/resume — `AdaptiveEngine.check_reward()`; `save_session()`; `load_session()`; `restore_engine()`
+- [X] gestures, LEDs, and speech aligned to inferred state — `nao_gesture()`; `nao_set_leds()`; `extract_gesture()`; `LED_COLOURS` map
+- [X] whisper transcription with network timeout fallbacks — `transcribe()`
+- [X] ambient noise calibration & dynamic silence detection — `nao_calibrate_ambient()`; `local_calibrate_ambient()`; `record()`/`local_record()` silence loop
+- [X] natural TTS sentence-level pacing — `split_into_sentences()`; `nao_say()`; `nao_say_animated()`
 
 NICE-TO-HAVE:
 - [ ] make web-search capabilities
-- [ ] make vision capabilities  
+- [ ] make vision-driven capabilities  
 - [ ] capability to fetch time and date if the AI determines its useful, encode this ability into system prompt 
 
 """
@@ -124,16 +130,16 @@ SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR    = os.path.join(SCRIPT_DIR, "models")
 WORKSHOP_DIR  = os.path.join(SCRIPT_DIR, "..", "..", "..", "learning", "workshops")
 
-def _find_model(local_name, workshop_subpath):
+def find_model(local_name, workshop_subpath):
     """Resolve a model file: local models/ dir first, then workshop fallback."""
     local = os.path.join(MODELS_DIR, local_name)
     if os.path.exists(local):
         return local
     return os.path.join(WORKSHOP_DIR, workshop_subpath)
 
-MODEL_JSON    = _find_model("model.json", os.path.join("[X]-facial-expression-detection", "model.json"))
-MODEL_WEIGHTS = _find_model("model_weights.weights.h5", os.path.join("[X]-facial-expression-detection", "model_weights.weights.h5"))
-HAAR_CASCADE  = _find_model("haarcascade_frontalface_default.xml", os.path.join("[X]-ws-10", "haarcascade_frontalface_default.xml"))
+MODEL_JSON    = find_model("model.json", os.path.join("[X]-facial-expression-detection", "model.json"))
+MODEL_WEIGHTS = find_model("model_weights.weights.h5", os.path.join("[X]-facial-expression-detection", "model_weights.weights.h5"))
+HAAR_CASCADE  = find_model("haarcascade_frontalface_default.xml", os.path.join("[X]-ws-10", "haarcascade_frontalface_default.xml"))
 SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 
 # adaptive engine thresholds
@@ -559,14 +565,14 @@ class AdaptiveEngine:
             tone               = "calm"
             if self.consecutive_wrong >= 4:
                 switch_game = True
-                new_game    = self._pick_different_game()
+                new_game    = self.pick_different_game()
 
         elif state == InferredState.DISENGAGED:
             tone               = "energetic"
             give_encouragement = True
             if self.consecutive_silences >= 3:
                 switch_game = True
-                new_game    = self._pick_different_game()
+                new_game    = self.pick_different_game()
 
         # commit
         self.current_difficulty = new_difficulty
@@ -629,7 +635,7 @@ class AdaptiveEngine:
                 return message
         return None
 
-    def _pick_different_game(self) -> GameType:
+    def pick_different_game(self) -> GameType:
         """Toggle between the two countdown game variants."""
         if self.current_game == GameType.NUMBERS:
             return GameType.LETTERS
@@ -912,7 +918,7 @@ rec.stopMicrophonesRecording()
     sftp.close()
 
 
-def _split_into_sentences(text: str) -> list[str]:
+def split_into_sentences(text: str) -> list[str]:
     """
     Split dialogue into sentence-level segments for speech delivery.
 
@@ -942,7 +948,7 @@ def nao_say(ssh, text):
     would burn 1-2 seconds of round-trip per sentence and turn the 0.4s
     inter-sentence cadence into something choppy and unnatural.
     """
-    sentences = _split_into_sentences(text)
+    sentences = split_into_sentences(text)
     safe_sentences = json.dumps(sentences)
 
     nao_run(ssh, f"""
@@ -1060,12 +1066,12 @@ def local_calibrate_ambient() -> int:
 
     print(f"Calibrating Mac mic (stay quiet for {CALIBRATION_SECS}s)...")
 
-    def _cb(indata, frames, time_info, status):
+    def cb(indata, frames, time_info, status):
         rms = (np.mean(indata.astype(np.float64) ** 2)) ** 0.5
         samples.append(rms)
 
     with sd.InputStream(samplerate=native_rate, channels=1, dtype="int16",
-                        blocksize=chunk_size, device=dev_index, callback=_cb):
+                        blocksize=chunk_size, device=dev_index, callback=cb):
         time.sleep(CALIBRATION_SECS)
 
     if samples:
@@ -1120,11 +1126,11 @@ def local_record(max_secs: float = RECORD_MAX_SECS):
 
     print(f"  Recording from Mac mic (up to {max_secs}s, stops after silence)...")
 
-    def _callback(indata, frames, time_info, status):
+    def callback(indata, frames, time_info, status):
         buffer.append(indata.copy())
 
     with sd.InputStream(samplerate=native_rate, channels=1, dtype="int16",
-                        blocksize=chunk_size, callback=_callback):
+                        blocksize=chunk_size, callback=callback):
         while elapsed < max_secs:
             time.sleep(SILENCE_POLL_SECS)
             elapsed += SILENCE_POLL_SECS
@@ -1361,7 +1367,7 @@ def transcribe() -> str:
 # FACIAL EXPRESSION PIPELINE
 # ------------------------------------------------------------------------------
 
-def _preview_thread_loop(camera, face_model, face_cascade):
+def preview_thread_loop(camera, face_model, face_cascade):
     """
     Continuous camera preview (daemon thread).
 
@@ -1405,7 +1411,7 @@ def _preview_thread_loop(camera, face_model, face_cascade):
 
 def start_preview_thread(camera, face_model, face_cascade):
     """Launch the continuous preview as a daemon thread."""
-    t = threading.Thread(target=_preview_thread_loop,
+    t = threading.Thread(target=preview_thread_loop,
                          args=(camera, face_model, face_cascade),
                          daemon=True)
     t.start()
@@ -1786,7 +1792,7 @@ def execute_tool_call(tool_name: str, tool_args: dict,
     if tool_name == "generate_game_question":
         gt = tool_args.get("game_type", "numbers")
         diff = tool_args.get("difficulty", "MEDIUM")
-        result = _generate_game_question_internal(gt, diff)
+        result = generate_game_question_internal(gt, diff)
         # sync adaptive engine with LLM's chosen difficulty so
         # the engine's next decide() starts from the correct baseline
         try:
@@ -1943,7 +1949,7 @@ def extract_gesture(text: str) -> str:
     return "neutral"
 
 
-def _generate_game_question_internal(game_type_str: str, difficulty_str: str) -> dict:
+def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> dict:
     """
     Dedicated sub-call for game question generation via OpenAI.
     Reuses GAME_DESCRIPTIONS and DIFFICULTY_DESCRIPTIONS.
@@ -2083,7 +2089,7 @@ class GazeDashboard:
                  fg="#a6e3a1", bg="#2a2a3e", padx=8).pack(side="left")
 
         # transcription block
-        self._add_section_label(right, "TRANSCRIPTION")
+        self.add_section_label(right, "TRANSCRIPTION")
         trans_frame = tk.Frame(right, bg="#2a2a3e")
         trans_frame.pack(fill="x", pady=2)
         self._heard_var   = tk.StringVar(value="You said: —")
@@ -2099,7 +2105,7 @@ class GazeDashboard:
         self._result_label.pack(fill="x")
 
         # five signals
-        self._add_section_label(right, "LIVE SIGNALS")
+        self.add_section_label(right, "LIVE SIGNALS")
         sig_frame = tk.Frame(right, bg="#2a2a3e")
         sig_frame.pack(fill="x", pady=2)
 
@@ -2120,7 +2126,7 @@ class GazeDashboard:
         self._vol_canvas.pack(fill="x", padx=8, pady=(2, 4))
 
         # adaptive decision
-        self._add_section_label(right, "ADAPTIVE DECISION")
+        self.add_section_label(right, "ADAPTIVE DECISION")
         dec_frame = tk.Frame(right, bg="#2a2a3e")
         dec_frame.pack(fill="x", pady=2)
 
@@ -2147,26 +2153,26 @@ class GazeDashboard:
         # quit button + keyboard shortcut (Escape or Cmd+Q)
         quit_btn = tk.Button(right, text="QUIT  (Esc)", font=("Menlo", 12, "bold"),
                              fg="#ffffff", bg="#ef4444", activebackground="#dc2626",
-                             command=self._quit, padx=16, pady=6)
+                             command=self.quit_app, padx=16, pady=6)
         quit_btn.pack(pady=(12, 0))
 
-        self.root.bind("<Escape>", lambda e: self._quit())
-        self.root.bind("<Command-q>", lambda e: self._quit())
-        self.root.protocol("WM_DELETE_WINDOW", self._quit)
+        self.root.bind("<Escape>", lambda e: self.quit_app())
+        self.root.bind("<Command-q>", lambda e: self.quit_app())
+        self.root.protocol("WM_DELETE_WINDOW", self.quit_app)
 
         # start camera + signal refresh loops
-        self._camera_refresh()
-        self._signal_refresh()
+        self.camera_refresh()
+        self.signal_refresh()
         self.root.update()
 
     @staticmethod
-    def _add_section_label(parent, text):
+    def add_section_label(parent, text):
         tk.Label(parent, text=text, font=("Menlo", 9, "bold"),
                  fg="#6c7086", bg="#1e1e2e", anchor="w").pack(fill="x", pady=(8, 0))
 
     # ── camera feed refresh (runs via root.after) ──
 
-    def _camera_refresh(self):
+    def camera_refresh(self):
         """Pull the latest frame from the preview thread and display it."""
         global _preview_frame
         with _preview_lock:
@@ -2179,22 +2185,22 @@ class GazeDashboard:
             self.camera_label.configure(image=img)
             self.camera_label._photo = img      # prevent garbage collection
 
-        self.root.after(50, self._camera_refresh)   # ~20 fps
+        self.root.after(50, self.camera_refresh)   # ~20 fps
 
-    def _signal_refresh(self):
+    def signal_refresh(self):
         """Update face expression label from preview thread (runs independently)."""
         with _preview_lock:
             emotion = _preview_state["emotion"]
             conf    = _preview_state["confidence"]
         self._face_var.set(f"Face (CNN):    {emotion} ({conf:.0%})")
-        self.root.after(500, self._signal_refresh)   # 2 Hz
+        self.root.after(500, self.signal_refresh)   # 2 Hz
 
     # ── thread-safe scheduling ──
     # The game loop runs in a daemon thread; tkinter widgets can only be
     # touched from the main thread. root.after(0, fn) is thread-safe and
     # queues fn to execute on the next mainloop iteration.
 
-    def _on_main(self, fn):
+    def on_main(self, fn):
         """Schedule fn to run on the main (tkinter) thread."""
         try:
             self.root.after(0, fn)
@@ -2209,7 +2215,7 @@ class GazeDashboard:
             self._conv_text.insert("end", f"Robot: {text}\n\n")
             self._conv_text.see("end")
             self._conv_text.configure(state="disabled")
-        self._on_main(_apply)
+        self.on_main(_apply)
 
     def append_user_speech(self, text: str):
         def _apply():
@@ -2217,7 +2223,7 @@ class GazeDashboard:
             self._conv_text.insert("end", f"You: {text}\n")
             self._conv_text.see("end")
             self._conv_text.configure(state="disabled")
-        self._on_main(_apply)
+        self.on_main(_apply)
 
     def update_signals(self, round_num: int, user_answer: str, correct_answer: str,
                        correct: bool, expression: str, expr_conf: float,
@@ -2258,7 +2264,7 @@ class GazeDashboard:
             bar_colour = "#ef4444" if vol_rms > 2000 else "#22c55e" if vol_rms >= VOLUME_THRESHOLD else "#94a3b8"
             self._vol_canvas.create_rectangle(0, 0, int(canvas_w * bar_frac), 14, fill=bar_colour)
 
-        self._on_main(_apply)
+        self.on_main(_apply)
 
     def update_decision(self, decision, adaptation_eval: str = None):
         state = decision.inferred_state
@@ -2273,13 +2279,13 @@ class GazeDashboard:
             if decision.switch_game:        flags.append(f"switch -> {decision.game_type.value}")
             self._adapt_var.set(f"Adaptations: {', '.join(flags) if flags else 'none'}")
             self._eval_var.set(adaptation_eval if adaptation_eval else "")
-        self._on_main(_apply)
+        self.on_main(_apply)
 
     def update_personality(self, name: str):
         """Update the personality indicator label on the dashboard."""
-        self._on_main(lambda: self._personality_var.set(f"Personality: {name}"))
+        self.on_main(lambda: self._personality_var.set(f"Personality: {name}"))
 
-    def _quit(self):
+    def quit_app(self):
         """Kill the entire process from the GUI; clean exit."""
         print("\n  [Dashboard] Quit requested.")
         self.close()
@@ -2291,7 +2297,7 @@ class GazeDashboard:
         except tk.TclError:
             pass
 
-def _conversation_loop(dashboard, face_model, face_cascade, speech_model,
+def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                        local_camera, ssh, ssh_tts, energy_threshold):
     """
     Conversational interaction loop. Run in a daemon thread so the
@@ -2784,7 +2790,7 @@ def main():
 
     # ── run conversation loop in a daemon thread so tkinter mainloop stays live ──
     conv_thread = threading.Thread(
-        target=_conversation_loop,
+        target=conversation_loop,
         args=(dashboard, face_model, face_cascade, speech_model,
               local_camera, ssh, ssh_tts, energy_threshold),
         daemon=True,
