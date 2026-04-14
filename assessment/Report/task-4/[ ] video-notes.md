@@ -4,11 +4,13 @@ Brief requirement: "a **video of 5 minutes** describing your contribution and sh
 
 ---
 
+- [ ] discuss the emotinal recognition citing 
+
 ## Structure (5 minutes total)
 
 ### 0:00--0:30 -- Introduction (30 seconds)
 
-- State your name, module, project title
+
 - "This is GAZE: Game-Adaptive Zone of Engagement, an adaptive countdown-style game host integrated into the Pepper robot"
 - One-sentence novelty: "The core novelty is multi-signal emotional inference -- the system weighs facial expression, response time, and answer correctness together, rather than trusting any single signal in isolation"
 - Brief mention of your contribution split (general code architecture, OpenAI integration, facial recognition, AdaptiveEngine, Background/Method/Conclusion sections)

@@ -15,6 +15,7 @@ CRITICAL:
 FUNDAMENTAL:
 
 [ ] TODO: seperate clearly mine and Salman's code
+- [ ] can give more time if needed
 
 Alfie's:
 ---------
@@ -99,7 +100,7 @@ REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
-VOLUME_THRESHOLD = 500  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
+VOLUME_THRESHOLD = 100  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
 FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; treat as Neutral
 VOICE_CONFIDENCE_THRESHOLD = 0.5  # below this, vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
@@ -108,11 +109,11 @@ CMD_TIMEOUT  = 60
 # false when connected to pepper; true for testing when no Pepper's camera
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
 
-# full local mode; runs entire game loop on Mac without any Pepper connection
-# uses local webcam, Mac microphone, and macOS TTS instead of Pepper hardware
+# full local mode to run game loop on Mac without any Pepper connection
+# uses local webcam; Mac microphone, and macOS TTS instead of Pepper hardware
 LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
-    USE_LOCAL_CAMERA = True      # local mode implies local camera
+    USE_LOCAL_CAMERA = True      # local mode implies local computer's camera
 
 # live debug preview (local mode only)
 DEBUG_PREVIEW = LOCAL_MODE
@@ -212,11 +213,15 @@ class SpeechEmotionModel:
 
         stft = np.abs(librosa.stft(audio, n_fft=n_fft))
 
-        mfccs  = np.mean(librosa.feature.mfcc(
+        # compute mean (average) frames to consistent vector-length for consistent MLP-input
+
+        mfccs = np.mean(librosa.feature.mfcc(
             y=audio, sr=sample_rate, n_mfcc=40).T, axis=0).flatten()
+        
         chroma = np.mean(librosa.feature.chroma_stft(
             S=stft, sr=sample_rate).T, axis=0).flatten()
-        mel    = np.mean(librosa.feature.melspectrogram(
+        
+        mel = np.mean(librosa.feature.melspectrogram(
             y=audio, sr=sample_rate).T, axis=0).flatten()
 
         return np.concatenate([mfccs, chroma, mel])
@@ -244,7 +249,7 @@ def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
     try:
         return speech_model.predict(wav_path)
     except Exception as e:
-        print(f"  [Speech emotion fallback] {e}")
+        print(f"  Speech emo classify failed: {e}; defaulting to neutral")
         return "neutral", 0.0
 
 
@@ -598,7 +603,6 @@ class AdaptiveEngine:
         )
 
     def record_round(self, result: RoundResult):
-        """Store a completed round in history."""
         self.history.append(result)
         self.games_played[result.game_type] = (
             self.games_played.get(result.game_type, 0) + 1
@@ -636,7 +640,6 @@ class AdaptiveEngine:
         return None
 
     def pick_different_game(self) -> GameType:
-        """Toggle between the two countdown game variants."""
         if self.current_game == GameType.NUMBERS:
             return GameType.LETTERS
         return GameType.NUMBERS
@@ -798,7 +801,7 @@ def nao_run(ssh, code):
         _, stdout, _ = ssh.exec_command(f"python -c '{escaped}'", timeout=CMD_TIMEOUT)
         return stdout.read().decode().strip()
     except Exception as e:
-        print(f"  [SSH fallback] exec_command failed: {e}")
+        print(f"  Pepper SSH exec_command dropped: {e}")
         return ""
 
 
@@ -977,7 +980,7 @@ from naoqi import ALProxy
 ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
 """)
     except Exception as e:
-        print(f"  [Animated speech failed] {e}")
+        print(f"  Animated speech failed mid-sentence: {e}")
         nao_say(ssh, text)
 
 
@@ -1018,18 +1021,17 @@ except Exception as e:
     print("  [Face unsubscribe failed] " + str(e))
 """)
     except Exception as e:
-        print(f"  [Face tracking failed] {e}")
+        print(f"  Face tracking unavailable: {e}")
 
 
 def nao_set_leds(ssh, group, colour, duration=1.0):
-    """Fade an LED group to a colour."""
     try:
         nao_run(ssh, f"""
 from naoqi import ALProxy
 ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
 """)
     except Exception as e:
-        print(f"  [LED failed] {e}")
+        print(f"  LED set ignored: {e}")
 
 
 # ------------------------------------------------------------------------------
@@ -1191,7 +1193,7 @@ def local_say(text: str):
     try:
         subprocess.run(["say", text], check=True, timeout=30)
     except Exception as e:
-        print(f"  [Local TTS failed] {e}")
+        print(f"  Local TTS broke: {e}")
 
 
 def say(ssh_tts, text):
@@ -1319,7 +1321,7 @@ def nao_gesture(ssh, gesture_type: str):
     try:
         nao_run(ssh, code)
     except Exception as e:
-        print(f"  [Gesture failed: {gesture_type}] {e}")
+        print(f"  Gesture {gesture_type!r} did not play: {e}")
 
 
 # ------------------------------------------------------------------------------
@@ -1343,7 +1345,7 @@ def measure_volume() -> float:
             samples = struct.unpack(f"<{len(raw) // 2}h", raw)
             return (sum(s * s for s in samples) / len(samples)) ** 0.5
     except Exception as e:
-        print(f"  [Volume measurement failed] {e}")
+        print(f"  Volume RMS calc failed: {e}")
         return 0.0
 
 
@@ -1359,7 +1361,7 @@ def transcribe() -> str:
                 model="whisper-1", file=fh, timeout=API_TIMEOUT
             ).text.strip()
     except Exception as e:
-        print(f"  [Whisper fallback] Transcription failed: {e}")
+        print(f"  Whisper transcribe failed ({e}); returning empty")
         return ""
 
 
@@ -1410,7 +1412,6 @@ def preview_thread_loop(camera, face_model, face_cascade):
 
 
 def start_preview_thread(camera, face_model, face_cascade):
-    """Launch the continuous preview as a daemon thread."""
     t = threading.Thread(target=preview_thread_loop,
                          args=(camera, face_model, face_cascade),
                          daemon=True)
@@ -1443,10 +1444,10 @@ def capture_and_classify(ssh, face_model, face_cascade,
             nao_capture_image(ssh)
             frame = cv2.imread(LOCAL_IMG)
             if frame is None:
-                print(f"  [Image read failed] cv2.imread returned None for {LOCAL_IMG}")
+                print(f"  cv2.imread returned None for {LOCAL_IMG}")
                 return "Neutral", 0.0
         except Exception as e:
-            print(f"  [Camera capture failed] {e}")
+            print(f"  Camera frame grab failed: {e}")
             return "Neutral", 0.0
 
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -1503,7 +1504,7 @@ def check_answer(user_answer: str, correct_answer: str,
         return "correct" in resp.choices[0].message.content.strip().lower()
     except Exception as e:
         # fallback: naive string match so the game loop continues
-        print(f"  [API fallback] Answer check failed: {e}")
+        print(f"  Answer verifier API failed: {e}")
         return correct_answer.lower().strip() in user_answer.lower().strip()
 
 
@@ -1550,7 +1551,7 @@ def load_session() -> Optional[dict]:
         with open(SAVE_FILE, "r") as f:
             return json.load(f)
     except (json.JSONDecodeError, IOError) as e:
-        print(f"  [Save file corrupt] {e}")
+        print(f"  Save file corrupt, ignoring: {e}")
         return None
 
 
@@ -1567,7 +1568,7 @@ def restore_engine(save_data: dict) -> AdaptiveEngine:
         try:
             engine.games_played[GameType(g_val)] = count
         except ValueError as e:
-            print(f"  [Restore skipped invalid game type: {g_val}] {e}")
+            print(f"  Could not restore game type {g_val!r}: {e}")
     return engine
 
 
@@ -1772,10 +1773,10 @@ def converse(conversation: list, tools: list) -> object:
         )
         return resp.choices[0].message
     except Exception as e:
-        print(f"  [API fallback] converse() failed: {e}")
+        print(f"  converse() API failed: {e}")
         # return a minimal mock so the caller can continue
         class _FallbackMsg:
-            content = f"I had a brief network hiccup. Let's keep going! [gesture:think]"
+            content = "I had a brief network hiccup. Let's keep going! [gesture:think]"
             tool_calls = None
             role = "assistant"
         return _FallbackMsg()
@@ -1906,12 +1907,12 @@ def process_llm_response(message, conversation: list,
             except json.JSONDecodeError:
                 fn_args = {}
 
-            print(f"  [Tool call] {fn_name}({fn_args})")
+            print(f"  Calling tool {fn_name}({fn_args})")
             result_str = execute_tool_call(
                 fn_name, fn_args, engine, game_state,
                 conversation, preferred_game, dashboard
             )
-            print(f"  [Tool result] {result_str[:120]}")
+            print(f"  Tool returned: {result_str[:120]}")
 
             conversation.append({
                 "role": "tool",
@@ -1941,7 +1942,7 @@ def extract_gesture(text: str) -> str:
     Parse a [gesture:TYPE] tag from the LLM's response text.
     Returns the gesture type string, defaulting to 'neutral' if not found.
     """
-    match = re.search(r'\[gesture:(\w+)\]', text)
+    match = re.search(r'\[gesture:(\w+)\]', text) # regex to find [gesture:type]
     if match:
         gesture = match.group(1).lower()
         if gesture in GESTURE_CODE:
@@ -1993,7 +1994,7 @@ def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> 
     except json.JSONDecodeError:
         return {"question": content, "answer": "", "category": "general"}
     except Exception as e:
-        print(f"  [Game question generation failed] {e}")
+        print(f"  Game question gen failed: {e}")
         return {
             "question": "Let's try a quick one: what is 25 + 17?",
             "answer": "42",
@@ -2015,7 +2016,7 @@ LED_COLOURS = {
 
 
 # ------------------------------------------------------------------------------
-# LIVE DASHBOARD (tkinter-GUI only)
+# LIVE DASHBOARD (tkinter-GUI based)
 # ------------------------------------------------------------------------------
 
 # colour palette; maps inferred state to a hex background for the state label
@@ -2173,7 +2174,6 @@ class GazeDashboard:
     # ── camera feed refresh (runs via root.after) ──
 
     def camera_refresh(self):
-        """Pull the latest frame from the preview thread and display it."""
         global _preview_frame
         with _preview_lock:
             frame = _preview_frame
@@ -2188,7 +2188,6 @@ class GazeDashboard:
         self.root.after(50, self.camera_refresh)   # ~20 fps
 
     def signal_refresh(self):
-        """Update face expression label from preview thread (runs independently)."""
         with _preview_lock:
             emotion = _preview_state["emotion"]
             conf    = _preview_state["confidence"]
@@ -2363,7 +2362,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             engine = restore_engine(save_data)
             preferred_game = engine.current_game
             restore_msg = (
-                f"Restoring your previous session — "
+                "Restoring your previous session: "
                 f"{save_data.get('rounds_played', 0)} rounds on record."
             )
             say(ssh_tts, restore_msg)
@@ -2750,7 +2749,7 @@ def main():
         speech_model = SpeechEmotionModel(SPEECH_MODEL)
         print("  Speech model loaded.")
     else:
-        print(f"  Speech emotion model not found at {SPEECH_MODEL} — vocal signal disabled.")
+        print(f"  Speech emotion model not found at {SPEECH_MODEL}; vocal signal disabled.")
         print("  Run train_speech_model.py to generate it.")
 
     # ── local camera (dev/testing) ──
@@ -2771,7 +2770,7 @@ def main():
     energy_threshold = DEFAULT_ENERGY_THRESHOLD
 
     if LOCAL_MODE:
-        print("\n  LOCAL MODE — skipping Pepper connection.")
+        print("\n  LOCAL MODE: skipping Pepper connection.")
         print("\nCalibrating Mac microphone ambient noise level...")
         local_calibrate_ambient()
     else:
