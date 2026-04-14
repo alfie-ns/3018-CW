@@ -195,6 +195,24 @@ header-includes:
 | ----- | ------- | ------- | ---------------------- | ------------- | ------------------------------------------------------------------------ |
 | - [ ] | 647     | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | "deep learning based generation is prone to hallucinate unintended text" |
 
+#### Picard (1997) -- `papers/Picard (1997) - Affective Computing.pdf`
+
+| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                                                                                              |
+| ----- | ------- | ------- | ----------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [X] | 517     | S2.2    | Picard (1997, p. 1, Abstract) | p. 1          | Abstract: "affective computing," computing that relates to, arises from, or influences emotions" (full founding definition). verified 2026-04-14 via PDF extraction |
+
+#### Spezialetti, Placidi and Rossi (2020) -- `papers/Spezialetti, Placidi and Rossi (2020) - Emotion Recognition for Human-Robot Interaction.pdf`
+
+| OK?   | Line(s) | Section | Citation as written                                          | Go to page... | You should see...                                                                                                                                                                                      |
+| ----- | ------- | ------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| - [X] | 517     | S2.2    | Spezialetti, Placidi and Rossi (2020, pp. 1-2, Introduction) | pp. 1-2       | Introduction; bullet "Ability of robots to infer the human emotional state" (p. 2); reviews recognition across facial, vocal, brain, peripheral physiological channels. verified 2026-04-14 |
+
+#### Radford et al. (2023) -- `papers/Radford et al. (2023) - Robust Speech Recognition via Large-Scale Weak Supervision.pdf`
+
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                                                                                                                          |
+| ----- | ------- | ------- | -------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [X] | 544     | S2.3.2  | (Radford et al., 2023, Abstract) | p. 1          | Abstract (final sentence): "When compared to humans, the models approach their accuracy and robustness". No inline page cited (PMLR volume-pagination not printed on page). verified 2026-04-14 |
+
 ---
 
 - [ ] if enough time: ermengent cognitive robot architecture
@@ -508,7 +526,41 @@ References:
 - [ ] **Strongest citations for the core GAZE concept: Tapus et al. (2007), Sciutti et al. (2023), Nikolaidis et al. (2017), Ahn et al. (2022), and Smedegaard (2019). These five alone cover the adaptive-assistive role, cognitive framing, mutual adaptation, LLM-robot grounding, and the novelty-engagement challenge.**
 -->
 
-## 2.1. Introduction (10%)
+## 2.1. Introduction (10%; Salman)
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    every node/.style={font=\sffamily\scriptsize},
+    stage/.style={rectangle, rounded corners=3pt, draw=black!70, fill=gray!10,
+                  minimum width=2.4cm, minimum height=0.9cm, align=center,
+                  font=\sffamily\small\bfseries},
+    sig/.style={rectangle, rounded corners=2pt, draw=blue!50, fill=blue!8,
+                minimum width=2.4cm, minimum height=0.45cm, align=center},
+    >=Stealth,
+]
+% INPUT: 5 signals stacked
+\node[font=\sffamily\tiny\bfseries, text=blue!60] at (0, 2.9) {INPUT};
+\node[sig] (s1) at (0, 2.2)  {Facial Expression};
+\node[sig] (s2) at (0, 1.6)  {Verbal Answer};
+\node[sig] (s3) at (0, 1.0)  {Vocal Emotion};
+\node[sig] (s4) at (0, 0.4)  {Response Time};
+\node[sig] (s5) at (0,-0.2)  {Answer Correctness};
+% Stages
+\node[stage] (proc) at (4.0, 1.0) {PROCESS\\[1pt]\scriptsize\mdseries AdaptiveEngine};
+\node[stage] (gen)  at (7.2, 1.0) {GENERATE\\[1pt]\scriptsize\mdseries GPT-4.1};
+\node[stage] (out)  at (10.4, 1.0) {OUTPUT\\[1pt]\scriptsize\mdseries Pepper};
+% Arrows: signals to process
+\foreach \n in {s1,s2,s3,s4,s5} \draw[->, black!40, thin] (\n.east) -- (proc.west);
+% Stage transitions
+\draw[->, thick] (proc.east) -- (gen.west);
+\draw[->, thick] (gen.east)  -- (out.west);
+% Loop back
+\draw[->, black!50, dashed] (out.south) to[bend left=35] node[below, font=\sffamily\scriptsize, pos=0.5] {next round} (proc.south);
+\end{tikzpicture}
+\caption{GAZE system architecture. Five input signals feed the AdaptiveEngine, which constructs a context block for GPT-4.1 function-calling; the generated response is delivered concurrently via Pepper's speech, gesture, and LED subsystems. The loop circulates to the next round, now adapted.}
+\label{fig:system-diagram}
+\end{figure}
 
 ## 2.2. Background (10%; Alfie)
 
@@ -522,32 +574,33 @@ GAZE's core contribution is therefore multi-signal emotional inference: facial e
 
 ## 2.3. Methods & Setup (35%; Alfie)
 
+- [ ] cite chunks of gaze.py
+
 ### 2.3.1 System Architecture
 
 GAZE operates as a conversational loop rather than a rigid question-answer cycle. Each turn: 1) five emotional signals are captured; 2) the AdaptiveEngine infers user-state; 3) signal context and transcribed speech are sent to *GPT-4.1* with function-calling tools; 4) the LLM decides whether to respond conversationally, initiate a game, check an answer, or adjust difficulty; 5) the spoken response, gestures, and LED state are delivered on Pepper concurrently via threading. Computation runs on the laptop; Pepper handles physical I/O. Ensuring all five signals are immediately inferred upon system startup, before the main-conversation loop begins post-personality selection; the dashboard thus reflects live emotional state inference from the moment the user sits down, not solely once gameplay commences.
 
 - [ ] This function-calling architecture is neuro-symbolic: GPT-4.1 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, p. TODO: VERIFY 12389) 'third wave' paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, p. 1).
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.82\textwidth]{task-4/SYSTEM-DIAGRAM.png}
-\caption{GAZE system architecture (adapted from the project proposal). Four input channels (facial expression, vocal emotion, response time, answer correctness) feed the AdaptiveEngine (PROCESS), which infers user-state and constructs a dynamic prompt for OpenAI GPT-4.1 (GENERATE); the resultant dialogue, gesture tag, and game-state update are delivered via Pepper's speech, motor, and LED subsystems (OUTPUT) concurrently. The loop circulates to the next round, now adapted.}
-\label{fig:system-diagram}
-\end{figure}
-
-### 2.3.2 Input Layer: Four Simultaneous Signals
+### 2.3.2 Input Layer: Five Simultaneous Signals
 
 **1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated via cross-modal override.
 
-**2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection and arousal thresholds calibrated to the room's ambient noise level at startup. Recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. The recorded WAV is transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract).
+**2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection calibrated to the room's ambient noise level at startup; arousal bands are fixed. Recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. The recorded WAV is transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract).
 
 **3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 577) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality; the two may disagree, wherein decision logic arbitrates.
 
 **4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion; the Whisper call occurs *after* the timer halts, isolating deliberation time from API latency.
 
+**5- Answer Correctness (task-based).** GPT-4.1's `check_game_answer` evaluates the transcribed answer at a deterministic temperature; the resultant binary correctness feeds the AdaptiveEngine and the derived rolling-correctness signal.
+
 ### 2.3.3 Process Layer: Multi-Signal State Inference
 
-The AdaptiveEngine's `infer_state()` method weighs seven signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Four raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The classification rules combine these in cross-modal ways (see Listing~\ref{lst:infer} and Table~\ref{tab:state-action}): neither visual nor vocal modality is trusted in isolation. GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3) were derived from pilot testing.
+- [ ] TODO: write about the signal-driven think-budget (`recommend_think_budget()`) — frame as reading five signals directly (accumulated silence, prior response time, facial expression, inferred state, `waiting` flag); stress that the LLM's `request_more_time` tool is one signal among many, NOT the sole path. Cite Desai et al. (2013, p. 256) on brittleness of single-signal systems.
+- [ ] TODO: justify the round-1 generous default (7s / 2.5s / 15s) — frame around the stroke-recovery target user; aphasia and mental-arithmetic pauses make the baseline 1.5s silence tolerance unrealistic with no session history to fast-track from. Position as a fail-safe default, not a permanent setting.
+- [ ] TODO: justify the hard ceiling (20s) — defensive cap against signal-combination edge cases; UX bound so no single turn feels abandoned; headroom under `CMD_TIMEOUT` (60s) for future additions.
+
+The AdaptiveEngine's `infer_state()` method weighs eight signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The classification rules combine these in cross-modal ways (see Listing~\ref{lst:infer} and Table~\ref{tab:state-action}): neither visual nor vocal modality is trusted in isolation. GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -594,11 +647,11 @@ The AdaptiveEngine's `infer_state()` method weighs seven signals to classify the
 % Arrows: engine to states
 \foreach \n in {s1,s2,s3,s4,s5} \draw[->,black!40,thick] (eng.east) -- (\n.west);
 \end{tikzpicture}
-\caption{Multi-signal inference pipeline. Four raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; voice reads \textit{calm} whilst camera frowns $\rightarrow$ cross-modal override to \textit{Comfortable}) to classify the user into one of five states. Neither visual nor vocal modality is trusted in isolation; therefore, the multi-signal novelty.
+\caption{Multi-signal inference pipeline. Five raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}; voice reads \textit{calm} with accuracy holding whilst camera frowns $\rightarrow$ cross-modal override to \textit{Comfortable}) to classify the user into one of five states. Neither visual nor vocal modality is trusted in isolation; therefore, the multi-signal novelty.
 \label{fig:multi-signal}
 \end{figure}
 
-The cross-modal inference rules are shown in Listing~\ref{lst:infer} (extracted from `gaze.py`, *lines 343--438*):
+The cross-modal inference rules are shown in Listing~\ref{lst:infer} (extracted from `gaze.py`, *lines 472--508*):
 
 \begin{lstlisting}[caption={Multi-signal inference rules (excerpt from \texttt{gaze.py}).}, label=lst:infer]
 
@@ -646,8 +699,8 @@ The `decide()` function then maps the inferred state to concrete adaptive action
 Thriving    & $\uparrow$ ramp up     & No  & No  & Energetic    & \textcolor{green!60!black}{Green} \\
 Comfortable & $\uparrow$ if $>$70\%  & No  & No  & Neutral      & White \\
 Struggling  & $\downarrow$ ease off  & No  & Yes & Encouraging  & \textcolor{yellow!80!black}{Yellow} \\
-Frustrated  & $\downarrow\downarrow$ Easy & After 4 wrong & Yes & Calm & \textcolor{orange}{Orange} \\
-Disengaged  & ---                    & After 2 silent & No & Energetic & \textcolor{blue!60}{Blue} \\
+Frustrated  & $\downarrow\downarrow$ Easy & After 4 wrong & No  & Calm & \textcolor{orange}{Orange} \\
+Disengaged  & ---                    & After 3 silent & No & Energetic & \textcolor{blue!60}{Blue} \\
 \bottomrule
 \end{tabular}
 \caption{State-to-action mapping. The adaptive engine translates each inferred state into a specific combination of difficulty adjustment, game-type switch, hint provision, tone selection, and LED colour. Arrows indicate direction of difficulty change relative to the current level.}
@@ -656,7 +709,10 @@ Disengaged  & ---                    & After 2 silent & No & Energetic & \textco
 
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
-- [ ] Rather than constructing a fixed game prompt each round, GAZE utilises OpenAI function calling to let GPT-4.1 decide which actions to take. Every turn, `build_signal_context()` packages all five live signals into a context block prepended to the user's transcribed speech. This is sent to GPT-4.1 with eight callable tools: `generate_game_question`, `check_game_answer`, `get_adaptive_recommendation`, `check_reward_milestone`, `get_session_summary`, `save_progress`, `evaluate_last_adaptation`, and `select_personality`. The LLM decides which tools to invoke based on context; during natural conversation it calls none, whilst during gameplay it chains `check_game_answer`, `get_adaptive_recommendation`, and `generate_game_question` in a single turn. Separate OpenAI calls handle game-question generation at a creative temperature and answer verification at a deterministic temperature; the latter mitigates the hallucination risk Ji et al. (2023, p. 3) identify. A strict 10-second timeout wraps every API call; if the network stalls, the robot falls back gracefully, thereby ensuring Pepper remains responsive.
+- [ ] TODO: explain semantic bucketing in `build_signal_context()` — the LLM sees `System pacing: relaxed and patient / standard / brisk and energetic`, NEVER the raw `Think budget: 18s`. Why: LLMs at generation temperature (0.8) can fixate on raw integers and echo them verbatim in dialogue ("take 18 seconds"); labels prevent that failure mode whilst preserving the belief. Cite Ji et al. (2023, p. 3) on hallucination in NLG.
+- [ ] TODO: tie this to the temperature split already described — 0.0 for `check_game_answer` (deterministic, no hallucination of answers), 0.8 for dialogue (creative). Semantic bucketing is the dialogue-side safeguard that lets the creative temperature do its job without leaking numeric system metrics into user-facing speech.
+
+- [ ] Rather than constructing a fixed game prompt each round, GAZE utilises OpenAI function calling to let GPT-4.1 decide which actions to take. Every turn, `build_signal_context()` packages all five live signals into a context block prepended to the user's transcribed speech. This is sent to GPT-4.1 with nine callable tools: `generate_game_question`, `check_game_answer`, `get_adaptive_recommendation`, `check_reward_milestone`, `get_session_summary`, `save_progress`, `evaluate_last_adaptation`, `select_personality`, and `request_more_time`. The LLM decides which tools to invoke based on context; during natural conversation it calls none, whilst during gameplay it chains `check_game_answer`, `get_adaptive_recommendation`, and `generate_game_question` in a single turn. Separate OpenAI calls handle game-question generation at a creative temperature and answer verification at a deterministic temperature; the latter mitigates the hallucination risk Ji et al. (2023, p. 3) identify. A strict 10-second timeout wraps every API call; if the network stalls, the robot falls back gracefully, thereby ensuring Pepper remains responsive.
 
 ### 2.3.5 Output Layer: Aligned Multimodal Response
 
@@ -666,9 +722,9 @@ Speech, gestures, and LED state fire concurrently via threading. Context-aligned
 
 After each round, `evaluate_adaptation()` assesses whether the previous adaptation worked by comparing concrete outcome pairs (e.g. did a difficulty decrease produce a correct answer?). The evaluation feeds into the next LLM call, creating a system that learns whether its adaptations are effective. Session progress is saved to `gaze_save.json` after every round, protecting data against unexpected crashes and supporting session resumption.
 
-<!-- POMDP content removed (superseded by GAZE). See git history if needed. -->
+<!-- POMDP content removed. See git history if needed. -->
 
-## 2.4. Outcome & System Analysis (30%)
+## 2.4. Outcome & System Analysis (30%; Salman)
 
 ## 2.5. Conclusion (10%; Alfie)
 
@@ -690,41 +746,24 @@ The multi-signal approach could transfer to stroke rehabilitation re-engagement 
 
 ### Alfie's
 
-
 - Ahn, M., Brohan, A., Brown, N., et al. (2022) 'Do As I Can, Not As I Say: Grounding Language in Robotic Affordances', *arXiv preprint arXiv:2204.01691*. Available at: [https://arxiv.org/abs/2204.01691](https://arxiv.org/abs/2204.01691) (Accessed: 24 March 2026).
 
-- [X] - [ ] Calvo, R.A. and D'Mello, S. (2010) 'Affect Detection: An Interdisciplinary Review of Models, Methods, and Their Applications', *IEEE Transactions on Affective Computing*, 1(1), pp. 18--37. Available at: [https://www.researchgate.net/publication/220395370_Affect_Detection_An_Interdisciplinary_Review_of_Models_Methods_and_Their_Applications](https://www.researchgate.net/publication/220395370_Affect_Detection_An_Interdisciplinary_Review_of_Models_Methods_and_Their_Applications) (Accessed: 2 April 2026). **VERIFIED: p. 28 -- "the inherent challenges with unisensory affect detection" and "mostly unimodal approaches" (Section 3.7). DOI: 10.1109/t-affc.2010.1**
-
+- [X]
 - [ ] [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251--275. Available at: [https://ieeexplore.ieee.org/document/6483596](https://ieeexplore.ieee.org/document/6483596) (Accessed: 20 March 2026).
-
-- [X] - [ ] Ekman, P. and Friesen, W.V. (1971) 'Constants Across Cultures in the Face and Emotion', *Journal of Personality and Social Psychology*, 17(2), pp. 124--129. Available at: [http://www.communicationcache.com/uploads/1/0/8/8/10887248/constants_across_cultures_in_the_face_and_emotion.pdf](http://www.communicationcache.com/uploads/1/0/8/8/10887248/constants_across_cultures_in_the_face_and_emotion.pdf) (Accessed: 2 April 2026). **VERIFIED: p. 128 -- "particular facial behaviors are universally associated with particular emotions" and "minimal opportunity to have learned to recognize uniquely Western facial expressions" (Discussion). DOI: 10.1037/h0030377**
-
-- [X] - [ ] El Ayadi, M., Kamel, M.S. and Karray, F. (2011) 'Survey on speech emotion recognition: Features, classification schemes, and databases', *Pattern Recognition*, 44(3), pp. 572--587. Available at: [https://www.sciencedirect.com/science/article/pii/S0031320310004619](https://www.sciencedirect.com/science/article/pii/S0031320310004619) (Accessed: 2 April 2026). **VERIFIED: p. 577 -- "the MFCC are the most promising features" for speech representation (Section 3.2 conclusion). DOI: 10.1016/j.patcog.2010.09.020**
-
+- [X]
+- [X]
 - [ ] [ ] Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3--4), pp. 143--166. Available at: [https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf](https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf) (Accessed: 18 March 2026).
-
 - [ ] [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387--12406. Available at: [https://link.springer.com/article/10.1007/s10462-023-10448-w](https://link.springer.com/article/10.1007/s10462-023-10448-w) (Accessed: 20 March 2026).
-
 - [ ] [ ] Ji, Z., Lee, N., Frieske, R., et al. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), pp. 1--38. Available at: [https://dl.acm.org/doi/10.1145/3571730](https://dl.acm.org/doi/10.1145/3571730) (Accessed: 22 March 2026).
-
 - [ ] [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1--2), pp. 99--134. Available at: [https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf](https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf) (Accessed: 13 March 2026).
-
-- [X] - [ ] Li, S. and Deng, W. (2020) 'Deep Facial Expression Recognition: A Survey', *IEEE Transactions on Affective Computing*, 13(3), pp. 1195--1215. Available at: [http://www.whdeng.cn/Li_Deng_Survey.pdf](http://www.whdeng.cn/Li_Deng_Survey.pdf) (Accessed: 2 April 2026). **VERIFIED: p. 1 -- "The categorical model that describes emotions in terms of discrete basic emotions is still the most popular perspective for FER." DOI: 10.1109/TAFFC.2020.2981446**
-
+- [X]
 - [ ] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5--7), pp. 618--634. Available at: [https://journals.sagepub.com/doi/10.1177/0278364917690593](https://journals.sagepub.com/doi/10.1177/0278364917690593) (Accessed: 20 March 2026).
-
 - [ ] [ ] Picard, R.W. (1997) 'Affective Computing', *MIT Media Laboratory Perceptual Computing Section Technical Report No. 321*. Available at: [https://affect.media.mit.edu/pdfs/95.picard.pdf](https://affect.media.mit.edu/pdfs/95.picard.pdf) (Accessed: 14 April 2026).
-
-- [X] - [ ] Poria, S., Cambria, E., Bajpai, R. and Hussain, A. (2017) 'A review of affective computing: From unimodal analysis to multimodal fusion', *Information Fusion*, 37, pp. 98--125. Available at: [https://dspace.stir.ac.uk/bitstream/1893/25490/1/affective-computing-review.pdf](https://dspace.stir.ac.uk/bitstream/1893/25490/1/affective-computing-review.pdf) (Accessed: 2 April 2026). **VERIFIED: p. 99 -- "consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83%." DOI: 10.1016/j.inffus.2017.02.003**
-
+- [X]
 - [ ] [ ] Radford, A., Kim, J.W., Xu, T., Brockman, G., McLeavey, C. and Sutskever, I. (2023) 'Robust Speech Recognition via Large-Scale Weak Supervision', in Proceedings of the 40th International Conference on Machine Learning (ICML 2023), PMLR 202, pp. 28492-28518. Available at: [https://proceedings.mlr.press/v202/radford23a/radford23a.pdf](https://proceedings.mlr.press/v202/radford23a/radford23a.pdf) Proceedings of Machine Learning Research (Accessed: 14 April 2026).
-
 - [ ] [ ] Sciutti, A., Beetz, M., Inamura, T., et al. (2023) 'The Present and the Future of Cognitive Robotics', *IEEE Robotics \& Automation Magazine*, 30(3), pp. 160--163. Available at: [https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092](https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092) (Accessed: 18 March 2026).
-
 - [ ] [ ] Smedegaard, C. V. (2019) 'Reframing the Role of Novelty within Social HRI: From Noise to Information', in *Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19)*, pp. 411--420. Available at: [https://dl.acm.org/doi/10.1109/HRI.2019.8673219](https://dl.acm.org/doi/10.1109/HRI.2019.8673219) (Accessed: 22 March 2026).
-
 - [X] [ ] Spezialetti, M., Placidi, G. and Rossi, S. (2020) 'Emotion Recognition for Human-Robot Interaction: Recent Advances and Future Perspectives', Frontiers in Robotics and AI, 7, Article 532279. Available at: [https://www.researchgate.net/publication/347520928_Emotion_Recognition_for_Human-Robot_Interaction_Recent_Advances_and_Future_Perspectives](https://www.researchgate.net/publication/347520928_Emotion_Recognition_for_Human-Robot_Interaction_Recent_Advances_and_Future_Perspectives) (Accessed: 14 April 2026).
-
 - [ ] [ ] Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics \& Automation Magazine*, 14(1), pp. 35--42. Available at: [https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf](https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf) (Accessed: 25 March 2026).
 
 ## 2.7. Appendix

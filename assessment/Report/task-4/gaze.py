@@ -15,7 +15,13 @@ CRITICAL:
 FUNDAMENTAL:
 
 [ ] TODO: seperate clearly mine and Salman's code
-- [ ] can give more time if needed
+- [X] can give more time if needed
+- [X] stop the main dashboard leaking the correct answer — remove `_answer_var` label from `GazeDashboard.__init__()` TRANSCRIPTION block; terminal `print(f"(Game answer: ...")` stays for the observer
+- [X] signal-driven think-time budget — new `AdaptiveEngine.recommend_think_budget()` reading silence, response time, facial expression, inferred state, and the `waiting` flag (NOT trigger phrases); updates `engine.think_budget_secs` / `engine.silence_tolerance_secs` each round
+- [X] plumb the budget through recording — `record()` / `local_record()` / `nao_record()` take `no_speech_max`, `silence_secs` params so the recorder's `LOCAL_NO_SPEECH_MAX` / `LOCAL_SILENCE_SECS` / `SILENCE_DURATION` adapt per-round
+- [X] `request_more_time` (`execute_tool_call()`) becomes one signal among many rather than the sole path — sets `game_state.waiting = True` which feeds `recommend_think_budget()`; never bumps the budget directly
+- [X] dashboard diagnostic "Think budget" row in `GazeDashboard`'s LIVE SIGNALS — lets the observer watch the belief shift
+- [X] inject `Think budget: Xs` into `build_signal_context()` so the LLM's dialogue reflects the belief without being told to
 
 Alfie's:
 ---------
@@ -404,6 +410,11 @@ class AdaptiveEngine:
         self.total_correct                 = 0
         self.best_streak                   = 0
         self.rewards_given: set[str]       = set()
+        # adaptive think-budget; baseline defaults, updated per round by
+        # recommend_think_budget() — signals-driven wait time for the user
+        self.think_budget_secs       = float(RECORD_MAX_SECS)   # hard ceiling
+        self.silence_tolerance_secs  = float(SILENCE_DURATION)  # post-speech silence
+        self.no_speech_max_secs      = 5.0                       # give up if no speech at all
 
     # ── properties --
 
@@ -601,6 +612,78 @@ class AdaptiveEngine:
             give_hint=give_hint, give_encouragement=give_encouragement,
             tone=tone,
         )
+
+    def recommend_think_budget(self, state: InferredState, expression: str,
+                               prev_response_time: float,
+                               consecutive_silences: int, waiting: bool
+                               ) -> tuple[float, float, float]:
+        """
+        Decide how long to wait for the user to answer this turn, based on
+        state + signals; NOT on trigger phrases. Returns
+        (no_speech_max, silence_secs, record_max_secs) honoured by the
+        recorder for this turn only.
+
+        The LLM's `request_more_time` tool only flips game_state.waiting;
+        it never bumps the budget directly. Here, waiting is one signal
+        among many — accumulated silence, previous response time, facial
+        expression, inferred state all contribute independently.
+        """
+        # baseline budget (fast-track: thriving / comfortable)
+        no_speech_max   = 5.0
+        silence_secs    = float(SILENCE_DURATION)
+        record_max_secs = float(RECORD_MAX_SECS)
+
+        # round 1: no history, no inferred baseline. Be generous with an
+        # unseen user, especially in a stroke-recovery deployment where
+        # aphasia makes the standard 1.5s silence tolerance unrealistic.
+        # Placed before the rule block so later signals can still push higher.
+        if not self.history:
+            no_speech_max   = max(no_speech_max, 7.0)
+            silence_secs    = max(silence_secs, 2.5)
+            record_max_secs = max(record_max_secs, 15.0)
+
+        # state-driven extension: hesitant users need breathing room
+        if state in (InferredState.STRUGGLING, InferredState.FRUSTRATED,
+                     InferredState.DISENGAGED):
+            no_speech_max   = 8.0
+            silence_secs    = 2.5
+            record_max_secs = 18.0
+
+        # accumulated silence: graduated extension *before* the state flips
+        # to Disengaged. One silent turn nudges the budget; two nudges more;
+        # three triggers Disengaged + the extended baseline above.
+        if consecutive_silences > 0:
+            no_speech_max = max(no_speech_max, 5.0 + consecutive_silences * 1.5)
+            silence_secs  = max(silence_secs,  1.5 + consecutive_silences * 0.5)
+
+        # facial expression cue: pensive faces suggest thinking in progress
+        if expression in ("Sad", "Fear"):
+            no_speech_max = max(no_speech_max, 7.0)
+            silence_secs  = max(silence_secs, 2.0)
+
+        # previous response time: slow prior turn hints more time is needed
+        if prev_response_time > RESPONSE_TIME_BASELINE:
+            no_speech_max = max(no_speech_max, 7.0)
+            silence_secs  = max(silence_secs, 2.0)
+
+        # LLM-flagged waiting: honour the signal without letting the LLM
+        # own the budget directly; additive bump keeps other cues weighted
+        if waiting:
+            no_speech_max   += 3.0
+            silence_secs    += 1.0
+            record_max_secs += 5.0
+
+        # defensive ceiling: no combination of signals should push the
+        # recording window past 20s — keeps UX bounded and leaves generous
+        # headroom under CMD_TIMEOUT (60s) for future additions
+        record_max_secs = min(record_max_secs, 20.0)
+
+        # expose for dashboard diagnostic + signal-context injection
+        self.no_speech_max_secs     = no_speech_max
+        self.silence_tolerance_secs = silence_secs
+        self.think_budget_secs      = record_max_secs
+
+        return no_speech_max, silence_secs, record_max_secs
 
     def record_round(self, result: RoundResult):
         self.history.append(result)
@@ -844,7 +927,9 @@ else:
         return DEFAULT_ENERGY_THRESHOLD
 
 
-def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD):
+def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
+               record_max_secs: float = RECORD_MAX_SECS,
+               silence_secs: float = SILENCE_DURATION):
     """
     Record audio on Pepper with dynamic silence detection.
 
@@ -883,7 +968,7 @@ try:
         elapsed = time.time() - start
 
         # hard ceiling; never exceed max duration
-        if elapsed >= {RECORD_MAX_SECS}:
+        if elapsed >= {record_max_secs}:
             break
 
         # poll front microphone energy level
@@ -903,7 +988,7 @@ try:
             if speech_detected and silence_start is None:
                 silence_start = time.time()
             if speech_detected and silence_start is not None:
-                if (time.time() - silence_start) >= {SILENCE_DURATION}:
+                if (time.time() - silence_start) >= {silence_secs}:
                     break
 
         time.sleep({SILENCE_POLL_SECS})
@@ -912,7 +997,7 @@ except Exception as e:
     # firmware fallback; getFrontMicEnergy() unsupported on this Pepper
     # fall back to a safe fixed-duration recording so the demo never breaks
     print("  [Silence detection failed: " + str(e) + "] Falling back to fixed-duration recording")
-    time.sleep({RECORD_MAX_SECS})
+    time.sleep({record_max_secs})
 
 rec.stopMicrophonesRecording()
 """)
@@ -1106,7 +1191,9 @@ def local_calibrate_ambient() -> int:
     return threshold
 
 
-def local_record(max_secs: float = RECORD_MAX_SECS):
+def local_record(max_secs: float = RECORD_MAX_SECS,
+                 no_speech_max: float = LOCAL_NO_SPEECH_MAX,
+                 silence_secs: float = LOCAL_SILENCE_SECS):
     """
     Record audio from the Mac's built-in microphone to LOCAL_WAV with
     silence detection mirroring Pepper's dynamic recording behaviour.
@@ -1151,7 +1238,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS):
                     speech_detected = True
                 continue
 
-            if not speech_detected and elapsed >= LOCAL_NO_SPEECH_MAX:
+            if not speech_detected and elapsed >= no_speech_max:
                 break
 
             if rms > LOCAL_SILENCE_RMS:
@@ -1161,7 +1248,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS):
                 if speech_detected and silence_start is None:
                     silence_start = elapsed
                 if speech_detected and silence_start is not None:
-                    if (elapsed - silence_start) >= LOCAL_SILENCE_SECS:
+                    if (elapsed - silence_start) >= silence_secs:
                         break
 
     print()
@@ -1204,12 +1291,21 @@ def say(ssh_tts, text):
         nao_say(ssh_tts, text)
 
 
-def record(ssh, energy_threshold):
-    """Dispatch audio recording to local or Pepper depending on mode."""
+def record(ssh, energy_threshold,
+           no_speech_max: float = LOCAL_NO_SPEECH_MAX,
+           silence_secs: float = LOCAL_SILENCE_SECS,
+           record_max_secs: float = RECORD_MAX_SECS):
+    """Dispatch audio recording to local or Pepper depending on mode,
+    honouring the per-turn think-budget set by
+    AdaptiveEngine.recommend_think_budget()."""
     if LOCAL_MODE:
-        local_record()
+        local_record(max_secs=record_max_secs,
+                     no_speech_max=no_speech_max,
+                     silence_secs=silence_secs)
     else:
-        nao_record(ssh, energy_threshold)
+        nao_record(ssh, energy_threshold,
+                   record_max_secs=record_max_secs,
+                   silence_secs=silence_secs)
 
 
 # ------------------------------------------------------------------------------------
@@ -1741,6 +1837,15 @@ def build_signal_context(engine: AdaptiveEngine,
     recent_faces = [r.facial_expression for r in engine.history[-3:]]
     recent_vocal = [r.vocal_emotion for r in engine.history[-3:]]
 
+    # map raw budget to a semantic label so the LLM reflects pacing without
+    # ever seeing or repeating the raw seconds verbatim in dialogue
+    if engine.think_budget_secs >= 17.0:
+        pacing = "relaxed and patient"
+    elif engine.think_budget_secs <= 13.0:
+        pacing = "brisk and energetic"
+    else:
+        pacing = "standard"
+
     lines = [
         "--- LIVE SIGNALS ---",
         f"Turn: {engine.round_number}",
@@ -1749,6 +1854,7 @@ def build_signal_context(engine: AdaptiveEngine,
         f"Volume: {vol_rms:.0f} RMS",
         f"Response time: {response_time:.1f}s",
         f"Rolling accuracy (last {CORRECTNESS_WINDOW}): {correctness:.0%}",
+        f"System pacing: {pacing}",
     ]
     if recent_faces:
         lines.append(f"Recent faces: {', '.join(recent_faces)}")
@@ -2089,17 +2195,17 @@ class GazeDashboard:
         tk.Label(info_frame, textvariable=self._personality_var, font=("Menlo", 11),
                  fg="#a6e3a1", bg="#2a2a3e", padx=8).pack(side="left")
 
-        # transcription block
+        # transcription block — user's transcribed answer only; the correct
+        # answer is deliberately NOT displayed so an observer reading the
+        # dashboard cannot spoil gameplay by reading it off the screen.
+        # The correct answer is still printed to stdout for the operator.
         self.add_section_label(right, "TRANSCRIPTION")
         trans_frame = tk.Frame(right, bg="#2a2a3e")
         trans_frame.pack(fill="x", pady=2)
         self._heard_var   = tk.StringVar(value="You said: —")
-        self._answer_var  = tk.StringVar(value="Correct: —")
         self._result_var  = tk.StringVar(value="—")
         tk.Label(trans_frame, textvariable=self._heard_var, font=("Menlo", 11),
                  fg="#ffffff", bg="#2a2a3e", anchor="w", padx=8).pack(fill="x")
-        tk.Label(trans_frame, textvariable=self._answer_var, font=("Menlo", 11),
-                 fg="#a0a0a0", bg="#2a2a3e", anchor="w", padx=8).pack(fill="x")
         self._result_label = tk.Label(trans_frame, textvariable=self._result_var,
                                       font=("Menlo", 12, "bold"), fg="#ffffff",
                                       bg="#2a2a3e", anchor="w", padx=8)
@@ -2110,14 +2216,15 @@ class GazeDashboard:
         sig_frame = tk.Frame(right, bg="#2a2a3e")
         sig_frame.pack(fill="x", pady=2)
 
-        self._face_var  = tk.StringVar(value="Face (CNN):    —")
-        self._voice_var = tk.StringVar(value="Voice (MLP):   —")
-        self._vol_var   = tk.StringVar(value="Volume RMS:    —")
-        self._time_var  = tk.StringVar(value="Response time: —")
-        self._acc_var   = tk.StringVar(value="Rolling acc:   —")
+        self._face_var   = tk.StringVar(value="Face (CNN):    —")
+        self._voice_var  = tk.StringVar(value="Voice (MLP):   —")
+        self._vol_var    = tk.StringVar(value="Volume RMS:    —")
+        self._time_var   = tk.StringVar(value="Response time: —")
+        self._acc_var    = tk.StringVar(value="Rolling acc:   —")
+        self._budget_var = tk.StringVar(value="Think budget:  —")
 
         for var in (self._face_var, self._voice_var, self._vol_var,
-                    self._time_var, self._acc_var):
+                    self._time_var, self._acc_var, self._budget_var):
             tk.Label(sig_frame, textvariable=var, font=("Menlo", 11),
                      fg="#cdd6f4", bg="#2a2a3e", anchor="w", padx=8).pack(fill="x")
 
@@ -2224,6 +2331,12 @@ class GazeDashboard:
             self._conv_text.configure(state="disabled")
         self.on_main(_apply)
 
+    def update_think_budget(self, secs: float):
+        """Update the dashboard's adaptive think-budget diagnostic row."""
+        def _apply():
+            self._budget_var.set(f"Think budget:  {secs:.1f}s")
+        self.on_main(_apply)
+
     def update_signals(self, round_num: int, user_answer: str, correct_answer: str,
                        correct: bool, expression: str, expr_conf: float,
                        vocal_emo: str, vocal_conf: float, vol_rms: float,
@@ -2235,7 +2348,6 @@ class GazeDashboard:
             self._streak_var.set(f"Streak: {streak}")
 
             self._heard_var.set(f"You said: {user_answer if user_answer else '(silence)'}")
-            self._answer_var.set(f"Correct:  {correct_answer if correct_answer else '—'}")
             if not correct_answer:
                 # conversation turn, not a game answer; no result to show
                 self._result_var.set("—")
@@ -2482,7 +2594,24 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             print("Listening...")
             if not LOCAL_MODE:
                 nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-            record(ssh, energy_threshold)
+
+            # adaptive think-budget based on previous round's state + current face;
+            # slow prior turn / pensive face / hesitant state => more breathing room
+            prev_state = (engine.history[-1].inferred_state if engine.history
+                          else InferredState.COMFORTABLE)
+            prev_rt    = engine.history[-1].response_time if engine.history else 0.0
+            no_speech_max, silence_secs, record_max_secs = engine.recommend_think_budget(
+                state=prev_state, expression=expression,
+                prev_response_time=prev_rt,
+                consecutive_silences=engine.consecutive_silences,
+                waiting=game_state.waiting,
+            )
+            dashboard.update_think_budget(record_max_secs)
+
+            record(ssh, energy_threshold,
+                   no_speech_max=no_speech_max,
+                   silence_secs=silence_secs,
+                   record_max_secs=record_max_secs)
             response_time = time.time() - question_start
 
             vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
