@@ -1,0 +1,15 @@
+{
+  "total_correct": 0,
+  "best_streak": 0,
+  "games_played": {
+    "numbers": 0,
+    "letters": 0
+  },
+  "game_switches": 0,
+  "last_difficulty": 2,
+  "last_game": "numbers",
+  "preferred_game": null,
+  "rounds_played": 0,
+  "rewards_given": [],
+  "round_log": []
+}

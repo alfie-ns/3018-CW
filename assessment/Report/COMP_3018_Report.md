@@ -459,6 +459,8 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 
 # 2- Task (4) Noval Programming Project
 
+- [ ] CRITICAL: reconfigure report below to match newest gaze.py
+
 - [ ] verify word count
 
 <!--

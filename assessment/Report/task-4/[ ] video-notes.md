@@ -4,7 +4,8 @@ Brief requirement: "a **video of 5 minutes** describing your contribution and sh
 
 ---
 
-- [ ] discuss the emotinal recognition citing 
+- [ ] discuss the emotinal recognition deeply
+- [ ] find the best HRI-relevant stuff to discuss
 
 ## Structure (5 minutes total)
 
