@@ -9,9 +9,10 @@ Novelty: multi-signal emotional inference: face (WS-10) + voice (WS-08) + respon
 
 CRITICAL:
 - **REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.**
+- **REMEMBER: CONFIG NAO IP INTO ENV LIKE LAST TIME**
 
 - [ ] offload simpler tasks? to either computation or mini model
-
+- [ ] ensure all facial expression inference is sufficently commented
 FUNDAMENTAL:
 
 [ ] TODO: seperate clearly mine and Salman's code
@@ -57,58 +58,58 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 
-print("[boot] stdlib loaded", flush=True)
+print("[booting] stdlib loaded", flush=True)
 
 # data + vision
 import numpy as np
 import cv2
 from PIL import Image, ImageTk
-print("[boot] numpy + opencv loaded", flush=True)
+print("[booting] numpy + opencv loaded", flush=True)
 
 # networking
 import paramiko
-print("[boot] paramiko loaded", flush=True)
+print("[booting] paramiko loaded", flush=True)
 
 # audio
 import sounddevice as sd
 import librosa
 import soundfile as sf
-print("[boot] audio stack loaded", flush=True)
+print("[booting] audio stack loaded", flush=True)
 
 # venv + API
 from dotenv import load_dotenv
 from openai import OpenAI
-print("[boot] openai loaded", flush=True)
+print("[booting] openai loaded", flush=True)
 
 # ML
 import joblib
-print("[boot] loading tensorflow (this is slow on first run)...", flush=True)
+print("[booting] loading tensorflow (this is slow on first run)...", flush=True)
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
-print("[boot] tensorflow loaded", flush=True)
+print("[booting] tensorflow loaded", flush=True)
 
 load_dotenv()
 
 
-# ── Configuration ──
+# ── Config ──
 
 NAO_IP       = os.getenv("NAO_IP", "ROBOT_IP")
 NAO_USER     = "nao"
 NAO_PASS     = "nao"
-RECORD_MAX_SECS    = 12     # hard ceiling; never record longer than this
-RECORD_MIN_SECS    = 2      # minimum recording before silence detection kicks in
-SILENCE_POLL_SECS  = 0.5    # polling interval for silence detection on Pepper
-SILENCE_DURATION   = 1.5    # seconds of silence after speech to trigger stop
-CALIBRATION_SECS   = 3      # duration of ambient noise calibration at startup
-ENERGY_BUFFER      = 200    # margin above ambient baseline to set speech threshold
-DEFAULT_ENERGY_THRESHOLD = 800  # fallback if calibration fails
+RECORD_MAX_SECS    = 12 # ceiling (don't record longer than this)
+RECORD_MIN_SECS    = 2 # minimum recording before silence-detection kicks in
+SILENCE_POLL_SECS  = 0.5 # polling interval for silence detection on Pepper
+SILENCE_DURATION   = 1.5 # seconds of silence after speech to trigger stop
+CALIBRATION_SECS   = 3 # duration of ambient noise calibration at start-up
+ENERGY_BUFFER      = 200 # margin above ambient baseline to set speech threshold
+DEFAULT_ENERGY_THRESHOLD = 800  # fallback for if calibration fails
 REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 100  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
-FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; treat as Neutral
-VOICE_CONFIDENCE_THRESHOLD = 0.5  # below this, vocal emotion is too uncertain; treat as neutral
+FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; thus treat as Neutral
+VOICE_CONFIDENCE_THRESHOLD = 0.5  # vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
 
@@ -116,29 +117,29 @@ CMD_TIMEOUT  = 60
 USE_LOCAL_CAMERA = os.getenv("GAZE_LOCAL_CAMERA", "false").lower() == "true"
 
 # full local mode to run game loop on Mac without any Pepper connection
-# uses local webcam; Mac microphone, and macOS TTS instead of Pepper hardware
+# uses local webcam; Mac microphone, and macOS TTS instead of Pepper-hardware
 LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
-    USE_LOCAL_CAMERA = True      # local mode implies local computer's camera
+    USE_LOCAL_CAMERA = True # local mode implies local computer's camera
 
 # live debug preview (local mode only)
 DEBUG_PREVIEW = LOCAL_MODE
-_last_rms = 0.0          # shared with recording thread for overlay
-_last_emotion = ""        # updated by capture_and_classify
+_last_rms = 0.0 # shared with recording thread for overlay
+_last_emotion = "" # updated by capture_and_classify
 
 # shared state for continuous preview thread
 _preview_lock  = threading.Lock()
 _preview_state = {"emotion": "Neutral", "confidence": 0.0}
 _preview_frame = None    # latest annotated BGR frame for the dashboard
 
-# paths to pre-trained models; checks local models/ first (portable),
+# paths to pre-trained models; checks models/ first (portable),
 # then falls back to the workshop directory (development repo layout)
 SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR    = os.path.join(SCRIPT_DIR, "models")
-WORKSHOP_DIR  = os.path.join(SCRIPT_DIR, "..", "..", "..", "learning", "workshops")
+WORKSHOP_DIR  = os.path.join(SCRIPT_DIR, "..", "..", "..", "learning", "workshops") # TODO: Verify correctness: go backwards from task-4/ ending up in learning/workshops
 
 def find_model(local_name, workshop_subpath):
-    """Resolve a model file: local models/ dir first, then workshop fallback."""
+    """Resolve a model local models/ dir first, then workshop fallback."""
     local = os.path.join(MODELS_DIR, local_name)
     if os.path.exists(local):
         return local
@@ -150,14 +151,14 @@ HAAR_CASCADE  = find_model("haarcascade_frontalface_default.xml", os.path.join("
 SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 
 # adaptive engine thresholds
-RESPONSE_TIME_BASELINE = 30.0   # seconds; beyond this, user is slow
-CORRECTNESS_WINDOW     = 5      # rolling window size
-CORRECTNESS_FLOOR      = 0.4    # below thus ease off
-CORRECTNESS_CEILING    = 0.8    # above thus ramp up
-SILENCE_THRESHOLD      = 2      # consecutive non-responses before intervention
-MAX_ROUNDS             = 20     # natural session end
+RESPONSE_TIME_BASELINE = 30.0 # seconds; beyond this the user is slow
+CORRECTNESS_WINDOW     = 5 # rolling window size
+CORRECTNESS_FLOOR      = 0.4 # below thus ease off
+CORRECTNESS_CEILING    = 0.8 # above thus ramp up
+SILENCE_THRESHOLD      = 2 # consecutive non-responses before intervention
+MAX_ROUNDS             = 20 # natural session end
 
-# persistent session save file
+# persistent session-save file
 SAVE_FILE = os.path.join(SCRIPT_DIR, "gaze_save.json")
 
 if not os.getenv("OPENAI_API_KEY", "").strip():
@@ -220,6 +221,8 @@ class SpeechEmotionModel:
         stft = np.abs(librosa.stft(audio, n_fft=n_fft))
 
         # compute mean (average) frames to consistent vector-length for consistent MLP-input
+
+        # TODO: explain why it flattens
 
         mfccs = np.mean(librosa.feature.mfcc(
             y=audio, sr=sample_rate, n_mfcc=40).T, axis=0).flatten()
@@ -2578,7 +2581,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             turn_count += 1
             print(f"\n{'─' * 40} Turn {turn_count} {'─' * 40}")
 
-            # ── a. Capture face expression ──
+            # (a) Capture face expression
             print("Capturing expression...")
             expression, expr_conf = capture_and_classify(
                 ssh, face_model, face_cascade, local_camera
@@ -2589,7 +2592,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             else:
                 print(f"  Expression: {expression} ({expr_conf:.2f})")
 
-            # ── b. Record audio + measure volume + classify vocal emotion ──
+            # (b) Record audio + measure volume + classify vocal emotion
             question_start = time.time()
             print("Listening...")
             if not LOCAL_MODE:
@@ -2624,7 +2627,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             vol_rms = measure_volume()
             print(f"  Volume RMS: {vol_rms:.0f}")
 
-            # ── c. Transcribe ──
+            # (c) Transcribe
             # In local mode, trust the recording's own speech_detected flag
             # instead of the full-file volume RMS. Mac mics with low SNR
             # average badly across silence, so the RMS gate would either
@@ -2653,7 +2656,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 # don't force a response on silence; just nudge
                 user_text = "(The user was silent this turn.)"
 
-            # ── d. Check exit keywords ──
+            # (d) Check exit keywords
             if user_text.lower().strip() in [
                 "stop", "quit", "exit", "goodbye", "bye", "end",
                 "i want to stop", "let's stop", "no more",
@@ -2661,13 +2664,13 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 print("User wants to stop.")
                 break
 
-            # ── e. Build signal context ──
+            # (e) Build signal context
             signal_ctx = build_signal_context(
                 engine, expression, expr_conf,
                 vocal_emo, vocal_conf, vol_rms, response_time,
             )
 
-            # ── f. Append user message (signals + transcription) to conversation ──
+            # (f) Append user message (signals + transcription) to conversation
             user_msg_content = f"{signal_ctx}\n\nUser says: {user_text}"
             conversation.append({"role": "user", "content": user_msg_content})
 
@@ -2676,13 +2679,13 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             if len(conversation) > 42:
                 conversation = [conversation[0]] + conversation[-40:]
 
-            # ── g. Call converse() with tools ──
+            # (g) Call converse() with tools
             if not LOCAL_MODE:
                 nao_set_leds(ssh, "EarLeds", 0x000000FF, 0.3)  # blue = thinking
 
             llm_message = converse(conversation, TOOLS)
 
-            # ── h. Process response (handle tool calls) ──
+            # (h) Process response (handle tool calls)
             response_text = process_llm_response(
                 llm_message, conversation, engine, game_state,
                 preferred_game, dashboard
@@ -2691,11 +2694,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             if not response_text.strip():
                 response_text = "I'm here! What would you like to talk about? [gesture:neutral]"
 
-            # ── i. Extract gesture ──
+            # (i) Extract gesture
             gesture_type = extract_gesture(response_text)
             speech_text  = re.sub(r'\[gesture:\w+\]', '', response_text).strip()
 
-            # ── j. Speak + gesture + LEDs ──
+            # (j) Speak + gesture + LEDs
             if not LOCAL_MODE:
                 # LED colour reflects latest inferred state if available
                 if engine.adaptation_log:
@@ -2726,7 +2729,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 print(f"(Game answer: {game_state.current_answer})")
             dashboard.update_robot_speech(speech_text)
 
-            # ── k. Update dashboard (signals + decision if game active) ──
+            # (k) Update dashboard (signals + decision if game active)
             # use the actual answer check result from the tool chain
             was_game_answer = game_state.last_answer_checked
             correct = game_state.last_answer_correct if was_game_answer else False
@@ -2790,7 +2793,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     streak=engine.consecutive_correct,
                 )
 
-            # ── l. Auto-save every 5 turns ──
+            # (l) Auto-save every 5 turns
             if turn_count % 5 == 0:
                 save_session(engine, preferred_game)
                 print("  [Auto-save]")
