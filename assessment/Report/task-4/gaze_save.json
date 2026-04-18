@@ -1,15 +1,26 @@
 {
-  "total_correct": 0,
-  "best_streak": 0,
+  "total_correct": 2,
+  "best_streak": 1,
   "games_played": {
-    "numbers": 0,
+    "numbers": 2,
     "letters": 0
   },
   "game_switches": 0,
-  "last_difficulty": 2,
+  "last_difficulty": 3,
   "last_game": "numbers",
-  "preferred_game": null,
-  "rounds_played": 0,
+  "preferred_game": "numbers",
+  "rounds_played": 1,
   "rewards_given": [],
-  "round_log": []
+  "round_log": [
+    {
+      "round": 4,
+      "game": "numbers",
+      "difficulty": 1,
+      "correct": true,
+      "time": 4.7,
+      "expression": "Neutral",
+      "vocal": "calm",
+      "state": "comfortable"
+    }
+  ]
 }

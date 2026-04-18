@@ -43,12 +43,21 @@ OUTPUT_PATH = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 
 def extract_features(file_name: str):
     """Extract MFCC (40) + chroma (12) + mel spectrogram (128) = 180 features."""
-    with sf.SoundFile(file_name) as sound_file:
-        audio = sound_file.read(dtype="float32")
-        sample_rate = sound_file.samplerate
-
+    # force-resample to 16 kHz so the mel filterbank (fmax=fs/2) matches
+    # inference; RAVDESS is natively 48 kHz whilst the mic records at 16 kHz,
+    # wherein the 3x spectral warp previously routed most inferences to "disgust".
+    # Use sf.read + librosa.resample rather than librosa.load because audioread
+    # is broken in at least one of this project's venvs
+    audio, native_sr = sf.read(file_name, dtype="float32", always_2d=False)
     if audio.ndim > 1:
         audio = audio.mean(axis=1)
+    if native_sr != 16000:
+        audio = librosa.resample(audio, orig_sr=native_sr, target_sr=16000)
+    sample_rate = 16000
+    # peak-normalise so loudness stops being an implicit feature; this is an
+    # accessibility choice for post-stroke / brain-injured target users whose
+    # vocal intensity systematically differs from RAVDESS's healthy actors
+    audio = librosa.util.normalize(audio)
 
     n_fft = 2048
     if len(audio) < n_fft:

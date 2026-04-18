@@ -5,6 +5,12 @@ Brief requirement: "a **video of 5 minutes** describing your contribution and sh
 ---
 
 - [ ] discuss the emotinal recognition deeply
+  - [ ] sample-rate bug -- RAVDESS 48 kHz vs mic 16 kHz; Gemini caught it
+  - [ ] mel bins 0-24 kHz at training, 0-8 kHz at inference; 3$\times$ spectral warp
+  - [ ] fix: `librosa.load(sr=16000)`; retrain; reship pkl
+  - [ ] my audit assumed 16 kHz on both sides; Gemini cross-check caught it
+  - [ ] cross-modal design masked a silent vocal-channel failure -- hence the novelty
+  - [ ] loudness-normalisation = accessibility for quieter brain-injured users
 - [ ] find the best HRI-relevant stuff to discuss
 
 ## Structure (5 minutes total)

@@ -6,6 +6,7 @@ Using Python: .venv/bin/python
 [booting] openai loaded
 [booting] loading tensorflow (this is slow on first run)...
 [booting] tensorflow loaded
+[booting] silero-vad failed to load (No module named 'silero_vad'); VAD gate disabled
 ============================================================
   GAZE — Game-Adaptive Zone of Engagement
   Adaptive Game System for Pepper Robot
@@ -22,141 +23,68 @@ Loading speech emotion model...
 
 Calibrating Mac microphone ambient noise level...
 Calibrating Mac mic (stay quiet for 3s)...
-  Ambient RMS: 298, silence threshold: 348, transcription gate: 1392
-  Arousal thresholds: QUIET=596, LOUD=2980
+  Ambient RMS: 592, silence threshold: 642, transcription gate: 2568
+  Arousal thresholds: QUIET=1184, LOUD=5920
   Dashboard launched.
+
+Robot: Welcome back! Last time you played 1 rounds and got 2 correct. Want to continue where you left off, or start fresh?
+
+Listening for continue/fresh...
+  Recording from Mac mic (up to 12s, stops after silence)...
+    [1.0s] RMS: 545 ░    [1.5s] RMS: 609 ░    [2.0s] RMS: 597 ░    [2.5s] RMS: 671 ▓    [3.0s] RMS: 646 ▓    [3.5s] RMS: 648 ▓    [4.0s] RMS: 2955 ▓    [4.5s] RMS: 2133 ▓    [5.0s] RMS: 1495 ▓    [5.5s] RMS: 630 ░    [6.0s] RMS: 630 ░    [6.5s] RMS: 647 ▓    [7.0s] RMS: 602 ░    [7.5s] RMS: 660 ▓    [8.0s] RMS: 632 ░    [8.5s] RMS: 595 ░    [9.0s] RMS: 654 ▓    [9.5s] RMS: 705 ▓    [10.0s] RMS: 668 ▓    [10.5s] RMS: 631 ░    [11.0s] RMS: 631 ░    [11.5s] RMS: 648 ▓    [12.0s] RMS: 653 ▓
+  Recording saved (12.0s, speech=yes).
+  Heard: Yeah, let's continue.
+
+Robot: Restoring your previous session: 1 rounds on record.
 
 Robot: Hello! I'm GAZE, your companion. Before we begin, you can pick my personality: cheeky, mentor, coach, or therapeutic. Or just say hello and I'll be my usual self!
 
 Listening for personality choice...
   Recording from Mac mic (up to 12s, stops after silence)...
-    [1.0s] RMS: 58 ░    [1.5s] RMS: 61 ░    [2.0s] RMS: 74 ░    [2.5s] RMS: 1826 ▓    [3.0s] RMS: 2319 ▓    [3.5s] RMS: 1827 ▓    [4.0s] RMS: 46 ░    [4.5s] RMS: 50 ░    [5.0s] RMS: 43 ░    [5.5s] RMS: 46 ░
+    [1.0s] RMS: 314 ░    [1.5s] RMS: 2817 ▓    [2.0s] RMS: 3101 ▓    [2.5s] RMS: 2258 ▓    [3.0s] RMS: 3237 ▓    [3.5s] RMS: 2587 ▓    [4.0s] RMS: 428 ░    [4.5s] RMS: 494 ░    [5.0s] RMS: 481 ░    [5.5s] RMS: 481 ░
   Recording saved (5.5s, speech=yes).
-  Heard: Hi, let's play some games.
+  Heard: I would like you to be a therapist.
 
 Robot: Sorry, I didn't catch that. Which personality would you like: cheeky, mentor, coach, or therapeutic?
 
 Listening for personality choice...
   Recording from Mac mic (up to 12s, stops after silence)...
-    [1.0s] RMS: 37 ░    [1.5s] RMS: 44 ░    [2.0s] RMS: 52 ░    [2.5s] RMS: 2692 ▓    [3.0s] RMS: 1752 ▓    [3.5s] RMS: 103 ░    [4.0s] RMS: 42 ░    [4.5s] RMS: 45 ░    [5.0s] RMS: 46 ░
-  Recording saved (5.0s, speech=yes).
-  Heard: Therapeutic.
+    [1.0s] RMS: 4159 ▓    [1.5s] RMS: 2062 ▓    [2.0s] RMS: 1921 ▓    [2.5s] RMS: 2250 ▓    [3.0s] RMS: 368 ░    [3.5s] RMS: 152 ░    [4.0s] RMS: 81 ░    [4.5s] RMS: 108 ░
+  Recording saved (4.5s, speech=yes).
+  Heard: I would like you to be therapeutic.
   Active personality: therapeutic
 
-Robot: Hello, I'm here to support you—whether you want to talk, play a gentle game, or simply spend some relaxing time together. Whatever you need right now, I'm here for you.
+Robot: Hello, I’m here for you—whether you’d like to chat, play a gentle game, or simply spend some quiet time together. Whatever you need, I’m right here by your side.
 
-──────────────────────────────────────── Turn 1 ────────────────────────────────────────
+---------------------------------------- Turn 1 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
+  Expression: Neutral (0.60)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 34 ░    [1.5s] RMS: 45 ░    [2.0s] RMS: 53 ░    [2.5s] RMS: 1695 ▓    [3.0s] RMS: 2282 ▓    [3.5s] RMS: 1288 ▓    [4.0s] RMS: 306 ░    [4.5s] RMS: 43 ░    [5.0s] RMS: 50 ░    [5.5s] RMS: 50 ░    [6.0s] RMS: 53 ░    [6.5s] RMS: 50 ░
-  Recording saved (6.5s, speech=yes).
-  Vocal emotion: disgust (0.65)
-  Volume RMS: 1050
-  Heard: Let's play a game.
-  Calling tool get_adaptive_recommendation({})
-  Tool returned: {"inferred_state": "comfortable", "current_difficulty": "MEDIUM", "rolling_correctness": 0.5, "consecutive_correct": 0, 
+    [1.0s] RMS: 60 ░    [1.5s] RMS: 99 ░    [2.0s] RMS: 85 ░    [2.5s] RMS: 69 ░    [3.0s] RMS: 72 ░    [3.5s] RMS: 102 ░    [4.0s] RMS: 103 ░    [4.5s] RMS: 4436 ▓    [5.0s] RMS: 3445 ▓    [5.5s] RMS: 1880 ▓    [6.0s] RMS: 1880 ▓    [6.5s] RMS: 2214 ▓    [7.0s] RMS: 1170 ▓    [7.5s] RMS: 1444 ▓    [8.0s] RMS: 91 ░    [8.5s] RMS: 90 ░    [9.0s] RMS: 84 ░    [9.5s] RMS: 72 ░    [10.0s] RMS: 78 ░    [10.5s] RMS: 85 ░
+  Recording saved (10.5s, speech=yes).
+  Vocal emotion: fearful (1.00)
+  Volume RMS: 1490
+  Heard: So yeah, let's do that, let's play a game.
 
-Robot: Great! Would you like to play a numbers round or a letters round? Just let me know which one you’re in the mood for, and we’ll get started together.
+Robot: Of course, we can play a game together. Would you like to try a numbers round or a letters round today? I’ll make sure to keep it gentle and fun for us.
 
-──────────────────────────────────────── Turn 2 ────────────────────────────────────────
+---------------------------------------- Turn 2 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
+  Expression: Neutral (0.68)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 1586 ▓    [1.5s] RMS: 1648 ▓    [2.0s] RMS: 891 ▓    [2.5s] RMS: 48 ░    [3.0s] RMS: 47 ░    [3.5s] RMS: 46 ░    [4.0s] RMS: 44 ░    [4.5s] RMS: 48 ░    [5.0s] RMS: 48 ░
-  Recording saved (5.0s, speech=yes).
-  Vocal emotion: disgust (0.63)
-  Volume RMS: 777
-  Heard: A letter's round.
-  Calling tool generate_game_question({'game_type': 'letters', 'difficulty': 'MEDIUM'})
-  Tool returned: {"question": "Using the following 9 letters, form the longest English word possible. You may use each letter only once: 
-
-Robot: Alright! Here are your nine letters: E, A, T, S, L, R, N, C, D. Try to make the longest word you can using these letters—take your time, and let me know when you’re ready with your word.
-(Game answer: CLEANSED)
-
-──────────────────────────────────────── Turn 3 ────────────────────────────────────────
-Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 37 ░    [1.5s] RMS: 45 ░    [2.0s] RMS: 44 ░    [2.5s] RMS: 43 ░    [3.0s] RMS: 47 ░    [3.5s] RMS: 51 ░    [4.0s] RMS: 43 ░    [4.5s] RMS: 44 ░    [5.0s] RMS: 45 ░    [5.5s] RMS: 46 ░    [6.0s] RMS: 46 ░    [6.5s] RMS: 46 ░    [7.0s] RMS: 49 ░
-  Recording saved (7.0s, speech=no).
-  Vocal emotion: disgust (0.72)
-  Volume RMS: 45
-  No speech detected during recording, skipping transcription.
+    [1.0s] RMS: 77 ░    [1.5s] RMS: 143 ░    [2.0s] RMS: 72 ░    [2.5s] RMS: 51 ░    [3.0s] RMS: 58 ░    [3.5s] RMS: 39 ░    [4.0s] RMS: 902 ▓    [4.5s] RMS: 125 ░    [5.0s] RMS: 107 ░    [5.5s] RMS: 107 ░    [6.0s] RMS: 89 ░    [6.5s] RMS: 212 ░    [7.0s] RMS: 116 ░
+  Recording saved (7.0s, speech=yes).
+  Vocal emotion: calm (0.89)
+  Volume RMS: 265
+  No real speech detected (speech_flag=True, vol_rms=265, floor=642); skipping transcription.
   Heard: (silence)
 
-Robot: No pressure—take as much time as you need. If you’d like a hint or want to chat instead, just let me know. I’m here for you either way.
-(Game answer: CLEANSED)
-
-──────────────────────────────────────── Turn 4 ────────────────────────────────────────
+---------------------------------------- Turn 3 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
+  Expression: Neutral (0.62)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 1888 ▓    [1.5s] RMS: 1299 ▓    [2.0s] RMS: 469 ▓    [2.5s] RMS: 47 ░    [3.0s] RMS: 56 ░    [3.5s] RMS: 42 ░    [4.0s] RMS: 50 ░    [4.5s] RMS: 46 ░    [5.0s] RMS: 50 ░
-  Recording saved (5.0s, speech=yes).
-  Vocal emotion: disgust (0.62)
-  Volume RMS: 740
-  Heard: Give me a little hint.
-
-Robot: Of course! Here’s a gentle hint: the longest word you can make uses all nine letters and means “purified” or “made clean.” If you want another clue or a smaller word, just ask.
-(Game answer: CLEANSED)
-
-──────────────────────────────────────── Turn 5 ────────────────────────────────────────
-Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 37 ░    [1.5s] RMS: 46 ░    [2.0s] RMS: 45 ░    [2.5s] RMS: 45 ░    [3.0s] RMS: 44 ░    [3.5s] RMS: 46 ░    [4.0s] RMS: 46 ░    [4.5s] RMS: 46 ░    [5.0s] RMS: 50 ░    [5.5s] RMS: 50 ░    [6.0s] RMS: 50 ░    [6.5s] RMS: 56 ░    [7.0s] RMS: 61 ░
-  Recording saved (7.0s, speech=no).
-  Vocal emotion: disgust (0.73)
-  Volume RMS: 48
-  No speech detected during recording, skipping transcription.
-  Heard: (silence)
-
-Robot: It’s perfectly okay to pause or take a breather—no rush at all. If you’d like to try a different word or switch gears, I’m here for you. Just let me know what feels best right now.
-(Game answer: CLEANSED)
-  Session saved to /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/gaze_save.json
-  [Auto-save]
-
-──────────────────────────────────────── Turn 6 ────────────────────────────────────────
-Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 39 ░    [1.5s] RMS: 48 ░    [2.0s] RMS: 49 ░    [2.5s] RMS: 51 ░    [3.0s] RMS: 49 ░    [3.5s] RMS: 56 ░    [4.0s] RMS: 2231 ▓    [4.5s] RMS: 1624 ▓    [5.0s] RMS: 2389 ▓    [5.5s] RMS: 2389 ▓    [6.0s] RMS: 1611 ▓    [6.5s] RMS: 1274 ▓    [7.0s] RMS: 49 ░    [7.5s] RMS: 48 ░    [8.0s] RMS: 48 ░    [8.5s] RMS: 41 ░    [9.0s] RMS: 47 ░    [9.5s] RMS: 47 ░
-  Recording saved (9.5s, speech=yes).
-  Vocal emotion: disgust (0.69)
-  Volume RMS: 1099
-  Heard: Give me some different letters, give me a simpler one.
-  Calling tool generate_game_question({'game_type': 'letters', 'difficulty': 'EASY'})
-  Tool returned: {"question": "Form the longest English word possible using these 9 letters (each letter only once): R, S, T, E, A, C, I,
-
-Robot: Absolutely, let’s make it easier! Here are your new letters: R, S, T, E, A, C, I, N, O. See what long word you can create—no pressure, take your time.
-(Game answer: CREATIONS)
-
-──────────────────────────────────────── Turn 7 ────────────────────────────────────────
-Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 38 ░    [1.5s] RMS: 43 ░    [2.0s] RMS: 58 ░    [2.5s] RMS: 49 ░    [3.0s] RMS: 47 ░    [3.5s] RMS: 47 ░    [4.0s] RMS: 43 ░    [4.5s] RMS: 51 ░    [5.0s] RMS: 50 ░    [5.5s] RMS: 50 ░    [6.0s] RMS: 48 ░    [6.5s] RMS: 46 ░    [7.0s] RMS: 48 ░
-  Recording saved (7.0s, speech=no).
-  Vocal emotion: disgust (0.59)
-  Volume RMS: 47
-  No speech detected during recording, skipping transcription.
-  Heard: (silence)
-
-Robot: There’s no hurry at all. If you want to try a word, need another hint, or would rather just chat for a bit, that’s perfectly fine. I’m here, and we can go at your pace.
-(Game answer: CREATIONS)
-
-──────────────────────────────────────── Turn 8 ────────────────────────────────────────
-Capturing expression...
-  Expression: Neutral (0.00) — LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 44 ░    [1.5s] RMS: 45 ░    [2.0s] RMS: 50 ░    [2.5s] RMS: 47 ░    [3.0s] RMS: 51 ░    [3.5s] RMS: 51 ░
+    [1.0s] RMS: 59 ░    [1.5s] RMS: 54 ░    [2.0s] RMS: 346 ░
   [Dashboard] Quit requested.

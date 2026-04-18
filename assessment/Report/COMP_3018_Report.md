@@ -460,7 +460,9 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 # 2- Task (4) Noval Programming Project
 
 - [ ] CRITICAL: reconfigure report below to match newest gaze.py
+- [ ] CRIITCAL: reconfigure task-4/ to newest version when zipping and giving to Salman
 
+- [ ] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
 - [ ] verify word count
 
 <!--
@@ -591,6 +593,8 @@ GAZE operates as a conversational loop rather than a rigid question-answer cycle
 **2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection calibrated to the room's ambient noise level at startup; arousal bands are fixed. Recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. The recorded WAV is transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract).
 
 **3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 577) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality; the two may disagree, wherein decision logic arbitrates.
+
+- [ ] waveform peak-normalisation -- accessibility for quieter brain-injured users beyond RAVDESS
 
 **4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion; the Whisper call occurs *after* the timer halts, isolating deliberation time from API latency.
 
@@ -739,6 +743,7 @@ The multi-signal approach could transfer to stroke rehabilitation re-engagement 
 <!-- NOTE FOR SALMAN: The following limitations should go in section 2.4 (Outcome & System Analysis):
 - Facial-expression CNN not fine-tuned for deployment context (Workshop 10 model, general dataset, low confidence under poor lighting)
 - Speech-emotion MLP trained on RAVDESS acted-speech corpus; domain mismatch with natural conversational speech, partially mitigated by cross-modal design
+- Sample-rate mismatch (RAVDESS 48 kHz vs mic 16 kHz) warped the mel filterbank by $3\times$; fixed via `librosa.load(sr=16000)`; Gemini cross-critique caught it
 - Classification thresholds (correctness floor 0.4, response-time baseline 30s, consecutive-wrong 3) are hand-coded rather than learned; prioritises interpretability over optimisation
 - Conversation history grows unboundedly; extended sessions may approach OpenAI token limits -->
 
