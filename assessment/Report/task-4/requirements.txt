@@ -60,3 +60,5 @@ soundfile==0.13.1
 scikit-learn==1.8.0
 scipy==1.17.1
 silero-vad==5.1.2
+vosk==0.3.44
+srt==3.5.3  # vosk imports this at module load; on Py3.13 + setuptools>=74 build needs `pip install "setuptools<74"` transiently (restore pin after).

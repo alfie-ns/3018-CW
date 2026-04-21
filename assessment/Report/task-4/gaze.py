@@ -10,6 +10,9 @@ Novelty: multi-signal emotional inference: face (WS-10) + voice (WS-08) + respon
 CRITICAL:
 - **REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.**
 - **REMEMBER: CONFIG NAO IP INTO ENV LIKE LAST TIME**
+- [ ] only make listen when 'Pepper' is heard and hopefully this fix the Whisper hallucinations
+
+
 
 - [ ] offload simpler tasks? to either computation or mini model
 - [ ] ensure all facial expression inference is sufficently commented
@@ -54,40 +57,61 @@ NICE-TO-HAVE:
 """
 
 # standard library
-import os, re, sys, json, time, wave, struct, tempfile, threading, subprocess, tkinter as tk
+import os, re, sys, json, time, wave, struct, tempfile, threading, subprocess, unicodedata, tkinter as tk
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
 
-print("[booting] stdlib loaded", flush=True)
+print("[booting...] stdlib loaded", flush=True)
 
 # data + vision
 import numpy as np
 import cv2
 from PIL import Image, ImageTk
-print("[booting] numpy + opencv loaded", flush=True)
+print("[booting...] numpy + opencv loaded", flush=True)
 
 # networking
 import paramiko
-print("[booting] paramiko loaded", flush=True)
+print("[booting...] paramiko loaded", flush=True)
 
 # audio
 import sounddevice as sd
 import librosa
 import soundfile as sf
-print("[booting] audio stack loaded", flush=True)
+# Vosk wake-word gate (fifth-layer defence against Whisper hallucinations);
+# wrapped in try/except thus a missing dep fails open rather than killing
+# the app -- the four existing layers still protect us.
+try:
+    from vosk import Model as VoskModel, KaldiRecognizer
+    _vosk_import_ok = True
+except ImportError:
+    VoskModel = None
+    KaldiRecognizer = None
+    _vosk_import_ok = False
+# Silero VAD: pre-Whisper speech-activity gate; import lives at the top with
+# the other audio imports, the loader sits later near the model-path block.
+# Fail-open if the dep is missing thus the downstream layers still protect us.
+try:
+    from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
+    _silero_import_ok = True
+except ImportError:
+    load_silero_vad = None
+    read_audio = None
+    get_speech_timestamps = None
+    _silero_import_ok = False
+print("[booting...] audio stack loaded", flush=True)
 
 # venv + API
 from dotenv import load_dotenv
 from openai import OpenAI
-print("[booting] openai loaded", flush=True)
+print("[booting...] openai loaded", flush=True)
 
 # ML
 import joblib
-print("[booting] loading tensorflow (this is slow on first run)...", flush=True)
+print("[booting...] loading tensorflow (this is slow on first run)...", flush=True)
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
-print("[booting] tensorflow loaded", flush=True)
+print("[booting...] tensorflow loaded", flush=True)
 
 
 
@@ -95,22 +119,16 @@ print("[booting] tensorflow loaded", flush=True)
 
 
 
-# Silero VAD: pre-Whisper speech-activity gate; think kills most silent-audio
-# hallucinations. Fail-open if it doesn't load, thus the
-# downstream verbose_json + blacklist layers still protects the code.
-try:
-    from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
-    _silero_model = load_silero_vad()
-    print("[booting] silero-vad loaded", flush=True)
-except Exception as _vad_err:
-    print(f"[booting] silero-vad failed to load ({_vad_err}); VAD gate disabled", flush=True)
-    _silero_model = None
-    load_silero_vad = None
-    read_audio = None
-    get_speech_timestamps = None
-
-# unicodedata is stdlib; used by the hallucination blacklist normaliser
-import unicodedata
+# Silero VAD loader: pre-Whisper speech-activity gate; kills most silent-audio
+# hallucinations. Fail-open if the model won't instantiate thus the
+# downstream verbose_json + blacklist layers still protect the code.
+_silero_model = None
+if _silero_import_ok:
+    try:
+        _silero_model = load_silero_vad()
+        print("[booting] silero-vad loaded", flush=True)
+    except Exception as _vad_err:
+        print(f"[booting] silero-vad failed to load ({_vad_err}); VAD gate disabled", flush=True)
 
 load_dotenv()
 
@@ -173,6 +191,19 @@ MODEL_JSON    = find_model("model.json", os.path.join("[X]-facial-expression-det
 MODEL_WEIGHTS = find_model("model_weights.weights.h5", os.path.join("[X]-facial-expression-detection", "model_weights.weights.h5"))
 HAAR_CASCADE  = find_model("haarcascade_frontalface_default.xml", os.path.join("[X]-ws-10", "haarcascade_frontalface_default.xml"))
 SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
+VOSK_MODEL_DIR = os.path.join(MODELS_DIR, "vosk-model-small-en-us-0.15")
+
+# Vosk wake-word gate: post-Silero, pre-Whisper fifth-layer defence
+# thus Whisper is never invoked on silent audio (the user must say
+# "Pepper" or "Gaze" before the transcription API ever fires).
+# Fail-open if it doesn't load -- the four existing layers still guard.
+_vosk_model = None
+if _vosk_import_ok:
+    try:
+        _vosk_model = VoskModel(VOSK_MODEL_DIR)
+        print("[booting] vosk wake-word model loaded", flush=True)
+    except Exception as _vosk_err:
+        print(f"[booting] vosk failed to load ({_vosk_err}); wake-word gate disabled", flush=True)
 
 # adaptive engine thresholds
 RESPONSE_TIME_BASELINE = 30.0 # seconds; beyond this the user is slow
@@ -204,6 +235,8 @@ class FacialExpressionModel:
         self.model.load_weights(model_weights_path)
         self.model.make_predict_function()
 
+    # Alfie's
+    # ------------------------------------------------------------------------------
     def predict(self, img):
         """Return (emotion_label, confidence) from the (1, 48, 48, 1) array."""
         preds = self.model.predict(img, verbose=0)
@@ -212,7 +245,7 @@ class FacialExpressionModel:
 
 
 # SPEECH EMOTION MODEL (WS-08)
-# --------------------------------
+# -----------------------------
 
 class SpeechEmotionModel:
     """
@@ -263,6 +296,8 @@ class SpeechEmotionModel:
 
         return np.concatenate([mfccs, chroma, mel])
 
+    # Alfie's
+    # ------------------------------------------------------------------------------
     def predict(self, wav_path: str) -> tuple[str, float]:
         """Return (emotion_label, confidence) from a WAV file."""
         features = self.extract_features(wav_path)
@@ -276,6 +311,8 @@ class SpeechEmotionModel:
         return label, confidence
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
     """
     Classify the vocal emotion from a recorded WAV file.
@@ -315,6 +352,8 @@ class InferredState(Enum):
     DISENGAGED  = "disengaged"
     FRUSTRATED  = "frustrated"
 
+# Alfie's
+# ------------------------------------------------------------------------------
 class GameType(Enum):
     NUMBERS = "numbers"
     LETTERS = "letters"
@@ -358,7 +397,7 @@ PERSONALITY_PROMPTS = {
 
 
 BASE_SYSTEM_PROMPT = (
-    "You are GAZE, a social-companion robot running on a Pepper humanoid. "
+    "You are GAZE: a social-companion robot running on a Pepper humanoid. "
     "You are a companion first and a game host second.\n\n"
     "CONVERSATION GUIDELINES:\n"
     "- Have natural, flowing conversations with the user.\n"
@@ -408,7 +447,7 @@ class RoundResult:
     expression_confidence: float
     vocal_emotion:         str
     vocal_emotion_confidence: float
-    volume_rms:            float           # speech loudness (arousal signal)
+    volume_rms:            float # speech loudness (arousal signal)
     inferred_state:        InferredState
     timestamp:             float = field(default_factory=time.time)
 
@@ -481,6 +520,8 @@ class AdaptiveEngine:
     VOLUME_QUIET = 200 # below this -> low arousal (quiet/disengaged)
     VOLUME_LOUD  = 2000 # above this -> high arousal (excited/frustrated)
 
+    # Alfie's
+    # ------------------------------------------------------------------------------
     def infer_state(self, expression: str, response_time: float,
                     correct: bool, answer_text: str,
                     vocal_emotion: str = "neutral",
@@ -575,6 +616,8 @@ class AdaptiveEngine:
         # default: comfortable --
         return InferredState.COMFORTABLE
 
+    # Alfie's
+    # ------------------------------------------------------------------------------
     # -- core decision function --
 
     def decide(self, expression: str, expression_conf: float,
@@ -583,7 +626,7 @@ class AdaptiveEngine:
                vocal_emotion: str = "neutral",
                volume_rms: float = 0.0) -> AdaptiveDecision:
         """Return what to do next based on the inferred state."""
-        state       = self.infer_state(expression, response_time, correct, answer_text,
+        state = self.infer_state(expression, response_time, correct, answer_text,
                                        vocal_emotion, volume_rms=volume_rms)
         correctness = self.rolling_correctness()
 
@@ -651,6 +694,8 @@ class AdaptiveEngine:
             tone=tone,
         )
 
+    # Alfie's
+    # ------------------------------------------------------------------------------
     def recommend_think_budget(self, state: InferredState, expression: str,
                                prev_response_time: float,
                                consecutive_silences: int, waiting: bool
@@ -731,12 +776,20 @@ class AdaptiveEngine:
             self.total_correct += 1
         self.best_streak = max(self.best_streak, self.consecutive_correct)
 
+
+
+# Salman's
+# ------------------------------------------------------------------------------
+#track the streaks and sum correcr answers each milsetone fire once
+# celebrate
+#make sure reacts right in right time
     def check_reward(self) -> Optional[str]:
         """
         Check if the user hit a milestone.
-        Returns a reward instruction for the prompt, or None.
-        Each milestone fires once per session.
+        returns a reward instruction for the prompt, or None.
+        each milestone fires once per session.
         """
+        #streaks
         milestones = [
             ("streak_3",  self.consecutive_correct >= 3,
              "The user just got 3 in a row! Announce 'Hat trick!' and celebrate."),
@@ -746,6 +799,7 @@ class AdaptiveEngine:
             ("streak_10", self.consecutive_correct >= 10,
              "Incredible — 10 correct in a row! Announce 'Unstoppable!' "
              "and make a big deal of it."),
+              #total correct
             ("total_5",   self.total_correct >= 5 and "total_5" not in self.rewards_given,
              "The user has reached 5 correct answers total. Briefly acknowledge the milestone."),
             ("total_10",  self.total_correct >= 10 and "total_10" not in self.rewards_given,
@@ -753,21 +807,24 @@ class AdaptiveEngine:
             ("total_15",  self.total_correct >= 15 and "total_15" not in self.rewards_given,
              "15 correct answers! The user is on fire. Acknowledge it enthusiastically."),
         ]
+         # check if been rewarded or not
         for key, condition, message in milestones:
             if condition and key not in self.rewards_given:
                 self.rewards_given.add(key)
                 return message
         return None
-
+    # return the other type
     def pick_different_game(self) -> GameType:
         if self.current_game == GameType.NUMBERS:
             return GameType.LETTERS
         return GameType.NUMBERS
 
     def get_session_summary(self) -> dict:
+        #if no games played
         if not self.history:
             return {"rounds": 0}
         total   = len(self.history)
+         #check how many correct
         correct = sum(1 for r in self.history if r.correct)
         return {
             "rounds":             total,
@@ -780,6 +837,8 @@ class AdaptiveEngine:
             "final_difficulty":   self.current_difficulty.name,
         }
 
+    # Alfie's
+    # ------------------------------------------------------------------------------
     # -- adaptation self-evaluation --
 
     def evaluate_adaptation(self) -> Optional[str]:
@@ -925,7 +984,10 @@ def nao_run(ssh, code):
         print(f"  Pepper SSH exec_command dropped: {e}")
         return ""
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+#listens silent
+#not triggered by noise
 def nao_calibrate_ambient(ssh) -> int:
     """
     Calibrate the mic energy threshold to the room.
@@ -963,6 +1025,8 @@ else:
         return DEFAULT_ENERGY_THRESHOLD
 
 
+# Salman's
+# ------------------------------------------------------------------------------
 def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
                record_max_secs: float = RECORD_MAX_SECS,
                silence_secs: float = SILENCE_DURATION):
@@ -1037,7 +1101,10 @@ rec.stopMicrophonesRecording()
     sftp.get(REMOTE_WAV, LOCAL_WAV)
     sftp.close()
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+ #responses arrive in one block no splitting
+#delivered with no pauses
 def split_into_sentences(text: str) -> list[str]:
     """
     Split dialogue into sentences for speech delivery.
@@ -1045,9 +1112,9 @@ def split_into_sentences(text: str) -> list[str]:
     Pepper speaks straight through with no pauses, which sounds robotic.
     Split at (. ? !) whilst keeping abbreviations and decimal numbers.
     """
-    # split on sentence-ending punctuation followed by a space or end-of-string
+    # split on sentence-ending punctuation followed by a space or end of string
     raw_segments = re.split(r'(?<=[.!?])\s+', text.strip())
-    # also split any remaining newlines within segments
+    # split any remaining newlines within segments
     sentences = []
     for seg in raw_segments:
         for line in seg.split("\n"):
@@ -1056,7 +1123,9 @@ def split_into_sentences(text: str) -> list[str]:
                 sentences.append(cleaned)
     return sentences if sentences else [text.strip()]
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+#single ssh calls
 def nao_say(ssh, text):
     """
     Speak text on Pepper with sentence-level pausing.
@@ -1065,6 +1134,7 @@ def nao_say(ssh, text):
     per sentence; the 0.4s inter-sentence pause gets lost in that.
     """
     sentences = split_into_sentences(text)
+    ##convert to json 
     safe_sentences = json.dumps(sentences)
 
     nao_run(ssh, f"""
@@ -1083,7 +1153,9 @@ except Exception as e:
     print("  [TTS failed] " + str(e))
 """)
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+#animations with speech
 def nao_say_animated(ssh, text):
     """Try animated speech; fall back to plain TTS."""
     safe = json.dumps(text)
@@ -1136,9 +1208,12 @@ except Exception as e:
     except Exception as e:
         print(f"  Face tracking unavailable: {e}")
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+#leds
 def nao_set_leds(ssh, group, colour, duration=1.0):
     try:
+        #ssh led colours gestures duration 
         nao_run(ssh, f"""
 from naoqi import ALProxy
 ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
@@ -1162,6 +1237,8 @@ LOCAL_NO_SPEECH_MAX = 5.0 # stop if no speech detected at all after this many se
 LOCAL_ENERGY_BUFFER = 50 # margin above ambient baseline for speech detection
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def local_calibrate_ambient() -> int:
     """
     Calibrate the local-testing (Mac) mic's ambient noise level; mirrors
@@ -1213,6 +1290,8 @@ def local_calibrate_ambient() -> int:
     return threshold
 
 
+# Alfie's and Salman's
+# ------------------------------------------------------------------------------
 def local_record(max_secs: float = RECORD_MAX_SECS,
                  no_speech_max: float = LOCAL_NO_SPEECH_MAX,
                  silence_secs: float = LOCAL_SILENCE_SECS):
@@ -1240,7 +1319,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
     def callback(indata, frames, time_info, status):
         buffer.append(indata.copy())
 
-    for attempt in range(2):
+    for attempt in range(2): # one retry if PortAudio error (if the device is briefly unavailable after Pepper usage)
         try:
             with sd.InputStream(samplerate=native_rate, channels=1, dtype="int16",
                                 blocksize=chunk_size, callback=callback):
@@ -1252,7 +1331,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
                         continue
                     data = buffer[-1]
 
-                    rms = (np.mean(data.astype(np.float64) ** 2)) ** 0.5
+                    rms = (np.mean(data.astype(np.float64) ** 2)) ** 0.5 # compute RMS of the latest chunk for real-time feedback
                     global _last_rms
                     _last_rms = rms
                     print(f"\r    [{elapsed:.1f}s] RMS: {rms:.0f} {'▓' if rms > LOCAL_SILENCE_RMS else '░'}", end="", flush=True)
@@ -1306,6 +1385,8 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
     print(f"  Recording saved ({elapsed:.1f}s, speech={'yes' if speech_detected else 'no'}).")
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def local_say(text: str):
     """Speak text using host OS built-in TTS (macOS `say` or Windows SAPI)."""
     try:
@@ -1334,6 +1415,8 @@ def say(ssh_tts, text):
         nao_say(ssh_tts, text)
 
 
+# Alfie's and Salman's
+# ------------------------------------------------------------------------------
 def record(ssh, energy_threshold,
            no_speech_max: float = LOCAL_NO_SPEECH_MAX,
            silence_secs: float = LOCAL_SILENCE_SECS,
@@ -1352,7 +1435,7 @@ def record(ssh, energy_threshold,
 
 
 # ------------------------------------------------------------------------------------
-# GESTURE MAPPING
+# GESTURE MAPPING (Alfie's)
 # ------------------------------------------------------------------------------------
 # Each gesture is a motion sequence aligned to the game/emotional context:
 #   - celebrate: arms up + small bicep curls, for thriving moments and milestones
@@ -1454,6 +1537,8 @@ m.setStiffnesses("Arms", 0.0)
 }
 
 
+# Salman's
+# ------------------------------------------------------------------------------
 def nao_gesture(ssh, gesture_type: str):
     """Execute a gesture on Pepper aligned to the game context."""
     code = GESTURE_CODE.get(gesture_type, GESTURE_CODE["neutral"])
@@ -1467,6 +1552,8 @@ def nao_gesture(ssh, gesture_type: str):
 # AUDIO ANALYSIS + TRANSCRIPTION
 # ------------------------------------------------------------------------------
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def measure_volume() -> float:
     """
     RMS amplitude of the recorded WAV (local and Pepper paths).
@@ -1486,7 +1573,7 @@ def measure_volume() -> float:
         print(f"  Volume RMS calc failed: {e}")
         return 0.0
 
-# [ ] TODO: might need to ask gpt-4.1 to infer if something Whisper hallucinates is actually something the user would say
+# [ ] TODO: might need to ask gpt-4.1 to check and infer if something Whisper hallucinates is actually something the user would say or like one of the training-set tics below
 
 # Whisper hallucinates these training-set tics on silent/near-silent
 # audio (YouTube outros, CJK fillers, minimal-token fallbacks). Stored
@@ -1561,13 +1648,44 @@ def _has_real_speech(wav_path: str, min_speech_ms: int = 500,
         return True
 
 
+def _has_wake_word(wav_path: str) -> bool:
+    """
+    Vosk wake-word gate. True iff "Pepper" or "Gaze" is heard in the WAV.
+    Grammar-restricted KaldiRecognizer thus the decoder can only emit
+    "pepper", "gaze", or the [unk] placeholder -- background chatter and
+    room tone thereby collapse to [unk] and the gate returns False.
+    Fail-open (returns True) if the Vosk model didn't load thus the four
+    existing layers still protect us.
+    """
+    if _vosk_model is None or KaldiRecognizer is None:
+        return True
+    try:
+        rec = KaldiRecognizer(_vosk_model, LOCAL_SAMPLE_RATE,
+                              json.dumps(["pepper", "gaze", "[unk]"]))
+        with wave.open(wav_path, "rb") as wf:
+            while True:
+                data = wf.readframes(4000)
+                if len(data) == 0:
+                    break
+                rec.AcceptWaveform(data)
+        final = json.loads(rec.FinalResult())
+        text = (final.get("text") or "").lower()
+        return "pepper" in text or "gaze" in text
+    except Exception as e:
+        print(f"  Vosk wake-word check failed ({e}); falling through to Whisper")
+        return True
+
+# Salman's
+# ------------------------------------------------------------------------------
+#open ai whisperings and incase fails and in silent
 def transcribe() -> str:
     """
-    Transcribe the local WAV with Whisper via a four-layer defence:
+    Transcribe the local WAV with Whisper via a five-layer defence:
       1- existing RMS + speech_detected pre-gate (in conversation_loop)
       2- Silero VAD hard gate (this function)
-      3- Whisper's own no_speech_prob + avg_logprob (from verbose_json)
-      4- aggressively-normalised hallucination blacklist
+      3- Vosk wake-word gate (requires "Pepper" or "Gaze" in the audio)
+      4- Whisper's own no_speech_prob + avg_logprob (from verbose_json)
+      5- aggressively-normalised hallucination blacklist
 
     Returns "" on failure, on any gate rejecting the audio, or when the
     transcription normalises to a known-hallucination phrase.
@@ -1578,6 +1696,13 @@ def transcribe() -> str:
     # Layer 2: Silero VAD hard gate
     if LOCAL_MODE and not _has_real_speech(LOCAL_WAV):
         print("  Silero VAD found no speech; skipping Whisper.")
+        return ""
+
+    # Layer 3: Vosk wake-word gate -- user must say "Pepper" or "Gaze"
+    # thus Whisper never fires on silent audio that somehow slipped past
+    # the RMS + Silero layers (the original hallucination pain case).
+    if not _has_wake_word(LOCAL_WAV):
+        print("  No wake-word detected; skipping Whisper.")
         return ""
 
     try:
@@ -1592,7 +1717,7 @@ def transcribe() -> str:
             )
         text = (getattr(resp, "text", "") or "").strip()
 
-        # Layer 3: Whisper's own per-segment silence + low-confidence
+        # Layer 4: Whisper's own per-segment silence + low-confidence
         # signals. `resp` is a Pydantic TranscriptionVerbose; segments
         # are objects, thus attribute access (not dict indexing).
         segments = getattr(resp, "segments", None) or []
@@ -1620,11 +1745,17 @@ def transcribe() -> str:
                       f"{max(compression_vals):.2f}); dropping {text!r}")
                 return ""
 
-        # Layer 4: aggressively-normalised hallucination blacklist
+        # Layer 5: aggressively-normalised hallucination blacklist
         if _is_known_hallucination(text):
             print(f"  Filtered Whisper hallucination: {text!r}")
             return ""
-        return text
+
+        # Strip the leading "Pepper" / "Gaze" wake-word thus downstream
+        # handlers (check_game_answer etc.) receive just the answer; the
+        # wake-word is addressing-ritual, not content. \b guards against
+        # false positives like "Pepperoni" or "Gazebo".
+        stripped = re.sub(r'(?i)^\s*(pepper|gaze)\b[,.\s]*', '', text).strip()
+        return stripped
     except Exception as e:
         print(f"  Whisper transcribe failed ({e}); returning empty")
         return ""
@@ -1684,6 +1815,8 @@ def start_preview_thread(camera, face_model, face_cascade):
     return t
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def capture_and_classify(ssh, face_model, face_cascade,
                          local_camera=None) -> tuple[str, float]:
     """
@@ -1735,6 +1868,8 @@ def capture_and_classify(ssh, face_model, face_cascade,
 API_TIMEOUT = 10  # 10-second timeout; prevents Pepper freezing if OpenAI/network stalls
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
     """
@@ -1778,6 +1913,9 @@ def check_answer(user_answer: str, correct_answer: str,
 # SAVE/LOAD SESSIONS
 # ------------------------------------------------------------------------------
 
+# Salman's
+# ------------------------------------------------------------------------------
+#score, difficulty, streak, histpry and rewars to json every 5 turns for next session
 def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None):
     """Save session progress so user can continue later."""
     data = {
@@ -1809,6 +1947,8 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
     print(f"  Session saved to {SAVE_FILE}")
 
 
+# Salman's
+# ------------------------------------------------------------------------------
 def load_session() -> Optional[dict]:
     """Load a previously saved session, if one exists."""
     if not os.path.exists(SAVE_FILE):
@@ -1820,7 +1960,9 @@ def load_session() -> Optional[dict]:
         print(f"  Save file corrupt, ignoring: {e}")
         return None
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+#saves so user carries on where they stopped
 def restore_engine(save_data: dict) -> AdaptiveEngine:
     """Restore engine state from saved data."""
     engine = AdaptiveEngine()
@@ -1982,6 +2124,8 @@ TOOLS = [
 _signal_context = {"text": ""}
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def build_signal_context(engine: AdaptiveEngine,
                          expression: str, expr_conf: float,
                          vocal_emo: str, vocal_conf: float,
@@ -2046,6 +2190,8 @@ def converse(conversation: list, tools: list) -> object:
         return _FallbackMsg()
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def execute_tool_call(tool_name: str, tool_args: dict,
                       engine: AdaptiveEngine, game_state: GameState,
                       conversation: list,
@@ -2184,7 +2330,9 @@ def process_llm_response(message, conversation: list,
 
     return current_msg.content or ""
 
-
+# Salman's
+# ------------------------------------------------------------------------------
+#look for gestures
 def extract_gesture(text: str) -> str:
     """
     Parse a [gesture:TYPE] tag from the LLM's response text.
@@ -2198,6 +2346,8 @@ def extract_gesture(text: str) -> str:
     return "neutral"
 
 
+# Alfie's
+# ------------------------------------------------------------------------------
 def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> dict:
     """
     Dedicated sub-call for game question generation via OpenAI.
@@ -2253,7 +2403,7 @@ def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> 
 # ------------------------------------------------------------------------------
 # LED COLOUR MAP
 # ------------------------------------------------------------------------------
-
+#a colour each state
 LED_COLOURS = {
     InferredState.THRIVING:    0x0000FF00,   # green
     InferredState.COMFORTABLE: 0x00FFFFFF,   # white
