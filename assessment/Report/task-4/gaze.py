@@ -251,8 +251,8 @@ class SpeechEmotionModel:
     """
     Pre-trained MLP for vocal emotion classification (WS-08).
     MFCC + chroma + mel features extracted from the WAV; fed into the
-    trained MLP. Runs alongside the face CNN and thus the inference never
-    relies singly in terms of sensor.
+    MLP. Runs alongside the face CNN thus the inference never relies
+    singly in terms of sensor.
     """
 
     EMOTIONS = ["calm", "happy", "fearful", "disgust"]
@@ -315,13 +315,13 @@ class SpeechEmotionModel:
 # ------------------------------------------------------------------------------
 def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
     """
-    Classify the vocal emotion from a recorded WAV file.
+    Classify the vocal emotion from a WAV file.
     Returns ("neutral", 0.0) if the model is unavailable, audio is too
     short, or Silero VAD finds no real speech.
 
     The MLP is a closed-set 4-class classifier (calm/happy/fearful/
     disgust); fed near-silent audio, it confidently picks whichever
-    class the feature noise happens to resemble (often "disgust"),
+    class the feature noise resembles (often "disgust"),
     thus gating on the VAD prevents out-of-distribution false positives.
     """
     if speech_model is None:
@@ -469,10 +469,10 @@ class AdaptiveDecision:
 
 class AdaptiveEngine:
     """
-    Takes all three input signals and *infers* the user's real state
+    Takes all five input signals and *infers* the user's real state
 
     The adaptive engine also evaluates whether its previous adaptation
-    actually worked, feeding that evaluation into the next round's prompt.
+    worked, feeding that evaluation into the next round's prompt.
     """
 
     def __init__(self):
@@ -527,7 +527,7 @@ class AdaptiveEngine:
                     vocal_emotion: str = "neutral",
                     volume_rms: float = 0.0) -> InferredState:
         """
-        Weigh all signals together to infer the user's actual state.
+        Weigh all signals to infer the user's state.
 
         Five signals, each noisy on its own:
           1- facial expression  (CNN, WS-10)
@@ -537,8 +537,8 @@ class AdaptiveEngine:
           5- speech volume/RMS  (arousal)
 
         No single signal is trusted alone otherwise a resting face reads as
-        "Angry" on the CNN, and a cough reads as "fearful" on the MLP.
-        Cross-checking against actual performance.
+        "Angry" on the CNN, a cough reads as "fearful" on the MLP.
+        Cross-checking against performance.
         """
         correctness = self.rolling_correctness()
         clean = answer_text.strip().lower()
@@ -708,7 +708,7 @@ class AdaptiveEngine:
         The LLM's `request_more_time` tool only flips game_state.waiting;
         it never bumps the budget directly. `waiting` is one signal
         among many; accumulated silence, previous response time, facial
-        expression, inferred state all contribute independently.
+        expression, inferred state contribute independently.
         """
         # baseline budget (fast-track: thriving / comfortable)
         no_speech_max   = 5.0
@@ -843,11 +843,11 @@ class AdaptiveEngine:
 
     def evaluate_adaptation(self) -> Optional[str]:
         """
-        Evaluate whether the previous round's adaptation actually worked.
+        Evaluate whether the previous round's adaptation worked.
 
         Compares the inferred state and performance before and after the
-        last adaptation decision, returning a natural-language evaluation
-        that is fed into the next prompt so the LLM can adjust accordingly.
+        last adaptation, returning a natural-language evaluation fed
+        into the next prompt so the LLM can adjust accordingly.
         """
         if len(self.adaptation_log) < 2 or len(self.history) < 2:
             return None
@@ -1036,7 +1036,7 @@ def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
     Polls ALAudioDevice front-mic energy rather than using a fixed
     sleep. Stops when:
       1- speech detected (energy above threshold), THEN
-      2- SILENCE_DURATION seconds of silence after speech ends, OR
+      2- SILENCE_DURATION seconds of silence after speech, OR
       3- RECORD_MAX_SECS hard ceiling hit.
 
     energy_threshold comes from nao_calibrate_ambient() so the recorder
@@ -1130,8 +1130,8 @@ def nao_say(ssh, text):
     """
     Speak text on Pepper with sentence-level pausing.
     Sentences are packed into one SSH payload so Pepper handles the
-    loop locally. One-SSH-call-per-sentence would add ~1s of round-trip
-    per sentence; the 0.4s inter-sentence pause gets lost in that.
+    loop locally. One-SSH-call-per-sentence would add ~1s of round-trip;
+    the 0.4s inter-sentence pause gets lost in that.
     """
     sentences = split_into_sentences(text)
     ##convert to json 
@@ -1244,8 +1244,7 @@ def local_calibrate_ambient() -> int:
     Calibrate the local-testing (Mac) mic's ambient noise level; mirrors
     nao_calibrate_ambient() so LOCAL_MODE testing behaves like the robot.
     Sample for CALIBRATION_SECS; set threshold = ambient +
-    LOCAL_ENERGY_BUFFER. Without this, the recorder runs to its ceiling
-    in any room noisier than the hardcoded default.
+    LOCAL_ENERGY_BUFFER. Thereby adapting to noisiness of a room.
     """
     global LOCAL_SILENCE_RMS
     dev_info   = sd.query_devices(kind="input")
@@ -1297,10 +1296,10 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
                  silence_secs: float = LOCAL_SILENCE_SECS):
     """
     Record audio from the Mac's built-in microphone to LOCAL_WAV with
-    silence detection mirroring Pepper's dynamic recording behaviour.
+    silence detection mirroring Pepper's dynamic recording.
 
     Records at the device's native sample rate then resamples to 16 kHz
-    for Whisper compatibility via librosa.
+    for Whisper via librosa (to match nao_record()'s 16 kHz recording).
     """
     # explicitly select the default input device (matches test-mic.py behaviour)
     dev_info    = sd.query_devices(kind="input")
@@ -1319,7 +1318,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
     def callback(indata, frames, time_info, status):
         buffer.append(indata.copy())
 
-    for attempt in range(2): # one retry if PortAudio error (if the device is briefly unavailable after Pepper usage)
+    for attempt in range(2): #one retry if PortAudio error (if the device briefly is unavailable after Pepper usage)
         try:
             with sd.InputStream(samplerate=native_rate, channels=1, dtype="int16",
                                 blocksize=chunk_size, callback=callback):
@@ -1421,9 +1420,8 @@ def record(ssh, energy_threshold,
            no_speech_max: float = LOCAL_NO_SPEECH_MAX,
            silence_secs: float = LOCAL_SILENCE_SECS,
            record_max_secs: float = RECORD_MAX_SECS):
-    """Dispatch audio recording to local or Pepper depending on mode,
-    honouring the per-turn think-budget set by
-    AdaptiveEngine.recommend_think_budget()."""
+    """Dispatch recording to local or Pepper depending on mode; 
+       per-turn think-budget set by: AdaptiveEngine.recommend_think_budget()."""
     if LOCAL_MODE:
         local_record(max_secs=record_max_secs,
                      no_speech_max=no_speech_max,
@@ -1556,7 +1554,7 @@ def nao_gesture(ssh, gesture_type: str):
 # ------------------------------------------------------------------------------
 def measure_volume() -> float:
     """
-    RMS amplitude of the recorded WAV (local and Pepper paths).
+    RMS amplitude of the WAV (local and Pepper paths).
     Used as the 5th signal; roughly maps to arousal (e.g. loud = excited or
     frustrated, quiet = calm OR disengaged). Just-volume can't tell
     these pairs apart, thus the engine cross-references face/voice/
@@ -1624,8 +1622,8 @@ def is_known_hallucination(text: str) -> bool:
 def has_real_speech(wav_path: str, min_speech_ms: int = 500,
                      threshold: float = 0.6) -> bool:
     """
-    Silero VAD pre-gate. True iff at least `min_speech_ms` of actual
-    speech is detected in the WAV at probability >= `threshold`.
+    Silero VAD pre-gate. True iff at least `min_speech_ms` of speech
+    is detected at probability >= `threshold`.
     Default threshold bumped from Silero's 0.5 to 0.6, and minimum
     duration from 250ms to 500ms, thus background noise + single-syllable
     mic spikes don't pass as speech. Fail-open (returns True) if the
@@ -1650,12 +1648,11 @@ def has_real_speech(wav_path: str, min_speech_ms: int = 500,
 
 def has_wake_word(wav_path: str) -> bool:
     """
-    Vosk wake-word gate. True iff "Pepper" or "Gaze" is heard in the WAV.
-    Grammar-restricted KaldiRecognizer thus the decoder can only emit
-    "pepper", "gaze", or the [unk] placeholder -- background chatter and
-    room tone thereby collapse to [unk] and the gate returns False.
-    Fail-open (returns True) if the Vosk model didn't load thus the four
-    existing layers still protect us.
+    Vosk wake-word gate. True only if "Pepper" or "Gaze" is heard in the
+    WAV. The 3-token grammar restriction (pepper, gaze, [unk]) strongly
+    constrains but does not eliminate false positives; phonetic
+    near-neighbours may still match. Fail-open (returns True) if the
+    Vosk model didn't load thus the four layers still protect us.
     """
     if _vosk_model is None or KaldiRecognizer is None:
         return True
@@ -1683,11 +1680,11 @@ def transcribe() -> str:
     Transcribe the local WAV with Whisper via a five-layer defence:
       1- existing RMS + speech_detected pre-gate (in conversation_loop)
       2- Silero VAD hard gate (this function)
-      3- Vosk wake-word gate (requires "Pepper" or "Gaze" in the audio)
+      3- Vosk wake-word gate (requires "Pepper" or "Gaze")
       4- Whisper's own no_speech_prob + avg_logprob (from verbose_json)
       5- aggressively-normalised hallucination blacklist
 
-    Returns "" on failure, on any gate rejecting the audio, or when the
+    Returns "" on failure, on any gate rejecting, or when the
     transcription normalises to a known-hallucination phrase.
     """
     if LOCAL_MODE and not _local_speech_detected:
@@ -1824,10 +1821,10 @@ def capture_and_classify(ssh, face_model, face_cascade,
     Uses Pepper's camera by default; local webcam if GAZE_LOCAL_CAMERA=true.
     Returns (emotion_label, confidence).
 
-    In DEBUG_PREVIEW mode with a local camera, reads from the continuous
-    preview thread instead of capturing a new frame (avoids duplicate reads).
+    In DEBUG_PREVIEW mode with a local camera, reads from the preview
+    thread instead of capturing a new frame (avoids duplicate reads).
     """
-    # local mode with preview thread running; just read shared state
+    # local mode with preview thread running; only read shared state
     if DEBUG_PREVIEW and local_camera is not None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
@@ -1874,7 +1871,7 @@ def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
     """
     Verify the user's spoken answer via GPT. Falls back to naive
-    string-containment if the API drops, thus the game loop will-never hangs
+    string-containment if the API drops, thus the game loop will-never hang
     on a single question.
     """
     if not user_answer.strip():
@@ -2125,9 +2122,9 @@ def build_signal_context(engine: AdaptiveEngine,
                          vocal_emo: str, vocal_conf: float,
                          vol_rms: float, response_time: float) -> str:
     """
-    Build a concise signal summary string that is injected alongside every
-    user message so the LLM can adapt its behaviour to the user's real-time
-    emotional state without needing explicit adaptive-engine instructions.
+    Build a signal summary string injected alongside every user message
+    so the LLM can adapt its behaviour to the user's real-time
+    emotional state without explicit adaptive-engine instructions.
     """
     correctness = engine.rolling_correctness()
     recent_faces = [r.facial_expression for r in engine.history[-3:]]

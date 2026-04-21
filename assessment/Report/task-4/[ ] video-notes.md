@@ -1,6 +1,6 @@
-# GAZE 5-Minute Video Demo -- Script Notes
+# GAZE ~2.5-Minute Video Demo -- Script Notes
 
-Brief requirement: "a **video of 5 minutes** describing your contribution and showing clearly a running demo of your work."
+Brief allows up to 5 minutes; chosen target is **~2.5 minutes**, dense and HRI-focused. Covers Alfie's contribution only (multi-signal cognitive loop + wake-word gate); Salman's work (TTS pacing, scoring, LEDs, calibration) deferred to the written Method section.
 
 ---
 
@@ -12,61 +12,52 @@ Brief requirement: "a **video of 5 minutes** describing your contribution and sh
   - [ ] cross-modal design masked a silent vocal-channel failure -- hence the novelty
   - [ ] loudness-normalisation = accessibility for quieter brain-injured users
 - [ ] find the best HRI-relevant stuff to discuss
+- [ ] discuss why text-prompts to NAO robot need to not be indented to work probably
 
-## Structure (5 minutes total)
+## Structure (~2.5 minutes total, 150 s)
 
-### 0:00--0:30 -- Introduction (30 seconds)
+Method-and-setup orientated; each shot pairs a function in `gaze.py` with a one-sentence HRI rationale. Line numbers are pinned so you can tab to them live on-camera.
 
+### 0:00--0:10 -- Framing (10 s)
 
-- "This is GAZE: Game-Adaptive Zone of Engagement, an adaptive countdown-style game host integrated into the Pepper robot"
-- One-sentence novelty: "The core novelty is multi-signal emotional inference -- the system weighs facial expression, response time, and answer correctness together, rather than trusting any single signal in isolation"
-- Brief mention of your contribution split (general code architecture, OpenAI integration, facial recognition, AdaptiveEngine, Background/Method/Conclusion sections)
+One sentence: *"GAZE's novel contribution is a multi-signal adaptive cognitive loop: infer state, adapt, then evaluate whether the adaptation helped. No single signal is trusted alone."*
 
-### 0:30--1:30 -- Architecture Walkthrough (60 seconds)
+### 0:10--0:45 -- Multi-signal state inference (35 s) -- `AdaptiveEngine.infer_state()` @ gaze.py:525
 
-- Show the system diagram (SYSTEM-DIAGRAM.png or the TikZ version)
-- Walk through the four layers: INPUT, PROCESS, GENERATE, OUTPUT
-- Mention the SSH architecture: "The system runs on my laptop; Pepper is controlled via SSH. Two connections: one for motors and camera, one for speech, so gestures and speech can run in parallel"
-- Mention the WS-10 integration: "Facial expression detection uses the pre-trained CNN from Workshop 10 -- same 48x48 greyscale pipeline, same 7 emotion classes"
-- Show the multi-signal inference diagram (the TikZ from the report)
+Headline novelty. Separates GAZE from a single-signal classifier wire-up.
 
-### 1:30--4:00 -- Live Demo on Pepper (150 seconds)
+- Show the four inputs feeding `infer_state()`: facial expression (WS-10 CNN, 7-class 48$\times$48 greyscale), vocal emotion (WS-08 MLP, MFCC/chroma/mel), response time, answer correctness.
+- Show the cross-validation branches inside the function and the `InferredState` output that feeds everything downstream.
+- **Narrate:** *"The robot doesn't commit to one signal -- it triangulates. A happy face with a wrong answer and a long response time doesn't read as 'happy'; it reads as 'struggling but hiding it'. Workshop 10 and Workshop 8 gave me two independent inference paths; I use both as votes rather than as an oracle."*
+- **Salvage-line from the old script:** *"The camera says Angry but I answered fast and correctly, so the engine correctly infers Comfortable."* That example lands in one sentence; keep it.
 
-This is the core. Film the following interaction sequence:
+### 0:45--1:15 -- Signal-driven think-time budget (30 s) -- `AdaptiveEngine.recommend_think_budget()` @ gaze.py:699
 
-**Startup sequence (show):**
-- [ ] GAZE connects to Pepper ("Connected")
-- [ ] Ambient noise calibration ("Stay quiet for 3 seconds...")
-- [ ] Pepper waves, asks game preference ("Numbers or letters?")
-- [ ] User says "Numbers"
-- [ ] First question generated and spoken with gesture
+Strongest HRI moment: accommodation-by-inference, not accommodation-by-request.
 
-**Normal gameplay (2-3 rounds showing adaptation):**
-- [ ] Answer a question correctly -- show Pepper celebrate, show console output: "Inferred state: comfortable", difficulty stays or ramps
-- [ ] Answer a question correctly again -- show streak recognition ("Hat trick!"), show LED colour change to green (thriving)
-- [ ] Deliberately answer wrong or stay silent -- show console: "Inferred state: struggling", difficulty drops, hint offered, LED changes to yellow
-- [ ] Stay silent again -- show disengagement detection, game switch from numbers to letters
+- Show inputs: silence duration, response time, facial expression, `InferredState`, and `game_state.waiting` flag.
+- Show outputs: updated `engine.think_budget_secs` and `engine.silence_tolerance_secs`.
+- **Contrast:** *"`request_more_time` exists but is one signal among many -- it sets `waiting = True` which feeds this function; it never bumps the budget directly."*
+- **Narrate:** *"I deliberately broke the brittle pattern where asking 'give me more time' is the only way to get more time. The robot infers struggle from silence-plus-expression-plus-history and quietly widens the window. That respects users who can't or won't verbalise the request -- which is most of the stroke-recovery cohort GAZE targets."*
 
-**Key things to narrate during the demo:**
-- Point out the console output showing the three raw signals (expression, response time, correctness) and the inferred state
-- Point out when the engine overrides the camera reading (e.g. "The camera says Angry but I answered fast and correctly, so the engine correctly infers Comfortable")
-- Point out the dynamic prompt changing ("Each round the prompt is freshly assembled from live metrics")
-- Point out the gesture running concurrently with speech
-- Point out LED colour changes matching inferred state
+### 1:15--1:40 -- Adaptation self-evaluation (25 s) -- `AdaptiveEngine.evaluate_adaptation()` @ gaze.py:844
 
-### 4:00--4:30 -- Session Summary (30 seconds)
+Closed-loop cognition. Rare in student projects thus strong for ≥70% marks.
 
-- Say "goodbye" or "stop" to end the session
-- Show the session summary printed in the console (rounds, accuracy, best streak, game switches)
-- Show gaze_save.json being written (progressive save)
-- Briefly mention session resumption: "If I restart, Pepper asks if I want to continue where I left off"
+- Show the function asking *"did the last adaptation help?"* and feeding that answer into the next `decide()` call.
+- **Narrate:** *"Without this the system would adapt blindly -- make a change and never check. This loop lets GAZE back out of a bad adaptation (e.g. easier difficulty that bored the user) rather than doubling down."*
 
-### 4:30--5:00 -- Reflection and Novelty (30 seconds)
+### 1:40--2:15 -- Wake-word gate + defence-in-depth (35 s) -- `has_wake_word()` @ gaze.py:1651
 
-- Reiterate the core novelty: "The system doesn't just trust the camera. If I look angry but I'm answering quickly and correctly, it knows I'm fine. That's the multi-signal fusion."
-- Mention the adaptation self-evaluation: "After each round the engine evaluates whether its previous adaptation actually worked, and feeds that evaluation back into the next prompt"
-- One-sentence limitation: "The facial expression model wasn't fine-tuned for this specific environment, so confidence scores can be low under poor lighting"
-- Close
+Only shot with a visible live demo; the other three are cognitive-internal.
+
+- **(10 s live)** Ask a question on-camera, stay silent for 10 s. Console prints `No wake-word detected; skipping Whisper.` Round passes cleanly.
+- **(10 s pre-recorded)** Cut to the "bypass-gate" clip: Whisper hallucinating Khmer-script gibberish on the same 60 s of silent audio (from the empirical test; keep the screenshot of `'សានំរានំរានំ... ḏḏḏḏḏ'`).
+- **(15 s voice-over on the 5-layer stack):** *"Whisper hallucinates on silent audio -- verified empirically on a 60 s test, it returned Khmer-script gibberish and 'Q1. Q1.' loops 140 times over. The wake-word gate is a fifth defence layer: the robot only listens when addressed by name. This is deliberate addressing ritual, socially analogous to turn-taking in human conversation."*
+
+### 2:15--2:30 -- Close (15 s)
+
+*"Each of these four mechanisms -- multi-signal inference, signal-driven think-time, adaptation self-evaluation, and addressing-ritual gating -- is a direct response to a workshop concept or a documented HRI failure mode. The system is adaptive-by-construction, not adaptive-by-accident."*
 
 ---
 
