@@ -328,7 +328,7 @@ def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
         return "neutral", 0.0
     # VAD gate: MLP was trained on speech; running it on silence or
     # background noise is out-of-distribution and produces rubbush
-    if LOCAL_MODE and not _has_real_speech(wav_path):
+    if LOCAL_MODE and not has_real_speech(wav_path):
         return "neutral", 0.0
     try:
         return speech_model.predict(wav_path)
@@ -1578,7 +1578,7 @@ def measure_volume() -> float:
 # Whisper hallucinates these training-set tics on silent/near-silent
 # audio (YouTube outros, CJK fillers, minimal-token fallbacks). Stored
 # pre-normalised (lowercase, punctuation + symbols already stripped),
-# thus `_is_known_hallucination()` matches regardless of decoration.
+# thus `is_known_hallucination()` matches regardless of decoration.
 WHISPER_HALLUCINATIONS = {
     # YouTube-outro tics
     "thank you for watching",
@@ -1606,7 +1606,7 @@ WHISPER_HALLUCINATIONS = {
 }
 
 
-def _normalise_for_blacklist(text: str) -> str:
+def normalise_for_blacklist(text: str) -> str:
     """
     Lowercase + NFKC + strip everything except letters/digits/spaces;
     thus the blacklist matches independent of Whisper's decorations
@@ -1616,12 +1616,12 @@ def _normalise_for_blacklist(text: str) -> str:
     return " ".join("".join(kept).split())
 
 
-def _is_known_hallucination(text: str) -> bool:
-    norm = _normalise_for_blacklist(text)
+def is_known_hallucination(text: str) -> bool:
+    norm = normalise_for_blacklist(text)
     return norm == "" or norm in WHISPER_HALLUCINATIONS
 
 
-def _has_real_speech(wav_path: str, min_speech_ms: int = 500,
+def has_real_speech(wav_path: str, min_speech_ms: int = 500,
                      threshold: float = 0.6) -> bool:
     """
     Silero VAD pre-gate. True iff at least `min_speech_ms` of actual
@@ -1648,7 +1648,7 @@ def _has_real_speech(wav_path: str, min_speech_ms: int = 500,
         return True
 
 
-def _has_wake_word(wav_path: str) -> bool:
+def has_wake_word(wav_path: str) -> bool:
     """
     Vosk wake-word gate. True iff "Pepper" or "Gaze" is heard in the WAV.
     Grammar-restricted KaldiRecognizer thus the decoder can only emit
@@ -1675,7 +1675,7 @@ def _has_wake_word(wav_path: str) -> bool:
         print(f"  Vosk wake-word check failed ({e}); falling through to Whisper")
         return True
 
-# Salman's
+# Alfie & Salman's
 # ------------------------------------------------------------------------------
 #open ai whisperings and incase fails and in silent
 def transcribe() -> str:
@@ -1694,14 +1694,14 @@ def transcribe() -> str:
         return ""
 
     # Layer 2: Silero VAD hard gate
-    if LOCAL_MODE and not _has_real_speech(LOCAL_WAV):
+    if LOCAL_MODE and not has_real_speech(LOCAL_WAV):
         print("  Silero VAD found no speech; skipping Whisper.")
         return ""
 
     # Layer 3: Vosk wake-word gate -- user must say "Pepper" or "Gaze"
     # thus Whisper never fires on silent audio that somehow slipped past
     # the RMS + Silero layers (the original hallucination pain case).
-    if not _has_wake_word(LOCAL_WAV):
+    if not has_wake_word(LOCAL_WAV):
         print("  No wake-word detected; skipping Whisper.")
         return ""
 
@@ -1746,7 +1746,7 @@ def transcribe() -> str:
                 return ""
 
         # Layer 5: aggressively-normalised hallucination blacklist
-        if _is_known_hallucination(text):
+        if is_known_hallucination(text):
             print(f"  Filtered Whisper hallucination: {text!r}")
             return ""
 
@@ -1762,7 +1762,7 @@ def transcribe() -> str:
 
 
 # ------------------------------------------------------------------------------
-# FACIAL EXPRESSION PIPELINE
+# Alfie: FACIAL EXPRESSION PIPELINE
 # ------------------------------------------------------------------------------
 
 def preview_thread_loop(camera, face_model, face_cascade):
@@ -1910,11 +1910,9 @@ def check_answer(user_answer: str, correct_answer: str,
 
 
 # ------------------------------------------------------------------------------
-# SAVE/LOAD SESSIONS
+# Salman: SAVE/LOAD SESSIONS
 # ------------------------------------------------------------------------------
 
-# Salman's
-# ------------------------------------------------------------------------------
 #score, difficulty, streak, histpry and rewars to json every 5 turns for next session
 def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None):
     """Save session progress so user can continue later."""
@@ -1947,8 +1945,6 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
     print(f"  Session saved to {SAVE_FILE}")
 
 
-# Salman's
-# ------------------------------------------------------------------------------
 def load_session() -> Optional[dict]:
     """Load a previously saved session, if one exists."""
     if not os.path.exists(SAVE_FILE):
@@ -1960,8 +1956,6 @@ def load_session() -> Optional[dict]:
         print(f"  Save file corrupt, ignoring: {e}")
         return None
 
-# Salman's
-# ------------------------------------------------------------------------------
 #saves so user carries on where they stopped
 def restore_engine(save_data: dict) -> AdaptiveEngine:
     """Restore engine state from saved data."""
@@ -1987,7 +1981,7 @@ def delete_save():
 
 
 # ------------------------------------------------------------------------------
-# OPENAI FUNCTION-CALLING TOOLS + CONVERSATION HELPERS
+# Alfie: OPENAI FUNCTION-CALLING TOOLS + CONVERSATION HELPERS
 # ------------------------------------------------------------------------------
 
 TOOLS = [
@@ -2183,11 +2177,11 @@ def converse(conversation: list, tools: list) -> object:
     except Exception as e:
         print(f"  converse() API failed: {e}")
         # return a minimal mock so the caller can continue
-        class _FallbackMsg:
+        class FallbackMsg:
             content = "I had a brief network hiccup. Let's keep going! [gesture:think]"
             tool_calls = None
             role = "assistant"
-        return _FallbackMsg()
+        return FallbackMsg()
 
 
 # Alfie's
@@ -2575,33 +2569,33 @@ class GazeDashboard:
     # -- public update methods (safe to call from any thread) --
 
     def update_robot_speech(self, text: str):
-        def _apply():
+        def apply():
             self._conv_text.configure(state="normal")
             self._conv_text.insert("end", f"Robot: {text}\n\n")
             self._conv_text.see("end")
             self._conv_text.configure(state="disabled")
-        self.on_main(_apply)
+        self.on_main(apply)
 
     def append_user_speech(self, text: str):
-        def _apply():
+        def apply():
             self._conv_text.configure(state="normal")
             self._conv_text.insert("end", f"You: {text}\n")
             self._conv_text.see("end")
             self._conv_text.configure(state="disabled")
-        self.on_main(_apply)
+        self.on_main(apply)
 
     def update_think_budget(self, secs: float):
         """Update the dashboard's adaptive think-budget diagnostic row."""
-        def _apply():
+        def apply():
             self._budget_var.set(f"Think budget:  {secs:.1f}s")
-        self.on_main(_apply)
+        self.on_main(apply)
 
     def update_signals(self, round_num: int, user_answer: str, correct_answer: str,
                        correct: bool, expression: str, expr_conf: float,
                        vocal_emo: str, vocal_conf: float, vol_rms: float,
                        response_time: float, rolling_acc: float,
                        total_correct: int, total_rounds: int, streak: int):
-        def _apply():
+        def apply():
             self._round_var.set(f"Round: {round_num}")
             self._score_var.set(f"Score: {total_correct}/{total_rounds}")
             self._streak_var.set(f"Streak: {streak}")
@@ -2632,11 +2626,11 @@ class GazeDashboard:
             self._time_var.set(f"Response time: {response_time:.1f}s")
             self._acc_var.set(f"Rolling acc:   {rolling_acc:.0%}")
 
-        self.on_main(_apply)
+        self.on_main(apply)
 
     def update_decision(self, decision, adaptation_eval: str = None):
         state = decision.inferred_state
-        def _apply():
+        def apply():
             self._state_var.set(f"State: {state.value.upper()}")
             self._state_label.configure(fg=_STATE_COLOURS.get(state, "grey"))
             self._diff_var.set(f"Difficulty: {decision.difficulty.name}")
@@ -2647,7 +2641,7 @@ class GazeDashboard:
             if decision.switch_game:        flags.append(f"switch -> {decision.game_type.value}")
             self._adapt_var.set(f"Adaptations: {', '.join(flags) if flags else 'none'}")
             self._eval_var.set(adaptation_eval if adaptation_eval else "")
-        self.on_main(_apply)
+        self.on_main(apply)
 
     def update_personality(self, name: str):
         """Update the personality indicator label on the dashboard."""
