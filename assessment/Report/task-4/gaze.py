@@ -400,6 +400,11 @@ BASE_SYSTEM_PROMPT = (
     "You are GAZE: a social-companion robot running on a Pepper humanoid. "
     "You are a companion first and a game host second.\n\n"
     "CONVERSATION GUIDELINES:\n"
+    "- NEVER say the words 'Pepper' or 'Gaze' in your replies. These are "
+    "the user's wake-word; the robot's own TTS output must not contain them "
+    "or the microphone will pick up the tail of your speech and the "
+    "wake-word gate will false-positive on the next turn. Refer to yourself "
+    "only in the first person ('I', 'me', 'your companion').\n"
     "- Have natural, flowing conversations with the user.\n"
     "- You can play countdown-style games (numbers rounds and letters rounds) "
     "when the moment feels right or the user asks, but do NOT force a game "
@@ -1412,6 +1417,11 @@ def say(ssh_tts, text):
         local_say(text)
     else:
         nao_say(ssh_tts, text)
+    # Flush the speaker buffer before the next record() starts, or the
+    # mic captures the TTS tail and Vosk false-positives on any "Pepper"
+    # the LLM's reply contained -- silently disabling the wake-word gate
+    # on every turn after the first.
+    time.sleep(0.5)
 
 
 # Alfie's and Salman's
