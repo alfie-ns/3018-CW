@@ -1,62 +1,26 @@
 """
 GAZE: Game-Adaptive Zone of Engagement
 
-Adaptive countdown-style game host ran on Pepper robot.
-Novelty: multi-signal emotional inference: face (WS-10) + voice (WS-08) + response time
-+ answer correctness, ... cross-validated so no single signal is trusted alone.
+Adaptive countdown-style game host on Pepper robot.
+Novelty: multi-signal emotional inference -- face (WS-10) + voice (WS-08)
++ response time + answer correctness, cross-validated so no single
+signal is trusted alone.
 
-
+Authorship (per proposal.pdf):
+  Alfie  -- code architecture, OpenAI integration, facial recognition, AdaptiveEngine
+  Salman -- game logic, gestures, LEDs, TTS pacing, session save/resume
 
 CRITICAL:
-- **REMEMBER: PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN AND FEATURES OF THE CODE.**
-- **REMEMBER: CONFIG NAO IP INTO ENV LIKE LAST TIME**
-- [ ] only make listen when 'Pepper' is heard and hopefully this fix the Whisper hallucinations
+- **PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN**
+- **CONFIG NAO IP INTO ENV LIKE LAST TIME**
 
-
-
+OPEN TODOs:
+- [ ] only make listen when 'Pepper' is heard and hopefully this fix the Whisper hallucinations - `transcribe()` with Vosk wake-word gate + `
 - [ ] offload simpler tasks? to either computation or mini model
 - [ ] ensure all facial expression inference is sufficently commented
-
-FUNDAMENTAL:
-
-[] TODO: seperate clearly mine and Salman's code
-
-Alfie's:
----------
-- [X] adaptive/chosen difficulties, hints, encouragement, game switching {AdaptiveEngine.decide()` (returns `AdaptiveDecision`)}
-- [X] user-volume indicate emotional signals {`measure_volume()`; `local_calibrate_ambient()` (sets `VOLUME_QUIET`/`VOLUME_LOUD`)}
-- [X] adaptive-chosen words or numbers based on inferred user state somehow??? — `generate_game_question_internal()` + `build_signal_context()`
-- [X] WS-10 CNN facial-expression detection (7-class, 48x48 greyscale) — `FacialExpressionModel.predict()`; `capture_and_classify()`
-- [X] WS-08 MLP speech-emotion recognition (MFCC/chroma/mel features) — `SpeechEmotionModel.predict()`; `classify_speech_emotion()`
-- [X] countdown-like games (numbers/letters) — `GameType` enum; `generate_game_question_internal()`
-- [X] multi-signal state inference (face + voice + time + correctness) — `AdaptiveEngine.infer_state()`
-- [X] adaptation self-evaluation (did the previous adaptation help?) — `AdaptiveEngine.evaluate_adaptation()`
-- [X] local testing mode (GAZE_LOCAL_MODE) — `local_record()`; `local_say()`; `local_calibrate_ambient()`
-- [X] dynamic LLM game generation & answer verification (OpenAI/GPT) — `generate_game_question_internal()`; `check_answer()`
-- [X] can give more time if needed
-- [X] signal-driven think-time budget — new `AdaptiveEngine.recommend_think_budget()` reading silence, response time, facial expression, inferred state, and the `waiting` flag (NOT trigger phrases); updates `engine.think_budget_secs` / `engine.silence_tolerance_secs` each round
-- [X] `request_more_time` (`execute_tool_call()`) becomes one signal among many rather than the sole path — sets `game_state.waiting = True` which feeds `recommend_think_budget()`; never bumps the budget directly
-- [X] inject `Think budget: Xs` into `build_signal_context()` so the LLM's dialogue reflects the belief without being told to
-
-Salman's:
----------
-- [X] scoring, reward milestones, session save/resume — `AdaptiveEngine.check_reward()`; `save_session()`; `load_session()`; `restore_engine()`
-- [X] gestures, LEDs, and speech aligned to inferred state — `nao_gesture()`; `nao_set_leds()`; `extract_gesture()`; `LED_COLOURS` map
-- [X] whisper transcription with network timeout fallbacks — `transcribe()`
-- [X] ambient noise calibration & dynamic silence detection — `nao_calibrate_ambient()`; `local_calibrate_ambient()`; `record()`/`local_record()` silence loop
-- [X] natural TTS sentence-level pacing — `split_into_sentences()`; `nao_say()`; `nao_say_animated()`
-- [X] stop the main dashboard leaking the correct answer — remove `_answer_var` label from `GazeDashboard.__init__()` TRANSCRIPTION block; terminal `print(f"(Game answer: ...")` stays for the observer
-- [X] plumb the budget through recording — `record()` / `local_record()` / `nao_record()` take `no_speech_max`, `silence_secs` params so the recorder's `LOCAL_NO_SPEECH_MAX` / `LOCAL_SILENCE_SECS` / `SILENCE_DURATION` adapt per-round
-- [X] dashboard diagnostic "Think budget" row in `GazeDashboard`'s LIVE SIGNALS — lets the observer watch the belief shift
-
-NICE-TO-HAVE:
-- [ ] make web-search capabilities
-- [ ] make vision-driven capabilities  
-- [ ] capability to fetch time and date if the AI determines its useful, encode this ability into system prompt 
-
+- [ ] ensure it notices and mitigates when user's disengaged
 """
 
-# standard library
 import os, re, sys, json, time, wave, struct, tempfile, threading, subprocess, unicodedata, tkinter as tk
 from dataclasses import dataclass, field
 from enum import Enum
@@ -64,17 +28,14 @@ from typing import Optional
 
 print("[booting...] stdlib loaded", flush=True)
 
-# data + vision
 import numpy as np
 import cv2
 from PIL import Image, ImageTk
 print("[booting...] numpy + opencv loaded", flush=True)
 
-# networking
 import paramiko
 print("[booting...] paramiko loaded", flush=True)
 
-# audio
 import sounddevice as sd
 import librosa
 import soundfile as sf
@@ -101,23 +62,15 @@ except ImportError:
     _silero_import_ok = False
 print("[booting...] audio stack loaded", flush=True)
 
-# venv + API
 from dotenv import load_dotenv
 from openai import OpenAI
 print("[booting...] openai loaded", flush=True)
 
-# ML
 import joblib
 print("[booting...] loading tensorflow (this is slow on first run)...", flush=True)
 import tensorflow as tf
 from tensorflow.keras.models import model_from_json
 print("[booting...] tensorflow loaded", flush=True)
-
-
-
-# -----------------------------------------------------------------------------------
-
-
 
 # Silero VAD loader: pre-Whisper speech-activity gate; kills most silent-audio
 # hallucinations. Fail-open if the model won't instantiate thus the
@@ -132,8 +85,6 @@ if _silero_import_ok:
 
 load_dotenv()
 
-
-# -- Config --
 
 NAO_IP       = os.getenv("NAO_IP", "ROBOT_IP")
 NAO_USER     = "nao"
@@ -164,12 +115,10 @@ LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
     USE_LOCAL_CAMERA = True # local mode implies local computer's camera
 
-# live debug preview (local mode only)
 DEBUG_PREVIEW = LOCAL_MODE
 _last_rms = 0.0 # shared with recording thread for overlay
 _last_emotion = "" # updated by capture_and_classify
 
-# shared state for continuous preview thread
 _preview_lock  = threading.Lock()
 _preview_state = {"emotion": "Neutral", "confidence": 0.0}
 _preview_frame = None # latest annotated BGR frame for the dashboard
@@ -205,7 +154,6 @@ if _vosk_import_ok:
     except Exception as _vosk_err:
         print(f"[booting] vosk failed to load ({_vosk_err}); wake-word gate disabled", flush=True)
 
-# adaptive engine thresholds
 RESPONSE_TIME_BASELINE = 30.0 # seconds; beyond this the user is slow
 CORRECTNESS_WINDOW     = 5 # rolling window size
 CORRECTNESS_FLOOR      = 0.4 # below thus ease off
@@ -213,16 +161,12 @@ CORRECTNESS_CEILING    = 0.8 # above thus ramp up
 SILENCE_THRESHOLD      = 2 # consecutive non-responses before intervention
 MAX_ROUNDS             = 20 # natural session end
 
-# persistent session-save file
 SAVE_FILE = os.path.join(SCRIPT_DIR, "gaze_save.json")
 
 if not os.getenv("OPENAI_API_KEY", "").strip():
     raise SystemExit("ERROR: OPENAI_API_KEY not set. Add it to .env")
 client = OpenAI()
 
-
-# FACIAL EXPRESSION MODEL (WS-10)
-# --------------------------------
 
 class FacialExpressionModel:
     """Pre-trained CNN: 7-classed emotion classifier (48x48 greyscale input)."""
@@ -236,7 +180,6 @@ class FacialExpressionModel:
         self.model.make_predict_function()
 
     # Alfie's
-    # ------------------------------------------------------------------------------
     def predict(self, img):
         """Return (emotion_label, confidence) from the (1, 48, 48, 1) array."""
         preds = self.model.predict(img, verbose=0)
@@ -244,16 +187,8 @@ class FacialExpressionModel:
         return self.EMOTIONS[idx], float(preds[0][idx])
 
 
-# SPEECH EMOTION MODEL (WS-08)
-# -----------------------------
-
 class SpeechEmotionModel:
-    """
-    Pre-trained MLP for vocal emotion classification (WS-08).
-    MFCC + chroma + mel features extracted from the WAV; fed into the
-    MLP. Runs alongside the face CNN thus the inference never relies
-    singly in terms of sensor.
-    """
+    """Pre-trained MLP for vocal emotion classification (WS-08)."""
 
     EMOTIONS = ["calm", "happy", "fearful", "disgust"]
 
@@ -281,10 +216,6 @@ class SpeechEmotionModel:
 
         stft = np.abs(librosa.stft(audio, n_fft=n_fft))
 
-        # compute mean (average) frames to consistent vector-length for consistent MLP-input
-
-        # [ ] TODO: explain why it flattens
-
         mfccs = np.mean(librosa.feature.mfcc(
             y=audio, sr=sample_rate, n_mfcc=40).T, axis=0).flatten()
         
@@ -297,7 +228,6 @@ class SpeechEmotionModel:
         return np.concatenate([mfccs, chroma, mel])
 
     # Alfie's
-    # ------------------------------------------------------------------------------
     def predict(self, wav_path: str) -> tuple[str, float]:
         """Return (emotion_label, confidence) from a WAV file."""
         features = self.extract_features(wav_path)
@@ -310,20 +240,9 @@ class SpeechEmotionModel:
         confidence = float(np.max(proba))
         return label, confidence
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
-    """
-    Classify the vocal emotion from a WAV file.
-    Returns ("neutral", 0.0) if the model is unavailable, audio is too
-    short, or Silero VAD finds no real speech.
-
-    The MLP is a closed-set 4-class classifier (calm/happy/fearful/
-    disgust); fed near-silent audio, it confidently picks whichever
-    class the feature noise resembles (often "disgust"),
-    thus gating on the VAD prevents out-of-distribution false positives.
-    """
+    """Classify the vocal emotion from a WAV file."""
     if speech_model is None:
         return "neutral", 0.0
     # VAD gate: MLP was trained on speech; running it on silence or
@@ -336,9 +255,6 @@ def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
         print(f"  Speech emo classify failed: {e}; defaulting to neutral")
         return "neutral", 0.0
 
-
-# ENUMS AND DATA CLASSES
-# ------------------------
 
 class Difficulty(Enum):
     EASY   = 1
@@ -353,48 +269,9 @@ class InferredState(Enum):
     FRUSTRATED  = "frustrated"
 
 # Alfie's
-# ------------------------------------------------------------------------------
 class GameType(Enum):
     NUMBERS = "numbers"
     LETTERS = "letters"
-
-
-# -- Personality system --
-
-class Personality(Enum):
-    CHEEKY      = "cheeky"
-    MENTOR      = "mentor"
-    COACH       = "coach"
-    THERAPEUTIC = "therapeutic"
-
-# various personalities for the robot
-PERSONALITY_PROMPTS = {
-    Personality.CHEEKY: (
-        "You are playful, witty, and cheeky. You gently tease when the "
-        "user gets something wrong, and instead celebrate with over-the-top enthusiasm when "
-        "they get it right, and sprinkle in some light humour throughout. Think of "
-        "yourself as the user's fun and slightly mischievous friend."
-    ),
-    Personality.MENTOR: (
-        "You are a wise, patient mentor. You explain things clearly, offer "
-        "thoughtful encouragement, and guide the user towards understanding "
-        "rather than just giving answers. You ask reflective questions and "
-        "celebrate growth over raw performance."
-    ),
-    Personality.COACH: (
-        "You are an energetic, motivational coach. You push the user to do "
-        "their best, celebrate effort and determination, use direct and "
-        "punchy language, and keep the energy high. You believe in the user "
-        "and make sure they know it."
-    ),
-    Personality.THERAPEUTIC: (
-        "You are calm, warm, and emotionally attuned. You prioritise the "
-        "user's wellbeing above performance, validate their feelings, use a "
-        "gentle and reassuring tone, and never rush. If the user seems "
-        "stressed or frustrated, you ease off and primarily offer comfort."
-    ),
-}
-
 
 BASE_SYSTEM_PROMPT = (
     "You are GAZE: a social-companion robot running on a Pepper humanoid. "
@@ -419,12 +296,11 @@ BASE_SYSTEM_PROMPT = (
     "- If a game is active, acknowledge the user's answer before moving on.\n"
     "- If the user seems disengaged, try a different topic or suggest a game.\n"
     "- If the user asks for more time to think, call request_more_time and "
-    "respond warmly in your personality voice.\n"
+    "respond warmly.\n"
     "- If the user says the game is too hard or too easy, adjust the difficulty "
     "naturally in your next generate_game_question call.\n"
     "- Be genuinely present; you are the user's companion for this session.\n"
 )
-
 
 @dataclass
 class GameState:
@@ -468,17 +344,8 @@ class AdaptiveDecision:
     tone:               str # "encouraging" | "celebratory" | "calm" | "energetic" | "neutral"
 
 
-
-# ADAPTIVE ENGINE
-# ----------------
-
 class AdaptiveEngine:
-    """
-    Takes all five input signals and *infers* the user's real state
-
-    The adaptive engine also evaluates whether its previous adaptation
-    worked, feeding that evaluation into the next round's prompt.
-    """
+    """Takes all five input signals and *infers* the user's real state The adaptive engine also evaluates whether its previous adaptation worked, feeding that evaluation into the next round's prompt."""
 
     def __init__(self):
         self.history: list[RoundResult]   = []
@@ -489,9 +356,7 @@ class AdaptiveEngine:
         self.consecutive_wrong             = 0
         self.games_played: dict[GameType, int] = {g: 0 for g in GameType}
         self.game_switch_count             = 0
-        # tracks what adaptation was applied each round (used by evaluate_adaptation)
         self.adaptation_log: list[dict]    = []
-        # reward system; milestones already announced
         self.total_correct                 = 0
         self.best_streak                   = 0
         self.rewards_given: set[str]       = set()
@@ -501,7 +366,6 @@ class AdaptiveEngine:
         self.silence_tolerance_secs  = float(SILENCE_DURATION) # post-speech silence
         self.no_speech_max_secs      = 5.0 # give up if no speech at all
 
-    # -- properties --
 
     @property
     def round_number(self) -> int:
@@ -519,14 +383,11 @@ class AdaptiveEngine:
             return RESPONSE_TIME_BASELINE / 2
         return sum(r.response_time for r in recent) / len(recent)
 
-    # -- multi-signal state inference --
 
-    # volume thresholds for arousal mapping (RMS of 16-bit PCM)
     VOLUME_QUIET = 200 # below this -> low arousal (quiet/disengaged)
     VOLUME_LOUD  = 2000 # above this -> high arousal (excited/frustrated)
 
     # Alfie's
-    # ------------------------------------------------------------------------------
     def infer_state(self, expression: str, response_time: float,
                     correct: bool, answer_text: str,
                     vocal_emotion: str = "neutral",
@@ -549,11 +410,9 @@ class AdaptiveEngine:
         clean = answer_text.strip().lower()
         is_silent = (not clean or clean in {"i don't know", "skip", "pass", "next"}) # if no meaningful input OR input matches a phrase in the set (set over list because it's faster/idiomatic for `in` checks: O(1) hashed lookup vs O(n) scan)
 
-        # volume-based arousal: loud -> high arousal, quiet -> low arousal
         high_arousal = volume_rms > self.VOLUME_LOUD
         low_arousal  = 0 < volume_rms < self.VOLUME_QUIET
 
-        # track streaks
         if is_silent:
             self.consecutive_silences += 1
         else:
@@ -571,7 +430,6 @@ class AdaptiveEngine:
         # voice happy + correct + fast -> thriving even if face is neutral
         if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
             return InferredState.THRIVING
-        # camera says Angry but fast + correct -> they're fine (resting bitch-face)
         if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
             return InferredState.COMFORTABLE
 
@@ -582,34 +440,28 @@ class AdaptiveEngine:
                 and response_time > RESPONSE_TIME_BASELINE
                 and correctness < 0.5):
             return InferredState.DISENGAGED
-        # quiet voice + neutral face + slow -> disengaged (confirmed low-arousal)
         if (low_arousal and expression == "Neutral"
                 and response_time > RESPONSE_TIME_BASELINE * 0.8):
             return InferredState.DISENGAGED
 
-        # frustrated: both modalities agree on negative state --
         if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
             return InferredState.FRUSTRATED
         if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
             return InferredState.FRUSTRATED
-        # loud voice + negative face + failing -> frustrated (confirmed high-arousal)
         if (high_arousal and expression in ("Angry", "Disgust", "Fear")
                 and correctness < CORRECTNESS_FLOOR):
             return InferredState.FRUSTRATED
-        # voice fearful/disgust + face negative + low correctness -> frustrated
         if (vocal_emotion in ("fearful", "disgust")
                 and expression in ("Angry", "Sad", "Fear", "Disgust")
                 and correctness < CORRECTNESS_FLOOR):
             return InferredState.FRUSTRATED
 
-        # struggling: declining performance + negative signals --
         if expression == "Sad" and response_time > RESPONSE_TIME_BASELINE * 0.7:
             return InferredState.STRUGGLING
         if correctness < CORRECTNESS_FLOOR:
             return InferredState.STRUGGLING
         if expression == "Fear" and not correct:
             return InferredState.STRUGGLING
-        # voice fearful + not correct -> struggling (even if face is neutral)
         if vocal_emotion == "fearful" and not correct:
             return InferredState.STRUGGLING
 
@@ -618,11 +470,9 @@ class AdaptiveEngine:
         if vocal_emotion == "calm" and correctness >= 0.5:
             return InferredState.COMFORTABLE
 
-        # default: comfortable --
         return InferredState.COMFORTABLE
 
     # Alfie's
-    # ------------------------------------------------------------------------------
     # -- core decision function --
 
     def decide(self, expression: str, expression_conf: float,
@@ -676,13 +526,11 @@ class AdaptiveEngine:
                 switch_game = True
                 new_game    = self.pick_different_game()
 
-        # commit
         self.current_difficulty = new_difficulty
         if switch_game:
             self.current_game = new_game
             self.game_switch_count += 1
 
-        # log this round's adaptation for evaluate_adaptation()
         self.adaptation_log.append({
             "round":  self.round_number,
             "state":  state.value,
@@ -700,7 +548,6 @@ class AdaptiveEngine:
         )
 
     # Alfie's
-    # ------------------------------------------------------------------------------
     def recommend_think_budget(self, state: InferredState, expression: str,
                                prev_response_time: float,
                                consecutive_silences: int, waiting: bool
@@ -729,7 +576,6 @@ class AdaptiveEngine:
             silence_secs    = max(silence_secs, 2.5)
             record_max_secs = max(record_max_secs, 15.0)
 
-        # state-driven extension: hesitant users need breathing room
         if state in (InferredState.STRUGGLING, InferredState.FRUSTRATED,
                      InferredState.DISENGAGED):
             no_speech_max   = 8.0
@@ -743,12 +589,10 @@ class AdaptiveEngine:
             no_speech_max = max(no_speech_max, 5.0 + consecutive_silences * 1.5)
             silence_secs  = max(silence_secs,  1.5 + consecutive_silences * 0.5)
 
-        # facial expression cue: pensive faces suggest thinking in progress
         if expression in ("Sad", "Fear"):
             no_speech_max = max(no_speech_max, 7.0)
             silence_secs  = max(silence_secs, 2.0)
 
-        # previous response time: slow prior turn hints more time is needed
         if prev_response_time > RESPONSE_TIME_BASELINE:
             no_speech_max = max(no_speech_max, 7.0)
             silence_secs  = max(silence_secs, 2.0)
@@ -765,7 +609,6 @@ class AdaptiveEngine:
         # nice amount of headroom under CMD_TIMEOUT (60s) for future additions
         record_max_secs = min(record_max_secs, 20.0)
 
-        # expose for dashboard diagnostic + signal-context injection
         self.no_speech_max_secs     = no_speech_max
         self.silence_tolerance_secs = silence_secs
         self.think_budget_secs      = record_max_secs
@@ -781,20 +624,12 @@ class AdaptiveEngine:
             self.total_correct += 1
         self.best_streak = max(self.best_streak, self.consecutive_correct)
 
-
-
 # Salman's
-# ------------------------------------------------------------------------------
 #track the streaks and sum correcr answers each milsetone fire once
 # celebrate
 #make sure reacts right in right time
     def check_reward(self) -> Optional[str]:
-        """
-        Check if the user hit a milestone.
-        returns a reward instruction for the prompt, or None.
-        each milestone fires once per session.
-        """
-        #streaks
+        """Check if the user hit a milestone."""
         milestones = [
             ("streak_3",  self.consecutive_correct >= 3,
              "The user just got 3 in a row! Announce 'Hat trick!' and celebrate."),
@@ -804,7 +639,6 @@ class AdaptiveEngine:
             ("streak_10", self.consecutive_correct >= 10,
              "Incredible — 10 correct in a row! Announce 'Unstoppable!' "
              "and make a big deal of it."),
-              #total correct
             ("total_5",   self.total_correct >= 5 and "total_5" not in self.rewards_given,
              "The user has reached 5 correct answers total. Briefly acknowledge the milestone."),
             ("total_10",  self.total_correct >= 10 and "total_10" not in self.rewards_given,
@@ -812,24 +646,20 @@ class AdaptiveEngine:
             ("total_15",  self.total_correct >= 15 and "total_15" not in self.rewards_given,
              "15 correct answers! The user is on fire. Acknowledge it enthusiastically."),
         ]
-         # check if been rewarded or not
         for key, condition, message in milestones:
             if condition and key not in self.rewards_given:
                 self.rewards_given.add(key)
                 return message
         return None
-    # return the other type
     def pick_different_game(self) -> GameType:
         if self.current_game == GameType.NUMBERS:
             return GameType.LETTERS
         return GameType.NUMBERS
 
     def get_session_summary(self) -> dict:
-        #if no games played
         if not self.history:
             return {"rounds": 0}
         total   = len(self.history)
-         #check how many correct
         correct = sum(1 for r in self.history if r.correct)
         return {
             "rounds":             total,
@@ -843,17 +673,10 @@ class AdaptiveEngine:
         }
 
     # Alfie's
-    # ------------------------------------------------------------------------------
     # -- adaptation self-evaluation --
 
     def evaluate_adaptation(self) -> Optional[str]:
-        """
-        Evaluate whether the previous round's adaptation worked.
-
-        Compares the inferred state and performance before and after the
-        last adaptation, returning a natural-language evaluation fed
-        into the next prompt so the LLM can adjust accordingly.
-        """
+        """Evaluate whether the previous round's adaptation worked."""
         if len(self.adaptation_log) < 2 or len(self.history) < 2:
             return None
 
@@ -868,7 +691,6 @@ class AdaptiveEngine:
 
         evaluations = []
 
-        # check if a difficulty decrease help a struggling/frustrated user
         if prev_state in ("struggling", "frustrated"):
             if curr_round.correct and not prev_round.correct:
                 evaluations.append(
@@ -907,7 +729,6 @@ class AdaptiveEngine:
                     "Try a different approach or switch game type."
                 )
 
-        # did a game switch help?
         if prev_action.get("switch"):
             if curr_state in ("thriving", "comfortable"):
                 evaluations.append(
@@ -918,7 +739,6 @@ class AdaptiveEngine:
                     "Game switch DID NOT HELP: user is still in a negative state."
                 )
 
-        # did encouragement speed up response?
         if (prev_action.get("encouragement")
                 and prev_state in ("struggling", "frustrated")
                 and curr_round.response_time < prev_round.response_time):
@@ -932,9 +752,6 @@ class AdaptiveEngine:
         return ("Adaptation evaluation from previous round:\n"
                 + "\n".join(f"- {e}" for e in evaluations))
 
-
-# DYNAMIC PROMPT CONSTRUCTION
-# ----------------------------
 
 GAME_DESCRIPTIONS = {
     GameType.NUMBERS: (
@@ -964,12 +781,9 @@ TONE_INSTRUCTIONS = {
     "neutral":     "Use a friendly, natural tone.",
 }
 
-
-# -----------------------------------------------------
 # SSH AND PEPPER ROBOT HELPERS
 # (adapted from lab-robot-code-fin.py i.e. when 
 #  we tested OpenAI on the NAO robot perhaps too early)
-# -----------------------------------------------------
 
 def ssh_connect():
     """Open SSH connection to Pepper and return the client."""
@@ -977,7 +791,6 @@ def ssh_connect():
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(NAO_IP, username=NAO_USER, password=NAO_PASS, timeout=SSH_TIMEOUT)
     return ssh
-
 
 def nao_run(ssh, code):
     """Execute a Python 2 snippet on Pepper via SSH."""
@@ -990,17 +803,10 @@ def nao_run(ssh, code):
         return ""
 
 # Salman's
-# ------------------------------------------------------------------------------
 #listens silent
 #not triggered by noise
 def nao_calibrate_ambient(ssh) -> int:
-    """
-    Calibrate the mic energy threshold to the room.
-    Sample front-mic energy for CALIBRATION_SECS via ALAudioDevice,
-    then set threshold = ambient + ENERGY_BUFFER. Without this, a noisy
-    room triggers speech detection constantly, and a quiet room misses
-    genuine speech.
-    """
+    """Calibrate the mic energy threshold to the room."""
     try:
         # NOTE: nao_run() payloads stay at column 0; `python -c` on Pepper
         # rejects leading whitespace thus these blocks can't be indented; I initially done this
@@ -1029,25 +835,11 @@ else:
         print(f"  Calibration failed ({e}), using default threshold: {DEFAULT_ENERGY_THRESHOLD}")
         return DEFAULT_ENERGY_THRESHOLD
 
-
 # Salman's
-# ------------------------------------------------------------------------------
 def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
                record_max_secs: float = RECORD_MAX_SECS,
                silence_secs: float = SILENCE_DURATION):
-    """
-    Record audio on Pepper with dynamic silence detection.
-
-    Polls ALAudioDevice front-mic energy rather than using a fixed
-    sleep. Stops when:
-      1- speech detected (energy above threshold), THEN
-      2- SILENCE_DURATION seconds of silence after speech, OR
-      3- RECORD_MAX_SECS hard ceiling hit.
-
-    energy_threshold comes from nao_calibrate_ambient() so the recorder
-    adapts to the room. If getFrontMicEnergy() is unsupported on this
-    firmware, falls back to a fixed-duration recording.
-    """
+    """Record audio on Pepper with dynamic silence detection."""
     nao_run(ssh, f"""
 from naoqi import ALProxy
 import time
@@ -1107,19 +899,11 @@ rec.stopMicrophonesRecording()
     sftp.close()
 
 # Salman's
-# ------------------------------------------------------------------------------
  #responses arrive in one block no splitting
 #delivered with no pauses
 def split_into_sentences(text: str) -> list[str]:
-    """
-    Split dialogue into sentences for speech delivery.
-    OpenAI returns dialogue as one unbroken block; without splitting,
-    Pepper speaks straight through with no pauses, which sounds robotic.
-    Split at (. ? !) whilst keeping abbreviations and decimal numbers.
-    """
-    # split on sentence-ending punctuation followed by a space or end of string
+    """Split dialogue into sentences for speech delivery."""
     raw_segments = re.split(r'(?<=[.!?])\s+', text.strip())
-    # split any remaining newlines within segments
     sentences = []
     for seg in raw_segments:
         for line in seg.split("\n"):
@@ -1129,17 +913,10 @@ def split_into_sentences(text: str) -> list[str]:
     return sentences if sentences else [text.strip()]
 
 # Salman's
-# ------------------------------------------------------------------------------
 #single ssh calls
 def nao_say(ssh, text):
-    """
-    Speak text on Pepper with sentence-level pausing.
-    Sentences are packed into one SSH payload so Pepper handles the
-    loop locally. One-SSH-call-per-sentence would add ~1s of round-trip;
-    the 0.4s inter-sentence pause gets lost in that.
-    """
+    """Speak text on Pepper with sentence-level pausing."""
     sentences = split_into_sentences(text)
-    ##convert to json 
     safe_sentences = json.dumps(sentences)
 
     nao_run(ssh, f"""
@@ -1159,7 +936,6 @@ except Exception as e:
 """)
 
 # Salman's
-# ------------------------------------------------------------------------------
 #animations with speech
 def nao_say_animated(ssh, text):
     """Try animated speech; fall back to plain TTS."""
@@ -1173,7 +949,6 @@ ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
         print(f"  Animated speech failed mid-sentence: {e}")
         nao_say(ssh, text)
 
-
 def nao_capture_image(ssh):
     """Capture a photo from Pepper's camera and download it."""
     nao_run(ssh, f"""
@@ -1186,7 +961,6 @@ pc.takePicture("{os.path.dirname(REMOTE_IMG)}/", "{os.path.splitext(os.path.base
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_IMG, LOCAL_IMG)
     sftp.close()
-
 
 def nao_track_face(ssh, enable=True):
     """Toggle face tracking on Pepper."""
@@ -1214,11 +988,9 @@ except Exception as e:
         print(f"  Face tracking unavailable: {e}")
 
 # Salman's
-# ------------------------------------------------------------------------------
 #leds
 def nao_set_leds(ssh, group, colour, duration=1.0):
     try:
-        #ssh led colours gestures duration 
         nao_run(ssh, f"""
 from naoqi import ALProxy
 ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
@@ -1226,13 +998,9 @@ ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
     except Exception as e:
         print(f"  LED set ignored: {e}")
 
-
-# ------------------------------------------------------------------------------
 # LOCAL MODE HELPERS (Mac; no Pepper required)
-# ------------------------------------------------------------------------------
 
 LOCAL_SAMPLE_RATE = 16000   # Whisper expects 16 kHz; we resample from native rate
-
 
 LOCAL_SILENCE_RMS   = 40 # default RMS; overridden by local_calibrate_ambient()
 _local_speech_detected = False # set by local_record(); used as transcription gate
@@ -1241,16 +1009,9 @@ LOCAL_MIN_SECS      = 1.0 # minimum recording before silence detection kicks in
 LOCAL_NO_SPEECH_MAX = 5.0 # stop if no speech detected at all after this many seconds
 LOCAL_ENERGY_BUFFER = 50 # margin above ambient baseline for speech detection
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def local_calibrate_ambient() -> int:
-    """
-    Calibrate the local-testing (Mac) mic's ambient noise level; mirrors
-    nao_calibrate_ambient() so LOCAL_MODE testing behaves like the robot.
-    Sample for CALIBRATION_SECS; set threshold = ambient +
-    LOCAL_ENERGY_BUFFER. Thereby adapting to noisiness of a room.
-    """
+    """Calibrate the local-testing (Mac) mic's ambient noise level; mirrors nao_calibrate_ambient() so LOCAL_MODE testing behaves like the robot."""
     global LOCAL_SILENCE_RMS
     dev_info   = sd.query_devices(kind="input")
     dev_index  = dev_info["index"]
@@ -1293,19 +1054,11 @@ def local_calibrate_ambient() -> int:
           f"LOUD={AdaptiveEngine.VOLUME_LOUD}")
     return threshold
 
-
 # Alfie's and Salman's
-# ------------------------------------------------------------------------------
 def local_record(max_secs: float = RECORD_MAX_SECS,
                  no_speech_max: float = LOCAL_NO_SPEECH_MAX,
                  silence_secs: float = LOCAL_SILENCE_SECS):
-    """
-    Record audio from the Mac's built-in microphone to LOCAL_WAV with
-    silence detection mirroring Pepper's dynamic recording.
-
-    Records at the device's native sample rate then resamples to 16 kHz
-    for Whisper via librosa (to match nao_record()'s 16 kHz recording).
-    """
+    """Record audio from the Mac's built-in microphone to LOCAL_WAV with silence detection mirroring Pepper's dynamic recording."""
     # explicitly select the default input device (matches test-mic.py behaviour)
     dev_info    = sd.query_devices(kind="input")
     dev_index   = dev_info["index"]
@@ -1367,7 +1120,6 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
 
     print()
 
-    # concatenate all buffered audio at native rate
     if buffer:
         audio_native = np.concatenate(buffer).flatten().astype(np.float32) / 32768.0
         # resample to 16 kHz for Whisper
@@ -1388,9 +1140,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
         wf.writeframes(audio_int16.tobytes())
     print(f"  Recording saved ({elapsed:.1f}s, speech={'yes' if speech_detected else 'no'}).")
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def local_say(text: str):
     """Speak text using host OS built-in TTS (macOS `say` or Windows SAPI)."""
     try:
@@ -1410,7 +1160,6 @@ def local_say(text: str):
     except Exception as e:
         print(f"  Local TTS broke: {e}")
 
-
 def say(ssh_tts, text):
     """Dispatch TTS to local or Pepper depending on mode."""
     if LOCAL_MODE:
@@ -1423,9 +1172,7 @@ def say(ssh_tts, text):
     # on every turn after the first.
     time.sleep(0.5)
 
-
 # Alfie's and Salman's
-# ------------------------------------------------------------------------------
 def record(ssh, energy_threshold,
            no_speech_max: float = LOCAL_NO_SPEECH_MAX,
            silence_secs: float = LOCAL_SILENCE_SECS,
@@ -1441,10 +1188,7 @@ def record(ssh, energy_threshold,
                    record_max_secs=record_max_secs,
                    silence_secs=silence_secs)
 
-
-# ------------------------------------------------------------------------------------
 # GESTURE MAPPING (Alfie's)
-# ------------------------------------------------------------------------------------
 # Each gesture is a motion sequence aligned to the game/emotional context:
 #   - celebrate: arms up + small bicep curls, for thriving moments and milestones
 #   - encourage: one arm forward with open hand, for encouragement when struggling
@@ -1453,7 +1197,6 @@ def record(ssh, energy_threshold,
 #   - calm: slow open-arm gesture, for calming down when frustrated
 #   - energetic: quick open-arm raises, for boosting energy when disengaged or thriving
 #   - neutral: resting; no gesture-movements as no need
-# ------------------------------------------------------------------------------------
 
 GESTURE_CODE = {
     "celebrate": """
@@ -1544,9 +1287,7 @@ m.setStiffnesses("Arms", 0.0)
 """,
 }
 
-
 # Salman's
-# ------------------------------------------------------------------------------
 def nao_gesture(ssh, gesture_type: str):
     """Execute a gesture on Pepper aligned to the game context."""
     code = GESTURE_CODE.get(gesture_type, GESTURE_CODE["neutral"])
@@ -1556,20 +1297,9 @@ def nao_gesture(ssh, gesture_type: str):
         print(f"  Gesture {gesture_type!r} did not play: {e}")
 
 
-# ------------------------------------------------------------------------------
-# AUDIO ANALYSIS + TRANSCRIPTION
-# ------------------------------------------------------------------------------
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def measure_volume() -> float:
-    """
-    RMS amplitude of the WAV (local and Pepper paths).
-    Used as the 5th signal; roughly maps to arousal (e.g. loud = excited or
-    frustrated, quiet = calm OR disengaged). Just-volume can't tell
-    these pairs apart, thus the engine cross-references face/voice/
-    correctness to disambiguate.
-    """
+    """RMS amplitude of the WAV (local and Pepper paths)."""
     try:
         with wave.open(LOCAL_WAV, "rb") as wf:
             raw = wf.readframes(wf.getnframes())
@@ -1581,14 +1311,11 @@ def measure_volume() -> float:
         print(f"  Volume RMS calc failed: {e}")
         return 0.0
 
-# [ ] TODO: might need to ask gpt-4.1 to check and infer if something Whisper hallucinates is actually something the user would say or like one of the training-set tics below
-
 # Whisper hallucinates these training-set tics on silent/near-silent
 # audio (YouTube outros, CJK fillers, minimal-token fallbacks). Stored
 # pre-normalised (lowercase, punctuation + symbols already stripped),
 # thus `is_known_hallucination()` matches regardless of decoration.
 WHISPER_HALLUCINATIONS = {
-    # YouTube-outro tics
     "thank you for watching",
     "thanks for watching",
     "thank you so much for watching",
@@ -1600,9 +1327,7 @@ WHISPER_HALLUCINATIONS = {
     "subscribe and like",
     "ill see you next time",
     "see you next time",
-    # generic closings
     "thank you", "thanks", "bye",
-    # single-token junk
     "you", "mm", "hmm", "uh", "um",
     # CJK fillers Whisper emits on silence (pre-normalised)
     "おいしいねにかねしたかな",
@@ -1613,32 +1338,19 @@ WHISPER_HALLUCINATIONS = {
     "구독과 좋아요 부탁드립니다",
 }
 
-
 def normalise_for_blacklist(text: str) -> str:
-    """
-    Lowercase + NFKC + strip everything except letters/digits/spaces;
-    thus the blacklist matches independent of Whisper's decorations
-    """
+    """Lowercase + NFKC + strip everything except letters/digits/spaces; thus the blacklist matches independent of Whisper's decorations"""
     t = unicodedata.normalize("NFKC", text).lower()
     kept = [ch for ch in t if ch.isalnum() or ch.isspace()]
     return " ".join("".join(kept).split())
-
 
 def is_known_hallucination(text: str) -> bool:
     norm = normalise_for_blacklist(text)
     return norm == "" or norm in WHISPER_HALLUCINATIONS
 
-
 def has_real_speech(wav_path: str, min_speech_ms: int = 500,
                      threshold: float = 0.6) -> bool:
-    """
-    Silero VAD pre-gate. True iff at least `min_speech_ms` of speech
-    is detected at probability >= `threshold`.
-    Default threshold bumped from Silero's 0.5 to 0.6, and minimum
-    duration from 250ms to 500ms, thus background noise + single-syllable
-    mic spikes don't pass as speech. Fail-open (returns True) if the
-    VAD model didn't load thus downstream layers still protect us.
-    """
+    """Silero VAD pre-gate."""
     if _silero_model is None or get_speech_timestamps is None:
         return True
     try:
@@ -1654,7 +1366,6 @@ def has_real_speech(wav_path: str, min_speech_ms: int = 500,
     except Exception as e:
         print(f"  Silero VAD check failed ({e}); falling through to Whisper")
         return True
-
 
 def has_wake_word(wav_path: str) -> bool:
     """
@@ -1683,7 +1394,6 @@ def has_wake_word(wav_path: str) -> bool:
         return True
 
 # Alfie & Salman's
-# ------------------------------------------------------------------------------
 #open ai whisperings and incase fails and in silent
 def transcribe() -> str:
     """
@@ -1767,19 +1477,10 @@ def transcribe() -> str:
         print(f"  Whisper transcribe failed ({e}); returning empty")
         return ""
 
-
-# ------------------------------------------------------------------------------
 # Alfie: FACIAL EXPRESSION PIPELINE
-# ------------------------------------------------------------------------------
 
 def preview_thread_loop(camera, face_model, face_cascade):
-    """
-    Continuous camera preview (daemon thread).
-    Reads frames, runs face detection + classification, updates the
-    shared _preview_state, and stores the annotated frame for the
-    dashboard. Runs independently of the game loop so the preview
-    doesn't freeze between rounds.
-    """
+    """Continuous camera preview (daemon thread)."""
     global _last_emotion, _preview_frame
     while True:
         ret, frame = camera.read()
@@ -1800,19 +1501,16 @@ def preview_thread_loop(camera, face_model, face_cascade):
             emotion, conf = face_model.predict(inp)
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-        # update shared state for capture_and_classify to read
         with _preview_lock:
             _preview_state["emotion"]    = emotion
             _preview_state["confidence"] = conf
         _last_emotion = emotion
 
-        # annotate frame and store for the tkinter dashboard
         label = f"{emotion} ({conf:.0%})"
         cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                     0.8, (0, 255, 0), 2)
         with _preview_lock:
             _preview_frame = frame.copy()
-
 
 def start_preview_thread(camera, face_model, face_cascade):
     t = threading.Thread(target=preview_thread_loop,
@@ -1821,20 +1519,10 @@ def start_preview_thread(camera, face_model, face_cascade):
     t.start()
     return t
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def capture_and_classify(ssh, face_model, face_cascade,
                          local_camera=None) -> tuple[str, float]:
-    """
-    Capture a face image and classify the expression.
-    Uses Pepper's camera by default; local webcam if GAZE_LOCAL_CAMERA=true.
-    Returns (emotion_label, confidence).
-
-    In DEBUG_PREVIEW mode with a local camera, reads from the preview
-    thread instead of capturing a new frame (avoids duplicate reads).
-    """
-    # local mode with preview thread running; only read shared state
+    """Capture a face image and classify the expression."""
     if DEBUG_PREVIEW and local_camera is not None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
@@ -1868,22 +1556,12 @@ def capture_and_classify(ssh, face_model, face_cascade,
     return face_model.predict(inp)
 
 
-# ------------------------------------------------------------------------------
-# OPENAI GAME-GENERATION + ANSWER CHECKING
-# ------------------------------------------------------------------------------
-
 API_TIMEOUT = 10  # 10-second timeout; prevents Pepper freezing if OpenAI/network stalls
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
-    """
-    Verify the user's spoken answer via GPT. Falls back to naive
-    string-containment if the API drops, thus the game loop will-never hang
-    on a single question.
-    """
+    """Verify the user's spoken answer via GPT."""
     if not user_answer.strip():
         return False
 
@@ -1911,16 +1589,11 @@ def check_answer(user_answer: str, correct_answer: str,
         )
         return "correct" in resp.choices[0].message.content.strip().lower()
     except Exception as e:
-        # fallback: naive string match so the game loop continues
         print(f"  Answer verifier API failed: {e}")
         return correct_answer.lower().strip() in user_answer.lower().strip()
 
-
-# ------------------------------------------------------------------------------
 # Salman: SAVE/LOAD SESSIONS
-# ------------------------------------------------------------------------------
 
-#score, difficulty, streak, histpry and rewars to json every 5 turns for next session
 def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None):
     """Save session progress so user can continue later."""
     data = {
@@ -1951,7 +1624,6 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
         json.dump(data, f, indent=2)
     print(f"  Session saved to {SAVE_FILE}")
 
-
 def load_session() -> Optional[dict]:
     """Load a previously saved session, if one exists."""
     if not os.path.exists(SAVE_FILE):
@@ -1963,7 +1635,6 @@ def load_session() -> Optional[dict]:
         print(f"  Save file corrupt, ignoring: {e}")
         return None
 
-#saves so user carries on where they stopped
 def restore_engine(save_data: dict) -> AdaptiveEngine:
     """Restore engine state from saved data."""
     engine = AdaptiveEngine()
@@ -1980,16 +1651,12 @@ def restore_engine(save_data: dict) -> AdaptiveEngine:
             print(f"  Could not restore game type {g_val!r}: {e}")
     return engine
 
-
 def delete_save():
     """Remove the save file after a completed session or on user request."""
     if os.path.exists(SAVE_FILE):
         os.remove(SAVE_FILE)
 
-
-# ------------------------------------------------------------------------------
 # Alfie: OPENAI FUNCTION-CALLING TOOLS + CONVERSATION HELPERS
-# ------------------------------------------------------------------------------
 
 TOOLS = [
     {
@@ -2092,24 +1759,6 @@ TOOLS = [
     {
         "type": "function",
         "function": {
-            "name": "select_personality",
-            "description": "Switch the robot's personality mode mid-session.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "personality": {
-                        "type": "string",
-                        "enum": ["cheeky", "mentor", "coach", "therapeutic"],
-                        "description": "The personality mode to switch to.",
-                    },
-                },
-                "required": ["personality"],
-            },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
             "name": "request_more_time",
             "description": (
                 "The user has asked for more time to think about the current "
@@ -2120,22 +1769,14 @@ TOOLS = [
     },
 ]
 
-
-# -- shared mutable state for signal injection (set before each converse call) --
 _signal_context = {"text": ""}
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def build_signal_context(engine: AdaptiveEngine,
                          expression: str, expr_conf: float,
                          vocal_emo: str, vocal_conf: float,
                          vol_rms: float, response_time: float) -> str:
-    """
-    Build a signal summary string injected alongside every user message
-    so the LLM can adapt its behaviour to the user's real-time
-    emotional state without explicit adaptive-engine instructions.
-    """
+    """Build a signal summary string injected alongside every user message so the LLM can adapt its behaviour to the user's real-time emotional state without explicit adaptive-engine instructions."""
     correctness = engine.rolling_correctness()
     recent_faces = [r.facial_expression for r in engine.history[-3:]]
     recent_vocal = [r.vocal_emotion for r in engine.history[-3:]]
@@ -2166,12 +1807,8 @@ def build_signal_context(engine: AdaptiveEngine,
 
     return "\n".join(lines)
 
-
 def converse(conversation: list, tools: list) -> object:
-    """
-    Make an OpenAI chat-completion call with function calling enabled.
-    Returns the raw response message object.
-    """
+    """Make an OpenAI chat-completion call with function calling enabled."""
     try:
         resp = client.chat.completions.create(
             model="gpt-4.1",
@@ -2183,24 +1820,19 @@ def converse(conversation: list, tools: list) -> object:
         return resp.choices[0].message
     except Exception as e:
         print(f"  converse() API failed: {e}")
-        # return a minimal mock so the caller can continue
         class FallbackMsg:
             content = "I had a brief network hiccup. Let's keep going! [gesture:think]"
             tool_calls = None
             role = "assistant"
         return FallbackMsg()
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def execute_tool_call(tool_name: str, tool_args: dict,
                       engine: AdaptiveEngine, game_state: GameState,
                       conversation: list,
                       preferred_game: Optional[GameType],
                       dashboard=None) -> str:
-    """
-    Dispatch a function-calling tool invocation and return a JSON string result.
-    """
+    """Dispatch a function-calling tool invocation and return a JSON string result."""
     if tool_name == "generate_game_question":
         gt = tool_args.get("game_type", "numbers")
         diff = tool_args.get("difficulty", "MEDIUM")
@@ -2211,7 +1843,6 @@ def execute_tool_call(tool_name: str, tool_args: dict,
             engine.current_difficulty = Difficulty[diff]
         except (KeyError, ValueError):
             pass
-        # update game state
         game_state.active = True
         game_state.current_question = result.get("question", "")
         game_state.current_answer   = result.get("answer", "")
@@ -2246,19 +1877,6 @@ def execute_tool_call(tool_name: str, tool_args: dict,
         evaluation = engine.evaluate_adaptation()
         return json.dumps({"evaluation": evaluation})
 
-    elif tool_name == "select_personality":
-        p_name = tool_args.get("personality", "mentor")
-        try:
-            new_p = Personality(p_name)
-        except ValueError:
-            new_p = Personality.MENTOR
-        # update the system message in conversation
-        personality_fragment = PERSONALITY_PROMPTS[new_p]
-        conversation[0]["content"] = BASE_SYSTEM_PROMPT + "\n\nPERSONALITY:\n" + personality_fragment
-        if dashboard is not None:
-            dashboard.update_personality(new_p.value.upper())
-        return json.dumps({"personality": new_p.value, "applied": True})
-
     elif tool_name == "request_more_time":
         game_state.waiting = True
         return json.dumps({"acknowledged": True})
@@ -2266,16 +1884,11 @@ def execute_tool_call(tool_name: str, tool_args: dict,
     else:
         return json.dumps({"error": f"Unknown tool: {tool_name}"})
 
-
 def process_llm_response(message, conversation: list,
                          engine: AdaptiveEngine, game_state: GameState,
                          preferred_game: Optional[GameType],
                          dashboard=None) -> str:
-    """
-    Handle the LLM response, including any tool call chains.
-    Returns the final text response from the LLM.
-    """
-    # append the assistant's (gpt's) message (may include tool calls)
+    """Handle the LLM response, including any tool call chains."""
     msg_dict = {"role": "assistant", "content": message.content or ""}
     if message.tool_calls:
         msg_dict["tool_calls"] = [
@@ -2288,7 +1901,6 @@ def process_llm_response(message, conversation: list,
         ]
     conversation.append(msg_dict)
 
-    # process tool calls in a loop (the LLM may chain multiple)
     max_tool_rounds = 5
     current_msg = message
     for _ in range(max_tool_rounds):
@@ -2315,7 +1927,6 @@ def process_llm_response(message, conversation: list,
                 "content": result_str,
             })
 
-        # call the LLM again so it can respond after processing tool results
         current_msg = converse(conversation, TOOLS)
         resp_dict = {"role": "assistant", "content": current_msg.content or ""}
         if current_msg.tool_calls:
@@ -2332,13 +1943,9 @@ def process_llm_response(message, conversation: list,
     return current_msg.content or ""
 
 # Salman's
-# ------------------------------------------------------------------------------
 #look for gestures
 def extract_gesture(text: str) -> str:
-    """
-    Parse a [gesture:TYPE] tag from the LLM's response text.
-    Returns the gesture type string, defaulting to 'neutral' if not found.
-    """
+    """Parse a [gesture:TYPE] tag from the LLM's response text."""
     match = re.search(r'\[gesture:(\w+)\]', text) # regex to find [gesture:type]
     if match:
         gesture = match.group(1).lower()
@@ -2346,15 +1953,9 @@ def extract_gesture(text: str) -> str:
             return gesture
     return "neutral"
 
-
 # Alfie's
-# ------------------------------------------------------------------------------
 def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> dict:
-    """
-    Dedicated sub-call for game question generation via OpenAI.
-    Reuses GAME_DESCRIPTIONS and DIFFICULTY_DESCRIPTIONS.
-    Returns {question, answer, category}.
-    """
+    """Dedicated sub-call for game question generation via OpenAI."""
     try:
         gt = GameType(game_type_str)
     except ValueError:
@@ -2383,7 +1984,6 @@ def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> 
             timeout=API_TIMEOUT,
         )
         content = resp.choices[0].message.content.strip()
-        # strip markdown code fences if present
         if content.startswith("```"):
             content = content.split("\n", 1)[1] if "\n" in content else content[3:]
             if content.endswith("```"):
@@ -2400,10 +2000,7 @@ def generate_game_question_internal(game_type_str: str, difficulty_str: str) -> 
             "category": "arithmetic fallback",
         }
 
-
-# ------------------------------------------------------------------------------
 # LED COLOUR MAP
-# ------------------------------------------------------------------------------
 #a colour each state
 LED_COLOURS = {
     InferredState.THRIVING:    0x0000FF00,   # green
@@ -2414,11 +2011,6 @@ LED_COLOURS = {
 }
 
 
-# ------------------------------------------------------------------------------
-# LIVE DASHBOARD (tkinter)
-# ------------------------------------------------------------------------------
-
-# text colours; red = bad, green = good, grey = disengaged
 _STATE_COLOURS = {
     InferredState.THRIVING:     "green",
     InferredState.COMFORTABLE:  "blue",
@@ -2427,13 +2019,8 @@ _STATE_COLOURS = {
     InferredState.DISENGAGED:   "grey",
 }
 
-
 class GazeDashboard:
-    """
-    Tkinter dashboard for GAZE.
-    All tk widgets touched on the main thread only (macOS requirement);
-    the game loop schedules updates via root.after().
-    """
+    """Tkinter dashboard for GAZE."""
 
     CAMERA_W, CAMERA_H = 400, 300
 
@@ -2442,7 +2029,6 @@ class GazeDashboard:
         self.root.title("GAZE Dashboard")
         self.root.resizable(False, False)
 
-        # left side: camera + conversation
         left = tk.Frame(self.root)
         left.grid(row=0, column=0, padx=8, pady=8, sticky="n")
 
@@ -2461,20 +2047,16 @@ class GazeDashboard:
         self._conv_text.pack(side="left", fill="both", expand=True)
         conv_scroll.pack(side="right", fill="y")
 
-        # right side: signals + decision
         right = tk.Frame(self.root)
         right.grid(row=0, column=1, padx=(0, 8), pady=8, sticky="n")
 
         tk.Label(right, text="GAZE Dashboard",
                  font=("TkDefaultFont", 14, "bold")).pack(pady=(0, 4))
 
-        # round, score, streak, personality
         self._round_var = tk.StringVar(value="Round: -")
         self._score_var = tk.StringVar(value="Score: 0/0")
         self._streak_var = tk.StringVar(value="Streak: 0")
-        self._personality_var = tk.StringVar(value="Personality: MENTOR")
-        for var in (self._round_var, self._score_var, self._streak_var,
-                    self._personality_var):
+        for var in (self._round_var, self._score_var, self._streak_var):
             tk.Label(right, textvariable=var).pack(anchor="w")
 
         # transcription — only what the user said; correct answer stays
@@ -2489,7 +2071,6 @@ class GazeDashboard:
                                       font=("TkDefaultFont", 11, "bold"))
         self._result_label.pack(anchor="w")
 
-        # live signals — monospace so columns line up
         tk.Label(right, text="").pack()
         tk.Label(right, text="Live Signals:",
                  font=("TkDefaultFont", 10, "bold")).pack(anchor="w")
@@ -2504,7 +2085,6 @@ class GazeDashboard:
             tk.Label(right, textvariable=var,
                      font=("Courier", 10)).pack(anchor="w")
 
-        # adaptive decision
         tk.Label(right, text="").pack()
         tk.Label(right, text="Adaptive Decision:",
                  font=("TkDefaultFont", 10, "bold")).pack(anchor="w")
@@ -2526,7 +2106,6 @@ class GazeDashboard:
                                     wraplength=340, justify="left")
         self._eval_label.pack(anchor="w")
 
-        # quit
         tk.Button(right, text="Quit (Esc)",
                   command=self.quit_app).pack(pady=(10, 0))
 
@@ -2538,7 +2117,6 @@ class GazeDashboard:
         self.signal_refresh()
         self.root.update()
 
-    # -- camera feed refresh (runs via root.after) --
 
     def camera_refresh(self):
         global _preview_frame
@@ -2573,7 +2151,6 @@ class GazeDashboard:
         except tk.TclError:
             pass
 
-    # -- public update methods (safe to call from any thread) --
 
     def update_robot_speech(self, text: str):
         def apply():
@@ -2609,7 +2186,6 @@ class GazeDashboard:
 
             self._heard_var.set(f"You said: {user_answer if user_answer else '(silence)'}")
             if not correct_answer:
-                # just a conversational turn; no game answer to mark
                 self._result_var.set("")
                 self._result_label.configure(fg="grey")
             elif correct:
@@ -2625,7 +2201,6 @@ class GazeDashboard:
             self._face_var.set(f"Face (CNN):    {expression} ({expr_conf:.0%})")
             self._voice_var.set(f"Voice (MLP):   {vocal_emo} ({vocal_conf:.0%})")
 
-            # crude ASCII volume meter; enough to eyeball arousal at a glance
             vol_tag = "(loud)" if vol_rms > 2000 else "(quiet)" if vol_rms < VOLUME_THRESHOLD else "(normal)"
             bar_len = min(int(vol_rms / 250), 20)
             meter = "#" * bar_len + "." * (20 - bar_len)
@@ -2650,10 +2225,6 @@ class GazeDashboard:
             self._eval_var.set(adaptation_eval if adaptation_eval else "")
         self.on_main(apply)
 
-    def update_personality(self, name: str):
-        """Update the personality indicator label on the dashboard."""
-        self.on_main(lambda: self._personality_var.set(f"Personality: {name}"))
-
     def quit_app(self):
         """Kill the entire process from the GUI; clean exit."""
         print("\n  [Dashboard] Quit requested.")
@@ -2668,20 +2239,11 @@ class GazeDashboard:
 
 def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                        local_camera, ssh, ssh_tts, energy_threshold):
-    """
-    Main-conversation loop. Run a daemon thread so tkinter
-    mainloop stays responsive.
-
-    The LLM drives flow via function calling; it decides when to start
-    a game round rather than forcing one every turn. GAZE is thus a
-    companion first, game host second.
-    """
+    """Main-conversation loop."""
     preferred_game = None
     engine         = AdaptiveEngine()
     game_state     = GameState()
-    active_personality = Personality.MENTOR   # default
 
-    # -- 1. Check for saved session (reuses existing load/restore logic) --
 
     save_data = load_session()
     if save_data:
@@ -2706,7 +2268,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
         record(ssh, energy_threshold)
 
-        # classify signals during startup (mirrors main loop)
         expression, expr_conf = capture_and_classify(
             ssh, face_model, face_cascade, local_camera)
         vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
@@ -2743,95 +2304,22 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             say(ssh_tts, fresh_msg)
             print(f"\nRobot: {fresh_msg}")
 
-    # -- 2. Ask user to pick a personality (verbal or default) --
 
     if not LOCAL_MODE:
         nao_track_face(ssh, enable=True)
         nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
         nao_gesture(ssh, "wave")
 
-    personality_prompt = (
-        "Hello! I'm GAZE, your companion. Before we begin, you can pick "
-        "my personality: cheeky, mentor, coach, or therapeutic. "
-        "Or just say hello and I'll be my usual self!"
-    )
-    retry_prompt = (
-        "Sorry, I didn't catch that. Which personality would you like: "
-        "cheeky, mentor, coach, or therapeutic?"
-    )
-
-    # up to 3 attempts to hear a valid personality; if still nothing,
-    # fall back to MENTOR so the session always starts
-    personality_selected = False
-    for attempt in range(3):
-        prompt = personality_prompt if attempt == 0 else retry_prompt
-        say(ssh_tts, prompt)
-        print(f"\nRobot: {prompt}")
-        dashboard.update_robot_speech(prompt)
-
-        print("\nListening for personality choice...")
-        if not LOCAL_MODE:
-            nao_set_leds(ssh, "EarLeds", 0x0000FF00, 0.3)
-        record(ssh, energy_threshold)
-
-        # classify signals during startup
-        # face: CNN (WS-10)
-        expression, expr_conf = capture_and_classify(
-            ssh, face_model, face_cascade, local_camera)
-        # voice: MLP (WS-08)
-        vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
-        # volume: arousal proxy
-        vol_rms = measure_volume()
-        dashboard.update_signals(
-            round_num=0, user_answer="", correct_answer="", correct=False,
-            expression=expression, expr_conf=expr_conf,
-            vocal_emo=vocal_emo, vocal_conf=vocal_conf,
-            vol_rms=vol_rms, response_time=0, rolling_acc=0,
-            total_correct=0, total_rounds=0, streak=0,
-        )
-
-        personality_text = transcribe()
-        if personality_text:
-            print(f"  Heard: {personality_text}")
-            dashboard.append_user_speech(personality_text)
-            lower_pt = personality_text.lower()
-            for p in Personality:
-                if p.value in lower_pt:
-                    active_personality = p
-                    personality_selected = True
-                    break
-        else:
-            print("  Heard: (silence)")
-
-        if personality_selected:
-            break
-
-    if not personality_selected:
-        print("  No personality heard after retries; defaulting to MENTOR.")
-
-    print(f"  Active personality: {active_personality.value}")
-    dashboard.update_personality(active_personality.value.upper())
-
-    # -- 3. Initialise conversation with system prompt + personality --
-
-    personality_fragment = PERSONALITY_PROMPTS[active_personality]
-    conversation = [{"role": "system", "content": (
-        BASE_SYSTEM_PROMPT + "\nPERSONALITY:\n" + personality_fragment
-    )}]
-
-    # -- 4. Warm greeting (personality-appropriate) --
+    conversation = [{"role": "system", "content": BASE_SYSTEM_PROMPT}]
 
     greeting_msg = converse(
         conversation + [{"role": "user", "content": (
-            f"[The user just chose the {active_personality.value} personality. "
-            "Give a warm, personality-appropriate greeting. "
-            "Mention you can chat, play games, or just hang out. "
-            "Keep it to 2 sentences.] [gesture:wave]"
+            "[Give a warm, supportive greeting. Mention you can chat, play games, "
+            "or just hang out. Keep it to 2 sentences.] [gesture:wave]"
         )}],
         TOOLS,
     )
     greeting_text = greeting_msg.content or "Hello! I'm GAZE, lovely to meet you."
-    # strip the gesture tag for speech but extract it
     greeting_gesture = extract_gesture(greeting_text)
     greeting_speech  = re.sub(r'\[gesture:\w+\]', '', greeting_text).strip()
 
@@ -2847,7 +2335,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     print(f"\nRobot: {greeting_speech}")
     dashboard.update_robot_speech(greeting_speech)
 
-    # -- 5. Main conversation loop --
 
     turn_count = 0
     # silent turns skip the LLM call so the robot doesn't pester; one
@@ -2859,7 +2346,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             turn_count += 1
             print(f"\n{'-' * 40} Turn {turn_count} {'-' * 40}")
 
-            # (a) Capture face expression
             print("Capturing expression...")
             expression, expr_conf = capture_and_classify(
                 ssh, face_model, face_cascade, local_camera
@@ -2870,7 +2356,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             else:
                 print(f"  Expression: {expression} ({expr_conf:.2f})")
 
-            # (b) Record audio + measure volume + classify vocal emotion
             question_start = time.time()
             print("Listening...")
             if not LOCAL_MODE:
@@ -2964,8 +2449,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 if engine.consecutive_silences >= 3 and not silence_nudge_fired:
                     nudge_prompt = [
                         {"role": "system",
-                         "content": BASE_SYSTEM_PROMPT + "\nPERSONALITY:\n"
-                                    + personality_fragment},
+                         "content": BASE_SYSTEM_PROMPT},
                         {"role": "user",
                          "content": ("[The user has been quiet for 3 turns. "
                                      "Offer ONE brief, gentle check-in; no "
@@ -2983,7 +2467,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
 
                 continue   # skip the LLM call; just wait for the user
 
-            # (d) Check exit keywords
             if user_text.lower().strip() in [
                 "stop", "quit", "exit", "goodbye", "bye", "end",
                 "i want to stop", "let's stop", "no more",
@@ -2991,13 +2474,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 print("User wants to stop.")
                 break
 
-            # (e) Build signal context
             signal_ctx = build_signal_context(
                 engine, expression, expr_conf,
                 vocal_emo, vocal_conf, vol_rms, response_time,
             )
 
-            # (f) Append user message (signals + transcription) to conversation
             user_msg_content = f"{signal_ctx}\n\nUser says: {user_text}"
             conversation.append({"role": "user", "content": user_msg_content})
 
@@ -3006,13 +2487,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             if len(conversation) > 42:
                 conversation = [conversation[0]] + conversation[-40:]
 
-            # (g) Call converse() with tools
             if not LOCAL_MODE:
                 nao_set_leds(ssh, "EarLeds", 0x000000FF, 0.3)  # blue = thinking
 
             llm_message = converse(conversation, TOOLS)
 
-            # (h) Process response (handle tool calls)
             response_text = process_llm_response(
                 llm_message, conversation, engine, game_state,
                 preferred_game, dashboard
@@ -3021,13 +2500,10 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             if not response_text.strip():
                 response_text = "I'm here! What would you like to talk about? [gesture:neutral]"
 
-            # (i) Extract gesture
             gesture_type = extract_gesture(response_text)
             speech_text  = re.sub(r'\[gesture:\w+\]', '', response_text).strip()
 
-            # (j) Speak + gesture + LEDs
             if not LOCAL_MODE:
-                # LED colour reflects latest inferred state if available
                 if engine.adaptation_log:
                     last_state_str = engine.adaptation_log[-1]["state"]
                     try:
@@ -3045,7 +2521,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 )
                 gesture_thread.start()
 
-            # animated speech for celebratory/encouraging gestures
             if not LOCAL_MODE and gesture_type in ("celebrate", "encourage"):
                 nao_say_animated(ssh_tts, speech_text)
             else:
@@ -3071,7 +2546,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     vocal_emotion=vocal_emo, volume_rms=vol_rms,
                 )
 
-                # record round if a game answer was checked this turn
                 if was_game_answer:
                     engine.record_round(RoundResult(
                         round_number=turn_count,
@@ -3120,7 +2594,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     streak=engine.consecutive_correct,
                 )
 
-            # (l) Auto-save every 5 turns
             if turn_count % 5 == 0:
                 save_session(engine, preferred_game)
                 print("  [Auto-save]")
@@ -3128,9 +2601,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     except KeyboardInterrupt:
         print("\n\nInterrupted.")
 
-    # ------------------------------------------------------------------------------
-    # SESSION END; save progress + farewell + cleanup
-    # ------------------------------------------------------------------------------
 
     save_session(engine, preferred_game)
 
@@ -3141,7 +2611,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     for k, v in summary.items():
         print(f"  {k}: {v}")
 
-    # farewell; adaptive to performance
     if summary.get("rounds", 0) > 0:
         acc = summary["accuracy"]
         streak_note = (f" Your best streak was {summary['best_streak']} in a row!"
@@ -3173,7 +2642,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     say(ssh_tts, farewell)
     print(f"\nRobot: {farewell}")
 
-    # cleanup
     if local_camera is not None:
         local_camera.release()
     if not LOCAL_MODE:
@@ -3185,23 +2653,17 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     print("\nGAZE disconnected.")
 
 
-# ------------------------------------------------------------------------------
-#                                     MAIN-GAME LOOP
-# ------------------------------------------------------------------------------
-
 def main():
     print("=" * 60)
     print("  GAZE — Game-Adaptive Zone of Engagement")
     print("  Adaptive Game System for Pepper Robot")
     print("=" * 60)
 
-    # -- load facial expression model (WS-10) --
     print("\nLoading facial expression model...")
     face_model   = FacialExpressionModel(MODEL_JSON, MODEL_WEIGHTS)
     face_cascade = cv2.CascadeClassifier(HAAR_CASCADE)
     print("  Facial model loaded.")
 
-    # -- load speech emotion model (WS-08) --
     speech_model = None
     if os.path.exists(SPEECH_MODEL):
         print("Loading speech emotion model...")
@@ -3211,12 +2673,10 @@ def main():
         print(f"  Speech emotion model not found at {SPEECH_MODEL}; vocal signal disabled.")
         print("  Run train_speech_model.py to generate it.")
 
-    # -- local camera (dev/testing) --
     local_camera = None
     if USE_LOCAL_CAMERA:
         local_camera = cv2.VideoCapture(0)
         print("  Using local webcam for expression detection.")
-        # start continuous preview thread so the debug window never freezes
         if DEBUG_PREVIEW:
             start_preview_thread(local_camera, face_model, face_cascade)
             print("  Preview thread started.")
@@ -3242,11 +2702,9 @@ def main():
         print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
         energy_threshold = nao_calibrate_ambient(ssh)
 
-    # -- launch live dashboard --
     dashboard = GazeDashboard()
     print("  Dashboard launched.")
 
-    # -- run conversation loop in a daemon thread so tkinter mainloop stays live --
     conv_thread = threading.Thread(
         target=conversation_loop,
         args=(dashboard, face_model, face_cascade, speech_model,
