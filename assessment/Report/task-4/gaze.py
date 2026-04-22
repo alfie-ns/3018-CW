@@ -7,21 +7,21 @@ Novelty: multi-signal emotional inference -- face (WS-10) + voice (WS-08)
 signal is trusted alone.
 
 Authorship (per proposal.pdf):
-  Alfie  -- code architecture, OpenAI integration, facial recognition, AdaptiveEngine
-  Salman -- game logic, gestures, LEDs, TTS pacing, session save/resume
+- Alfie: code architecture, OpenAI integration, facial recognition, AdaptiveEngine
+- Salman: game logic, gestures, LEDs, TTS pacing, session save/resume
 
 CRITICAL:
 - **PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN**
 - **CONFIG NAO IP INTO ENV LIKE LAST TIME**
 
-OPEN TODOs:
+TODO:
 - [ ] only make listen when 'Pepper' is heard and hopefully this fix the Whisper hallucinations - `transcribe()` with Vosk wake-word gate + `
 - [ ] offload simpler tasks? to either computation or mini model
 - [ ] ensure all facial expression inference is sufficently commented
 - [ ] ensure it notices and mitigates when user's disengaged
 """
 
-import os, re, sys, json, time, wave, struct, tempfile, threading, subprocess, unicodedata, tkinter as tk
+import os, re, sys, json, time, types, wave, struct, tempfile, threading, subprocess, unicodedata, tkinter as tk
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
@@ -359,7 +359,6 @@ class AdaptiveEngine:
         self.adaptation_log: list[dict]    = []
         self.total_correct                 = 0
         self.best_streak                   = 0
-        self.rewards_given: set[str]       = set()
         # adaptive think-budget; baseline defaults, updated per round by
         # recommend_think_budget() — signals-driven wait time for the user
         self.think_budget_secs       = float(RECORD_MAX_SECS) # hard ceiling
@@ -625,32 +624,6 @@ class AdaptiveEngine:
         self.best_streak = max(self.best_streak, self.consecutive_correct)
 
 # Salman's
-#track the streaks and sum correcr answers each milsetone fire once
-# celebrate
-#make sure reacts right in right time
-    def check_reward(self) -> Optional[str]:
-        """Check if the user hit a milestone."""
-        milestones = [
-            ("streak_3",  self.consecutive_correct >= 3,
-             "The user just got 3 in a row! Announce 'Hat trick!' and celebrate."),
-            ("streak_5",  self.consecutive_correct >= 5,
-             "The user is on a 5-answer streak! Announce 'Five-star streak!' "
-             "and be genuinely amazed."),
-            ("streak_10", self.consecutive_correct >= 10,
-             "Incredible — 10 correct in a row! Announce 'Unstoppable!' "
-             "and make a big deal of it."),
-            ("total_5",   self.total_correct >= 5 and "total_5" not in self.rewards_given,
-             "The user has reached 5 correct answers total. Briefly acknowledge the milestone."),
-            ("total_10",  self.total_correct >= 10 and "total_10" not in self.rewards_given,
-             "The user has hit double digits — 10 correct total! Congratulate them."),
-            ("total_15",  self.total_correct >= 15 and "total_15" not in self.rewards_given,
-             "15 correct answers! The user is on fire. Acknowledge it enthusiastically."),
-        ]
-        for key, condition, message in milestones:
-            if condition and key not in self.rewards_given:
-                self.rewards_given.add(key)
-                return message
-        return None
     def pick_different_game(self) -> GameType:
         if self.current_game == GameType.NUMBERS:
             return GameType.LETTERS
@@ -1605,7 +1578,6 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
         "last_game":        engine.current_game.value,
         "preferred_game":   preferred_game.value if preferred_game else None,
         "rounds_played":    len(engine.history),
-        "rewards_given":    list(engine.rewards_given),
         "round_log":        [
             {
                 "round":       r.round_number,
@@ -1643,7 +1615,6 @@ def restore_engine(save_data: dict) -> AdaptiveEngine:
     engine.game_switch_count = save_data.get("game_switches", 0)
     engine.current_difficulty = Difficulty(save_data.get("last_difficulty", 2))
     engine.current_game = GameType(save_data.get("last_game", "numbers"))
-    engine.rewards_given = set(save_data.get("rewards_given", []))
     for g_val, count in save_data.get("games_played", {}).items():
         try:
             engine.games_played[GameType(g_val)] = count
@@ -1712,37 +1683,6 @@ TOOLS = [
                 },
                 "required": ["user_answer", "correct_answer", "question_context"],
             },
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "check_reward_milestone",
-            "description": (
-                "Check whether the user has hit a scoring milestone (e.g. "
-                "3-in-a-row streak, 10 total correct). Returns the reward "
-                "message if a milestone was reached, otherwise null."
-            ),
-            "parameters": {"type": "object", "properties": {}},
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "get_session_summary",
-            "description": (
-                "Retrieve session statistics: total rounds, accuracy, best "
-                "streak, games played, etc."
-            ),
-            "parameters": {"type": "object", "properties": {}},
-        },
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "save_progress",
-            "description": "Save the current session to disk so it can be resumed later.",
-            "parameters": {"type": "object", "properties": {}},
         },
     },
     {
@@ -1820,11 +1760,9 @@ def converse(conversation: list, tools: list) -> object:
         return resp.choices[0].message
     except Exception as e:
         print(f"  converse() API failed: {e}")
-        class FallbackMsg:
-            content = "I had a brief network hiccup. Let's keep going! [gesture:think]"
-            tool_calls = None
-            role = "assistant"
-        return FallbackMsg()
+        return types.SimpleNamespace(
+            content="I had a brief network hiccup. Let's keep going! [gesture:think]",
+            tool_calls=None, role="assistant")
 
 # Alfie's
 def execute_tool_call(tool_name: str, tool_args: dict,
@@ -1861,17 +1799,6 @@ def execute_tool_call(tool_name: str, tool_args: dict,
         if game_state.active:
             game_state.active = False
         return json.dumps({"correct": is_correct})
-
-    elif tool_name == "check_reward_milestone":
-        reward = engine.check_reward()
-        return json.dumps({"reward": reward})
-
-    elif tool_name == "get_session_summary":
-        return json.dumps(engine.get_session_summary())
-
-    elif tool_name == "save_progress":
-        save_session(engine, preferred_game)
-        return json.dumps({"saved": True})
 
     elif tool_name == "evaluate_last_adaptation":
         evaluation = engine.evaluate_adaptation()
