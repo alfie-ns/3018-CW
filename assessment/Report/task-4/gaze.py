@@ -2,7 +2,7 @@
 GAZE: Game-Adaptive Zone of Engagement
 
 Adaptive countdown-style game host on Pepper robot.
-Novelty: multi-signal emotional inference -- face (WS-10) + voice (WS-08)
+Novelty: multi-signal emotional inference; face (WS-10) + voice (WS-08)
 + response time + answer correctness, cross-validated so no single
 signal is trusted alone.
 
@@ -39,9 +39,7 @@ print("[booting...] paramiko loaded", flush=True)
 import sounddevice as sd
 import librosa
 import soundfile as sf
-# Vosk wake-word gate (fifth-layer defence against Whisper hallucinations);
-# wrapped in try/except thus a missing dep fails open rather than killing
-# the app -- the four existing layers still protect us.
+# Vosk wake-word gate (fifth-layer defence); try/except fails open if the dep is missing, other four layers still protect us.
 try:
     from vosk import Model as VoskModel, KaldiRecognizer
     _vosk_import_ok = True
@@ -49,9 +47,7 @@ except ImportError:
     VoskModel = None
     KaldiRecognizer = None
     _vosk_import_ok = False
-# Silero VAD: pre-Whisper speech-activity gate; import lives at the top with
-# the other audio imports, the loader sits later near the model-path block.
-# Fail-open if the dep is missing thus the downstream layers still protect us.
+# Silero VAD: pre-Whisper speech-activity gate; import here with audio imports, loader sits later near MODELS_DIR. Fail-open on missing dep.
 try:
     from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
     _silero_import_ok = True
@@ -72,9 +68,7 @@ import tensorflow as tf
 from tensorflow.keras.models import model_from_json
 print("[booting...] tensorflow loaded", flush=True)
 
-# Silero VAD loader: pre-Whisper speech-activity gate; kills most silent-audio
-# hallucinations. Fail-open if the model won't instantiate thus the
-# downstream verbose_json + blacklist layers still protect the code.
+# Silero VAD loader; kills most silent-audio hallucinations. Fail-open if model won't instantiate; downstream verbose_json + blacklist still guard.
 _silero_model = None
 if _silero_import_ok:
     try:
@@ -142,10 +136,7 @@ HAAR_CASCADE  = find_model("haarcascade_frontalface_default.xml", os.path.join("
 SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 VOSK_MODEL_DIR = os.path.join(MODELS_DIR, "vosk-model-small-en-us-0.15")
 
-# Vosk wake-word gate: post-Silero, pre-Whisper fifth-layer defence
-# thus Whisper is never invoked on silent audio (the user must say
-# "Pepper" or "Gaze" before the transcription API ever fires).
-# Fail-open if it doesn't load -- the four existing layers still guard.
+# Vosk wake-word gate: post-Silero, pre-Whisper fifth-layer defence. User must say "Pepper"/"Gaze" before Whisper ever fires. Fail-open if model doesn't load.
 _vosk_model = None
 if _vosk_import_ok:
     try:
@@ -472,7 +463,7 @@ class AdaptiveEngine:
         return InferredState.COMFORTABLE
 
     # Alfie's
-    # -- core decision function --
+    # core decision function
 
     def decide(self, expression: str, expression_conf: float,
                response_time: float, correct: bool,
@@ -646,7 +637,7 @@ class AdaptiveEngine:
         }
 
     # Alfie's
-    # -- adaptation self-evaluation --
+    # adaptation self-evaluation
 
     def evaluate_adaptation(self) -> Optional[str]:
         """Evaluate whether the previous round's adaptation worked."""
@@ -1141,7 +1132,7 @@ def say(ssh_tts, text):
         nao_say(ssh_tts, text)
     # Flush the speaker buffer before the next record() starts, or the
     # mic captures the TTS tail and Vosk false-positives on any "Pepper"
-    # the LLM's reply contained -- silently disabling the wake-word gate
+    # the LLM's reply contained, silently disabling the wake-word gate
     # on every turn after the first.
     time.sleep(0.5)
 
@@ -1388,9 +1379,7 @@ def transcribe() -> str:
         print("  Silero VAD found no speech; skipping Whisper.")
         return ""
 
-    # Layer 3: Vosk wake-word gate -- user must say "Pepper" or "Gaze"
-    # thus Whisper never fires on silent audio that somehow slipped past
-    # the RMS + Silero layers (the original hallucination pain case).
+    # Layer 3: Vosk wake-word gate. User must say "Pepper"/"Gaze"; catches silent audio that slipped past Layers 1-2 (the original hallucination pain case).
     if not has_wake_word(LOCAL_WAV):
         print("  No wake-word detected; skipping Whisper.")
         return ""
@@ -1407,9 +1396,7 @@ def transcribe() -> str:
             )
         text = (getattr(resp, "text", "") or "").strip()
 
-        # Layer 4: Whisper's own per-segment silence + low-confidence
-        # signals. `resp` is a Pydantic TranscriptionVerbose; segments
-        # are objects, thus attribute access (not dict indexing).
+        # Layer 4: Whisper self-signals (no_speech_prob + avg_logprob + compression_ratio per segment). resp is a Pydantic TranscriptionVerbose thus attribute access (not dict indexing).
         segments = getattr(resp, "segments", None) or []
         if segments:
             no_speech_vals = [s.no_speech_prob for s in segments
@@ -1426,10 +1413,7 @@ def transcribe() -> str:
                 print(f"  Whisper low-confidence (min avg_logprob="
                       f"{min(logprob_vals):.2f}); dropping {text!r}")
                 return ""
-            # compression_ratio > 2.4 catches repetition loops like
-            # "Q1. Q1. Q1..." — repeating tokens compress very well thus
-            # a high ratio indicates Whisper has entered a bad loop. 2.4
-            # is the same threshold local Whisper uses internally.
+            # compression_ratio > 2.4 catches repetition loops (e.g. "Q1. Q1. Q1..."); repeating tokens compress well. 2.4 matches local Whisper's default.
             if compression_vals and max(compression_vals) > 2.4:
                 print(f"  Whisper repetition loop (max compression_ratio="
                       f"{max(compression_vals):.2f}); dropping {text!r}")
@@ -2066,10 +2050,7 @@ class GazeDashboard:
         self._face_var.set(f"Face (CNN):    {emotion} ({conf:.0%})")
         self.root.after(500, self.signal_refresh)   # 2 Hz
 
-    # -- thread-safe scheduling --
-    # The game loop runs in a daemon thread; tkinter widgets can only be
-    # touched from the main thread. root.after(0, fn) is thread-safe and
-    # queues fn to execute on the next mainloop iteration.
+    # thread-safe scheduling: tkinter widgets are main-thread only (macOS); root.after(0, fn) queues fn onto the main loop.
 
     def on_main(self, fn):
         """Schedule fn to run on the main (tkinter) thread."""
@@ -2317,20 +2298,9 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             vol_rms = measure_volume()
             print(f"  Volume RMS: {vol_rms:.0f}")
 
-            # (c) Transcribe
-            # In local mode, trust the recording's own speech_detected flag
-            # instead of the full-file volume RMS. Mac mics with low SNR
-            # average badly across silence, so the RMS gate would either
-            # let Whisper hallucinate a sentence out of room tone, or
-            # throw away quiet-but-real speech. On Pepper, the calibrated
-            # volume threshold is reliable, so the RMS gate is fine there.
+            # (c) Transcribe; local mode uses the per-chunk speech flag, not file-wide RMS (Mac mic SNR averages badly over silence).
             if LOCAL_MODE:
-                # double-gate: per-chunk speech flag AND sustained loudness.
-                # _local_speech_detected flips on ANY frame above the silence
-                # floor, thus one mic spike (a breath, a shuffle) was enough
-                # to fire Whisper; Whisper then hallucinated a training-data
-                # phrase ("Thank you for watching") from near-silent audio.
-                # Requiring vol_rms > 2x floor means sustained audio energy.
+                # double-gate: speech flag + sustained loudness (vol_rms > 2x floor) stops breath/shuffle spikes triggering a Whisper hallucination.
                 if _local_speech_detected and vol_rms > LOCAL_SILENCE_RMS * 2:
                     user_text = transcribe()
                 else:
@@ -2369,10 +2339,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     streak=engine.consecutive_correct,
                 )
 
-                # one-off gentle check-in after 3 consecutive silences
-                # (assistive disengagement intervention from proposal);
-                # gated by silence_nudge_fired so subsequent silent turns
-                # don't fire repeat nudges
+                # one-off check-in after 3 silences (proposed disengagement intervention); silence_nudge_fired blocks repeats
                 if engine.consecutive_silences >= 3 and not silence_nudge_fired:
                     nudge_prompt = [
                         {"role": "system",
@@ -2610,7 +2577,7 @@ def main():
     else:
         print("  Using Pepper's camera for expression detection.")
 
-    # -- connect to Pepper (skipped in local mode) --
+    # connect to Pepper (skipped in local mode)
     ssh     = None
     ssh_tts = None
     energy_threshold = DEFAULT_ENERGY_THRESHOLD
@@ -2625,7 +2592,6 @@ def main():
         ssh_tts = ssh_connect()         # dedicated TTS connection
         print("  Connected.")
 
-        # -- calibrate ambient noise level --
         print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
         energy_threshold = nao_calibrate_ambient(ssh)
 
