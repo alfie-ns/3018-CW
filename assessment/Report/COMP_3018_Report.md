@@ -195,6 +195,7 @@ header-includes:
 | OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                        |
 | ----- | ------- | ------- | ---------------------- | ------------- | ------------------------------------------------------------------------ |
 | - [ ] | 647     | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | "deep learning based generation is prone to hallucinate unintended text" |
+| - [X] | 596     | S2.3.2  | Ji et al. (2023, p. 3) | p. 3          | *degeneration* defined; output that is "bland, incoherent, or gets stuck in repetitive loops" (§1 INTRODUCTION, para. 2, sent. 3). verified 2026-04-22 via PDF extraction (cross-checked with Gemini) |
 
 #### Picard (1997) -- `papers/Picard (1997) - Affective Computing.pdf`
 
@@ -463,7 +464,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [ ] CRITICAL: reconfigure report below to match newest gaze.py
 - [ ] CRIITCAL: reconfigure task-4/ to newest version when zipping and giving to Salman
 
-- [ ] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
+- [X] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
 - [ ] verify word count
 
 <!--
@@ -593,9 +594,158 @@ GAZE operates as a conversational loop rather than a rigid question-answer cycle
 
 **2- Verbal Answer (speech-based).** Pepper records audio via `ALAudioRecorder` with dynamic silence detection calibrated to the room's ambient noise level at startup; arousal bands are fixed. Recording terminates when 1.5 seconds of silence follows detected speech, or a 12-second hard ceiling is reached. The recorded WAV is transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract).
 
+\begin{lstlisting}[style=python, caption={\texttt{nao\_record}: calibrated-threshold silence detection via \texttt{getFrontMicEnergy} polling, with firmware fallback.}, label={lst:nao-record}]
+def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
+               record_max_secs: float = RECORD_MAX_SECS,
+               silence_secs: float = SILENCE_DURATION):
+    """Record audio on Pepper with dynamic silence detection.
+        - get robot's front microphone (getFrontMicEnergy) to stop recording early if silence detected
+        - calibrated energy threshold to avoid false positives from ambient noise 
+        - if getFrontMicEnergy is unsupported (e.g. older firmware), fall back to a safe fixed-duration recording to ensure the demo still works, albeit without silence detection
+    """
+
+    nao_run(ssh, f"""
+from naoqi import ALProxy
+import time
+
+rec  = ALProxy("ALAudioRecorder", "127.0.0.1", 9559)
+
+rec.stopMicrophonesRecording()
+rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [0, 0, 1, 0])
+
+try:
+    audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
+
+    speech_detected  = False
+    silence_start    = None
+    start            = time.time()
+    threshold        = {energy_threshold}
+
+    while True:
+        elapsed = time.time() - start
+
+        # hard ceiling; never exceed max duration
+        if elapsed >= {record_max_secs}:
+            break
+
+        # poll front microphone energy level
+        energy = audio.getFrontMicEnergy()
+
+        if elapsed < {RECORD_MIN_SECS}:
+            # minimum recording period
+            if energy > threshold:
+                speech_detected = True
+            time.sleep({SILENCE_POLL_SECS})
+            continue
+
+        if energy > threshold:
+            speech_detected = True
+            silence_start = None
+        else:
+            if speech_detected and silence_start is None:
+                silence_start = time.time()
+            if speech_detected and silence_start is not None:
+                if (time.time() - silence_start) >= {silence_secs}:
+                    break
+
+        time.sleep({SILENCE_POLL_SECS})
+
+except Exception as e:
+    # firmware fallback; getFrontMicEnergy() unsupported on this Pepper
+    # fall back to a safe fixed-duration recording so the demo never breaks
+    print("  [Silence detection failed: " + str(e) + "] Falling back to fixed-duration recording")
+    time.sleep({record_max_secs})
+
+rec.stopMicrophonesRecording()
+""")
+    sftp = ssh.open_sftp()
+    sftp.get(REMOTE_WAV, LOCAL_WAV)
+    sftp.close()
+\end{lstlisting}
+
+Whisper hallucinates on near-silent audio, emitting training-set tics (CJK-script gibberish, prompt-primed repetition loops); the latter a form of NLG *degeneration* wherein models get "stuck in repetitive loops" (Ji et al., 2023, p. 3). Transcription is therefore gated by five defences: 1) RMS pre-gate, 2) Silero-VAD, 3) a Vosk grammar-restricted wake-word gate ("Pepper"/"Gaze"), 4) Whisper's own `no_speech_prob`/`avg_logprob`/`compression_ratio` signals, and 5) a hallucination blacklist. A 500 ms (`time.sleep(0.5)`) speaker-tail flush precedes every recording's start to prevent the mic capturing the end of Pepper's previous utterance causing wake-word gate mis-fires.
+
+\begin{lstlisting}[style=python, caption={\texttt{transcribe}: five-layer defence chain against Whisper hallucination on near-silent audio (gaze.py, lines ~1357--1427).}, label={lst:whisper}]
+def transcribe() -> str:
+    """
+    Transcribe the local WAV with Whisper via a five-layer defence:
+      1- existing RMS + speech_detected pre-gate (in conversation_loop)
+      2- Silero VAD hard gate (this function)
+      3- Vosk wake-word gate (requires "Pepper" or "Gaze")
+      4- Whisper's own no_speech_prob + avg_logprob (from verbose_json)
+      5- aggressively-normalised hallucination blacklist
+
+    Returns "" on failure, on any gate rejecting, or when the
+    transcription normalises to a known-hallucination phrase.
+    """
+    if LOCAL_MODE and not _local_speech_detected:
+        return ""
+
+    # Layer 2: Silero VAD hard gate
+    if LOCAL_MODE and not has_real_speech(LOCAL_WAV):
+        print("  Silero VAD found no speech; skipping Whisper.")
+        return ""
+
+    # Layer 3: Vosk wake-word gate. User must say "Pepper"/"Gaze"; catches silent audio that slipped past Layers 1-2 (the original hallucination pain case).
+    if not has_wake_word(LOCAL_WAV):
+        print("  No wake-word detected; skipping Whisper.")
+        return ""
+
+    try:
+        with open(LOCAL_WAV, "rb") as fh:
+            resp = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=fh,
+                response_format="verbose_json",
+                temperature=0.0,
+                prompt="User answers a quiz or chats with a companion robot.",
+                timeout=API_TIMEOUT,
+            )
+        text = (getattr(resp, "text", "") or "").strip()
+
+        # Layer 4: Whisper self-signals (no_speech_prob + avg_logprob + compression_ratio per segment). resp is a Pydantic TranscriptionVerbose thus attribute access (not dict indexing).
+        segments = getattr(resp, "segments", None) or []
+        if segments:
+            no_speech_vals = [s.no_speech_prob for s in segments
+                              if getattr(s, "no_speech_prob", None) is not None]
+            logprob_vals = [s.avg_logprob for s in segments
+                            if getattr(s, "avg_logprob", None) is not None]
+            compression_vals = [s.compression_ratio for s in segments
+                                if getattr(s, "compression_ratio", None) is not None]
+            if no_speech_vals and max(no_speech_vals) > 0.6:
+                print(f"  Whisper flagged silence (max no_speech_prob="
+                      f"{max(no_speech_vals):.2f}); dropping {text!r}")
+                return ""
+            if logprob_vals and min(logprob_vals) < -1.0:
+                print(f"  Whisper low-confidence (min avg_logprob="
+                      f"{min(logprob_vals):.2f}); dropping {text!r}")
+                return ""
+            # compression_ratio > 2.4 catches repetition loops (e.g. "Q1. Q1. Q1..."); repeating tokens compress well. 2.4 matches local Whisper's default.
+            if compression_vals and max(compression_vals) > 2.4:
+                print(f"  Whisper repetition loop (max compression_ratio="
+                      f"{max(compression_vals):.2f}); dropping {text!r}")
+                return ""
+
+        # Layer 5: aggressively-normalised hallucination blacklist
+        if is_known_hallucination(text):
+            print(f"  Filtered Whisper hallucination: {text!r}")
+            return ""
+
+        # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
+        stripped = re.sub(r'(?i)^\s*(pepper|gaze)\b[,.\s]*', '', text).strip()
+        return stripped
+    except Exception as e:
+        print(f"  Whisper transcribe failed ({e}); returning empty")
+        return ""
+\end{lstlisting}
+
 **3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 577) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality; the two may disagree, wherein decision logic arbitrates.
 
 - [ ] waveform peak-normalisation -- accessibility for quieter brain-injured users beyond RAVDESS
+
+\begin{lstlisting}[style=python, caption={\texttt{SpeechEmotionModel.extract\_features}: MFCC + chroma + mel-spectrogram feature vector matching the WS-08 training pipeline, with peak-normalisation for quieter brain-injured users (gaze.py, lines ~192--220).}, label={lst:extract-features}]
+# PASTE SpeechEmotionModel.extract_features FROM gaze.py HERE (lines ~192--220, including the @staticmethod decorator)
+\end{lstlisting}
 
 **4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion; the Whisper call occurs *after* the timer halts, isolating deliberation time from API latency.
 
@@ -607,7 +757,7 @@ GAZE operates as a conversational loop rather than a rigid question-answer cycle
 - [ ] TODO: justify the round-1 generous default (7s / 2.5s / 15s) — frame around the stroke-recovery target user; aphasia and mental-arithmetic pauses make the baseline 1.5s silence tolerance unrealistic with no session history to fast-track from. Position as a fail-safe default, not a permanent setting.
 - [ ] TODO: justify the hard ceiling (20s) — defensive cap against signal-combination edge cases; UX bound so no single turn feels abandoned; headroom under `CMD_TIMEOUT` (60s) for future additions.
 
-The AdaptiveEngine's `infer_state()` method weighs eight signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The classification rules combine these in cross-modal ways (see Listing~\ref{lst:infer} and Table~\ref{tab:state-action}): neither visual nor vocal modality is trusted in isolation. GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3) were derived from pilot testing.
+The AdaptiveEngine's `infer_state()` method weighs eight signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive silence count, and consecutive wrong-answer streak length. The classification rules combine these in cross-modal ways (see Listing~\ref{lst:infer} and Table~\ref{tab:state-action}): neither visual nor vocal modality is trusted in isolation. GAZE's multi-signal approach, wherein temporal streaks override or corroborate instantaneous readings, addresses the brittleness Desai et al. (2013, p. 256) observe when systems depend on singular, noisy observations. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -658,42 +808,60 @@ The AdaptiveEngine's `infer_state()` method weighs eight signals to classify the
 \label{fig:multi-signal}
 \end{figure}
 
-The cross-modal inference rules are shown in Listing~\ref{lst:infer} (extracted from `gaze.py`, *lines 472--508*):
+The complete classification logic, cross-modal overrides included, is shown in Listing~\ref{lst:infer} (extracted from `gaze.py`, *lines 418--464*):
 
-\begin{lstlisting}[caption={Multi-signal inference rules (excerpt from \texttt{gaze.py}).}, label=lst:infer]
-
-# thriving: performing well regardless of resting face
-
-if (correctness >= CORRECTNESS_CEILING
-        and response_time < RESPONSE_TIME_BASELINE * 0.5):
+\begin{lstlisting}[caption={Multi-signal inference rules (verbatim excerpt from \texttt{gaze.py}, lines 418--464; method-body indentation stripped).}, label=lst:infer]
+# thriving: performing well, voice confirms positive state
+if (correctness >= CORRECTNESS_CEILING and response_time < RESPONSE_TIME_BASELINE * 0.5):
     return InferredState.THRIVING
-
-# camera says Angry but fast + correct (*@$\rightarrow$@*) they're fine
-
-if expression == "Angry" and correct
-    and response_time < RESPONSE_TIME_BASELINE * 0.6:
+# voice happy + correct + fast -> thriving even if face is neutral
+if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
+    return InferredState.THRIVING
+if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
     return InferredState.COMFORTABLE
 
-# disengaged: multiple signals pointing to checked-out
-
+# disengaged: multiple signals pointing to checked-out (Stroke-ward insight via Dr. Amir)
 if self.consecutive_silences >= SILENCE_THRESHOLD:
     return InferredState.DISENGAGED
 if (expression == "Neutral"
         and response_time > RESPONSE_TIME_BASELINE
         and correctness < 0.5):
     return InferredState.DISENGAGED
+if (low_arousal and expression == "Neutral"
+        and response_time > RESPONSE_TIME_BASELINE * 0.8):
+    return InferredState.DISENGAGED
 
-# frustrated: struggling + negative expression
+# Frustrated: negative expressions paired with poor performance or high arousal
+if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
+    return InferredState.FRUSTRATED
+if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
+    return InferredState.FRUSTRATED
+if (high_arousal and expression in ("Angry", "Disgust", "Fear")
+        and correctness < CORRECTNESS_FLOOR):
+    return InferredState.FRUSTRATED
+if (vocal_emotion in ("fearful", "disgust")
+        and expression in ("Angry", "Sad", "Fear", "Disgust")
+        and correctness < CORRECTNESS_FLOOR):
+    return InferredState.FRUSTRATED
 
-if expression in ("Angry", "Disgust")
-    and correctness < CORRECTNESS_FLOOR:
-    return InferredState.FRUSTRATED
-if self.consecutive_wrong >= 3
-    and expression in ("Angry", "Sad", "Fear"):
-    return InferredState.FRUSTRATED
+# Struggling: sadness, fear, or consistently low correctness without the high arousal of frustration
+if expression == "Sad" and response_time > RESPONSE_TIME_BASELINE * 0.7:
+    return InferredState.STRUGGLING
+if correctness < CORRECTNESS_FLOOR:
+    return InferredState.STRUGGLING
+if expression == "Fear" and not correct:
+    return InferredState.STRUGGLING
+if vocal_emotion == "fearful" and not correct:
+    return InferredState.STRUGGLING
+
+# cross-modal override: voice calm + performing OK -> comfortable: prevent false negatives where camera reads a frown but voice is calm
+if vocal_emotion == "calm" and correctness >= 0.5:
+    return InferredState.COMFORTABLE
+
+return InferredState.COMFORTABLE # otherwise they must just be comfortable
 \end{lstlisting}
 
-The `decide()` function then maps the inferred state to concrete adaptive actions: difficulty adjustment (easy, medium, hard), game switching (numbers $\leftrightarrow$ letters when the user is frustrated or disengaged), hint provision, encouragement, and tone selection. This maps onto Nikolaidis, Hsu and Srinivasa's (2017, p. 625) mutual-adaptation paradigm. Table~\ref{tab:state-action} summarises the mapping.
+The `decide()` function then maps the inferred state to concrete adaptive actions: difficulty adjustment (easy, medium, hard), game switching (numbers $\leftrightarrow$ letters when the user is frustrated or disengaged), hint provision, encouragement, and tone selection. This parallels Nikolaidis, Hsu and Srinivasa's (2017, p. 625) mutual-adaptation paradigm. Table~\ref{tab:state-action} summarises the mapping.
 
 \begin{table}[H]
 \centering
@@ -707,12 +875,14 @@ Thriving    & $\uparrow$ ramp up     & No  & No  & Energetic    & \textcolor{gre
 Comfortable & $\uparrow$ if $>$70\%  & No  & No  & Neutral      & White \\
 Struggling  & $\downarrow$ ease off  & No  & Yes & Encouraging  & \textcolor{yellow!80!black}{Yellow} \\
 Frustrated  & $\downarrow\downarrow$ Easy & After 4 wrong & No  & Calm & \textcolor{orange}{Orange} \\
-Disengaged  & ---                    & After 3 silent & No & Energetic & \textcolor{blue!60}{Blue} \\
+Disengaged  & ---                    & After 3 checkouts & No & Energetic & \textcolor{blue!60}{Blue} \\
 \bottomrule
 \end{tabular}
-\caption{State-to-action mapping. The adaptive engine translates each inferred state into a specific combination of difficulty adjustment, game-type switch, hint provision, tone selection, and LED colour. Arrows indicate direction of difficulty change relative to the current level.}
+\caption{State-to-action mapping. The adaptive engine translates each inferred state into a specific combination of difficulty adjustment, game-type switch, hint provision, tone selection, and LED colour. Arrows indicate direction of difficulty change relative to the current level, wherein the mapping applies solely to \texttt{decide()}'s engine output (the spoken-checkout path, e.g. repeated \textit{skip}); the main-loop tiered intervention on pure-silence turns, tier-1 check-in at 3 silences and tier-2 switch at 4, bypasses \texttt{decide()} entirely.}
 \label{tab:state-action}
 \end{table}
+
+Disengagement is flagged by three OR'd rules wherein any one trips it: 1) two consecutive silences (mic-empty or "skip"/"pass" checkout phrases), 2) neutral-face + response > 30s + rolling-correctness < 50% (the cognitive-checkout pattern), 3) quiet-voice + neutral-face + slow-ish response (early-warning drift, catches it before accuracy tanks). GAZE then tiers its intervention, gentle check-in at three silences, game-switch at four, wherein each tier fires at most once per silent spell.
 
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
