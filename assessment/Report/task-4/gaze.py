@@ -7,8 +7,8 @@ Novelty: multi-signal emotional inference; face (WS-10) + voice (WS-08)
 signal is trusted alone.
 
 Authorship (per proposal.pdf):
-- Alfie: code architecture, OpenAI integration, facial recognition, AdaptiveEngine
-- Salman: game logic, gestures, LEDs, TTS pacing, session save/resume
+- Alfie: code architecture, OpenAI integration, facial recognition, AdaptiveEngine, etc
+- Salman: game logic, gestures, LEDs, TTS pacing, session save/resume, testing
 
 CRITICAL:
 - **PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN**
@@ -337,7 +337,7 @@ class AdaptiveDecision:
 
 
 class AdaptiveEngine:
-    """Takes all five input signals and *infers* the user's real state The adaptive engine also evaluates whether its previous adaptation worked, feeding that evaluation into the next round's prompt."""
+    """Takes all five input signals and *infers* the user's real state. The adaptive engine also evaluates if its previous adaptation worked, feeding that evaluation into the next round's prompt."""
 
     def __init__(self):
         self.history: list[RoundResult]   = []
@@ -804,8 +804,8 @@ def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
         - calibrated energy threshold to avoid false positives from ambient noise 
         - if getFrontMicEnergy is unsupported (e.g. older firmware), fall back to a safe fixed-duration recording to ensure the demo still works, albeit without silence detection
     """
-
-    nao_run(ssh, f"""
+    # SSH payload in a script wherein it tries to initialise ALAudioDevice to poll getFrontMicEnergy; if that fails due to older firmware fall back to a fixed-duration recording, thus ensuring the demo still works albeit without silence detection
+    nao_run(ssh, f""" 
 from naoqi import ALProxy
 import time
 
@@ -1056,7 +1056,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
                     rms = (np.mean(data.astype(np.float64) ** 2)) ** 0.5 # compute RMS of the latest chunk for real-time feedback
                     global _last_rms
                     _last_rms = rms
-                    print(f"\r    [{elapsed:.1f}s] RMS: {rms:.0f} {'▓' if rms > LOCAL_SILENCE_RMS else '░'}", end="", flush=True)
+                    print(f"\r    [{elapsed:.1f}s] RMS: {rms:.0f} {'▓' if rms > LOCAL_SILENCE_RMS else '░'}", end="", flush=True) # '▓' (U+2593 DARK SHADE) and '░' (U+2591 LIGHT SHADE) extracted from Unicode 1.1 Block Elements
 
                     if elapsed < LOCAL_MIN_SECS:
                         if rms > LOCAL_SILENCE_RMS:
@@ -1154,11 +1154,11 @@ def record(ssh, energy_threshold,
 # Each gesture is a motion sequence aligned to the game/emotional context:
 #   - celebrate: arms up + small bicep curls, for thriving moments and milestones
 #   - encourage: one arm forward with open hand, for encouragement when struggling
-#   - think: one hand on chin, for thinking moments and when user is taking a while
+#   - think: one hand on chin, for thinking moments and when user is taking long
 #   - wave: friendly wave to re-engage when disengaged
 #   - calm: slow open-arm gesture, for calming down when frustrated
 #   - energetic: quick open-arm raises, for boosting energy when disengaged or thriving
-#   - neutral: resting; no gesture-movements as no need
+#   - neutral: resting; no gesture-movements as no need due to neutrualness
 
 GESTURE_CODE = {
     "celebrate": """
@@ -1273,7 +1273,7 @@ def measure_volume() -> float:
         print(f"  Volume RMS calc failed: {e}")
         return 0.0
 
-# Whisper training-set tics on silent/near-silent audio (YouTube outros, CJK fillers); stored pre-normalised so is_known_hallucination() matches regardless of decoration.
+# Whisper training-set tic-blacklist on silent/near-silent audio (YouTube outros, CJK fillers); stored pre-normalised so is_known_hallucination() matches regardless of decoration.
 WHISPER_HALLUCINATIONS = {
     "thank you for watching",
     "thanks for watching",
@@ -1288,11 +1288,9 @@ WHISPER_HALLUCINATIONS = {
     "see you next time",
     "thank you", "thanks", "bye",
     "you", "mm", "hmm", "uh", "um",
-    # CJK fillers Whisper emits on silence (pre-normalised)
     "おいしいねにかねしたかな",
     "ご視聴ありがとうございました",
     "ありがとうございました",
-    # Korean YouTube sponsorship/ad-disclaimer hallucinations
     "이 영상은 유료광고를 포함하고 있습니다",
     "구독과 좋아요 부탁드립니다",
 }
@@ -1305,7 +1303,7 @@ def normalise_for_blacklist(text: str) -> str:
 
 def is_known_hallucination(text: str) -> bool:
     norm = normalise_for_blacklist(text)
-    return norm == "" or norm in WHISPER_HALLUCINATIONS
+    return norm == "" or norm in WHISPER_HALLUCINATIONS # return true if norm post-strip empty or matches a known-hallucination phrase
 
 def has_real_speech(wav_path: str, min_speech_ms: int = 500,
                      threshold: float = 0.6) -> bool:
@@ -1314,7 +1312,7 @@ def has_real_speech(wav_path: str, min_speech_ms: int = 500,
         return True
     try:
         wav = read_audio(wav_path, sampling_rate=LOCAL_SAMPLE_RATE)
-        segments = get_speech_timestamps(
+        segments = get_speech_timestamps( # pass in the audio and model to return a list of dicts containing the start and end frame indices of genuine speech
             wav, _silero_model,
             sampling_rate=LOCAL_SAMPLE_RATE,
             min_speech_duration_ms=min_speech_ms,
@@ -1329,10 +1327,10 @@ def has_real_speech(wav_path: str, min_speech_ms: int = 500,
 def has_wake_word(wav_path: str) -> bool:
     """
     Vosk wake-word gate. True only if "Pepper" or "Gaze" is heard in the
-    WAV. The 3-token grammar restriction (pepper, gaze, [unk]) strongly
-    constrains but does not eliminate false positives; phonetic
+    WAV. The 3-token grammar restriction (pepper, gaze, [unk])
+    constrains but doesn't eliminate false positives; phonetic
     near-neighbours may still match. Fail-open (returns True) if the
-    Vosk model didn't load thus the four layers still protect us.
+    Vosk model didn't load so the four layers still protect from hallucinations.
     """
     if _vosk_model is None or KaldiRecognizer is None:
         return True
@@ -1429,7 +1427,10 @@ def transcribe() -> str:
 # Alfie: FACIAL EXPRESSION PIPELINE
 
 def preview_thread_loop(camera, face_model, face_cascade):
-    """Continuous camera preview (daemon thread)."""
+    """Continuous camera preview (daemon thread to prevent **catastrophic** failing 
+       because terminating main program this background thread will be 
+       terminated automatically and won't freeze when the main program exits"""
+
     global _last_emotion, _preview_frame
     while True:
         ret, frame = camera.read()
@@ -1510,7 +1511,7 @@ API_TIMEOUT = 10  # 10-second timeout; prevents Pepper freezing if OpenAI/networ
 # Alfie's
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
-    """Verify the user's spoken answer via GPT."""
+    """Verify the user's answer via GPT."""
     if not user_answer.strip():
         return False
 
@@ -1697,8 +1698,7 @@ def build_signal_context(engine: AdaptiveEngine,
     recent_faces = [r.facial_expression for r in engine.history[-3:]]
     recent_vocal = [r.vocal_emotion for r in engine.history[-3:]]
 
-    # map raw budget to a semantic label so the LLM reflects pacing without
-    # ever seeing or repeating the raw seconds verbatim in dialogue
+    # map raw budget to a semantic label so the LLM reflects pacing without ever seeing or repeating the raw seconds verbatim in dialogue
     if engine.think_budget_secs >= 17.0:
         pacing = "relaxed and patient"
     elif engine.think_budget_secs <= 13.0:
@@ -1960,7 +1960,7 @@ class GazeDashboard:
         for var in (self._round_var, self._score_var, self._streak_var):
             tk.Label(right, textvariable=var).pack(anchor="w")
 
-        # transcription — only what the user said; correct answer stays
+        # transcription: only what the user said; correct answer stays
         # on stdout so watchers don't read it off the screen mid-game
         tk.Label(right, text="").pack()
         tk.Label(right, text="Transcription:",
@@ -2000,7 +2000,7 @@ class GazeDashboard:
         for var in (self._diff_var, self._tone_var, self._adapt_var):
             tk.Label(right, textvariable=var).pack(anchor="w")
 
-        # adaptation-eval note (tiny grey text)
+        # adaptation-eval note (tiny 'grey' text)
         self._eval_var = tk.StringVar(value="")
         self._eval_label = tk.Label(right, textvariable=self._eval_var,
                                     font=("TkDefaultFont", 9), fg="grey",
