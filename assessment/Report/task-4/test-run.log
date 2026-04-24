@@ -32,285 +32,15 @@ Loading speech emotion model...
 
 Calibrating Mac microphone ambient noise level...
 Calibrating Mac mic (stay quiet for 3s)...
-  Ambient RMS: 97, silence threshold: 147, transcription gate: 588
+  Ambient RMS: 0, silence threshold: 25, transcription gate: 100
   Arousal thresholds: QUIET=200, LOUD=2000
   Dashboard launched.
 
-Robot: Hello! I'm GAZE, your companion. Before we begin, you can pick my personality: cheeky, mentor, coach, or therapeutic. Or just say hello and I'll be my usual self!
-
-Listening for personality choice...
-  Recording from Mac mic (up to 12s, stops after silence)...
-    [1.0s] RMS: 14 ░    [1.5s] RMS: 19 ░    [2.0s] RMS: 2715 ▓    [2.5s] RMS: 1281 ▓    [3.0s] RMS: 1593 ▓    [3.5s] RMS: 2197 ▓    [4.0s] RMS: 63 ░    [4.5s] RMS: 13 ░    [5.0s] RMS: 14 ░    [5.5s] RMS: 20 ░
-  Recording saved (5.5s, speech=yes).
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: Hi Pepper, let's be therapeutic.
-  Active personality: therapeutic
-
-Robot: Hello, I'm here for you—whether you'd like to talk, play a gentle game, or simply share a quiet moment together. Let me know what feels good for you right now.
-
----------------------------------------- Turn 1 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.78)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 10 ░    [1.5s] RMS: 14 ░    [2.0s] RMS: 13 ░    [2.5s] RMS: 11 ░    [3.0s] RMS: 24 ░    [3.5s] RMS: 249 ▓    [4.0s] RMS: 1433 ▓    [4.5s] RMS: 1481 ▓    [5.0s] RMS: 1167 ▓    [5.5s] RMS: 21 ░    [6.0s] RMS: 14 ░    [6.5s] RMS: 14 ░    [7.0s] RMS: 17 ░    [7.5s] RMS: 14 ░    [8.0s] RMS: 11 ░
-  Recording saved (8.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 750
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  No wake-word detected; skipping Whisper.
-  Heard: (silence)
-
----------------------------------------- Turn 2 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.76)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 11 ░    [1.5s] RMS: 11 ░    [2.0s] RMS: 10 ░    [2.5s] RMS: 12 ░    [3.0s] RMS: 16 ░    [3.5s] RMS: 16 ░    [4.0s] RMS: 19 ░    [4.5s] RMS: 15 ░    [5.0s] RMS: 13 ░    [5.5s] RMS: 20 ░    [6.0s] RMS: 20 ░    [6.5s] RMS: 17 ░    [7.0s] RMS: 16 ░
+Robot: Before we start, may I know what to call you? Just your first name is perfect.
+  Recording from Mac mic (up to 10.0s, stops after silence)...
+    [0.5s] RMS: 0 ░    [0.8s] RMS: 0 ░    [1.0s] RMS: 0 ░    [1.2s] RMS: 0 ░    [1.5s] RMS: 0 ░    [1.8s] RMS: 0 ░    [2.0s] RMS: 0 ░    [2.2s] RMS: 0 ░    [2.5s] RMS: 0 ░    [2.8s] RMS: 0 ░    [3.0s] RMS: 0 ░    [3.2s] RMS: 0 ░    [3.5s] RMS: 0 ░    [3.8s] RMS: 0 ░    [4.0s] RMS: 0 ░    [4.2s] RMS: 0 ░    [4.5s] RMS: 0 ░    [4.8s] RMS: 0 ░    [5.0s] RMS: 0 ░    [5.2s] RMS: 0 ░    [5.5s] RMS: 0 ░    [5.8s] RMS: 0 ░    [6.0s] RMS: 0 ░    [6.2s] RMS: 0 ░    [6.5s] RMS: 0 ░    [6.8s] RMS: 0 ░    [7.0s] RMS: 0 ░
+  Pre-norm RMS 0 < 150; skipping normalisation (prevents hallucination on near-silent input).
   Recording saved (7.0s, speech=no).
-  Vocal emotion: fearful (1.00)
-  Volume RMS: 15
-  No real speech detected (speech_flag=False, vol_rms=15, floor=147); skipping transcription.
   Heard: (silence)
 
----------------------------------------- Turn 3 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.76)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 11 ░    [1.5s] RMS: 15 ░    [2.0s] RMS: 21 ░    [2.5s] RMS: 16 ░    [3.0s] RMS: 31 ░    [3.5s] RMS: 38 ░    [4.0s] RMS: 1930 ▓    [4.5s] RMS: 2854 ▓    [5.0s] RMS: 2450 ▓    [5.5s] RMS: 3116 ▓    [6.0s] RMS: 3116 ▓    [6.5s] RMS: 1901 ▓    [7.0s] RMS: 702 ▓    [7.5s] RMS: 29 ░    [8.0s] RMS: 23 ░    [8.5s] RMS: 14 ░    [9.0s] RMS: 21 ░    [9.5s] RMS: 18 ░    [10.0s] RMS: 16 ░
-  Recording saved (10.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1471
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: let's play a numerical game.
-  Calling tool generate_game_question({'game_type': 'numbers', 'difficulty': 'MEDIUM'})
-  Tool returned: {"question": "Use the numbers 25, 50, 6, 8, 3, and 7 to make the target number 322. You can use each number at most once
-
-Robot: Great choice! Here’s your numbers challenge: Use 25, 50, 6, 8, 3, and 7 to reach the target number 322. You can add, subtract, multiply, or divide—each number only once. Take your time and let me know your solution when you're ready.
-(Game answer: ((50 * 6) + (8 * 3)) - 7 = 322)
-
----------------------------------------- Turn 4 ----------------------------------------
-Capturing expression...
-  Expression: Happy (0.99)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 10 ░    [1.5s] RMS: 24 ░    [2.0s] RMS: 17 ░    [2.5s] RMS: 12 ░    [3.0s] RMS: 14 ░    [3.5s] RMS: 2279 ▓    [4.0s] RMS: 1590 ▓    [4.5s] RMS: 2468 ▓    [5.0s] RMS: 747 ▓    [5.5s] RMS: 1023 ▓    [6.0s] RMS: 1914 ▓    [6.5s] RMS: 1914 ▓    [7.0s] RMS: 855 ▓    [7.5s] RMS: 1427 ▓    [8.0s] RMS: 684 ▓    [8.5s] RMS: 12 ░    [9.0s] RMS: 16 ░    [9.5s] RMS: 17 ░    [10.0s] RMS: 20 ░    [10.5s] RMS: 50 ░    [11.0s] RMS: 20 ░
-  Recording saved (11.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1131
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  No wake-word detected; skipping Whisper.
-  Heard: (silence)
-
----------------------------------------- Turn 5 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.79)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 16 ░    [1.5s] RMS: 18 ░    [2.0s] RMS: 17 ░    [2.5s] RMS: 16 ░    [3.0s] RMS: 16 ░    [3.5s] RMS: 18 ░    [4.0s] RMS: 28 ░    [4.5s] RMS: 40 ░    [5.0s] RMS: 25 ░    [5.5s] RMS: 12 ░    [6.0s] RMS: 12 ░    [6.5s] RMS: 19 ░    [7.0s] RMS: 22 ░
-  Recording saved (7.0s, speech=no).
-  Vocal emotion: calm (0.99)
-  Volume RMS: 21
-  No real speech detected (speech_flag=False, vol_rms=21, floor=147); skipping transcription.
-  Heard: (silence)
-
----------------------------------------- Turn 6 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.79)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 12 ░    [1.5s] RMS: 17 ░    [2.0s] RMS: 85 ░    [2.5s] RMS: 48 ░    [3.0s] RMS: 24 ░    [3.5s] RMS: 18 ░    [4.0s] RMS: 16 ░    [4.5s] RMS: 26 ░    [5.0s] RMS: 24 ░    [5.5s] RMS: 24 ░    [6.0s] RMS: 13 ░    [6.5s] RMS: 23 ░    [7.0s] RMS: 17 ░    [7.5s] RMS: 233 ▓    [8.0s] RMS: 2775 ▓    [8.5s] RMS: 3205 ▓    [9.0s] RMS: 2785 ▓    [9.5s] RMS: 2756 ▓    [10.0s] RMS: 2569 ▓    [10.5s] RMS: 2569 ▓    [11.0s] RMS: 1740 ▓    [11.5s] RMS: 1396 ▓    [12.0s] RMS: 1901 ▓    [12.5s] RMS: 1987 ▓    [13.0s] RMS: 1127 ▓    [13.5s] RMS: 1769 ▓    [14.0s] RMS: 849 ▓    [14.5s] RMS: 1566 ▓    [15.0s] RMS: 1091 ▓
-  Recording saved (15.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1430
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: do 50 times 6, then 25 plus 8 plus 3.
-
-Robot: Nice start! 50 times 6 gives you 300. Then, adding 25, 8, and 3 together gets you 36. What would you like to do next?
-(Game answer: ((50 * 6) + (8 * 3)) - 7 = 322)
-
----------------------------------------- Turn 7 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.77)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 151 ▓    [1.5s] RMS: 29 ░    [2.0s] RMS: 37 ░    [2.5s] RMS: 23 ░    [3.0s] RMS: 22 ░    [3.5s] RMS: 22 ░    [4.0s] RMS: 47 ░
-  Recording saved (4.0s, speech=yes).
-  Vocal emotion: disgust (0.99)
-  Volume RMS: 52
-  No real speech detected (speech_flag=True, vol_rms=52, floor=147); skipping transcription.
-  Heard: (silence)
-
----------------------------------------- Turn 8 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.78)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 17 ░    [1.5s] RMS: 20 ░    [2.0s] RMS: 24 ░    [2.5s] RMS: 27 ░    [3.0s] RMS: 28 ░    [3.5s] RMS: 37 ░    [4.0s] RMS: 1248 ▓    [4.5s] RMS: 2411 ▓    [5.0s] RMS: 2093 ▓    [5.5s] RMS: 1763 ▓    [6.0s] RMS: 1763 ▓    [6.5s] RMS: 1274 ▓    [7.0s] RMS: 39 ░    [7.5s] RMS: 20 ░    [8.0s] RMS: 22 ░    [8.5s] RMS: 24 ░    [9.0s] RMS: 18 ░    [9.5s] RMS: 25 ░
-  Recording saved (9.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1138
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  No wake-word detected; skipping Whisper.
-  Heard: (silence)
-
----------------------------------------- Turn 9 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.76)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 15 ░    [1.5s] RMS: 21 ░    [2.0s] RMS: 20 ░    [2.5s] RMS: 23 ░    [3.0s] RMS: 22 ░    [3.5s] RMS: 22 ░    [4.0s] RMS: 20 ░    [4.5s] RMS: 21 ░    [5.0s] RMS: 19 ░    [5.5s] RMS: 20 ░    [6.0s] RMS: 22 ░    [6.5s] RMS: 22 ░    [7.0s] RMS: 21 ░    [7.5s] RMS: 22 ░    [8.0s] RMS: 21 ░
-  Recording saved (8.0s, speech=no).
-  Vocal emotion: fearful (1.00)
-  Volume RMS: 20
-  No real speech detected (speech_flag=False, vol_rms=20, floor=147); skipping transcription.
-  Heard: (silence)
-
-Robot (nudge): I'm here whenever you feel ready to chat or just sit together quietly.
-
----------------------------------------- Turn 10 ----------------------------------------
-Capturing expression...
-  Expression: Happy (0.96)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 18 ░    [1.5s] RMS: 22 ░    [2.0s] RMS: 21 ░    [2.5s] RMS: 19 ░    [3.0s] RMS: 20 ░    [3.5s] RMS: 21 ░    [4.0s] RMS: 21 ░    [4.5s] RMS: 27 ░    [5.0s] RMS: 21 ░    [5.5s] RMS: 22 ░    [6.0s] RMS: 26 ░    [6.5s] RMS: 26 ░    [7.0s] RMS: 1972 ▓    [7.5s] RMS: 1395 ▓    [8.0s] RMS: 21 ░    [8.5s] RMS: 24 ░    [9.0s] RMS: 22 ░    [9.5s] RMS: 21 ░    [10.0s] RMS: 26 ░    [10.5s] RMS: 27 ░    [11.0s] RMS: 21 ░
-  Recording saved (11.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 744
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  No wake-word detected; skipping Whisper.
-  Heard: (silence)
-
----------------------------------------- Turn 11 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.69)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 16 ░    [1.5s] RMS: 21 ░    [2.0s] RMS: 23 ░    [2.5s] RMS: 20 ░    [3.0s] RMS: 21 ░    [3.5s] RMS: 23 ░    [4.0s] RMS: 25 ░    [4.5s] RMS: 25 ░    [5.0s] RMS: 2992 ▓    [5.5s] RMS: 1564 ▓    [6.0s] RMS: 1564 ▓    [6.5s] RMS: 2236 ▓    [7.0s] RMS: 2996 ▓    [7.5s] RMS: 1410 ▓    [8.0s] RMS: 26 ░    [8.5s] RMS: 25 ░    [9.0s] RMS: 25 ░    [9.5s] RMS: 25 ░    [10.0s] RMS: 22 ░    [10.5s] RMS: 25 ░    [11.0s] RMS: 20 ░    [11.5s] RMS: 25 ░
-  Recording saved (11.5s, speech=yes).
-  Vocal emotion: calm (0.90)
-  Volume RMS: 1146
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: let's play a letters game.
-  Calling tool generate_game_question({'game_type': 'letters', 'difficulty': 'MEDIUM'})
-  Tool returned: {"question": "Form the longest word possible using the following 9 letters: T, E, R, A, D, O, S, N, I. Each letter can o
-
-Robot: Here’s your letters round: Try to form the longest word possible with these 9 letters—T, E, R, A, D, O, S, N, I. Each letter can only be used once. What word can you find?
-(Game answer: deration)
-
----------------------------------------- Turn 12 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.66)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 16 ░    [1.5s] RMS: 22 ░    [2.0s] RMS: 23 ░    [2.5s] RMS: 1747 ▓    [3.0s] RMS: 3681 ▓    [3.5s] RMS: 2124 ▓    [4.0s] RMS: 31 ░    [4.5s] RMS: 37 ░    [5.0s] RMS: 29 ░    [5.5s] RMS: 27 ░    [6.0s] RMS: 23 ░    [6.5s] RMS: 23 ░
-  Recording saved (6.5s, speech=yes).
-  Vocal emotion: calm (0.91)
-  Volume RMS: 1326
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  No wake-word detected; skipping Whisper.
-  Heard: (silence)
-
----------------------------------------- Turn 13 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.80)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [1.0s] RMS: 22 ░    [1.5s] RMS: 25 ░    [2.0s] RMS: 26 ░    [2.5s] RMS: 39 ░    [3.0s] RMS: 30 ░    [3.5s] RMS: 53 ░    [4.0s] RMS: 52 ░    [4.5s] RMS: 3322 ▓    [5.0s] RMS: 1831 ▓    [5.5s] RMS: 3150 ▓    [6.0s] RMS: 3150 ▓    [6.5s] RMS: 1778 ▓    [7.0s] RMS: 254 ▓    [7.5s] RMS: 26 ░    [8.0s] RMS: 27 ░    [8.5s] RMS: 33 ░    [9.0s] RMS: 58 ░    [9.5s] RMS: 24 ░    [10.0s] RMS: 28 ░
-  Recording saved (10.0s, speech=yes).
-  Vocal emotion: calm (0.96)
-  Volume RMS: 1174
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: how about read?
-  Calling tool check_game_answer({'user_answer': 'read', 'correct_answer': 'deration', 'question_context': 'Form the longest word possible using the following 9 letters: T, E, R, A, D, O, S, N, I. Each letter can only be used once.'})
-  Tool returned: {"correct": true}
-
-Robot: Great job! "Read" is a valid word using those letters. Would you like to try finding a longer word, or shall we switch things up?
-
----------------------------------------- Turn 14 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.77)
-Listening...
-  Recording from Mac mic (up to 12.0s, stops after silence)...
-    [1.0s] RMS: 17 ░    [1.5s] RMS: 23 ░    [2.0s] RMS: 1073 ▓    [2.5s] RMS: 1768 ▓    [3.0s] RMS: 3326 ▓    [3.5s] RMS: 1779 ▓    [4.0s] RMS: 44 ░    [4.5s] RMS: 20 ░    [5.0s] RMS: 24 ░    [5.5s] RMS: 28 ░
-  Recording saved (5.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1378
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: how would we switch things up?
-
-Robot: We could chat about something else you enjoy, try a different type of game, or even have a gentle mindfulness moment together. What feels right for you?
-
----------------------------------------- Turn 15 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.86)
-Listening...
-  Recording from Mac mic (up to 12.0s, stops after silence)...
-    [1.0s] RMS: 23 ░    [1.5s] RMS: 964 ▓    [2.0s] RMS: 2545 ▓    [2.5s] RMS: 1832 ▓    [3.0s] RMS: 29 ░    [3.5s] RMS: 23 ░    [4.0s] RMS: 27 ░    [4.5s] RMS: 26 ░
-  Recording saved (4.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1093
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  No wake-word detected; skipping Whisper.
-  Heard: (silence)
-
----------------------------------------- Turn 16 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.80)
-Listening...
-  Recording from Mac mic (up to 12.0s, stops after silence)...
-    [1.0s] RMS: 17 ░    [1.5s] RMS: 24 ░    [2.0s] RMS: 24 ░    [2.5s] RMS: 254 ▓    [3.0s] RMS: 3138 ▓    [3.5s] RMS: 4836 ▓    [4.0s] RMS: 1501 ▓    [4.5s] RMS: 24 ░    [5.0s] RMS: 30 ░    [5.5s] RMS: 24 ░    [6.0s] RMS: 24 ░    [6.5s] RMS: 24 ░
-  Recording saved (6.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1793
-LOG (VoskAPI:Recognizer():recognizer.cc:63) ["pepper", "gaze", "[unk]"]
-LOG (VoskAPI:Estimate():language_model.cc:142) Estimating language model with ngram-order=2, discount=0.5
-LOG (VoskAPI:OutputToFst():language_model.cc:209) Created language model with 4 states and 6 arcs.
-  Heard: I am not too sure.
-
-Robot: That’s completely okay. We can simply sit together for a moment, or I can offer gentle suggestions if you’d like. Just let me know if anything sparks your curiosity.
-
----------------------------------------- Turn 17 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.78)
-Listening...
-  Recording from Mac mic (up to 12.0s, stops after silence)...
-    [1.0s] RMS: 20 ░    [1.5s] RMS: 27 ░    [2.0s] RMS: 22 ░    [2.5s] RMS: 24 ░    [3.0s] RMS: 25 ░    [3.5s] RMS: 50 ░    [4.0s] RMS: 23 ░    [4.5s] RMS: 25 ░    [5.0s] RMS: 23 ░
-  Recording saved (5.0s, speech=no).
-  Vocal emotion: happy (0.46) — LOW CONFIDENCE, treating as neutral
-  Volume RMS: 27
-  No real speech detected (speech_flag=False, vol_rms=27, floor=147); skipping transcription.
-  Heard: (silence)
-
----------------------------------------- Turn 18 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.80)
-Listening...
-  Recording from Mac mic (up to 12.0s, stops after silence)...
-    [1.0s] RMS: 16 ░    [1.5s] RMS: 23 ░    [2.0s] RMS: 20 ░    [2.5s] RMS: 20 ░    [3.0s] RMS: 22 ░    [3.5s] RMS: 20 ░    [4.0s] RMS: 29 ░    [4.5s] RMS: 35 ░    [5.0s] RMS: 193 ▓    [5.5s] RMS: 85 ░    [6.0s] RMS: 85 ░    [6.5s] RMS: 458 ▓    [7.0s] RMS: 261 ▓
   [Dashboard] Quit requested.
