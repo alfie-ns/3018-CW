@@ -50,7 +50,7 @@ times
 - [ ] Mainly, fix: fix dashboard; saves each time; protise face over voice
 """ 
 
-import os, re, sys, json, time, types, wave, struct, tempfile, threading, subprocess, unicodedata
+import os, re, sys, json, time, types, wave, struct, socket, textwrap, tempfile, threading, subprocess, unicodedata
 import tkinter as tk
 from dataclasses import dataclass, field
 from enum import Enum
@@ -126,7 +126,8 @@ REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
-VOLUME_THRESHOLD = 120  # RMS amplitude; below this the WAV is silence/ambient noise, not speech. Set at/above normalise_wav's min_rms_int16 (150) so a skipped normalisation (silent file) also gets caught by this NAO-mode pre-transcribe gate; prevents hallucinations on Pepper's dead-quiet room recordings.
+VOLUME_THRESHOLD = 120  # RMS; dashboard label only ("quiet" vs "normal"). Not a transcription gate; see NAO_MIN_RMS_TO_TRANSCRIBE.
+NAO_MIN_RMS_TO_TRANSCRIBE = 30  # near-empty WAV floor for the NAO-mode pre-transcribe gate; Silero + Whisper + blacklist do the real filtering downstream.
 FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; thus treat as Neutral
 VOICE_CONFIDENCE_THRESHOLD = 0.5  # threshold for vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
@@ -184,7 +185,6 @@ CORRECTNESS_WINDOW     = 5 # rolling window size
 CORRECTNESS_FLOOR      = 0.4 # below thus ease off
 CORRECTNESS_CEILING    = 0.8 # above thus ramp up
 SILENCE_THRESHOLD      = 2 # consecutive non-responses before intervention
-MAX_ROUNDS             = 20 # natural session end
 
 SAVE_FILE = os.path.join(SCRIPT_DIR, "gaze_save.json")
 
@@ -406,12 +406,6 @@ class AdaptiveEngine:
         if not recent:
             return 0.5  # no data -> assume middle (neutral)
         return sum(1 for r in recent if r.correct) / len(recent)
-
-    def avg_response_time(self) -> float:
-        recent = self.history[-CORRECTNESS_WINDOW:]
-        if not recent:
-            return RESPONSE_TIME_BASELINE / 2
-        return sum(r.response_time for r in recent) / len(recent)
 
 
     VOLUME_QUIET = 200 # below this -> low arousal (quiet/disengaged)
@@ -783,17 +777,9 @@ DIFFICULTY_DESCRIPTIONS = {
     Difficulty.HARD:   "hard (obscure, multi-step, requires deep knowledge)",
 }
 
-TONE_INSTRUCTIONS = {
-    "encouraging": "Use a warm, supportive tone. Be patient.",
-    "celebratory": "Be enthusiastic and celebratory. The user is doing brilliantly.",
-    "calm":        "Use a calm, reassuring tone. No pressure.",
-    "energetic":   "Be upbeat and energetic. Keep the energy high.",
-    "neutral":     "Use a friendly, natural tone.",
-}
-
 # SSH AND PEPPER ROBOT HELPERS
 # (adapted from lab-robot-code-fin.py i.e. when 
-#  we tested OpenAI on the NAO robot perhaps too early)
+# we tested OpenAI on the NAO robot perhaps too early)
 
 def ssh_connect():
     """Open SSH connection to Pepper and return the client."""
@@ -871,7 +857,7 @@ import time
 rec  = ALProxy("ALAudioRecorder", "127.0.0.1", 9559)
 
 rec.stopMicrophonesRecording()
-rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [0, 0, 1, 0])
+rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [1, 1, 1, 1])
 
 try:
     audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
@@ -929,72 +915,38 @@ rec.stopMicrophonesRecording()
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_WAV, LOCAL_WAV)
     sftp.close()
-    # normalise_wav disabled: amplifies noise on near-silent Pepper WAVs, boosts Whisper hallucinations rather than reducing them.
-    # normalise_wav(LOCAL_WAV)
+    # loudness normalisation removed: amplified near-silent room noise into Whisper hallucinations, hence force_mono_16k_wav() canonicalises without a gain stage.
+
+    # WAV layout diagnostic; four-mic recording may land multi-channel
+    try:
+        with wave.open(LOCAL_WAV, "rb") as wf:
+            secs = wf.getnframes() / float(wf.getframerate())
+            print(f"  WAV debug: channels={wf.getnchannels()}, "
+                  f"rate={wf.getframerate()}, frames={wf.getnframes()}, "
+                  f"secs={secs:.2f}")
+    except Exception as e:
+        print(f"  WAV debug failed: {e}")
+
+    # collapse to mono 16 kHz so downstream gates see a canonical layout
+    force_mono_16k_wav(LOCAL_WAV)
 
 # Alfie's
-def normalise_wav(path: str, target_dbfs: float = -3.0,
-                  min_rms_int16: float = 150.0,
-                  max_gain: float = 6.0) -> None:
-    """Normalise a 16-bit WAV IF AND ONLY IF it contains sustained speech-
-    level energy. Key properties:
-      1- RMS-gated, not peak-gated. A single background click (peak=800) on
-         an otherwise-silent file would pass a naive peak check and get
-         amplified 29×, feeding Whisper pure boosted noise and triggering
-         classic training-set attractors ('Please see the complete disclaimer
-         at https://sites.google.com...', 'コメント欄にコメント欄に...', year
-         numbers). RMS captures whether the whole file has energy or just a
-         spurious spike.
-      2- Gain-capped at `max_gain` (6×). Without a cap, a quiet-peak file
-         gets unbounded amplification and downstream gates receive what is
-         statistically indistinguishable from speech regardless of content.
-      3- Skips entirely for silent / near-silent files; downstream gates
-         (Silero VAD, Whisper no_speech_prob, measure_volume + VOLUME_THRESHOLD)
-         then see the true quiet RMS and reject transcription, preventing
-         hallucinations at source."""
+def force_mono_16k_wav(path: str) -> None:
+    """Canonicalise `path` to mono 16 kHz int16 PCM; pick Pepper's loudest mic by RMS rather than averaging the four (they're not phase-aligned, hence a mean partially cancels speech)."""
     try:
-        with wave.open(path, "rb") as wf:
-            params = wf.getparams()
-            frames = wf.readframes(wf.getnframes())
+        audio, sr = sf.read(path, dtype="float32")
+        if audio.size == 0:
+            return
+        if audio.ndim > 1:
+            # pick the loudest mic instead of averaging; Pepper's four mics aren't phase-aligned, so a mean would partially cancel speech
+            rms_by_channel = np.sqrt(np.mean(audio.astype(np.float64) ** 2, axis=0))
+            audio = audio[:, int(np.argmax(rms_by_channel))]
+        if sr != LOCAL_SAMPLE_RATE:
+            audio = librosa.resample(audio, orig_sr=sr, target_sr=LOCAL_SAMPLE_RATE)
+        audio = np.clip(audio, -1.0, 1.0)
+        sf.write(path, audio, LOCAL_SAMPLE_RATE, subtype="PCM_16")
     except Exception as e:
-        print(f"  WAV normalise skipped (read failed: {e})")
-        return
-
-    if params.sampwidth != 2 or not frames:
-        return
-
-    samples = np.frombuffer(frames, dtype=np.int16)
-    if samples.size == 0:
-        return
-
-    # collapse multi-channel (defensive; current pipeline writes mono) by mean
-    if params.nchannels > 1:
-        samples = samples.reshape(-1, params.nchannels).mean(axis=1).astype(np.int16)
-
-    rms = float(np.sqrt(np.mean(samples.astype(np.float64) ** 2)))
-    if rms < min_rms_int16:
-        print(f"  Pre-norm RMS {rms:.0f} < {min_rms_int16:.0f}; skipping normalisation (prevents hallucination on near-silent input).")
-        return
-
-    peak = int(np.max(np.abs(samples)))
-    if peak == 0:
-        return
-    target_peak = int(32767 * (10 ** (target_dbfs / 20.0)))  # -3 dBFS ≈ 23198
-    if peak >= target_peak:
-        return
-
-    gain = min(target_peak / peak, max_gain)
-    scaled = np.clip(samples.astype(np.float32) * gain, -32768, 32767).astype(np.int16)
-
-    try:
-        with wave.open(path, "wb") as wf:
-            wf.setnchannels(1)
-            wf.setsampwidth(2)
-            wf.setframerate(params.framerate)
-            wf.writeframes(scaled.tobytes())
-        print(f"  Normalised: pre-RMS={rms:.0f}, gain={gain:.2f}× (capped at {max_gain}×)")
-    except Exception as e:
-        print(f"  WAV normalise skipped (write failed: {e})")
+        print(f"  Mono conversion skipped ({e})")
 
 # Salman's
  #responses arrive in one block no splitting
@@ -1048,7 +1000,7 @@ ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
         nao_say(ssh, text)
 
 def nao_capture_image(ssh):
-    """Capture a photo from Pepper's camera and download it."""
+    """Capture a photo from Pepper's camera and download it. Kept as a fallback for one-off stills; the live dashboard now uses pepper_video_loop()."""
     nao_run(ssh, f"""
 from naoqi import ALProxy
 pc = ALProxy("ALPhotoCapture","127.0.0.1",9559)
@@ -1059,6 +1011,115 @@ pc.takePicture("{os.path.dirname(REMOTE_IMG)}/", "{os.path.splitext(os.path.base
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_IMG, LOCAL_IMG)
     sftp.close()
+
+# Alfie's
+PEPPER_VIDEO_PORT = 9558  # non-clashing with NAOqi (9559) and SSH (22)
+_pepper_video_channel = None  # holder for the remote SSH channel; without this Paramiko may garbage-collect it and the Pepper-side script dies mid-stream
+
+def pepper_video_loop(ssh):
+    """Persistent ALVideoDevice subscriber on Pepper streaming length-prefixed RGB frames over TCP, hence replacing the per-turn ALPhotoCapture + SFTP screenshot-loop; channel held globally so Paramiko does not GC the async exec_command out from under the remote process."""
+    global _pepper_video_channel
+
+    code = textwrap.dedent('''
+        from naoqi import ALProxy
+        import socket, struct, time
+
+        HOST = "0.0.0.0"
+        PORT = {port}
+
+        cam = ALProxy("ALVideoDevice", "127.0.0.1", 9559)
+        # camera_id=0 (top), resolution=1 (320x240), colour_space=11 (RGB), fps=10
+        name = cam.subscribeCamera("gaze_video", 0, 1, 11, 10)
+
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        server.bind((HOST, PORT))
+        server.listen(1)
+
+        conn, addr = server.accept()
+
+        try:
+            while True:
+                img = cam.getImageRemote(name)
+                if img is None:
+                    time.sleep(0.05)
+                    continue
+                width = img[0]
+                height = img[1]
+                data = img[6]
+                payload = struct.pack("!II", width, height) + data
+                conn.sendall(struct.pack("!I", len(payload)) + payload)
+                time.sleep(0.1)
+        finally:
+            try:
+                cam.unsubscribe(name)
+            except Exception:
+                pass
+            try:
+                conn.close()
+            except Exception:
+                pass
+            server.close()
+    ''').format(port=PEPPER_VIDEO_PORT)
+
+    escaped = code.replace("'", "'\\''")
+    # exec_command async on purpose; nao_run() reads stdout and would block forever as the loop never exits whilst streaming
+    _stdin, stdout, _stderr = ssh.exec_command(f"python -c '{escaped}'")
+    _pepper_video_channel = stdout.channel  # keep referenced so Paramiko doesn't GC the channel out from under the remote process
+
+
+def _recv_exact(sock, n):
+    """Receive exactly n bytes; raise if the socket closes mid-frame."""
+    data = b""
+    while len(data) < n:
+        packet = sock.recv(n - len(data))
+        if not packet:
+            raise ConnectionError("Socket closed whilst receiving Pepper camera frame")
+        data += packet
+    return data
+
+
+def pepper_camera_receive_loop(pepper_ip: str):
+    """Pull length-prefixed RGB frames off Pepper:9558 into _preview_frame for detect_thread_loop to consume; ten 1-second connect-retries because Pepper-side bind() needs a beat to land after exec_command."""
+    global _preview_frame
+
+    sock = None
+    for attempt in range(10):
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((pepper_ip, PEPPER_VIDEO_PORT))
+            print(f"  Pepper video socket connected on attempt {attempt + 1}.")
+            break
+        except (ConnectionRefusedError, OSError) as e:
+            print(f"  Pepper video connect attempt {attempt + 1} failed ({e}); retrying...")
+            try:
+                sock.close()
+            except Exception:
+                pass
+            sock = None
+            time.sleep(1.0)
+    if sock is None:
+        print("  Pepper video stream unreachable; dashboard will stay black.")
+        return
+
+    try:
+        while True:
+            size_raw = _recv_exact(sock, 4)
+            size = struct.unpack("!I", size_raw)[0]
+            payload = _recv_exact(sock, size)
+            width, height = struct.unpack("!II", payload[:8])
+            rgb_bytes = payload[8:]
+            rgb = np.frombuffer(rgb_bytes, dtype=np.uint8).reshape((height, width, 3))
+            frame = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)  # rest of pipeline is BGR (OpenCV convention)
+            with _preview_lock:
+                _preview_frame = frame
+    except Exception as e:
+        print(f"  Pepper video receiver loop exited: {e}")
+    finally:
+        try:
+            sock.close()
+        except Exception:
+            pass
 
 def nao_track_face(ssh, enable=True):
     """Toggle face tracking on Pepper."""
@@ -1236,8 +1297,6 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
         wf.setsampwidth(2)
         wf.setframerate(LOCAL_SAMPLE_RATE)
         wf.writeframes(audio_int16.tobytes())
-    # normalise_wav disabled: amplifies noise on near-silent WAVs, boosts Whisper hallucinations rather than reducing them.
-    # normalise_wav(LOCAL_WAV)
     print(f"  Recording saved ({elapsed:.1f}s, speech={'yes' if speech_detected else 'no'}).")
 
 # Alfie's
@@ -1401,14 +1460,14 @@ def nao_gesture(ssh, gesture_type: str):
 
 # Alfie's
 def measure_volume() -> float:
-    """RMS amplitude of the WAV (local and Pepper paths)."""
+    """RMS amplitude of the WAV; soundfile-based so multi-channel files collapse to mono cleanly."""
     try:
-        with wave.open(LOCAL_WAV, "rb") as wf:
-            raw = wf.readframes(wf.getnframes())
-            if len(raw) < 2:
-                return 0.0
-            samples = struct.unpack(f"<{len(raw) // 2}h", raw)
-            return (sum(s * s for s in samples) / len(samples)) ** 0.5
+        audio, _sr = sf.read(LOCAL_WAV, dtype="float32")
+        if audio.size == 0:
+            return 0.0
+        if audio.ndim > 1:
+            audio = audio.mean(axis=1)
+        return float(np.sqrt(np.mean((audio * 32768.0) ** 2)))
     except Exception as e:
         print(f"  Volume RMS calc failed: {e}")
         return 0.0
@@ -1456,9 +1515,9 @@ def is_known_hallucination(text: str) -> bool:
         return True
     return False
 
-def has_real_speech(wav_path: str, min_speech_ms: int = 500,
-                     threshold: float = 0.6) -> bool:
-    """Silero VAD pre-gate."""
+def has_real_speech(wav_path: str, min_speech_ms: int = 250,
+                     threshold: float = 0.5) -> bool:
+    """Silero VAD pre-gate; relaxed defaults so short answers (yes/Tom/six) survive."""
     if _silero_model is None or get_speech_timestamps is None:
         return True
     try:
@@ -1526,8 +1585,8 @@ def transcribe(bypass_wake_word: bool = False,
     if LOCAL_MODE and not _local_speech_detected:
         return ""
 
-    # Layer 2: Silero VAD hard gate
-    if LOCAL_MODE and not has_real_speech(LOCAL_WAV):
+    # Layer 2: Silero VAD hard gate; now applied to NAO too because force_mono_16k_wav() canonicalises the WAV before transcribe() runs
+    if not has_real_speech(LOCAL_WAV):
         print("  Silero VAD found no speech; skipping Whisper.")
         return ""
 
@@ -1547,6 +1606,7 @@ def transcribe(bypass_wake_word: bool = False,
                 timeout=API_TIMEOUT,
             )
         text = (getattr(resp, "text", "") or "").strip()
+        print(f"  Whisper raw text: {text!r}")
 
         # Layer 4: Whisper self-signals (no_speech_prob + avg_logprob + compression_ratio per segment). resp is a Pydantic TranscriptionVerbose thus attribute access (not dict indexing).
         segments = getattr(resp, "segments", None) or []
@@ -1557,6 +1617,8 @@ def transcribe(bypass_wake_word: bool = False,
                             if getattr(s, "avg_logprob", None) is not None]
             compression_vals = [s.compression_ratio for s in segments
                                 if getattr(s, "compression_ratio", None) is not None]
+            print(f"  Whisper diagnostics: no_speech={no_speech_vals}, "
+                  f"avg_logprob={logprob_vals}, compression={compression_vals}")
             if no_speech_vals and max(no_speech_vals) > 0.6:
                 print(f"  Whisper flagged silence (max no_speech_prob="
                       f"{max(no_speech_vals):.2f}); dropping {text!r}")
@@ -1648,30 +1710,22 @@ def start_preview_thread(camera, face_model, face_cascade):
 # Alfie's
 def capture_and_classify(ssh, face_model, face_cascade,
                          local_camera=None) -> tuple[str, float]:
-    """Capture a face image and classify the expression.
-       Every non-preview-thread path also pushes the annotated frame into
-       the shared _preview_frame/_preview_state so GazeDashboard's camera
-       panel stays alive in NAO mode (was black before because only the
-       LOCAL_MODE preview thread wrote to _preview_frame)."""
+    """Return (emotion, confidence). Local-camera branch reads + classifies inline; NAO branch reads cached state set by detect_thread_loop off the live Pepper video stream."""
+    # local-camera + preview thread already running: just read the cache
     if DEBUG_PREVIEW and local_camera is not None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
 
-    if local_camera is not None: # use local camera if available; if unavailable use NAO
-        ret, frame = local_camera.read()
-        if not ret:
-            print("  [Local camera failed] cv2.VideoCapture.read() returned False")
-            return "Neutral", 0.0
-    else:
-        try:
-            nao_capture_image(ssh)
-            frame = cv2.imread(LOCAL_IMG)
-            if frame is None:
-                print(f"  cv2.imread returned None for {LOCAL_IMG}")
-                return "Neutral", 0.0
-        except Exception as e:
-            print(f"  Camera frame grab failed: {e}")
-            return "Neutral", 0.0
+    # NAO branch: detect_thread_loop classifies continuously off pepper_camera_receive_loop, hence we just read the cached state rather than re-running cascade + CNN per turn
+    if local_camera is None:
+        with _preview_lock:
+            return _preview_state["emotion"], _preview_state["confidence"]
+
+    # local-camera per-turn classification (DEBUG_PREVIEW disabled)
+    ret, frame = local_camera.read()
+    if not ret:
+        print("  [Local camera failed] cv2.VideoCapture.read() returned False")
+        return "Neutral", 0.0
 
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
@@ -1683,11 +1737,10 @@ def capture_and_classify(ssh, face_model, face_cascade,
         x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
         roi     = gray[y:y+h, x:x+w]
         resized = cv2.resize(roi, (48, 48))
-        inp     = resized[np.newaxis, :, :, np.newaxis]     # (1, 48, 48, 1)
+        inp     = resized[np.newaxis, :, :, np.newaxis]
         emotion, conf = face_model.predict(inp)
         bbox = (x, y, w, h)
 
-    # publish the RAW frame + cached bbox to the dashboard; annotation is composited in camera_refresh so display and detection cadence are decoupled (fixes the black-panel bug AND the sluggish-FPS regression)
     global _preview_frame, _last_bbox
     with _preview_lock:
         _preview_state["emotion"]    = emotion
@@ -1890,8 +1943,6 @@ TOOLS = [
         },
     },
 ]
-
-_signal_context = {"text": ""}
 
 # Alfie's
 def build_signal_context(engine: AdaptiveEngine,
@@ -2272,7 +2323,12 @@ class GazeDashboard:
                   command=self.quit_app).pack(pady=(10, 0))
 
         self.root.bind("<Escape>", lambda e: self.quit_app())
-        self.root.bind("<Command-q>", lambda e: self.quit_app())
+        # cross-platform quit; Command-q is macOS-only and may TclError on Windows Tk builds, hence guard each binding
+        for combo in ("<Command-q>", "<Control-q>"):
+            try:
+                self.root.bind(combo, lambda e: self.quit_app())
+            except tk.TclError:
+                pass
         self.root.protocol("WM_DELETE_WINDOW", self.quit_app)
 
         self.camera_refresh()
@@ -2661,11 +2717,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 else:
                     print(f"  No speech chunk detected (floor={LOCAL_SILENCE_RMS}); skipping transcription.")
                     user_text = ""
-            elif vol_rms >= VOLUME_THRESHOLD:
+            elif vol_rms >= NAO_MIN_RMS_TO_TRANSCRIBE:
+                print(f"  NAO RMS diagnostic: {vol_rms:.0f} (gate floor {NAO_MIN_RMS_TO_TRANSCRIBE})")
                 user_text = transcribe(bypass_wake_word=True)
             else:
-                print(f"  Volume ({vol_rms:.0f}) below speech threshold "
-                      f"({VOLUME_THRESHOLD}), skipping transcription.")
+                print(f"  WAV near-empty ({vol_rms:.0f} < {NAO_MIN_RMS_TO_TRANSCRIBE}); skipping transcription.")
                 user_text = ""
 
             if user_text:
@@ -2838,7 +2894,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     vocal_emotion=vocal_emo, vocal_conf=vocal_conf,
                     volume_rms=vol_rms,
                 )
-                # Record the round result if it was a game answer; if not, skip recording so it doesn't pollute the history with non-game turns
+                # Record the round result if it was a game answer; if not, skip recording so it doesn't pollute history with non-game turns
                 if was_game_answer:
                     engine.record_round(RoundResult(
                         round_number=turn_count,
@@ -3001,6 +3057,17 @@ def main():
 
         print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
         energy_threshold = nao_calibrate_ambient(ssh)
+
+        # Pepper-camera live stream: persistent ALVideoDevice subscriber on Pepper + receiver on the laptop, hence the dashboard sees ~10 fps wherein detect_thread_loop reads the same buffer at ~6-7 Hz
+        if not USE_LOCAL_CAMERA:
+            print("  Starting Pepper camera stream...")
+            threading.Thread(target=pepper_video_loop,
+                             args=(ssh,), daemon=True).start()
+            threading.Thread(target=pepper_camera_receive_loop,
+                             args=(NAO_IP,), daemon=True).start()
+            threading.Thread(target=detect_thread_loop,
+                             args=(face_model, face_cascade), daemon=True).start()
+            print("  Pepper camera stream threads started.")
 
     dashboard = GazeDashboard()
     print("  Dashboard launched.")
