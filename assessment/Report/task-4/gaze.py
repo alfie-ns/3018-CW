@@ -1388,9 +1388,9 @@ import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
 m.setStiffnesses("RArm", 1.0)
 names = ["RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RHand"]
-m.angleInterpolation(names, [-0.2, -0.1, 0.5, 1.2, 0.3], [1.2]*5, True)
+m.angleInterpolation(names, [-0.2, -0.1, 0.5, 1.2, 0.3], [2.0]*5, True)
 time.sleep(2.0)
-m.angleInterpolation(names, [1.4, -0.2, 1.2, 0.5, 0.0], [1.0]*5, True)
+m.angleInterpolation(names, [1.4, -0.2, 1.2, 0.5, 0.0], [1.8]*5, True)
 m.setStiffnesses("RArm", 0.0)
 """,
 
@@ -1400,12 +1400,12 @@ import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
 m.setStiffnesses("RArm", 1.0)
 names = ["RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RWristYaw","RHand"]
-m.angleInterpolation(names, [-0.5,-0.3,1.0,1.0,0.0,1.0], [1.0]*6, True)
+m.angleInterpolation(names, [-0.5,-0.3,1.0,1.0,0.0,1.0], [1.8]*6, True)
 for _ in range(3):
-    m.angleInterpolation(["RWristYaw"], [0.5], [0.3], True)
-    m.angleInterpolation(["RWristYaw"], [-0.5], [0.3], True)
+    m.angleInterpolation(["RWristYaw"], [0.5], [0.6], True)
+    m.angleInterpolation(["RWristYaw"], [-0.5], [0.6], True)
 time.sleep(0.7)
-m.angleInterpolation(names, [1.4,0.2,1.2,0.5,0.0,0.0], [1.0]*6, True)
+m.angleInterpolation(names, [1.4,0.2,1.2,0.5,0.0,0.0], [1.8]*6, True)
 m.setStiffnesses("RArm", 0.0)
 """,
 
@@ -1415,11 +1415,11 @@ import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
 m.setStiffnesses("Arms", 1.0)
 names = ["LShoulderPitch","LShoulderRoll","LHand","RShoulderPitch","RShoulderRoll","RHand"]
-m.angleInterpolation(names, [0.5, 0.3, 0.8, 0.5, -0.3, 0.8], [1.5]*6, True)
+m.angleInterpolation(names, [0.5, 0.3, 0.8, 0.5, -0.3, 0.8], [2.5]*6, True)
 time.sleep(0.4)
-m.angleInterpolation(["LShoulderPitch","RShoulderPitch"], [0.8, 0.8], [1.5]*2, True)
+m.angleInterpolation(["LShoulderPitch","RShoulderPitch"], [0.8, 0.8], [2.5]*2, True)
 time.sleep(0.3)
-m.angleInterpolation(names, [1.4, 0.2, 0.0, 1.4, -0.2, 0.0], [1.2]*6, True)
+m.angleInterpolation(names, [1.4, 0.2, 0.0, 1.4, -0.2, 0.0], [2.0]*6, True)
 m.setStiffnesses("Arms", 0.0)
 """,
 

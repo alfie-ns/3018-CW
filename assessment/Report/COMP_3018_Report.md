@@ -459,10 +459,10 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [ ] [ ] Wachter, S., Mittelstadt, B. and Floridi, L. (2017) 'Why a Right to Explanation of Automated Decision-Making Does Not Exist in the General Data Protection Regulation', *International Data Privacy Law*, 7(2), pp. 76-99. Available at: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2903469 (Accessed: 22 March 2026).
 - [ ] [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980. Available at: https://ieeexplore.ieee.org/document/4339551 (Accessed: 18 March 2026).
 
-# 2- Task (4) Noval Programming Project
+# 2- Task (4) Novel Programming Project
 
 - [ ] CRITICAL: reconfigure report below to match newest gaze.py
-- [ ] CRIITCAL: reconfigure task-4/ to newest version when zipping and giving to Salman
+- [ ] CRITICAL: reconfigure task-4/ to newest version when zipping and giving to Salman
 
 - [X] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
 - [ ] verify word count
@@ -598,9 +598,9 @@ GAZE operates as a conversational loop rather than a rigid question-answer cycle
 
 - [ ] This function-calling architecture is neuro-symbolic: GPT-5.4 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, p. TODO: VERIFY 12389) 'third wave' paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, p. 1).
 
-### 2.3.2 Input Layer: Five Simultaneous Signals
+### 2.3.2 Input Layer: Multimodal and Behavioural Signals
 
-**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated via cross-modal override.
+**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated by combining facial evidence with behavioural signals (response time, correctness, silence history, volume/RMS) rather than allowing the CNN to decide user state alone.
 
 - [ ] PROOFREAD
 **2- Verbal Answer (speech-based).** Pepper records through all four microphones (the `[1,1,1,1]` mask) via `ALAudioRecorder` at 16 kHz, whilst `ALAudioDevice` polls the maximum energy across all four mics, hence catching off-axis speakers a front-only poll would miss. Recording terminates after 1.2 seconds of post-speech silence or at the adaptive hard ceiling. After SFTP, `force_mono_16k_wav()` selects the loudest channel by RMS and rewrites mono 16 kHz PCM. The canonical WAV is then transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract).
@@ -639,13 +639,16 @@ try:
         if elapsed >= {record_max_secs}:
             break
 
-        # poll all four mic energies and take the max; off-axis speakers register on the side mics that a front-only poll would miss
-        energy = max(
-            audio.getFrontMicEnergy(),
-            audio.getLeftMicEnergy(),
-            audio.getRightMicEnergy(),
-            audio.getRearMicEnergy(),
-        )
+        # poll all four mics and take the MAX; a user stood to either side of Pepper registers on the side mics but not the front, so front-only polling misses them and the silence-detector stops recording mid-utterance
+        try:
+            energy = max(
+                audio.getFrontMicEnergy(),
+                audio.getLeftMicEnergy(),
+                audio.getRightMicEnergy(),
+                audio.getRearMicEnergy(),
+            )
+        except Exception:
+            energy = audio.getFrontMicEnergy()  # firmware fallback
 
         if elapsed < {RECORD_MIN_SECS}:
             # minimum recording period
@@ -783,7 +786,7 @@ def transcribe(bypass_wake_word: bool = False,
 -->
 
 - [ ] PROOFREAD
-The AdaptiveEngine's `infer_state()` weighs eight signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five raw inputs are supplemented by three derived temporal signals: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013, p. 256) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
+The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013, p. 256) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -830,7 +833,7 @@ The AdaptiveEngine's `infer_state()` weighs eight signals to classify the user i
 % Arrows: engine to states
 \foreach \n in {s1,s2,s3,s4,s5} \draw[->,black!40,thick] (eng.east) -- (\n.west);
 \end{tikzpicture}
-\caption{Multi-signal inference pipeline. Five raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}) to classify the user into one of five states. Voice is treated as advisory rather than dominant: it nudges the state only when the face is Neutral AND the MLP's confidence clears 0.9 AND the label is not \texttt{fearful} (the silence-attractor), hence a noisy vocal label can never override stronger visual or behavioural evidence; therein lies the multi-signal novelty.
+\caption{Multi-signal inference pipeline. Five raw inputs captured each round and three derived temporal signals computed from session history feed into \texttt{infer\_state()}, which applies cross-modal rules (e.g. camera reads \textit{Angry} but user answers fast and correctly $\rightarrow$ \textit{Comfortable}) to classify the user into one of five states. Voice is treated as advisory rather than dominant: it nudges the state only when the face is Neutral AND the MLP's confidence clears 0.9 AND the label is not \texttt{fearful} (the silence-attractor), hence a noisy vocal label can never override stronger visual or behavioural evidence; therein lies the multi-signal novelty.}
 \label{fig:multi-signal}
 \end{figure}
 
@@ -934,7 +937,8 @@ GAZE exposes `evaluate_adaptation()` to the LLM as the `evaluate_last_adaptation
 - [ ] PROOFREAD
 GAZE implements multi-signal emotional inference across two independent modalities *(facial expression via WS-10 CNN and vocal emotion via WS-08 MLP)* alongside speech volume/RMS, response time, answer correctness, answer text, and derived temporal signals, hence yielding a more robust user-state estimate than any single channel. The implementation hardens further by recording all four Pepper microphones, canonicalising audio to mono 16 kHz by loudest-channel selection, applying Silero-VAD to both modes, and streaming Pepper's camera via persistent `ALVideoDevice` rather than per-turn SFTP. The hybrid architecture (GPT-5.4 dialogue paired with symbolic rule-based inference and a deterministic GPT-4.1 verifier) and adaptive game-switching directly target the novelty-decay problem Smedegaard (2019, p. 4) identifies.
 
-- [ ] The conversational architecture, wherein the LLM decides actions via function calling, positions GAZE as a social companion rather than a rigid game host. <!-- WRAPPED OUT: factually inaccurate (no personality-mode selection in current gaze.py)
+- [ ] PROOFREAD
+The conversational architecture, wherein the LLM decides actions via function calling, positions GAZE as a social companion rather than a rigid game host. <!-- WRAPPED OUT: factually inaccurate (no personality-mode selection in current gaze.py)
 The selectable personality modes extend Tapus, Tapus and Mataric's (2008, p. TODO: VERIFY PAGE) personality matching from static trait-matching to dynamic, signal-driven adaptation.
 -->
 

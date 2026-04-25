@@ -40,7 +40,7 @@ times
 - [ ] Mainly, fix: fix dashboard; saves each time; protise face over voice
 """ 
 
-import os, re, sys, json, time, types, wave, struct, tempfile, threading, subprocess, unicodedata
+import os, re, sys, json, time, types, wave, struct, tempfile, threading, subprocess, unicodedata, socket, textwrap
 import tkinter as tk
 from dataclasses import dataclass, field
 from enum import Enum
@@ -116,6 +116,8 @@ REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
+PEPPER_VIDEO_PORT = 9558  # TCP port on Pepper for the persistent ALVideoDevice frame stream
+_pepper_video_channel = None  # held globally so Paramiko does not GC the async exec_command channel out from under the remote ALVideoDevice subscriber
 VOLUME_THRESHOLD = 100  # RMS amplitude; below this the WAV is silence/ambient noise, not speech
 FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; thus treat as Neutral
 VOICE_CONFIDENCE_THRESHOLD = 0.5  # threshold for vocal emotion is too uncertain; treat as neutral
@@ -814,7 +816,16 @@ audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
 samples = []
 start = time.time()
 while (time.time() - start) < {CALIBRATION_SECS}:
-    samples.append(audio.getFrontMicEnergy())
+    # poll all four mics and take the max; off-axis speakers register on the side mics that a front-only baseline would miss
+    try:
+        front = audio.getFrontMicEnergy()
+        left  = audio.getLeftMicEnergy()
+        right = audio.getRightMicEnergy()
+        rear  = audio.getRearMicEnergy()
+        samples.append(max(front, left, right, rear))
+    except Exception:
+        # older firmwares may expose only getFrontMicEnergy; fall back gracefully
+        samples.append(audio.getFrontMicEnergy())
     time.sleep(0.2)
 
 if samples:
@@ -836,11 +847,11 @@ def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
                record_max_secs: float = RECORD_MAX_SECS,
                silence_secs: float = SILENCE_DURATION):
     """Record audio on Pepper with dynamic silence detection.
-        - get robot's front microphone (getFrontMicEnergy) to stop recording early if silence detected
-        - calibrated energy threshold to avoid false positives from ambient noise 
-        - if getFrontMicEnergy is unsupported (e.g. older firmware), fall back to a safe fixed-duration recording to ensure the demo still works, albeit without silence detection
+        - poll all four mics each tick (front/left/right/rear) and take the max so a user stood off-axis still trips the gate; the front-only path missed them and cut speech mid-utterance
+        - calibrated energy threshold to avoid false positives from ambient noise
+        - if the four-mic API is unsupported (e.g. older firmware), fall back to getFrontMicEnergy and then to a safe fixed-duration recording to ensure the demo still works, albeit without silence detection
     """
-    # SSH payload in a script wherein it tries to initialise ALAudioDevice to poll getFrontMicEnergy; if that fails due to older firmware fall back to a fixed-duration recording, thus ensuring the demo still works albeit without silence detection
+    # SSH payload in a script wherein it polls all four mic energies each tick and takes the max; if the four-mic API is unsupported it falls back to getFrontMicEnergy, and if even ALAudioDevice fails (older firmware) it falls back to a fixed-duration recording, thus ensuring the demo still works albeit without silence detection
     nao_run(ssh, f""" 
 from naoqi import ALProxy
 import time
@@ -848,7 +859,7 @@ import time
 rec  = ALProxy("ALAudioRecorder", "127.0.0.1", 9559)
 
 rec.stopMicrophonesRecording()
-rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [0, 0, 1, 0])
+rec.startMicrophonesRecording("{REMOTE_WAV}", "wav", 16000, [1, 1, 1, 1])
 
 try:
     audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
@@ -865,8 +876,16 @@ try:
         if elapsed >= {record_max_secs}:
             break
 
-        # poll front microphone energy level
-        energy = audio.getFrontMicEnergy()
+        # poll all four mics and take the MAX; a user stood to either side of Pepper registers on the side mics but not the front, so front-only polling misses them and the silence-detector stops recording mid-utterance
+        try:
+            energy = max(
+                audio.getFrontMicEnergy(),
+                audio.getLeftMicEnergy(),
+                audio.getRightMicEnergy(),
+                audio.getRearMicEnergy(),
+            )
+        except Exception:
+            energy = audio.getFrontMicEnergy()  # firmware fallback
 
         if elapsed < {RECORD_MIN_SECS}:
             # minimum recording period
@@ -951,7 +970,7 @@ ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
         nao_say(ssh, text)
 
 def nao_capture_image(ssh):
-    """Capture a photo from Pepper's camera and download it."""
+    """Capture a photo from Pepper's camera and download it (legacy ALPhotoCapture+SFTP fallback path; the live preview now flows via pepper_video_loop)."""
     nao_run(ssh, f"""
 from naoqi import ALProxy
 pc = ALProxy("ALPhotoCapture","127.0.0.1",9559)
@@ -962,6 +981,112 @@ pc.takePicture("{os.path.dirname(REMOTE_IMG)}/", "{os.path.splitext(os.path.base
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_IMG, LOCAL_IMG)
     sftp.close()
+
+def pepper_video_loop(ssh):
+    """Persistent ALVideoDevice subscriber on Pepper streaming length-prefixed RGB frames over TCP, hence replacing the per-turn ALPhotoCapture + SFTP screenshot-loop; channel held globally so Paramiko does not GC the async exec_command out from under the remote process."""
+    global _pepper_video_channel
+    code = textwrap.dedent('''
+        from naoqi import ALProxy
+        import socket, struct, time
+        HOST = "0.0.0.0"
+        PORT = {port}
+        cam = ALProxy("ALVideoDevice", "127.0.0.1", 9559)
+        # subscribeCamera(name, cameraIndex=0/top, resolution=1/QVGA 320x240, colorspace=11/RGB, fps=10)
+        name = cam.subscribeCamera("gaze_video", 0, 1, 11, 10)
+        srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        srv.bind((HOST, PORT))
+        srv.listen(1)
+        try:
+            conn, _addr = srv.accept()
+            try:
+                while True:
+                    img = cam.getImageRemote(name)
+                    if img is None:
+                        time.sleep(0.05)
+                        continue
+                    width, height = img[0], img[1]
+                    data = img[6]
+                    payload = data if isinstance(data, (bytes, bytearray)) else str(data)
+                    header = struct.pack(">III", len(payload), width, height)
+                    conn.sendall(header + payload)
+                    cam.releaseImage(name)
+            finally:
+                conn.close()
+        finally:
+            cam.unsubscribe(name)
+            srv.close()
+    ''').format(port=PEPPER_VIDEO_PORT)
+    escaped = code.replace("'", "'\\''")
+    _stdin, stdout, _stderr = ssh.exec_command(f"python -c '{escaped}'")
+    _pepper_video_channel = stdout.channel  # retain so Paramiko keeps the channel open
+
+def _recv_exact(sock, n):
+    """Pull exactly *n* bytes off *sock*; raise if the peer closes early so the receive loop can reconnect rather than block forever."""
+    data = b""
+    while len(data) < n:
+        packet = sock.recv(n - len(data))
+        if not packet:
+            raise ConnectionError("Socket closed whilst receiving Pepper camera frame")
+        data += packet
+    return data
+
+def pepper_camera_receive_loop(pepper_ip: str, face_model, face_cascade):
+    """Pull length-prefixed RGB frames off Pepper:PEPPER_VIDEO_PORT, classify the dominant face inline, and publish into _preview_state/_preview_frame; ten 1-second connect-retries because Pepper-side bind() needs a beat to land after exec_command. Combined receive+classify because this file uses preview_thread_loop's single-thread pattern (gaze.py splits these into two threads)."""
+    global _last_emotion, _preview_frame
+    sock = None
+    for attempt in range(10):
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.connect((pepper_ip, PEPPER_VIDEO_PORT))
+            break
+        except OSError:
+            sock = None
+            time.sleep(1.0)
+    if sock is None:
+        print(f"  Pepper video stream unreachable at {pepper_ip}:{PEPPER_VIDEO_PORT}; preview will stay blank")
+        return
+
+    try:
+        while True:
+            try:
+                header = _recv_exact(sock, 12)
+                payload_len, width, height = struct.unpack(">III", header)
+                raw = _recv_exact(sock, payload_len)
+            except (ConnectionError, OSError) as e:
+                print(f"  Pepper video stream dropped: {e}")
+                return
+
+            rgb = np.frombuffer(raw, dtype=np.uint8).reshape((height, width, 3))
+            frame = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+
+            gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+            if len(faces) == 0:
+                emotion, conf = "Neutral", 0.0
+            else:
+                x, y, w, h = max(faces, key=lambda f: f[2] * f[3])
+                roi     = gray[y:y+h, x:x+w]
+                resized = cv2.resize(roi, (48, 48))
+                inp     = resized[np.newaxis, :, :, np.newaxis]
+                emotion, conf = face_model.predict(inp)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+            label = f"{emotion} ({conf:.0%})"
+            cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8, (0, 255, 0), 2)
+
+            with _preview_lock:
+                _preview_state["emotion"]    = emotion
+                _preview_state["confidence"] = conf
+                _preview_frame = frame.copy()
+            _last_emotion = emotion
+    finally:
+        try:
+            sock.close()
+        except Exception:
+            pass
 
 def nao_track_face(ssh, enable=True):
     """Toggle face tracking on Pepper."""
@@ -1516,30 +1641,18 @@ def start_preview_thread(camera, face_model, face_cascade):
 # Alfie's
 def capture_and_classify(ssh, face_model, face_cascade,
                          local_camera=None) -> tuple[str, float]:
-    """Capture a face image and classify the expression.
-       Every non-preview-thread path also pushes the annotated frame into
-       the shared _preview_frame/_preview_state so GazeDashboard's camera
-       panel stays alive in NAO mode (was black before because only the
-       LOCAL_MODE preview thread wrote to _preview_frame)."""
-    if DEBUG_PREVIEW and local_camera is not None:
+    """Snapshot the dominant facial expression for the current turn. NAO mode reads the cache published by pepper_camera_receive_loop (continuous TCP stream classified inline) instead of triggering ALPhotoCapture + SFTP per turn; LOCAL_MODE+DEBUG_PREVIEW likewise reads the preview thread's cache. Only the local-webcam-no-preview path actually runs detection here."""
+    # cached fast paths; the receive loop / preview thread is already
+    # classifying continuously, so a per-turn re-capture would just lag
+    # the conversation behind the latest frame the user has already moved on from
+    if (DEBUG_PREVIEW and local_camera is not None) or local_camera is None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
 
-    if local_camera is not None: # use local camera if available; if unavailable use NAO
-        ret, frame = local_camera.read()
-        if not ret:
-            print("  [Local camera failed] cv2.VideoCapture.read() returned False")
-            return "Neutral", 0.0
-    else:
-        try:
-            nao_capture_image(ssh)
-            frame = cv2.imread(LOCAL_IMG)
-            if frame is None:
-                print(f"  cv2.imread returned None for {LOCAL_IMG}")
-                return "Neutral", 0.0
-        except Exception as e:
-            print(f"  Camera frame grab failed: {e}")
-            return "Neutral", 0.0
+    ret, frame = local_camera.read()
+    if not ret:
+        print("  [Local camera failed] cv2.VideoCapture.read() returned False")
+        return "Neutral", 0.0
 
     gray  = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
@@ -1554,7 +1667,7 @@ def capture_and_classify(ssh, face_model, face_cascade,
         emotion, conf = face_model.predict(inp)
         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    # annotate and publish to the dashboard regardless of source; in NAO mode this is the ONLY writer of _preview_frame, thus the fix for the black-panel bug
+    # local-webcam-no-preview path; publish so the dashboard panel stays alive (NAO mode is now driven by pepper_camera_receive_loop, hence the per-turn writer here only matters for plain local mode without DEBUG_PREVIEW)
     label = f"{emotion} ({conf:.0%})"
     cv2.putText(frame, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                 0.8, (0, 255, 0), 2)
@@ -2813,6 +2926,16 @@ def main():
 
         print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
         energy_threshold = nao_calibrate_ambient(ssh)
+
+        # bring Pepper's camera up as a persistent TCP stream rather than the per-turn ALPhotoCapture+SFTP loop; pepper_video_loop launches the remote subscriber, then a local daemon thread pulls frames into _preview_state continuously throughout the session
+        print("\nStarting Pepper video stream...")
+        pepper_video_loop(ssh)
+        threading.Thread(
+            target=pepper_camera_receive_loop,
+            args=(NAO_IP, face_model, face_cascade),
+            daemon=True,
+        ).start()
+        print(f"  Streaming from Pepper:{PEPPER_VIDEO_PORT}")
 
     dashboard = GazeDashboard()
     print("  Dashboard launched.")
