@@ -1,0 +1,18 @@
+{
+  "user_name": "Elliot Ram",
+  "total_correct": 0,
+  "best_streak": 0,
+  "games_played": {
+    "numbers": 0,
+    "letters": 0
+  },
+  "game_switches": 0,
+  "last_difficulty": 2,
+  "last_game": "numbers",
+  "preferred_game": null,
+  "rounds_played": 0,
+  "recent_questions": [],
+  "recent_answers": [],
+  "recent_game_types": [],
+  "round_log": []
+}

@@ -1,5 +1,0 @@
-- [ ] Hardware Proxy Stability: The script relies heavily on local naoqi bindings, such as initialising the audio device (ALProxy("ALAudioDevice", "127.0.0.1", 9559)). You must verify if the physical robot's firmware responds to these proxy requests without silently dropping the connection under load.  
-
-- [ ] Network Latency Constraints: The language model API calls operate under a strict ceiling (API_TIMEOUT = 10). If the university network is sluggish, you need to observe if the fallback string-containment logic engages smoothly without hanging the main game loop.  
-
-- [ ] Thread Safety under Stress: The Tkinter dashboard explicitly marshals updates from the daemon thread to the main thread (self.root.after(0, fn)). You need to test this by triggering rapid, overlapping visual and vocal signals to ensure the GUI does not stutter while the daemon processes concurrent tasks.

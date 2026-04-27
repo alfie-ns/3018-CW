@@ -1,5 +1,0 @@
-Pepper-mode sanity:
- 1. python gaze.py with Pepper connected. Ask for more time mid-round. Confirm nao_record
- embeds the new silence_secs into the remote script on the following turn (add a temporary
-  debug print of the f-string if needed).
-
