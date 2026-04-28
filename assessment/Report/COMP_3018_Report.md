@@ -33,7 +33,6 @@ header-includes:
 # TODO
 
 - [ ] verify word count
-- [ ] use 'necessarily'
 
 ### VERIFY PAGE NUMBERS (check each against the actual PDF)
 
@@ -150,9 +149,9 @@ header-includes:
 
 #### Broadbent, Stafford and MacDonald (2009) -- `papers/Broadbent et al. (2009).pdf`
 
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                |
-| ----- | ------- | ------- | -------------------------------- | ------------- | ------------------------------------------------------------------------------------------------ |
-| - [ ] | 334     | S1.4.1  | Broadbent et al. (2009, p. TODO) | ??            | NEEDS MANUAL CHECK -- find acceptance depending on matching robot behaviour to user expectations |
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see... |
+| ----- | ------- | ------- | -------------------------------- | ------------- | ----------------- |
+| - [ ] | 334     | S1.4.1  | Broadbent et al. (2009, p. TODO) | ??            |                   |
 
 #### Desai et al. (2013) -- `papers/Desai et al. (2013) - Impact of Robot Failures and Feedback on Real-Time Trust.pdf`
 
@@ -192,27 +191,27 @@ header-includes:
 
 #### Ji et al. (2023) -- `papers/Ji et al. (2023) - Survey of Hallucination in Natural Language Generation.pdf`
 
-| OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                        |
-| ----- | ------- | ------- | ---------------------- | ------------- | ------------------------------------------------------------------------ |
-| - [ ] | 647     | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | "deep learning based generation is prone to hallucinate unintended text" |
+| OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                                                                                                                                                        |
+| ----- | ------- | ------- | ---------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| - [ ] | 647     | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | "deep learning based generation is prone to hallucinate unintended text"                                                                                                                                 |
 | - [X] | 596     | S2.3.2  | Ji et al. (2023, p. 3) | p. 3          | *degeneration* defined; output that is "bland, incoherent, or gets stuck in repetitive loops" (§1 INTRODUCTION, para. 2, sent. 3). verified 2026-04-22 via PDF extraction (cross-checked with Gemini) |
 
 #### Picard (1997) -- `papers/Picard (1997) - Affective Computing.pdf`
 
-| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                                                                                              |
-| ----- | ------- | ------- | ----------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                                                                                   |
+| ----- | ------- | ------- | ----------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | - [X] | 517     | S2.2    | Picard (1997, p. 1, Abstract) | p. 1          | Abstract: "affective computing," computing that relates to, arises from, or influences emotions" (full founding definition). verified 2026-04-14 via PDF extraction |
 
 #### Spezialetti, Placidi and Rossi (2020) -- `papers/Spezialetti, Placidi and Rossi (2020) - Emotion Recognition for Human-Robot Interaction.pdf`
 
-| OK?   | Line(s) | Section | Citation as written                                          | Go to page... | You should see...                                                                                                                                                                                      |
-| ----- | ------- | ------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| OK?   | Line(s) | Section | Citation as written                                          | Go to page... | You should see...                                                                                                                                                                           |
+| ----- | ------- | ------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | - [X] | 517     | S2.2    | Spezialetti, Placidi and Rossi (2020, pp. 1-2, Introduction) | pp. 1-2       | Introduction; bullet "Ability of robots to infer the human emotional state" (p. 2); reviews recognition across facial, vocal, brain, peripheral physiological channels. verified 2026-04-14 |
 
 #### Radford et al. (2023) -- `papers/Radford et al. (2023) - Robust Speech Recognition via Large-Scale Weak Supervision.pdf`
 
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                                                                                                                          |
-| ----- | ------- | ------- | -------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                                                                                                               |
+| ----- | ------- | ------- | -------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | - [X] | 544     | S2.3.2  | (Radford et al., 2023, Abstract) | p. 1          | Abstract (final sentence): "When compared to humans, the models approach their accuracy and robustness". No inline page cited (PMLR volume-pagination not printed on page). verified 2026-04-14 |
 
 ---
@@ -245,7 +244,6 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 
 - [ ] ensure no overused complex words
 - [ ] Download Broadbent via Plymouth library
-- [ ] Run past Gemini
 - [ ] decides the reward based on what it oberserves = inferring the reward
 - [ ] discuss POMDP maths
 - [ ] use wording from 3018 Task-4 Proposal Google Doc
@@ -253,9 +251,8 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 - [ ] talk about IRL (inverse reinforcement learning)
 - [ ] relatively talk about how it relates to others, motivation
 - [ ] CRAMS figure verified -- 5/6 actions appear (Back_Off absent because true state never sustained Low Trust long enough). Update report Task 4 discussion to: 1) explain why the action timeline shows context-sensitive selection (link each action cluster to the reward territory that produced it), 2) note Back_Off correctly absent given the Medium-trust initial state and stress profile, 3) highlight META-ADAPT triggers (red dotted lines) as evidence of metacognition detecting the stress event within 2 steps
-- [X] USE ‘misclassified’
-- [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
-- [ ] write code like lecturer in: `3018-cw/learning/workshops/[X] emotional-speech-recognition/solution.py`
+- [X] USE ‘misclassified’- [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
+  `
 - [ ] ‘persons’
 - [ ] make the robot kinda like how I disucssed you should make it in the set exercises
 - [ ] discuss mathematical notiation for the POMDP stuff??? (if not done in set exercises)
@@ -288,22 +285,17 @@ Task 3: Literature Review (Assistive Robotics Essay):
 	- [X] Acknowledge the 42-definitions problem to argue the field still lacks consensus on what cognition actually is (shows critical thinking)
 	- [X] Connect embodied cognition (“intelligence means body”) to ethical implications of robots entering intimate care spaces
 Task 4: Programming Project
-	- [ ]	GET APPROVAL FROM ALY – confirm extending set exercises POMDP into cognitive architecture implementation is acceptable; confirm simulation-only is fine
-	- [ ]	Wait for Lectures 10/11 on cognitive architectures before finalising design – Aly said the building blocks reappear in those lectures
-	- [ ]	Explicitly map every system component to Aly’s cognitive building blocks (perception, attention, action selection, memory, learning, reasoning, metacognition, prospection)
+	- [X]	GET APPROVAL FROM ALY – confirm extending set exercises POMDP into cognitive architecture implementation is acceptable; confirm simulation-only is fine
+	- [X]	Wait for Lectures 10/11 on cognitive architectures before finalising design – Aly said the building blocks reappear in those lectures
 	- [ ]	Add metacognition module (new from this lecture) – system monitors its own reasoning, flags when repeated actions produce negative outcomes
 	- [ ]	Implement explicit episodic vs semantic memory distinction – Aly specifically said “please distinguish or remember these two”
 	- [ ]	Label trust inference as theory of mind explicitly
 	- [ ]	Label POMDP planning over future states as prospection explicitly
 	- [ ]	Label observation filtering as attention (selective/suppressive)
 	- [ ]	Frame all actions as goal-directed (Aly’s term for purposeful cognitive actions vs reactive behaviour)
-	- [ ]	Include cognitive architecture diagram in report showing how building blocks interconnect
-	- [ ]	Use the term “cognitive architecture” – Aly defined this as the system that “puts all these basic building blocks together and supports the communications between all”
 	- [ ]	Frame project as cognitive robotics (not just social robotics) – Aly said nobody has ever done this; “invitation for challenging minds”
 	- [ ]	Don’t skip definitional rigour – define cognitive robotics, cognition, and key terms precisely in the Background section
 	- [ ]	5-min video: walk through a scenario showing perceive -> attend -> reason -> act -> learn -> adapt cycle in action
-
-Cross-check with Gemini.
 
 # 1- Task (3) Literature Review
 
@@ -462,7 +454,6 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 # 2- Task (4) Novel Programming Project
 
 - [ ] CRITICAL: reconfigure report below to match newest gaze.py
-
 - [X] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
 - [ ] verify word count
 
@@ -576,7 +567,7 @@ References:
 GAZE sits within socially assistive robotics *(the deployment of robots to support users through social interaction rather than physical contact)* and affective computing, which Picard (1997, p. 1, Abstract) founds as "computing that relates to, arises from, or influences emotions"; Tapus, Matarić and Scassellati (2007, p. 35) define this sub-field as systems that "assist users through social interaction." Most-current platforms react to a single input signal (Fong, Nourbakhsh and Dautenhahn, 2003, p. 148), suffering the single-signal problem: a facial-expression classifier misreads resting faces as displeasure; a response-time metric mistakes deliberation for disengagement. Calvo and D'Mello (2010, p. 28) identify "the inherent challenges with unisensory affect detection"; Poria et al. (2017, p. 99) report that multimodal systems were "consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83%." Spezialetti, Placidi and Rossi (2020, pp. 1-2, Introduction) corroborate this within HRI specifically, reviewing recognition systems across facial, vocal, and physiological channels. This demands multi-signal fusion (the system weighs complementary channels together instead of trusting any one alone).
 
 - [ ] PROOFREAD
-GAZE's core contribution is multi-signal emotional inference: facial expression (CNN, Workshop 10), vocal emotion (MLP, Workshop 8), speech volume/RMS, response time, answer correctness, and answer text fuse with derived temporal signals into a single-inferred userstate. The implementation is face-primary: voice nudges only when the face is Neutral and the MLP clears 0.9 confidence (`fearful` excluded as the silence-attractor). `GPT-5.4` generates dialogue whilst the symbolic AdaptiveEngine governs state inference, grounding output in Pepper's affordances (Ahn et al., 2022, p. 1); a GPT-4.1 verifier handles answer-checking. Smedegaard (2019, p. 4) warns engagement reflects novelty rather than sustained interest; GAZE targets this via adaptive... TODO finish sentence (game-switching?)
+  GAZE's core contribution is multi-signal emotional inference: facial expression (CNN, Workshop 10), vocal emotion (MLP, Workshop 8), speech volume/RMS, response time, answer correctness, and answer text fuse with derived temporal signals into a single-inferred userstate. The implementation is face-primary: voice nudges only when the face is Neutral and the MLP clears 0.9 confidence (`fearful` excluded as the silence-attractor). `GPT-5.4` generates dialogue whilst the symbolic AdaptiveEngine governs state inference, grounding output in Pepper's affordances (Ahn et al., 2022, p. 1); a GPT-4.1 verifier handles answer-checking. Smedegaard (2019, p. 4) warns engagement reflects novelty rather than sustained interest; GAZE targets this via adaptive... TODO finish sentence (game-switching?)
 
 <!-- WRAPPED OUT: factually inaccurate (no personality-mode selection in current gaze.py); checkbox preserved for tracking
 - [ ] Furthermore, four selectable personality modes, grounded in Tapus, Tapus and Mataric (2008, p. TODO: VERIFY PAGE) and Kahn et al.'s (2008, pp. 97-104) design patterns for sociality, extend static personality matching to dynamic, signal-driven adaptation.
@@ -593,8 +584,7 @@ GAZE's core contribution is multi-signal emotional inference: facial expression 
 ### 2.3.1 System Architecture
 
 - [ ] PROOFREAD
-GAZE operates as a conversational loop rather than a rigid question-answer cycle. Each turn: 1) Pepper's streamed camera frame (live `ALVideoDevice` socket, not per-turn photo) is classified for facial expression; 2) Pepper records through all four microphones with ambient-calibrated silence detection; 3) the WAV is canonicalised to mono 16 kHz by loudest-channel selection, then processed for vocal emotion, volume/RMS, and Whisper transcription; 4) the AdaptiveEngine infers user-state from face, voice, volume, response time, correctness, and answer text; 5) context plus user speech are sent to GPT-5.4 with four function-calling tools; 6) speech, gesture, and LED state fire concurrently on Pepper. Computation runs on the laptop; Pepper handles physical I/O. The dashboard hence reflects live emotional-state inference from session start.
-
+  GAZE operates as a conversational loop rather than a rigid question-answer cycle. Each turn: 1) Pepper's streamed camera frame (live `ALVideoDevice` socket, not per-turn photo) is classified for facial expression; 2) Pepper records through all four microphones with ambient-calibrated silence detection; 3) the WAV is canonicalised to mono 16 kHz by loudest-channel selection, then processed for vocal emotion, volume/RMS, and Whisper transcription; 4) the AdaptiveEngine infers user-state from face, voice, volume, response time, correctness, and answer text; 5) context plus user speech are sent to GPT-5.4 with four function-calling tools; 6) speech, gesture, and LED state fire concurrently on Pepper. Computation runs on the laptop; Pepper handles physical I/O. The dashboard hence reflects live emotional-state inference from session start.
 - [ ] This function-calling architecture is neuro-symbolic: GPT-5.4 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, p. TODO: VERIFY 12389) 'third wave' paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, p. 1).
 
 ### 2.3.2 Input Layer: Multimodal and Behavioural Signals
@@ -602,7 +592,7 @@ GAZE operates as a conversational loop rather than a rigid question-answer cycle
 **1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated by combining facial evidence with behavioural signals (response time, correctness, silence history, volume/RMS) rather than allowing the CNN to decide user state alone.
 
 - [ ] PROOFREAD
-**2- Verbal Answer (speech-based).** Pepper records through all four microphones (the `[1,1,1,1]` mask) via `ALAudioRecorder` at 16 kHz, whilst `ALAudioDevice` polls the maximum energy across all four mics, hence catching off-axis speakers a front-only poll would miss. Recording terminates after 1.2 seconds of post-speech silence or at the adaptive hard ceiling. After SFTP, `force_mono_16k_wav()` selects the loudest channel by RMS and rewrites mono 16 kHz PCM. The canonical WAV is then transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract).
+  **2- Verbal Answer (speech-based).** Pepper records through all four microphones (the `[1,1,1,1]` mask) via `ALAudioRecorder` at 16 kHz, whilst `ALAudioDevice` polls the maximum energy across all four mics, hence catching off-axis speakers a front-only poll would miss. Recording terminates after 1.2 seconds of post-speech silence or at the adaptive hard ceiling. After SFTP, `force_mono_16k_wav()` selects the loudest channel by RMS and rewrites mono 16 kHz PCM. The canonical WAV is then transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract). Turn-taking is strictly sequential, wherein the mic disengages during TTS playback; barge-in (user-initiated interrupt mid-utterance) was therefore deliberately omitted, owing to NAOqi's imperfect acoustic echo cancellation (which would have the robot's own voice fire false interrupts) and the resultant false-trigger risk under noisy demo conditions.
 
 \begin{lstlisting}[style=python, caption={\texttt{nao\_record}: calibrated-threshold silence detection polling the max energy across all four Pepper mics, with firmware fallback. Recording uses the \texttt{[1,1,1,1]} channel mask; \texttt{force\_mono\_16k\_wav()} downstream picks the loudest channel by RMS so Whisper, Silero-VAD, the WS-08 MLP, and \texttt{measure\_volume()} all see one canonical mono 16~kHz layout.}, label={lst:nao-record}]
 def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
@@ -610,7 +600,7 @@ def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
                silence_secs: float = SILENCE_DURATION):
     """Record audio on Pepper with dynamic silence detection.
         - poll the max energy across all four mics to stop recording early if silence detected
-        - calibrated energy threshold to avoid false positives from ambient noise 
+        - calibrated energy threshold to avoid false positives from ambient noise
         - if getFrontMicEnergy is unsupported (e.g. older firmware), fall back to a safe fixed-duration recording to ensure the demo still works, albeit without silence detection
     """
 
@@ -634,11 +624,11 @@ try:
     while True:
         elapsed = time.time() - start
 
-        # hard ceiling; never exceed max duration
+    # hard ceiling; never exceed max duration
         if elapsed >= {record_max_secs}:
             break
 
-        # poll all four mics and take the MAX; a user stood to either side of Pepper registers on the side mics but not the front, so front-only polling misses them and the silence-detector stops recording mid-utterance
+    # poll all four mics and take the MAX; a user stood to either side of Pepper registers on the side mics but not the front, so front-only polling misses them and the silence-detector stops recording mid-utterance
         try:
             energy = max(
                 audio.getFrontMicEnergy(),
@@ -649,14 +639,14 @@ try:
         except Exception:
             energy = audio.getFrontMicEnergy()  # firmware fallback
 
-        if elapsed < {RECORD_MIN_SECS}:
+    if elapsed < {RECORD_MIN_SECS}:
             # minimum recording period
             if energy > threshold:
                 speech_detected = True
             time.sleep({SILENCE_POLL_SECS})
             continue
 
-        if energy > threshold:
+    if energy > threshold:
             speech_detected = True
             silence_start = None
         else:
@@ -666,7 +656,7 @@ try:
                 if (time.time() - silence_start) >= {silence_secs}:
                     break
 
-        time.sleep({SILENCE_POLL_SECS})
+    time.sleep({SILENCE_POLL_SECS})
 
 except Exception as e:
     # firmware fallback; getFrontMicEnergy() unsupported on this Pepper
@@ -682,7 +672,7 @@ rec.stopMicrophonesRecording()
 \end{lstlisting}
 
 - [ ] PROOFREAD
-Whisper hallucinates on near-silent audio, emitting training-set tics (CJK gibberish, prompt-primed repetition); the latter NLG *degeneration* wherein models get "stuck in repetitive loops" (Ji et al., 2023, p. 3). Transcription is gated by five layers: 1) a near-empty-file RMS floor (`NAO_MIN_RMS_TO_TRANSCRIBE = 30`, emergency only; the older 120 wrongly rejected short answers like "yes" or "Tom"); 2) Silero-VAD, applied to both LOCAL and NAO modes since `force_mono_16k_wav()` canonicalises beforehand; 3) Vosk grammar-restricted wake-word gate ("Pepper"/"Gaze"), bypassable for the first-turn name prompt; 4) Whisper's own `no_speech_prob` / `avg_logprob` / `compression_ratio` signals; 5) an aggressively-normalised hallucination blacklist.
+  Whisper hallucinates on near-silent audio, emitting training-set tics (CJK gibberish, prompt-primed repetition); the latter NLG *degeneration* wherein models get "stuck in repetitive loops" (Ji et al., 2023, p. 3). Transcription is gated by five layers: 1) a near-empty-file RMS floor (`NAO_MIN_RMS_TO_TRANSCRIBE = 30`, emergency only; the older 120 wrongly rejected short answers like "yes" or "Tom"); 2) Silero-VAD, applied to both LOCAL and NAO modes since `force_mono_16k_wav()` canonicalises beforehand; 3) Vosk grammar-restricted wake-word gate ("Pepper"/"Gaze"), bypassable for the first-turn name prompt; 4) Whisper's own `no_speech_prob` / `avg_logprob` / `compression_ratio` signals; 5) an aggressively-normalised hallucination blacklist.
 
 \begin{lstlisting}[style=python, caption={\texttt{transcribe}: five-layer defence chain against Whisper hallucination on near-silent audio (gaze.py, lines ~1357--1427).}, label={lst:whisper}]
 def transcribe(bypass_wake_word: bool = False,
@@ -726,7 +716,7 @@ def transcribe(bypass_wake_word: bool = False,
             )
         text = (getattr(resp, "text", "") or "").strip()
 
-        # Layer 4: Whisper self-signals (no_speech_prob + avg_logprob + compression_ratio per segment). resp is a Pydantic TranscriptionVerbose thus attribute access (not dict indexing).
+    # Layer 4: Whisper self-signals (no_speech_prob + avg_logprob + compression_ratio per segment). resp is a Pydantic TranscriptionVerbose thus attribute access (not dict indexing).
         segments = getattr(resp, "segments", None) or []
         if segments:
             no_speech_vals = [s.no_speech_prob for s in segments
@@ -749,12 +739,12 @@ def transcribe(bypass_wake_word: bool = False,
                       f"{max(compression_vals):.2f}); dropping {text!r}")
                 return ""
 
-        # Layer 5: aggressively-normalised hallucination blacklist
+    # Layer 5: aggressively-normalised hallucination blacklist
         if is_known_hallucination(text):
             print(f"  Filtered Whisper hallucination: {text!r}")
             return ""
 
-        # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
+    # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
         stripped = re.sub(r'(?i)^\s*(pepper|gaze)\b[,.\s]*', '', text).strip()
         return stripped
     except Exception as e:
@@ -769,7 +759,9 @@ def transcribe(bypass_wake_word: bool = False,
 -->
 
 \begin{lstlisting}[style=python, caption={\texttt{SpeechEmotionModel.extract\_features}: MFCC + chroma + mel-spectrogram feature vector matching the WS-08 training pipeline, with peak-normalisation for quieter brain-injured users (gaze.py, lines ~192--220).}, label={lst:extract-features}]
+
 # PASTE SpeechEmotionModel.extract_features FROM gaze.py HERE (lines ~192--220, including the @staticmethod decorator)
+
 \end{lstlisting}
 
 **4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion; the Whisper call occurs *after* the timer halts, isolating deliberation time from API latency.
@@ -785,7 +777,7 @@ def transcribe(bypass_wake_word: bool = False,
 -->
 
 - [ ] PROOFREAD
-The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013, p. 256) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 15s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
+  The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013, p. 256) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 15s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -839,15 +831,18 @@ The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals
 The complete classification logic, face-primary with voice tie-breakers, is shown in Listing~\ref{lst:infer} (extracted from `gaze.py` `infer_state()`):
 
 \begin{lstlisting}[caption={Multi-signal inference rules (verbatim excerpt from \texttt{gaze.py} \texttt{infer\_state()}; method-body indentation stripped). The newest implementation is face-primary: every rule fires off facial expression + behavioural signals first, voice is consulted only as a high-confidence tie-breaker at the end.}, label=lst:infer]
+
 # 1- FACE-PRIMARY RULES: these fire before voice is ever consulted
 
 # thriving: performing well + fast responses
+
 if (correctness >= CORRECTNESS_CEILING and response_time < RESPONSE_TIME_BASELINE * 0.5):
     return InferredState.THRIVING
 if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
     return InferredState.COMFORTABLE
 
 # disengaged: silence threshold, or face + slow response + poor performance
+
 if self.consecutive_silences >= SILENCE_THRESHOLD:
     return InferredState.DISENGAGED
 if (expression == "Neutral"
@@ -859,6 +854,7 @@ if (low_arousal and expression == "Neutral"
     return InferredState.DISENGAGED
 
 # frustrated: negative face + poor performance, or 3+ wrong + negative face, or high arousal + negative face + poor
+
 if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
     return InferredState.FRUSTRATED
 if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
@@ -868,6 +864,7 @@ if (high_arousal and expression in ("Angry", "Disgust", "Fear")
     return InferredState.FRUSTRATED
 
 # struggling: sadness + slow; poor correctness; fear + wrong
+
 if expression == "Sad" and response_time > RESPONSE_TIME_BASELINE * 0.7:
     return InferredState.STRUGGLING
 if correctness < CORRECTNESS_FLOOR:
@@ -876,6 +873,7 @@ if expression == "Fear" and not correct:
     return InferredState.STRUGGLING
 
 # 2- VOICE TIE-BREAKERS: only when face is Neutral AND voice is trustworthy. Voice can nudge but never override a face-driven verdict.
+
 if expression == "Neutral" and trust_voice:
     if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
         return InferredState.THRIVING
@@ -925,7 +923,7 @@ Speech, gestures, and LED state fire concurrently via threading. Context-aligned
 ### 2.3.6 Adaptation Self-Evaluation and Session Persistence
 
 - [ ] PROOFREAD
-GAZE exposes `evaluate_adaptation()` to the LLM as the `evaluate_last_adaptation` tool, hence the LLM can compare consecutive rounds to judge whether a previous adaptation helped (e.g. did a difficulty decrease after frustration produce a correct answer?). Session progress is saved to `gaze_save.json` after every game round, with a belt-and-braces auto-save every two turns regardless, hence protecting state against unexpected crashes.
+  GAZE exposes `evaluate_adaptation()` to the LLM as the `evaluate_last_adaptation` tool, hence the LLM can compare consecutive rounds to judge whether a previous adaptation helped (e.g. did a difficulty decrease after frustration produce a correct answer?). Session progress is saved to `gaze_save.json` after every game round, with a belt-and-braces auto-save every two turns regardless, hence protecting state against unexpected crashes.
 
 <!-- POMDP content removed. See git history if needed. -->
 
@@ -934,12 +932,11 @@ GAZE exposes `evaluate_adaptation()` to the LLM as the `evaluate_last_adaptation
 ## 2.5. Conclusion (10%; Alfie)
 
 - [ ] PROOFREAD
-GAZE implements multi-signal emotional inference across two independent modalities *(facial expression via WS-10 CNN and vocal emotion via WS-08 MLP)* alongside speech volume/RMS, response time, answer correctness, answer text, and derived temporal signals, hence yielding a more robust user-state estimate than any single channel. The implementation hardens further by recording all four Pepper microphones, canonicalising audio to mono 16 kHz by loudest-channel selection, applying Silero-VAD to both modes, and streaming Pepper's camera via persistent `ALVideoDevice` rather than per-turn SFTP. The hybrid architecture (GPT-5.4 dialogue paired with symbolic rule-based inference and a deterministic GPT-4.1 verifier) and adaptive game-switching directly target the novelty-decay problem Smedegaard (2019, p. 4) identifies.
-
+  GAZE implements multi-signal emotional inference across two independent modalities *(facial expression via WS-10 CNN and vocal emotion via WS-08 MLP)* alongside speech volume/RMS, response time, answer correctness, answer text, and derived temporal signals, hence yielding a more robust user-state estimate than any single channel. The implementation hardens further by recording all four Pepper microphones, canonicalising audio to mono 16 kHz by loudest-channel selection, applying Silero-VAD to both modes, and streaming Pepper's camera via persistent `ALVideoDevice` rather than per-turn SFTP. The hybrid architecture (GPT-5.4 dialogue paired with symbolic rule-based inference and a deterministic GPT-4.1 verifier) and adaptive game-switching directly target the novelty-decay problem Smedegaard (2019, p. 4) identifies.
 - [ ] PROOFREAD
-The conversational architecture, wherein the LLM decides actions via function calling, positions GAZE as a social companion rather than a rigid game host. <!-- WRAPPED OUT: factually inaccurate (no personality-mode selection in current gaze.py)
-The selectable personality modes extend Tapus, Tapus and Mataric's (2008, p. TODO: VERIFY PAGE) personality matching from static trait-matching to dynamic, signal-driven adaptation.
--->
+  The conversational architecture, wherein the LLM decides actions via function calling, positions GAZE as a social companion rather than a rigid game host. `<!-- WRAPPED OUT: factually inaccurate (no personality-mode selection in current gaze.py)
+  The selectable personality modes extend Tapus, Tapus and Mataric's (2008, p. TODO: VERIFY PAGE) personality matching from static trait-matching to dynamic, signal-driven adaptation.
+  -->`
 
 The multi-signal approach could transfer to stroke rehabilitation re-engagement (Mataric et al., 2007), educational tutoring, or neurodivergent support. Future work could replace hand-coded thresholds with learned parameters from longitudinal data, and fine-tune both models on in-session Pepper captures.
 

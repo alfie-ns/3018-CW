@@ -1920,20 +1920,25 @@ def execute_tool_call(tool_name: str, tool_args: dict,
         return json.dumps(result)
 
     elif tool_name == "check_game_answer":
-        ua  = tool_args.get("user_answer", "")
-        ca  = tool_args.get("correct_answer", "")
-        ctx = tool_args.get("question_context", "")
-        is_correct = check_answer(ua, ca, ctx)
-        # snapshot question + game_type + difficulty before any same-chain generate_game_question overwrites them
+        ua = tool_args.get("user_answer", "")
+        if not game_state.active:
+            game_state.last_answer_checked = False
+            return json.dumps({"correct": False, "error": "no active game question"})
+        # snapshot before same-chain regen overwrites
         game_state.answered_question   = game_state.current_question
         game_state.answered_answer     = game_state.current_answer
         game_state.answered_game_type  = engine.current_game
         game_state.answered_difficulty = engine.current_difficulty
-        # push result through so the conversation loop can feed it to engine.decide() and record_round() after completion of the tool chain. last_answer_checked flips the "was_game_answer" switch in conversation_loop; without this flag being set, record_round() was silently skipped and rounds_played/total_correct stayed at 0 even after the user answered correctly
+        # Python state is the source of truth, not LLM-supplied args
+        is_correct = check_answer(
+            ua,
+            game_state.current_answer,
+            game_state.current_question,
+        )
+        # last_answer_checked: ensures record_round() runs
         game_state.last_answer_checked = True
         game_state.last_answer_correct = is_correct
-        if game_state.active:
-            game_state.active = False
+        game_state.active = False
         return json.dumps({"correct": is_correct})
 
     elif tool_name == "evaluate_last_adaptation":
@@ -1971,6 +1976,9 @@ def process_llm_response(message, conversation: list,
         if not current_msg.tool_calls:
             break # kill loop if no more tool calls
 
+        # block same-batch regen; engine.decide() must update difficulty first
+        batch_has_check = any(tc.function.name == "check_game_answer"
+                              for tc in current_msg.tool_calls)
         for tc in current_msg.tool_calls:
             fn_name = tc.function.name
             try:
@@ -1978,15 +1986,19 @@ def process_llm_response(message, conversation: list,
             except json.JSONDecodeError:
                 fn_args = {}
 
-            print(f"  Calling tool {fn_name}({fn_args})")
-            result_str = execute_tool_call(
-                fn_name, fn_args, engine, game_state,
-                conversation, preferred_game, dashboard
-            )
-            print(f"  Tool returned: {result_str[:120]}")
+            if batch_has_check and fn_name == "generate_game_question":
+                result_str = json.dumps({"skipped": True,
+                                         "reason": "deferred until after adaptive decision"})
+                print(f"  Skipping {fn_name}: deferred after answer check")
+            else:
+                print(f"  Calling tool {fn_name}({fn_args})")
+                result_str = execute_tool_call(
+                    fn_name, fn_args, engine, game_state,
+                    conversation, preferred_game, dashboard
+                )
+                print(f"  Tool returned: {result_str[:120]}")
             if fn_name == "check_game_answer":
                 used_answer_check = True
-            # append tool's raw string back to shared context
             conversation.append({
                 "role": "tool",
                 "tool_call_id": tc.id,
@@ -2112,7 +2124,15 @@ _STATE_COLOURS = {
 class GazeDashboard:
     """Tkinter dashboard for GAZE.
     1-  create a window with two panels: left = conversation then video, right for inferred stats/signals/state
-    
+    2-  left panel: camera canvas above the scrollable conversation log; log is read-only default and
+        flipped to "normal" when a new line is appended
+    3-  right panel: round/score/streak counters at top, then the transcription block (what the user said + correct/incorrect,
+        recoloured per outcome), then the live signals (face CNN, voice MLP, volume RMS, response time, rolling accuracy,
+        think budget), then the adaptive decision block (inferred state, difficulty, tone, adaptations, plus a grey eval-note line below)
+    4-  quit handling: the Quit button, Esc, Cmd/Ctrl-Q and the window-close (X) all converge on quit_app(), so the SSH farewell + LED-off
+        always run no matter how the user closes the dashboard
+    5-  refresh loops: camera_refresh() composites the latest raw frame with the cached detection overlay at native fps; signal_refresh()
+        repaints the StringVar-bound labels at a slower cadence; both self-reschedule via root.after()
     """
 
     CAMERA_W, CAMERA_H = 400, 300
@@ -2123,7 +2143,7 @@ class GazeDashboard:
         self._ssh_tts = ssh_tts
         self.root = tk.Tk()
         self.root.title("GAZE Dashboard")
-        self.root.resizable(False, False)         # fixed layout; no reflow
+        self.root.resizable(False, False)  
 
         # left col: video + chat; right col: stats
         left = tk.Frame(self.root)
@@ -2166,7 +2186,7 @@ class GazeDashboard:
         self._heard_var = tk.StringVar(value="You said: -")
         self._result_var = tk.StringVar(value="")
         tk.Label(right, textvariable=self._heard_var).pack(anchor="w")
-        # kept for fg recolour on correctness
+        # fg recolour on correctness
         self._result_label = tk.Label(right, textvariable=self._result_var,
                                       font=("TkDefaultFont", 11, "bold"))
         self._result_label.pack(anchor="w")
@@ -2227,7 +2247,7 @@ class GazeDashboard:
 
     def camera_refresh(self):
         """Composite the latest raw frame with the cached detection overlay.
-        Bbox is drawn on every fresh raw frame so the feed looks live."""
+        Bbox is drawn on every fresh raw frame for a live-feed."""
         with _preview_lock:
             frame   = _preview_frame
             bbox    = _last_bbox
@@ -2268,7 +2288,7 @@ class GazeDashboard:
 
 
     def update_robot_speech(self, text: str):
-        # enable -> insert -> see end -> disable: the Text widget is "disabled" (read-only) by default; flip to "normal" to write, scroll the view to "end" so newest message stays visible, then re-disable so the user can't accidentally type into the log.
+        # enable /to insert /to see end /to disable: the Text widget is "disabled" (read-only) by default; flip to "normal" to write, scroll the view to "end" so newest message stays visible, then re-disable so the user can't accidentally type into the log.
         def apply():
             self._conv_text.configure(state="normal")
             self._conv_text.insert("end", f"Robot: {text}\n\n")
@@ -2359,7 +2379,7 @@ class GazeDashboard:
             pass
 
 NAME_REJECT_YEAR = re.compile(r"^\d+$")   # "2016", "2012"; Whisper's short-utterance attractor
-# Reject common hallucinated openers that would otherwise become the "name" after split()[0]. 'Please' was produced in a real Pepper test; the WAV was near-silent and Whisper hallucinated 'Please see the complete disclaimer at https://...'
+# common hallucinated openers that would otherwise become the "name" after split()[0]
 NAME_REJECT_WORDS = frozenset({
     "please", "visit", "subscribe", "thanks", "thank", "http", "https",
     "www", "youtube", "video", "hello", "hi", "hey", "welcome",
@@ -2787,7 +2807,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 # use snapshot so a same-chain generate_game_question can't pollute this round's logged values
                 answered_q  = game_state.answered_question  or game_state.current_question
                 answered_a  = game_state.answered_answer    or game_state.current_answer
-                answered_gt = game_state.answered_game_type or engine.current_game
+                answered_gt = game_state.answered_game_type or engine.current_game 
                 answered_df = game_state.answered_difficulty or engine.current_difficulty
                 decision = engine.decide(
                     expression, expr_conf, response_time,
@@ -2835,7 +2855,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 # chat or more-time turn; refresh dashboard signals only
                 dashboard.update_signals(
                     round_num=turn_count, user_answer=user_text,
-                    correct_answer=game_state.current_answer if game_state.active else "",
+                    correct_answer="",
                     correct=False,
                     expression=expression, expr_conf=expr_conf,
                     vocal_emo=vocal_emo, vocal_conf=vocal_conf,
@@ -2877,7 +2897,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         else:
             farewell = f"Thanks for playing! You got {summary['correct']} out of {summary['rounds']}.{streak_note} Every round is a learning opportunity. Your progress is saved; see you next time!"
     else:
-        farewell = "It was lovely chatting! Your progress is saved; see you next time!"
+        farewell = "It was great to chat! Your progress is saved; see you next time!"
 
     if not LOCAL_MODE:
         nao_gesture(ssh, "wave")
@@ -2895,10 +2915,10 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     print("\nGAZE disconnected.")
 
 def main():
-    print("=" * 60)
+    print("----------------------------------------")
     print("  GAZE: Game-Adaptive Zone of Engagement")
-    print("  Adaptive Game System for Pepper Robot")
-    print("=" * 60)
+    print("  Adaptive Game-System Ran on Pepper")
+    print("----------------------------------------")
 
     print("\nLoading facial expression model...")
     face_model   = FacialExpressionModel(MODEL_JSON, MODEL_WEIGHTS)
