@@ -16,10 +16,10 @@ LOG (VoskAPI:ComputeDerivedVars():ivector-extractor.cc:204) Done.
 LOG (VoskAPI:ReadDataFiles():model.cc:282) Loading HCL and G from /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/HCLr.fst /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/Gr.fst
 LOG (VoskAPI:ReadDataFiles():model.cc:303) Loading winfo /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/phones/word_boundary.int
 [booting] vosk wake-word model loaded
-============================================================
+----------------------------------------
   GAZE: Game-Adaptive Zone of Engagement
-  Adaptive Game System for Pepper Robot
-============================================================
+  Adaptive Game-System Ran on Pepper
+----------------------------------------
 
 Loading facial expression model...
   Facial model loaded.
@@ -32,31 +32,208 @@ Loading speech emotion model...
 
 Calibrating Mac microphone ambient noise level...
 Calibrating Mac mic (stay quiet for 3s)...
-  Ambient RMS: 61, silence threshold: 86, transcription gate: 344
-  Arousal thresholds: QUIET=200, LOUD=2000
+  Ambient RMS: 157, silence threshold: 182, transcription gate: 728
+  Arousal thresholds: QUIET=314, LOUD=2000
   Dashboard launched.
+
+Robot: Welcome back, کومی! Last time you played 0 rounds and got 0 correct. Want to continue where you left off, or start fresh?
+
+Listening for continue/fresh...
+  Recording from Mac mic (up to 10.0s, stops after silence)...
+    [0.5s] RMS: 2300 ▓    [0.8s] RMS: 2083 ▓    [1.0s] RMS: 1610 ▓    [1.2s] RMS: 172 ░    [1.5s] RMS: 145 ░    [1.8s] RMS: 126 ░    [2.0s] RMS: 114 ░    [2.2s] RMS: 139 ░    [2.5s] RMS: 159 ░    [2.8s] RMS: 180 ░    [3.0s] RMS: 183 ▓    [3.2s] RMS: 171 ░    [3.5s] RMS: 139 ░    [3.8s] RMS: 131 ░    [4.0s] RMS: 187 ▓    [4.2s] RMS: 189 ▓    [4.5s] RMS: 221 ▓    [4.8s] RMS: 175 ░    [5.0s] RMS: 131 ░    [5.2s] RMS: 142 ░    [5.5s] RMS: 158 ░    [5.8s] RMS: 178 ░    [6.0s] RMS: 175 ░    [6.2s] RMS: 172 ░    [6.5s] RMS: 193 ▓    [6.8s] RMS: 209 ▓    [7.0s] RMS: 210 ▓    [7.2s] RMS: 170 ░    [7.5s] RMS: 2444 ▓    [7.8s] RMS: 2864 ▓    [8.0s] RMS: 2687 ▓    [8.2s] RMS: 4249 ▓    [8.5s] RMS: 4822 ▓    [8.8s] RMS: 2063 ▓    [9.0s] RMS: 331 ▓    [9.2s] RMS: 154 ░    [9.5s] RMS: 155 ░    [9.8s] RMS: 119 ░    [10.0s] RMS: 128 ░
+  Recording saved (10.0s, speech=yes).
+  Whisper raw text: "Let's start fresh. Let's start fresh."
+  Whisper diagnostics: no_speech=[0.12257581204175949, 0.12257581204175949], avg_logprob=[-0.6945231556892395, -0.6945231556892395], compression=[1.2333333492279053, 1.2333333492279053]
+  Heard: Let's start fresh. Let's start fresh.
+
+Robot: No worries, starting fresh! Your previous save has been cleared.
 
 Robot: Before we start, may I know what to call you? Just your first name is perfect.
   Recording from Mac mic (up to 10.0s, stops after silence)...
-    [0.5s] RMS: 24 ░    [0.8s] RMS: 50 ░    [1.0s] RMS: 1005 ▓    [1.2s] RMS: 2536 ▓    [1.5s] RMS: 2414 ▓    [1.8s] RMS: 2681 ▓    [2.0s] RMS: 1223 ▓    [2.2s] RMS: 3065 ▓    [2.5s] RMS: 1608 ▓    [2.8s] RMS: 2965 ▓    [3.0s] RMS: 465 ▓    [3.2s] RMS: 51 ░    [3.5s] RMS: 54 ░    [3.8s] RMS: 49 ░    [4.0s] RMS: 48 ░    [4.2s] RMS: 49 ░    [4.5s] RMS: 49 ░    [4.8s] RMS: 49 ░    [5.0s] RMS: 49 ░    [5.2s] RMS: 49 ░    [5.5s] RMS: 48 ░    [5.8s] RMS: 53 ░
-  Recording saved (5.8s, speech=yes).
-  Whisper raw text: 'Uh yeah, call me Elliot Ram.'
-  Whisper diagnostics: no_speech=[0.10538435727357864], avg_logprob=[-0.7876081466674805], compression=[0.7777777910232544]
-  Heard: Uh yeah, call me Elliot Ram.
+    [0.5s] RMS: 1593 ▓    [0.8s] RMS: 5473 ▓    [1.0s] RMS: 3046 ▓    [1.2s] RMS: 774 ▓    [1.5s] RMS: 4964 ▓    [1.8s] RMS: 2858 ▓    [2.0s] RMS: 4498 ▓    [2.2s] RMS: 2622 ▓    [2.5s] RMS: 280 ▓    [2.8s] RMS: 209 ▓    [3.0s] RMS: 172 ░    [3.2s] RMS: 164 ░    [3.5s] RMS: 169 ░    [3.8s] RMS: 146 ░    [4.0s] RMS: 147 ░    [4.2s] RMS: 154 ░    [4.5s] RMS: 215 ▓    [4.8s] RMS: 146 ░    [5.0s] RMS: 200 ▓    [5.2s] RMS: 166 ░    [5.5s] RMS: 138 ░    [5.8s] RMS: 215 ▓    [6.0s] RMS: 168 ░    [6.2s] RMS: 148 ░    [6.5s] RMS: 138 ░    [6.8s] RMS: 131 ░    [7.0s] RMS: 128 ░    [7.2s] RMS: 140 ░    [7.5s] RMS: 149 ░    [7.8s] RMS: 221 ▓    [8.0s] RMS: 154 ░    [8.2s] RMS: 179 ░    [8.5s] RMS: 191 ▓    [8.8s] RMS: 155 ░    [9.0s] RMS: 206 ▓    [9.2s] RMS: 169 ░    [9.5s] RMS: 172 ░    [9.8s] RMS: 171 ░    [10.0s] RMS: 145 ░
+  Recording saved (10.0s, speech=yes).
+  Whisper raw text: 'But yeah, just call me Alfie.'
+  Whisper diagnostics: no_speech=[0.1972459852695465], avg_logprob=[-0.5217005610466003], compression=[0.7837837934494019]
+  Heard: But yeah, just call me Alfie.
 
-Robot: Hi Elliot Ram, it’s lovely to be with you — we can chat, play a little game, or just hang out together. I’m here for whatever feels good for you right now.
+Robot: Hi Alfie, it’s lovely to be with you. We can have a chat, play a little game, or just hang out together.
 
 ---------------------------------------- Turn 1 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.00): LOW CONFIDENCE, treating as Neutral
+  Expression: Neutral (0.79)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 26 ░    [0.8s] RMS: 48 ░    [1.0s] RMS: 50 ░    [1.2s] RMS: 49 ░    [1.5s] RMS: 48 ░    [1.8s] RMS: 55 ░    [2.0s] RMS: 50 ░    [2.2s] RMS: 69 ░    [2.5s] RMS: 56 ░    [2.8s] RMS: 68 ░    [3.0s] RMS: 148 ▓    [3.2s] RMS: 57 ░    [3.5s] RMS: 2471 ▓    [3.8s] RMS: 373 ▓    [4.0s] RMS: 88 ▓    [4.2s] RMS: 64 ░    [4.5s] RMS: 65 ░    [4.8s] RMS: 343 ▓    [5.0s] RMS: 229 ▓    [5.2s] RMS: 60 ░    [5.5s] RMS: 1191 ▓    [5.8s] RMS: 1804 ▓    [6.0s] RMS: 1416 ▓    [6.2s] RMS: 98 ▓    [6.5s] RMS: 59 ░    [6.8s] RMS: 77 ░    [7.0s] RMS: 67 ░    [7.2s] RMS: 62 ░    [7.5s] RMS: 62 ░    [7.8s] RMS: 125 ▓    [8.0s] RMS: 59 ░    [8.2s] RMS: 62 ░    [8.5s] RMS: 52 ░    [8.8s] RMS: 67 ░    [9.0s] RMS: 64 ░    [9.2s] RMS: 2461 ▓    [9.5s] RMS: 1706 ▓    [9.8s] RMS: 1325 ▓    [10.0s] RMS: 3031 ▓    [10.2s] RMS: 1593 ▓    [10.5s] RMS: 735 ▓    [10.8s] RMS: 66 ░    [11.0s] RMS: 51 ░    [11.2s] RMS: 149 ▓    [11.5s] RMS: 66 ░    [11.8s] RMS: 52 ░
-  [Dashboard] Quit requested.
-    [12.0s] RMS: 118 ▓    [12.2s] RMS: 113 ▓    [12.5s] RMS: 124 ▓    [12.8s] RMS: 50 ░    [13.0s] RMS: 50 ░    [13.2s] RMS: 1689 ▓    [13.5s] RMS: 2418 ▓    [13.8s] RMS: 626 ▓    [14.0s] RMS: 1759 ▓    [14.2s] RMS: 237 ▓    [14.5s] RMS: 52 ░    [14.8s] RMS: 1135 ▓    [15.0s] RMS: 2259 ▓
+    [0.5s] RMS: 98 ░    [0.8s] RMS: 178 ░    [1.0s] RMS: 183 ▓    [1.2s] RMS: 203 ▓    [1.5s] RMS: 210 ▓    [1.8s] RMS: 192 ▓    [2.0s] RMS: 329 ▓    [2.2s] RMS: 4524 ▓    [2.5s] RMS: 3379 ▓    [2.8s] RMS: 4434 ▓    [3.0s] RMS: 1792 ▓    [3.2s] RMS: 2943 ▓    [3.5s] RMS: 2819 ▓    [3.8s] RMS: 214 ▓    [4.0s] RMS: 210 ▓    [4.2s] RMS: 194 ▓    [4.5s] RMS: 190 ▓    [4.8s] RMS: 187 ▓    [5.0s] RMS: 193 ▓    [5.2s] RMS: 191 ▓    [5.5s] RMS: 175 ░    [5.8s] RMS: 192 ▓    [6.0s] RMS: 241 ▓    [6.2s] RMS: 170 ░    [6.5s] RMS: 159 ░    [6.8s] RMS: 182 ░    [7.0s] RMS: 161 ░    [7.2s] RMS: 165 ░    [7.5s] RMS: 162 ░    [7.8s] RMS: 157 ░    [8.0s] RMS: 248 ▓    [8.2s] RMS: 166 ░    [8.5s] RMS: 231 ▓    [8.8s] RMS: 181 ░    [9.0s] RMS: 170 ░    [9.2s] RMS: 260 ▓    [9.5s] RMS: 180 ░    [9.8s] RMS: 169 ░    [10.0s] RMS: 188 ▓    [10.2s] RMS: 185 ▓    [10.5s] RMS: 177 ░    [10.8s] RMS: 171 ░    [11.0s] RMS: 166 ░    [11.2s] RMS: 277 ▓    [11.5s] RMS: 6004 ▓    [11.8s] RMS: 337 ▓    [12.0s] RMS: 216 ▓    [12.2s] RMS: 202 ▓    [12.5s] RMS: 244 ▓    [12.8s] RMS: 181 ░    [13.0s] RMS: 172 ░    [13.2s] RMS: 189 ▓    [13.5s] RMS: 158 ░    [13.8s] RMS: 164 ░    [14.0s] RMS: 160 ░    [14.2s] RMS: 152 ░    [14.5s] RMS: 250 ▓    [14.8s] RMS: 161 ░    [15.0s] RMS: 153 ░
   Recording saved (15.0s, speech=yes).
-  Vocal emotion: disgust (0.99)
-  Volume RMS: 973
-  Whisper raw text: 'All right, how about... It was great to chat. See you next...'
-  Whisper diagnostics: no_speech=[0.09952369332313538, 0.09952369332313538, 0.09952369332313538], avg_logprob=[-0.67359459400177, -0.67359459400177, -0.67359459400177], compression=[0.9104477763175964, 0.9104477763175964, 0.9104477763175964]
-  Heard: All right, how about... It was great to chat. See you next...
+  Vocal emotion: disgust (1.00)
+  Volume RMS: 1352
+  Whisper raw text: "Oh yeah, cool, let's play a game."
+  Whisper diagnostics: no_speech=[0.09642017632722855], avg_logprob=[-0.5109370946884155], compression=[0.8048780560493469]
+  Heard: Oh yeah, cool, let's play a game.
+  Calling tool generate_game_question({'game_type': 'letters', 'difficulty': 'EASY'})
+  Tool returned: {"question": "Letters round: Using the 9 letters T, E, R, A, S, L, I, N, O, form the longest word possible. You may use 
+
+Robot: Lovely, Alfie — let’s start with a gentle letters round. Using T, E, R, A, S, L, I, N, O, make the longest word you can, and you can use each letter only once.
+(Game answer: relations)
+
+---------------------------------------- Turn 2 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.66)
+Listening...
+  Recording from Mac mic (up to 15.0s, stops after silence)...
+    [0.5s] RMS: 1656 ▓    [0.8s] RMS: 2283 ▓    [1.0s] RMS: 2455 ▓    [1.2s] RMS: 3671 ▓    [1.5s] RMS: 3592 ▓    [1.8s] RMS: 3594 ▓    [2.0s] RMS: 1544 ▓    [2.2s] RMS: 1529 ▓    [2.5s] RMS: 363 ▓    [2.8s] RMS: 201 ▓    [3.0s] RMS: 221 ▓    [3.2s] RMS: 191 ▓    [3.5s] RMS: 198 ▓    [3.8s] RMS: 243 ▓    [4.0s] RMS: 229 ▓    [4.2s] RMS: 260 ▓    [4.5s] RMS: 242 ▓    [4.8s] RMS: 207 ▓    [5.0s] RMS: 173 ░    [5.2s] RMS: 278 ▓    [5.5s] RMS: 179 ░    [5.8s] RMS: 187 ▓    [6.0s] RMS: 183 ▓    [6.2s] RMS: 180 ░    [6.5s] RMS: 188 ▓    [6.8s] RMS: 149 ░    [7.0s] RMS: 146 ░    [7.2s] RMS: 165 ░    [7.5s] RMS: 204 ▓    [7.8s] RMS: 234 ▓    [8.0s] RMS: 243 ▓    [8.2s] RMS: 185 ▓    [8.5s] RMS: 164 ░    [8.8s] RMS: 182 ░    [9.0s] RMS: 196 ▓    [9.2s] RMS: 222 ▓    [9.5s] RMS: 195 ▓    [9.8s] RMS: 203 ▓    [10.0s] RMS: 197 ▓    [10.2s] RMS: 227 ▓    [10.5s] RMS: 242 ▓    [10.8s] RMS: 183 ▓    [11.0s] RMS: 181 ░    [11.2s] RMS: 178 ░    [11.5s] RMS: 161 ░    [11.8s] RMS: 151 ░    [12.0s] RMS: 159 ░    [12.2s] RMS: 184 ▓    [12.5s] RMS: 190 ▓    [12.8s] RMS: 187 ▓    [13.0s] RMS: 195 ▓    [13.2s] RMS: 170 ░    [13.5s] RMS: 6600 ▓    [13.8s] RMS: 11699 ▓    [14.0s] RMS: 13789 ▓    [14.2s] RMS: 3777 ▓    [14.5s] RMS: 920 ▓    [14.8s] RMS: 155 ░    [15.0s] RMS: 141 ░
+  Recording saved (15.0s, speech=yes).
+  Vocal emotion: disgust (1.00)
+  Volume RMS: 2718
+  Whisper raw text: 'Could you give me a little hint, please? Give me a hint!'
+  Whisper diagnostics: no_speech=[0.05768154561519623, 0.05768154561519623], avg_logprob=[-0.4196864664554596, -0.4196864664554596], compression=[1.0370370149612427, 1.0370370149612427]
+  Heard: Could you give me a little hint, please? Give me a hint!
+
+Robot: Of course, Alfie — try thinking of a 9-letter word for connections between people or things. It often comes up when talking about family, work, or links.
+(Game answer: relations)
+  [Auto-save]
+
+---------------------------------------- Turn 3 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.82)
+Listening...
+  Recording from Mac mic (up to 15.0s, stops after silence)...
+    [0.5s] RMS: 99 ░    [0.8s] RMS: 182 ░    [1.0s] RMS: 168 ░    [1.2s] RMS: 165 ░    [1.5s] RMS: 155 ░    [1.8s] RMS: 155 ░    [2.0s] RMS: 165 ░    [2.2s] RMS: 179 ░    [2.5s] RMS: 167 ░    [2.8s] RMS: 181 ░    [3.0s] RMS: 234 ▓    [3.2s] RMS: 200 ▓    [3.5s] RMS: 186 ▓    [3.8s] RMS: 171 ░    [4.0s] RMS: 176 ░    [4.2s] RMS: 175 ░    [4.5s] RMS: 171 ░    [4.8s] RMS: 169 ░    [5.0s] RMS: 230 ▓    [5.2s] RMS: 179 ░    [5.5s] RMS: 197 ▓    [5.8s] RMS: 191 ▓    [6.0s] RMS: 166 ░    [6.2s] RMS: 225 ▓    [6.5s] RMS: 188 ▓    [6.8s] RMS: 186 ▓    [7.0s] RMS: 614 ▓    [7.2s] RMS: 169 ░    [7.5s] RMS: 156 ░    [7.8s] RMS: 165 ░    [8.0s] RMS: 235 ▓    [8.2s] RMS: 182 ░    [8.5s] RMS: 199 ▓    [8.8s] RMS: 225 ▓    [9.0s] RMS: 327 ▓    [9.2s] RMS: 5941 ▓    [9.5s] RMS: 5941 ▓    [9.8s] RMS: 3015 ▓    [10.0s] RMS: 2599 ▓    [10.2s] RMS: 262 ▓    [10.5s] RMS: 156 ░    [10.8s] RMS: 168 ░    [11.0s] RMS: 179 ░    [11.2s] RMS: 235 ▓    [11.5s] RMS: 197 ▓    [11.8s] RMS: 196 ▓    [12.0s] RMS: 240 ▓    [12.2s] RMS: 190 ▓    [12.5s] RMS: 188 ▓    [12.8s] RMS: 189 ▓    [13.0s] RMS: 217 ▓    [13.2s] RMS: 170 ░    [13.5s] RMS: 180 ░    [13.8s] RMS: 202 ▓    [14.0s] RMS: 205 ▓    [14.2s] RMS: 210 ▓    [14.5s] RMS: 213 ▓    [14.8s] RMS: 209 ▓    [15.0s] RMS: 222 ▓
+  Recording saved (15.0s, speech=yes).
+  Vocal emotion: disgust (1.00)
+  Volume RMS: 945
+  Whisper raw text: "I don't know."
+  Whisper diagnostics: no_speech=[0.06585098803043365], avg_logprob=[-1.116945505142212], compression=[0.6190476417541504]
+  Whisper low-confidence (min avg_logprob=-1.12); dropping "I don't know."
+  Heard: (silence)
+
+---------------------------------------- Turn 4 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.46): LOW CONFIDENCE, treating as Neutral
+Listening...
+  Recording from Mac mic (up to 15.0s, stops after silence)...
+    [0.5s] RMS: 96 ░    [0.8s] RMS: 189 ▓    [1.0s] RMS: 196 ▓    [1.2s] RMS: 193 ▓    [1.5s] RMS: 173 ░    [1.8s] RMS: 195 ▓    [2.0s] RMS: 187 ▓    [2.2s] RMS: 201 ▓    [2.5s] RMS: 192 ▓    [2.8s] RMS: 200 ▓    [3.0s] RMS: 197 ▓    [3.2s] RMS: 180 ░    [3.5s] RMS: 195 ▓    [3.8s] RMS: 3243 ▓    [4.0s] RMS: 5378 ▓    [4.2s] RMS: 703 ▓    [4.5s] RMS: 211 ▓    [4.8s] RMS: 201 ▓    [5.0s] RMS: 221 ▓    [5.2s] RMS: 196 ▓    [5.5s] RMS: 198 ▓    [5.8s] RMS: 190 ▓    [6.0s] RMS: 174 ░    [6.2s] RMS: 165 ░    [6.5s] RMS: 162 ░    [6.8s] RMS: 161 ░    [7.0s] RMS: 175 ░    [7.2s] RMS: 168 ░    [7.5s] RMS: 179 ░    [7.8s] RMS: 180 ░    [8.0s] RMS: 174 ░    [8.2s] RMS: 197 ▓    [8.5s] RMS: 194 ▓    [8.8s] RMS: 176 ░    [9.0s] RMS: 192 ▓    [9.2s] RMS: 201 ▓    [9.5s] RMS: 188 ▓    [9.8s] RMS: 194 ▓    [10.0s] RMS: 228 ▓    [10.2s] RMS: 237 ▓    [10.5s] RMS: 222 ▓    [10.8s] RMS: 222 ▓    [11.0s] RMS: 221 ▓    [11.2s] RMS: 209 ▓    [11.5s] RMS: 199 ▓    [11.8s] RMS: 212 ▓    [12.0s] RMS: 218 ▓    [12.2s] RMS: 204 ▓    [12.5s] RMS: 194 ▓    [12.8s] RMS: 187 ▓    [13.0s] RMS: 185 ▓    [13.2s] RMS: 196 ▓    [13.5s] RMS: 202 ▓    [13.8s] RMS: 213 ▓    [14.0s] RMS: 202 ▓    [14.2s] RMS: 205 ▓    [14.5s] RMS: 191 ▓    [14.8s] RMS: 188 ▓    [15.0s] RMS: 189 ▓
+  Recording saved (15.0s, speech=yes).
+  Vocal emotion: disgust (1.00)
+  Volume RMS: 1093
+  Whisper raw text: "I'm not sure."
+  Whisper diagnostics: no_speech=[0.11138364672660828], avg_logprob=[-0.6096077561378479], compression=[0.6190476417541504]
+  Heard: I'm not sure.
+
+Robot: That’s okay, Alfie — you’re doing fine. A stronger hint: it starts with “rel…” and means links or connections.
+(Game answer: relations)
+  [Auto-save]
+
+---------------------------------------- Turn 5 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.82)
+Listening...
+  Recording from Mac mic (up to 15.0s, stops after silence)...
+    [0.5s] RMS: 2121 ▓    [0.8s] RMS: 2763 ▓    [1.0s] RMS: 2246 ▓    [1.2s] RMS: 1163 ▓    [1.5s] RMS: 3055 ▓    [1.8s] RMS: 2206 ▓    [2.0s] RMS: 4393 ▓    [2.2s] RMS: 2160 ▓    [2.5s] RMS: 2178 ▓    [2.8s] RMS: 528 ▓    [3.0s] RMS: 62 ░    [3.2s] RMS: 61 ░    [3.5s] RMS: 66 ░    [3.8s] RMS: 66 ░    [4.0s] RMS: 67 ░    [4.2s] RMS: 67 ░    [4.5s] RMS: 67 ░    [4.8s] RMS: 70 ░    [5.0s] RMS: 71 ░    [5.2s] RMS: 64 ░    [5.5s] RMS: 80 ░
+  Recording saved (5.5s, speech=yes).
+  Vocal emotion: calm (0.98)
+  Volume RMS: 1673
+  Whisper raw text: 'Relatively, no just relatives.'
+  Whisper diagnostics: no_speech=[0.18539616465568542], avg_logprob=[-0.8685281872749329], compression=[0.9090909361839294]
+  Heard: Relatively, no just relatives.
+  Calling tool check_game_answer({'user_answer': 'Relatively, no just relatives.', 'correct_answer': 'relations', 'question_context': 'Letters round: Using the 9 letters T, E, R, A, S, L, I, N, O, form the longest word possible. You may use each letter only once.'})
+  Tool returned: {"correct": false}
+
+Robot: Nice try, Alfie — “relatives” is a really good thought, but the best fit here is “relations.” You were very close; want another easy round?
+
+---------------------------------------- Turn 6 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.00): LOW CONFIDENCE, treating as Neutral
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 40 ░    [0.8s] RMS: 77 ░    [1.0s] RMS: 79 ░    [1.2s] RMS: 81 ░    [1.5s] RMS: 72 ░    [1.8s] RMS: 90 ░    [2.0s] RMS: 77 ░    [2.2s] RMS: 92 ░    [2.5s] RMS: 88 ░    [2.8s] RMS: 80 ░    [3.0s] RMS: 78 ░    [3.2s] RMS: 70 ░    [3.5s] RMS: 99 ░    [3.8s] RMS: 93 ░    [4.0s] RMS: 66 ░    [4.2s] RMS: 67 ░    [4.5s] RMS: 65 ░    [4.8s] RMS: 68 ░    [5.0s] RMS: 65 ░
+  Recording saved (5.0s, speech=no).
+  Vocal emotion: calm (1.00)
+  Volume RMS: 76
+  No speech chunk detected (floor=182); skipping transcription.
+  Heard: (silence)
+
+---------------------------------------- Turn 7 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.40): LOW CONFIDENCE, treating as Neutral
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 36 ░    [0.8s] RMS: 102 ░    [1.0s] RMS: 193 ▓    [1.2s] RMS: 3864 ▓    [1.5s] RMS: 4157 ▓    [1.8s] RMS: 2288 ▓    [2.0s] RMS: 2597 ▓    [2.2s] RMS: 2776 ▓    [2.5s] RMS: 2439 ▓    [2.8s] RMS: 2573 ▓    [3.0s] RMS: 1490 ▓    [3.2s] RMS: 1774 ▓    [3.5s] RMS: 139 ░    [3.8s] RMS: 69 ░    [4.0s] RMS: 73 ░    [4.2s] RMS: 79 ░    [4.5s] RMS: 71 ░    [4.8s] RMS: 72 ░    [5.0s] RMS: 71 ░    [5.2s] RMS: 74 ░    [5.5s] RMS: 70 ░
+  Recording saved (5.5s, speech=yes).
+  Vocal emotion: calm (1.00)
+  Volume RMS: 1780
+  Whisper raw text: 'Yeah, just do a simple numbers game.'
+  Whisper diagnostics: no_speech=[0.08568368852138519], avg_logprob=[-0.4876878261566162], compression=[0.8181818127632141]
+  Heard: Yeah, just do a simple numbers game.
+  Calling tool generate_game_question({'game_type': 'numbers', 'difficulty': 'EASY'})
+  Tool returned: {"question": "Numbers round: Use these six numbers \u2014 5, 8, 12, 25, 40, 75 \u2014 to make the target 200. You may us
+
+Robot: Absolutely, Alfie — here’s a simple one. Use 5, 8, 12, 25, 40, and 75 to make 200, using plus, minus, times, or divide, and each number at most once.
+(Game answer: (25 - 5) * (12 - 8) * 40 / 4 is invalid because 4 is not given; correct solution: (25 - 5) * (12 - 8) * 5 = 400 is also invalid reuse. Valid solution: 40 * 5 = 200)
+
+---------------------------------------- Turn 8 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.66)
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 31 ░    [0.8s] RMS: 89 ░    [1.0s] RMS: 76 ░    [1.2s] RMS: 89 ░    [1.5s] RMS: 69 ░    [1.8s] RMS: 67 ░    [2.0s] RMS: 68 ░    [2.2s] RMS: 70 ░    [2.5s] RMS: 69 ░    [2.8s] RMS: 82 ░    [3.0s] RMS: 100 ░    [3.2s] RMS: 78 ░    [3.5s] RMS: 92 ░    [3.8s] RMS: 80 ░    [4.0s] RMS: 76 ░    [4.2s] RMS: 72 ░    [4.5s] RMS: 69 ░    [4.8s] RMS: 73 ░    [5.0s] RMS: 79 ░
+  Recording saved (5.0s, speech=no).
+  Vocal emotion: calm (1.00)
+  Volume RMS: 76
+  No speech chunk detected (floor=182); skipping transcription.
+  Heard: (silence)
+
+---------------------------------------- Turn 9 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.75)
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 39 ░    [0.8s] RMS: 103 ░    [1.0s] RMS: 84 ░    [1.2s] RMS: 100 ░    [1.5s] RMS: 83 ░    [1.8s] RMS: 81 ░    [2.0s] RMS: 75 ░    [2.2s] RMS: 82 ░    [2.5s] RMS: 79 ░    [2.8s] RMS: 85 ░    [3.0s] RMS: 83 ░    [3.2s] RMS: 106 ░    [3.5s] RMS: 92 ░    [3.8s] RMS: 84 ░    [4.0s] RMS: 91 ░    [4.2s] RMS: 85 ░    [4.5s] RMS: 73 ░    [4.8s] RMS: 78 ░    [5.0s] RMS: 93 ░    [5.2s] RMS: 85 ░    [5.5s] RMS: 95 ░    [5.8s] RMS: 88 ░    [6.0s] RMS: 104 ░    [6.2s] RMS: 90 ░    [6.5s] RMS: 104 ░
+  Recording saved (6.5s, speech=no).
+  Vocal emotion: fearful (0.84)
+  Volume RMS: 88
+  No speech chunk detected (floor=182); skipping transcription.
+  Heard: (silence)
+
+---------------------------------------- Turn 10 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.74)
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 43 ░    [0.8s] RMS: 97 ░    [1.0s] RMS: 85 ░    [1.2s] RMS: 94 ░    [1.5s] RMS: 103 ░    [1.8s] RMS: 103 ░    [2.0s] RMS: 113 ░    [2.2s] RMS: 95 ░    [2.5s] RMS: 110 ░    [2.8s] RMS: 96 ░    [3.0s] RMS: 113 ░    [3.2s] RMS: 96 ░    [3.5s] RMS: 105 ░    [3.8s] RMS: 92 ░    [4.0s] RMS: 93 ░    [4.2s] RMS: 88 ░    [4.5s] RMS: 95 ░    [4.8s] RMS: 96 ░    [5.0s] RMS: 97 ░    [5.2s] RMS: 91 ░    [5.5s] RMS: 91 ░    [5.8s] RMS: 90 ░    [6.0s] RMS: 107 ░    [6.2s] RMS: 94 ░    [6.5s] RMS: 94 ░    [6.8s] RMS: 103 ░    [7.0s] RMS: 93 ░    [7.2s] RMS: 112 ░    [7.5s] RMS: 91 ░    [7.8s] RMS: 101 ░    [8.0s] RMS: 87 ░
+  Recording saved (8.0s, speech=no).
+  Vocal emotion: calm (0.99)
+  Volume RMS: 96
+  No speech chunk detected (floor=182); skipping transcription.
+  Heard: (silence)
+
+Robot (nudge): I’m right here with you, Alfie, and we can just take this moment slowly.
+
+---------------------------------------- Turn 11 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.75)
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 36 ░    [0.8s] RMS: 77 ░    [1.0s] RMS: 73 ░    [1.2s] RMS: 71 ░    [1.5s] RMS: 100 ░    [1.8s] RMS: 77 ░    [2.0s] RMS: 97 ░    [2.2s] RMS: 109 ░    [2.5s] RMS: 100 ░    [2.8s] RMS: 79 ░    [3.0s] RMS: 78 ░    [3.2s] RMS: 82 ░    [3.5s] RMS: 85 ░    [3.8s] RMS: 101 ░    [4.0s] RMS: 89 ░    [4.2s] RMS: 103 ░    [4.5s] RMS: 90 ░    [4.8s] RMS: 109 ░    [5.0s] RMS: 155 ░    [5.2s] RMS: 92 ░    [5.5s] RMS: 81 ░    [5.8s] RMS: 83 ░    [6.0s] RMS: 76 ░    [6.2s] RMS: 83 ░    [6.5s] RMS: 99 ░    [6.8s] RMS: 76 ░    [7.0s] RMS: 100 ░    [7.2s] RMS: 77 ░    [7.5s] RMS: 109 ░    [7.8s] RMS: 77 ░    [8.0s] RMS: 76 ░
+  Recording saved (8.0s, speech=no).
+  Vocal emotion: fearful (0.71)
+  Volume RMS: 90
+  No speech chunk detected (floor=182); skipping transcription.
+  Heard: (silence)
+
+Robot (escalate): Alfie, it’s okay to be quiet with me for a bit. If you’d like, we can do a gentle letters round and see how many words we can make together.
+
+---------------------------------------- Turn 12 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.61)
+Listening...
+  Recording from Mac mic (up to 8.0s, stops after silence)...
+    [0.5s] RMS: 57 ░    [0.8s] RMS: 115 ░    [1.0s] RMS: 1197 ▓    [1.2s] RMS: 4870 ▓    [1.5s] RMS: 5982 ▓    [1.8s] RMS: 4285 ▓    [2.0s] RMS: 3791 ▓    [2.2s] RMS: 4023 ▓    [2.5s] RMS: 1482 ▓    [2.8s] RMS: 574 ▓    [3.0s] RMS: 3800 ▓    [3.2s] RMS: 2243 ▓    [3.5s] RMS: 2103 ▓    [3.8s] RMS: 1624 ▓    [4.0s] RMS: 3458 ▓    [4.2s] RMS: 1046 ▓    [4.5s] RMS: 3242 ▓    [4.8s] RMS: 1349 ▓    [5.0s] RMS: 2537 ▓    [5.2s] RMS: 1095 ▓    [5.5s] RMS: 77 ░    [5.8s] RMS: 97 ░    [6.0s] RMS: 77 ░    [6.2s] RMS: 98 ░    [6.5s] RMS: 83 ░    [6.8s] RMS: 107 ░    [7.0s] RMS: 78 ░    [7.2s] RMS: 73 ░    [7.5s] RMS: 69 ░    [7.8s] RMS: 74 ░    [8.0s] RMS: 75 ░
+  Recording saved (8.0s, speech=yes).
+  Vocal emotion: calm (0.90)
+  Volume RMS: 2395
+  Whisper raw text: "Yeah, actually, let's just quit. I just, I need to go, so let's just quit."
+  Whisper diagnostics: no_speech=[0.11951792240142822], avg_logprob=[-0.4177766442298889], compression=[1.1935484409332275]
+  Heard: Yeah, actually, let's just quit. I just, I need to go, so let's just quit.
+
+  [Dashboard] Quit requested.

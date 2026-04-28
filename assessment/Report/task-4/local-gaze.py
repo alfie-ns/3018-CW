@@ -1283,8 +1283,8 @@ names = ["LShoulderPitch","LShoulderRoll","RShoulderPitch","RShoulderRoll"]
 m.angleInterpolation(names, [-0.5, 0.3, -0.5, -0.3], [2.0]*4, True)
 time.sleep(0.9)
 for _ in range(2):
-    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-1.0, 1.0], [0.9]*2, True)
-    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-0.5, 0.5], [0.9]*2, True)
+    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-1.0, 1.0], [1.3]*2, True)
+    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-0.5, 0.5], [1.3]*2, True)
 time.sleep(0.2)
 m.angleInterpolation(names, [1.4, 0.2, 1.4, -0.2], [2.0]*4, True)
 m.setStiffnesses("Arms", 0.0)
@@ -1322,8 +1322,8 @@ m.setStiffnesses("RArm", 1.0)
 names = ["RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RWristYaw","RHand"]
 m.angleInterpolation(names, [-0.5,-0.3,1.0,1.0,0.0,1.0], [1.8]*6, True)
 for _ in range(3):
-    m.angleInterpolation(["RWristYaw"], [0.5], [0.6], True)
-    m.angleInterpolation(["RWristYaw"], [-0.5], [0.6], True)
+    m.angleInterpolation(["RWristYaw"], [0.5], [1.0], True)
+    m.angleInterpolation(["RWristYaw"], [-0.5], [1.0], True)
 time.sleep(0.7)
 m.angleInterpolation(names, [1.4,0.2,1.2,0.5,0.0,0.0], [1.8]*6, True)
 m.setStiffnesses("RArm", 0.0)
@@ -1351,10 +1351,10 @@ m.setStiffnesses("Arms", 1.0)
 for _ in range(2):
     m.angleInterpolation(
         ["LShoulderPitch","RShoulderPitch"],
-        [0.0, 0.0], [1.0]*2, True)
+        [0.0, 0.0], [1.5]*2, True)
     m.angleInterpolation(
         ["LShoulderPitch","RShoulderPitch"],
-        [0.8, 0.8], [1.0]*2, True)
+        [0.8, 0.8], [1.5]*2, True)
 m.angleInterpolation(
     ["LShoulderPitch","LShoulderRoll","RShoulderPitch","RShoulderRoll"],
     [1.4, 0.2, 1.4, -0.2], [2.0]*4, True)

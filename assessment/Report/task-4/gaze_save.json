@@ -1,18 +1,36 @@
 {
-  "user_name": "Elliot Ram",
+  "user_name": "Alfie",
   "total_correct": 0,
+  "total_rounds_played": 1,
   "best_streak": 0,
   "games_played": {
     "numbers": 0,
-    "letters": 0
+    "letters": 1
   },
   "game_switches": 0,
-  "last_difficulty": 2,
-  "last_game": "numbers",
+  "last_difficulty": 1,
+  "last_game": "letters",
   "preferred_game": null,
-  "rounds_played": 0,
-  "recent_questions": [],
-  "recent_answers": [],
-  "recent_game_types": [],
-  "round_log": []
+  "rounds_played": 1,
+  "recent_questions": [
+    "Letters round: Using the 9 letters T, E, R, A, S, L, I, N, O, form the longest word possible. You may use each letter only once."
+  ],
+  "recent_answers": [
+    "relations"
+  ],
+  "recent_game_types": [
+    "letters"
+  ],
+  "round_log": [
+    {
+      "round": 5,
+      "game": "letters",
+      "difficulty": 1,
+      "correct": false,
+      "time": 5.8,
+      "expression": "Neutral",
+      "vocal": "calm",
+      "state": "comfortable"
+    }
+  ]
 }
