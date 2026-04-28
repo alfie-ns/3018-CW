@@ -2658,8 +2658,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
 
             if user_text:
                 print(f"  Heard: {user_text}")
-                dashboard.append_user_speech(user_text)
-                # user spoke; reset silence + nudge so future silence re-arms from scratch
+                dashboard.append_user_speech(user_text) # user spoke to reinitalise re-engagement trackers
                 engine.consecutive_silences = 0
                 nudge_level = 0
 
@@ -2682,7 +2681,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     streak=engine.consecutive_correct,
                 )
 
-                # tier 1 — gentle check-in at 3 consecutive silences; nudge_level guards each tier to once per silent spell (proposal: "intervenes to re-engage them", assistive/stroke-rehab analogue)
+                # tier 1: gentle check-in at 3 consecutive silences; nudge_level guards each tier to once per silent spell (proposal: "intervenes to re-engage them", assistive/stroke-rehab analogue)
                 if engine.consecutive_silences >= 3 and nudge_level < 1:
                     name_clause = (f"(their name is {engine.user_name}) "
                                    if engine.user_name and engine.user_name != "friend"
@@ -2697,7 +2696,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     nudge_text = (nudge_msg.content or "").strip()
                     nudge_speech = re.sub(r'\[gesture:\w+\]', '', nudge_text).strip()
                     if not LOCAL_MODE:
-                        # recolour eyes to signal the state has shifted; user sees the shift even if they say nothing back
+                        # re-colour eyes to signal the state has shifted; despite activeness user sees the shift'
                         nao_set_leds(ssh, "FaceLeds",
                                      LED_COLOURS[InferredState.DISENGAGED], 0.4)
                     if nudge_speech:
@@ -2733,7 +2732,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                         dashboard.update_robot_speech(esc_speech)
                     nudge_level = 2
 
-                continue   # skip the LLM call; just wait for the user
+                continue # skip the LLM call; just wait for the user
 
             if user_text.lower().strip() in [
                 "stop", "quit", "exit", "goodbye", "bye", "end",
@@ -2755,7 +2754,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 conversation = [conversation[0]] + conversation[-40:]
 
             if not LOCAL_MODE:
-                nao_set_leds(ssh, "EarLeds", 0x000000FF, 0.3)  # blue = thinking
+                nao_set_leds(ssh, "EarLeds", 0x000000FF, 0.3) # blue = thinking
 
             llm_message = converse(conversation, TOOLS)
 
@@ -2961,7 +2960,7 @@ def main():
     else:
         print(f"\nConnecting to Pepper at {NAO_IP}...")
         ssh     = ssh_connect()
-        ssh_tts = ssh_connect()         # dedicated TTS connection
+        ssh_tts = ssh_connect() # TTS connection
         print("  Connected.")
 
         print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
