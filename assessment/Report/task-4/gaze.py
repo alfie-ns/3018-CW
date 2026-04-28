@@ -195,7 +195,7 @@ if _vosk_import_ok:
     except Exception as _vosk_err:
         print(f"[booting] vosk failed to load ({_vosk_err}); wake-word gate disabled", flush=True)
 
-RESPONSE_TIME_BASELINE = 30.0 # seconds; beyond this the user is slow
+RESPONSE_TIME_BASELINE = 15.0 # seconds; sits below 20s recording cap
 CORRECTNESS_WINDOW     = 5 # rolling window size
 CORRECTNESS_FLOOR      = 0.4 # below: ease off
 CORRECTNESS_CEILING    = 0.8 # above: ramp up
@@ -334,6 +334,11 @@ class GameState:
     waiting:          bool   = False # user asked for more time to think
     last_answer_checked:  bool = False # was a game answer checked this turn?
     last_answer_correct:  bool = False # result of the last answer check
+    # snapshot of the answered round; survives a same-chain generate_game_question overwrite
+    answered_question:    str = ""
+    answered_answer:      str = ""
+    answered_game_type:   Optional[GameType]   = None
+    answered_difficulty:  Optional[Difficulty] = None
 
 @dataclass # decorator for round results and adaptive decisions
 class RoundResult:
@@ -379,6 +384,7 @@ class AdaptiveEngine:
         self.game_switch_count             = 0
         self.adaptation_log: list[dict]    = []
         self.total_correct                 = 0
+        self.total_rounds_played           = 0 # cumulative across resumed sessions
         self.best_streak                   = 0
         # user's preferred name (captured at session start, persisted across sessions)
         self.user_name: str                = ""
@@ -615,6 +621,7 @@ class AdaptiveEngine:
 
     def record_round(self, result: RoundResult):
         self.history.append(result)
+        self.total_rounds_played += 1
         self.games_played[result.game_type] = (
             self.games_played.get(result.game_type, 0) + 1
         )
@@ -1396,7 +1403,6 @@ WHISPER_HALLUCINATIONS = {
     "subscribe and like",
     "ill see you next time",
     "see you next time",
-    "thank you", "thanks", "bye",
     "you", "mm", "hmm", "uh", "um",
     "おいしいねにかねしたかな",
     "ご視聴ありがとうございました",
@@ -1640,7 +1646,7 @@ def capture_and_classify(ssh, face_model, face_cascade,
     return emotion, conf
 
 
-API_TIMEOUT = 10  # 10-second timeout; prevents Pepper freezing if OpenAI/network stalls
+API_TIMEOUT = 10  # 10-second timeout; prevents Pepper-freeze if OpenAI/network stalls
 
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
@@ -1664,7 +1670,7 @@ User's answer: {user_answer}""",
             timeout=API_TIMEOUT,
         )
         verdict = resp.choices[0].message.content.strip().lower()
-        return verdict == "correct"
+        return verdict == "correct" # if AI says its 'correct' return verdict=correct
     except Exception as e:
         print(f"  Answer verifier API failed: {e}")
         fallback_answer = correct_answer.lower().strip()
@@ -1672,7 +1678,7 @@ User's answer: {user_answer}""",
 
         return fallback_user == fallback_answer
 
-# save / load sessions
+# save/load sessions
 
 def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None,
                  quiet: bool = False):
@@ -1683,6 +1689,7 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
     data = {
         "user_name":        engine.user_name,
         "total_correct":    engine.total_correct,
+        "total_rounds_played": engine.total_rounds_played,
         "best_streak":      engine.best_streak,
         "games_played":     {g.value: c for g, c in engine.games_played.items()},
         "game_switches":    engine.game_switch_count,
@@ -1728,6 +1735,9 @@ def restore_engine(save_data: dict) -> AdaptiveEngine:
     engine = AdaptiveEngine()
     engine.user_name = save_data.get("user_name", "")
     engine.total_correct = save_data.get("total_correct", 0)
+    # legacy fallback; older saves used rounds_played instead
+    engine.total_rounds_played = save_data.get("total_rounds_played",
+                                               save_data.get("rounds_played", 0))
     engine.best_streak = save_data.get("best_streak", 0)
     engine.game_switch_count = save_data.get("game_switches", 0)
     engine.current_difficulty = Difficulty(save_data.get("last_difficulty", 2))
@@ -1898,6 +1908,11 @@ def execute_tool_call(tool_name: str, tool_args: dict,
             engine.current_difficulty = Difficulty[diff]
         except (KeyError, ValueError):
             pass
+        # also sync current_game; record_round logs game_type from this
+        try:
+            engine.current_game = GameType(gt)
+        except ValueError:
+            pass
         game_state.active = True
         game_state.current_question = result.get("question", "")
         game_state.current_answer   = result.get("answer", "")
@@ -1909,6 +1924,11 @@ def execute_tool_call(tool_name: str, tool_args: dict,
         ca  = tool_args.get("correct_answer", "")
         ctx = tool_args.get("question_context", "")
         is_correct = check_answer(ua, ca, ctx)
+        # snapshot question + game_type + difficulty before any same-chain generate_game_question overwrites them
+        game_state.answered_question   = game_state.current_question
+        game_state.answered_answer     = game_state.current_answer
+        game_state.answered_game_type  = engine.current_game
+        game_state.answered_difficulty = engine.current_difficulty
         # push result through so the conversation loop can feed it to engine.decide() and record_round() after completion of the tool chain. last_answer_checked flips the "was_game_answer" switch in conversation_loop; without this flag being set, record_round() was silently skipped and rounds_played/total_correct stayed at 0 even after the user answered correctly
         game_state.last_answer_checked = True
         game_state.last_answer_correct = is_correct
@@ -1946,6 +1966,7 @@ def process_llm_response(message, conversation: list,
     # Cap recursive tool calls at 5 rounds to prevent infinite loops
     max_tool_rounds = 5
     current_msg = message
+    used_answer_check = False # gate same-chain regen so engine.decide can adapt difficulty first
     for _ in range(max_tool_rounds):
         if not current_msg.tool_calls:
             break # kill loop if no more tool calls
@@ -1963,14 +1984,18 @@ def process_llm_response(message, conversation: list,
                 conversation, preferred_game, dashboard
             )
             print(f"  Tool returned: {result_str[:120]}")
+            if fn_name == "check_game_answer":
+                used_answer_check = True
             # append tool's raw string back to shared context
             conversation.append({
                 "role": "tool",
                 "tool_call_id": tc.id,
                 "content": result_str,
             })
-        # Re-prompt LLM with newly appended tool results to continue chain
-        current_msg = converse(conversation, TOOLS)
+        # withhold generate_game_question after a check; defer to next turn so engine.decide can update difficulty first
+        next_tools = ([t for t in TOOLS if t["function"]["name"] != "generate_game_question"]
+                      if used_answer_check else TOOLS)
+        current_msg = converse(conversation, next_tools)
         resp_dict = {"role": "assistant", "content": current_msg.content or ""}
         if current_msg.tool_calls:
             resp_dict["tool_calls"] = [
@@ -2353,6 +2378,7 @@ def is_goodbye(text: str) -> bool:
     try:
         bye = client.chat.completions.create(
             model="gpt-4.1-mini", max_completion_tokens=5, temperature=0.0,
+            timeout=API_TIMEOUT,
             messages=[{"role": "system", "content":
                 "Did the user just signal they want to end the conversation (e.g. 'bye', 'goodbye', 'I'm done', 'see you later', 'I have to go')? Reply ONLY with 'GOODBYE' or 'CONTINUE'."},
                 {"role": "user", "content": text}],
@@ -2402,6 +2428,7 @@ def ask_for_name(ssh, ssh_tts, dashboard,
         try:
             n = client.chat.completions.create(
                 model="gpt-4.1-mini", max_completion_tokens=10,
+                timeout=API_TIMEOUT,
                 messages=[{"role": "system", "content": """
                            Infer the user's name from the utterance.
                            Reply ONLY with the name (no punctuation) or 'friend' if absent/unclear.
@@ -2430,7 +2457,9 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     save_data = load_session()
     saved_name = (save_data.get("user_name") or "").strip() if save_data else ""
     if save_data:
-        prev_rounds  = save_data.get("rounds_played", 0)
+        # legacy fallback; older saves only had per-session rounds_played
+        prev_rounds  = save_data.get("total_rounds_played",
+                                     save_data.get("rounds_played", 0))
         prev_correct = save_data.get("total_correct", 0)
 
         name_prefix = f", {saved_name}" if saved_name else ""
@@ -2476,6 +2505,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             try:
                 intent = client.chat.completions.create(
                     model="gpt-4.1-mini", max_completion_tokens=5, temperature=0.0,
+                    timeout=API_TIMEOUT,
                     messages=[{"role": "system", "content":
                         "The user was just asked whether they want to CONTINUE their previous session or start FRESH. Reply ONLY with 'CONTINUE' or 'FRESH'."},
                         {"role": "user", "content": resume_text}],
@@ -2485,7 +2515,9 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         if "CONTINUE" in intent:
             engine = restore_engine(save_data)
             preferred_game = engine.current_game
-            restore_msg = f"Restoring your previous session{f', {engine.user_name}' if engine.user_name else ''}: {save_data.get('rounds_played', 0)} rounds on record."
+            restored_rounds = save_data.get("total_rounds_played",
+                                            save_data.get("rounds_played", 0))
+            restore_msg = f"Restoring your previous session{f', {engine.user_name}' if engine.user_name else ''}: {restored_rounds} rounds on record."
             say(ssh_tts, restore_msg)
             print(f"\nRobot: {restore_msg}")
         else:
@@ -2514,7 +2546,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         conversation + [{"role": "user", "content": greeting_directive}],
         TOOLS,
     )
-    greeting_text = greeting_msg.content or "Hello! I'm GAZE, lovely to meet you."
+    greeting_text = greeting_msg.content or "Hello, lovely to meet you!"
     greeting_gesture = extract_gesture(greeting_text)
     greeting_speech  = re.sub(r'\[gesture:\w+\]', '', greeting_text).strip()
 
@@ -2576,6 +2608,10 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                    record_max_secs=record_max_secs)
             response_time = time.time() - question_start
 
+            # extended think-budget consumed; reset for next turn
+            if game_state.waiting:
+                game_state.waiting = False
+
             vocal_emo, vocal_conf = classify_speech_emotion(speech_model, LOCAL_WAV)
             if vocal_conf < VOICE_CONFIDENCE_THRESHOLD:
                 print(f"  Vocal emotion: {vocal_emo} ({vocal_conf:.2f}): LOW CONFIDENCE, treating as neutral")
@@ -2603,7 +2639,8 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             if user_text:
                 print(f"  Heard: {user_text}")
                 dashboard.append_user_speech(user_text)
-                # user spoke; reset nudge tier so a future silent spell re-arms tier 1 from scratch
+                # user spoke; reset silence + nudge so future silence re-arms from scratch
+                engine.consecutive_silences = 0
                 nudge_level = 0
 
                 if is_goodbye(user_text):
@@ -2621,7 +2658,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     vol_rms=vol_rms, response_time=response_time,
                     rolling_acc=engine.rolling_correctness(),
                     total_correct=engine.total_correct,
-                    total_rounds=len(engine.history),
+                    total_rounds=engine.total_rounds_played,
                     streak=engine.consecutive_correct,
                 )
 
@@ -2745,8 +2782,13 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             was_game_answer = game_state.last_answer_checked
             correct = game_state.last_answer_correct if was_game_answer else False
 
-            # except when user just asked for more time; skip engine so it doesn't wrongly count this turn as a miss (fix)
-            if not game_state.waiting:
+            # only run engine.decide on real game answers; chat or more-time turns mustn't ramp difficulty or pollute streak counters
+            if was_game_answer:
+                # use snapshot so a same-chain generate_game_question can't pollute this round's logged values
+                answered_q  = game_state.answered_question  or game_state.current_question
+                answered_a  = game_state.answered_answer    or game_state.current_answer
+                answered_gt = game_state.answered_game_type or engine.current_game
+                answered_df = game_state.answered_difficulty or engine.current_difficulty
                 decision = engine.decide(
                     expression, expr_conf, response_time,
                     correct=correct,
@@ -2754,44 +2796,43 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     vocal_emotion=vocal_emo, vocal_conf=vocal_conf,
                     volume_rms=vol_rms,
                 )
-                # Record the round result if it was a game answer; if not, skip recording so it doesn't pollute history with non-game turns
-                if was_game_answer:
-                    engine.record_round(RoundResult(
-                        round_number=turn_count,
-                        game_type=engine.current_game,
-                        difficulty=engine.current_difficulty,
-                        question=game_state.current_question,
-                        user_answer=user_text,
-                        correct=correct,
-                        response_time=response_time,
-                        facial_expression=expression,
-                        expression_confidence=expr_conf,
-                        vocal_emotion=vocal_emo,
-                        vocal_emotion_confidence=vocal_conf,
-                        volume_rms=vol_rms,
-                        inferred_state=decision.inferred_state,
-                    ))
-                    # save after every round; crash or power-cycle loses at most the current turn, not five
-                    save_session(engine, preferred_game, quiet=True)
-
-                game_state.last_answer_checked = False
-
+                engine.record_round(RoundResult(
+                    round_number=turn_count,
+                    game_type=answered_gt,
+                    difficulty=answered_df,
+                    question=answered_q,
+                    user_answer=user_text,
+                    correct=correct,
+                    response_time=response_time,
+                    facial_expression=expression,
+                    expression_confidence=expr_conf,
+                    vocal_emotion=vocal_emo,
+                    vocal_emotion_confidence=vocal_conf,
+                    volume_rms=vol_rms,
+                    inferred_state=decision.inferred_state,
+                ))
+                # save after every round; power-cycle loses one turn, not five
+                save_session(engine, preferred_game, quiet=True)
                 dashboard.update_signals(
                     round_num=turn_count, user_answer=user_text,
-                    correct_answer=game_state.current_answer if was_game_answer else "",
+                    correct_answer=answered_a,
                     correct=correct,
                     expression=expression, expr_conf=expr_conf,
                     vocal_emo=vocal_emo, vocal_conf=vocal_conf,
                     vol_rms=vol_rms, response_time=response_time,
                     rolling_acc=engine.rolling_correctness(),
                     total_correct=engine.total_correct,
-                    total_rounds=len(engine.history),
+                    total_rounds=engine.total_rounds_played,
                     streak=engine.consecutive_correct,
                 )
                 dashboard.update_decision(decision)
+                # clear snapshot now the round is logged
+                game_state.answered_question   = ""
+                game_state.answered_answer     = ""
+                game_state.answered_game_type  = None
+                game_state.answered_difficulty = None
             else:
-                game_state.waiting = False
-                game_state.last_answer_checked = False
+                # chat or more-time turn; refresh dashboard signals only
                 dashboard.update_signals(
                     round_num=turn_count, user_answer=user_text,
                     correct_answer=game_state.current_answer if game_state.active else "",
@@ -2801,9 +2842,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     vol_rms=vol_rms, response_time=response_time,
                     rolling_acc=engine.rolling_correctness(),
                     total_correct=engine.total_correct,
-                    total_rounds=len(engine.history),
+                    total_rounds=engine.total_rounds_played,
                     streak=engine.consecutive_correct,
                 )
+
+            game_state.last_answer_checked = False
 
             # belt-and-braces auto-save: even on quiet/chat turns where no round was recorded, flush progress every 2 turns so mid-conversation state (name, recent_questions, streaks) is never stale by more than one turn
             if turn_count % 2 == 0:

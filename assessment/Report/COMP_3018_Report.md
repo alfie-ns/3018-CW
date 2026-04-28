@@ -785,7 +785,7 @@ def transcribe(bypass_wake_word: bool = False,
 -->
 
 - [ ] PROOFREAD
-The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013, p. 256) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 30s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
+The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013, p. 256) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 15s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -906,7 +906,7 @@ Disengaged  & ---                    & After 3 checkouts & No & Energetic & \tex
 \label{tab:state-action}
 \end{table}
 
-Disengagement is flagged by three OR'd rules wherein any one trips it: 1) two consecutive silences (mic-empty or "skip"/"pass" checkout phrases), 2) neutral-face + response > 30s + rolling-correctness < 50% (the cognitive-checkout pattern), 3) quiet-voice + neutral-face + slow-ish response (early-warning drift, catches it before accuracy tanks). GAZE then tiers its intervention, gentle check-in at three silences, game-switch at four, wherein each tier fires at most once per silent spell.
+Disengagement is flagged by three OR'd rules wherein any one trips it: 1) two consecutive silences (mic-empty or "skip"/"pass" checkout phrases), 2) neutral-face + response > 15s + rolling-correctness < 50% (the cognitive-checkout pattern), 3) quiet-voice + neutral-face + slow-ish response (early-warning drift, catches it before accuracy tanks). GAZE then tiers its intervention, gentle check-in at three silences, game-switch at four, wherein each tier fires at most once per silent spell.
 
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
@@ -916,7 +916,7 @@ Disengagement is flagged by three OR'd rules wherein any one trips it: 1) two co
 -->
 
 - [ ] PROOFREAD
-- [ ] Rather than constructing a fixed game prompt each round, GAZE utilises OpenAI function calling to let GPT-5.4 decide actions. Every turn, `build_signal_context()` packages live signals (face, voice, volume, response time, rolling accuracy, recent-face/recent-vocal windows) into a context block prepended to the user's transcribed speech. This is sent to GPT-5.4 with four callable tools: `generate_game_question`, `check_game_answer`, `evaluate_last_adaptation`, and `request_more_time`. The LLM decides which to invoke; during natural conversation it calls none, whilst during gameplay it chains `check_game_answer` and `generate_game_question`. Game-question generation runs as a separate JSON-only call with a variety seed plus a rolling 30-question do-not-repeat memory, hence preventing mode-collapsed targets. Answer verification is delegated to a deterministic GPT-4.1 verifier (temperature 0.0), reducing the hallucination risk Ji et al. (2023, p. 3) identify. A 10-second timeout wraps every API call so Pepper falls back gracefully if the network stalls.
+- [ ] Rather than constructing a fixed game prompt each round, GAZE utilises OpenAI function calling to let GPT-5.4 decide actions. Every turn, `build_signal_context()` packages live signals (face, voice, volume, response time, rolling accuracy, recent-face/recent-vocal windows) into a context block prepended to the user's transcribed speech. This is sent to GPT-5.4 with four callable tools: `generate_game_question`, `check_game_answer`, `evaluate_last_adaptation`, and `request_more_time`. The LLM decides which to invoke; during natural conversation it calls none, whilst during gameplay it sequences `check_game_answer` and `generate_game_question`. Game-question generation runs as a separate JSON-only call with a variety seed plus a rolling 30-question do-not-repeat memory, hence preventing mode-collapsed targets. Answer verification is delegated to a deterministic GPT-4.1 verifier (temperature 0.0), reducing the hallucination risk Ji et al. (2023, p. 3) identify. A 10-second timeout wraps every API call so Pepper falls back gracefully if the network stalls.
 
 ### 2.3.5 Output Layer: Aligned Multimodal Response
 
@@ -948,7 +948,7 @@ The multi-signal approach could transfer to stroke rehabilitation re-engagement 
 - Facial-expression CNN not fine-tuned for deployment context (Workshop 10 model, general dataset, low confidence under poor lighting)
 - Speech-emotion MLP trained on RAVDESS acted-speech corpus; domain mismatch with natural conversational speech, partially mitigated by cross-modal design
 - Sample-rate mismatch (RAVDESS 48 kHz vs mic 16 kHz) warped the mel filterbank by $3\times$; fixed via `librosa.load(sr=16000)`; Gemini cross-critique caught it
-- Classification thresholds (correctness floor 0.4, response-time baseline 30s, consecutive-wrong 3) are hand-coded rather than learned; prioritises interpretability over optimisation
+- Classification thresholds (correctness floor 0.4, response-time baseline 15s, consecutive-wrong 3) are hand-coded rather than learned; prioritises interpretability over optimisation
 - Conversation history grows unboundedly; extended sessions may approach OpenAI token limits -->
 
 ## 2.6 Task-4 References (5%)
