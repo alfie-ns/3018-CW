@@ -1,14 +1,32 @@
 """
-GAZE: Game-Adaptive Zone of Engagement
+GAZE: Game-Adaptive Zone of Engagement.
 
-Adaptive countdown-style game host on Pepper robot.
-Novelty: multi-signal emotional inference; face (WS-10) + voice (WS-08)
-+ response time + answer correctness, cross-validated so no single
-signal is trusted alone.
+A Pepper / NAO countdown game host. The robot adapts difficulty,
+pacing and feedback per turn from five signals:
+    1- facial expression  (CNN, WS-10)         primary
+    2- answer correctness (performance)        primary
+    3- response time      (behavioural)        primary
+    4- speech volume      (RMS)                secondary
+    5- vocal emotion      (MLP, WS-08)         tie-breaker
 
-Authorship (per proposal.pdf):
-- Alfie: code architecture, OpenAI integration, facial recognition, AdaptiveEngine, etc
-- Salman: game logic, gestures, LEDs, TTS pacing, session save/resume, testing
+No single signal is trusted alone. Voice is only consulted when the
+face is neutral and confidence is high, because the speech model
+tends to collapse to "fearful" on quiet or noisy robot audio.
+
+Modes:
+    LOCAL_MODE=true   webcam, Mac mic, local TTS; Pepper not required.
+    LOCAL_MODE=false  Pepper over SSH, ALAudio mics, robot TTS.
+
+Things noticed during testing:
+    - Pepper audio is noisy, so Whisper is gated by Silero VAD, a
+      wake-word check, no_speech_prob and a hallucination blacklist.
+    - Pepper camera streaming runs at about 10 fps; the local webcam
+      runs at about 30.
+    - The emotion classifiers are lightweight, not clinical instruments.
+
+Authorship (per proposal):
+    Alfie  - architecture, OpenAI integration, facial-expression pipeline, AdaptiveEngine.
+    Salman - game flow, gestures, LEDs, TTS pacing, save/load, testing.
 
 CRITICAL:
 - **PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN**
@@ -68,7 +86,7 @@ print("[booting...] paramiko loaded", flush=True)
 import sounddevice as sd
 import librosa
 import soundfile as sf
-# Vosk wake-word gate (fifth-layer defence); try/except fails open if the dep is missing, other four layers still protect us.
+# Vosk wake-word gate; optional dep
 try:
     from vosk import Model as VoskModel, KaldiRecognizer
     _vosk_import_ok = True
@@ -76,7 +94,7 @@ except ImportError:
     VoskModel = None
     KaldiRecognizer = None
     _vosk_import_ok = False
-# Silero VAD: pre-Whisper speech-activity gate; import with audio imports, loader sits later near MODELS_DIR. Fail-open on missing dep.
+# Silero VAD; pre-Whisper speech gate
 try:
     from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
     _silero_import_ok = True
@@ -99,7 +117,7 @@ print("[booting...] tensorflow loaded", flush=True)
 
 # ---
 
-# Silero VAD loader; kills most silent-audio hallucinations. Fail-open if model won't instantiate; downstream verbose_json + blacklist still guard.
+# Silero VAD loader; optional dep
 _silero_model = None
 if _silero_import_ok:
     try:
@@ -127,7 +145,7 @@ LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 120  # RMS; dashboard label only ("quiet" vs "normal"). Not a transcription gate; see NAO_MIN_RMS_TO_TRANSCRIBE.
 NAO_MIN_RMS_TO_TRANSCRIBE = 30  # near-empty WAV floor for the NAO-mode pre-transcribe gate; Silero + Whisper + blacklist do the real filtering downstream.
-FACE_CONFIDENCE_THRESHOLD  = 0.5  # below this, facial expression is too uncertain; thus treat as Neutral
+FACE_CONFIDENCE_THRESHOLD  = 0.5  # below: face uncertain, treat neutral
 VOICE_CONFIDENCE_THRESHOLD = 0.5  # threshold for vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
 CMD_TIMEOUT  = 60
@@ -168,7 +186,7 @@ HAAR_CASCADE  = find_model("haarcascade_frontalface_default.xml", os.path.join("
 SPEECH_MODEL  = os.path.join(SCRIPT_DIR, "speech_emotion_model.pkl")
 VOSK_MODEL_DIR = os.path.join(MODELS_DIR, "vosk-model-small-en-us-0.15")
 
-# Vosk wake-word gate: post-Silero, pre-Whisper fifth-layer defence; must say "Pepper"/"Gaze" before Whisper fires.
+# Vosk wake-word; "Pepper" or "Gaze"
 _vosk_model = None
 if _vosk_import_ok:
     try:
@@ -179,8 +197,8 @@ if _vosk_import_ok:
 
 RESPONSE_TIME_BASELINE = 30.0 # seconds; beyond this the user is slow
 CORRECTNESS_WINDOW     = 5 # rolling window size
-CORRECTNESS_FLOOR      = 0.4 # below thus ease off
-CORRECTNESS_CEILING    = 0.8 # above thus ramp up
+CORRECTNESS_FLOOR      = 0.4 # below: ease off
+CORRECTNESS_CEILING    = 0.8 # above: ramp up
 SILENCE_THRESHOLD      = 2 # consecutive non-responses before intervention
 
 SAVE_FILE = os.path.join(SCRIPT_DIR, "gaze_save.json")
@@ -191,7 +209,7 @@ client = OpenAI()
 
 
 class FacialExpressionModel:
-    """Pre-trained CNN: 7-classed emotion classifier (48x48 greyscale input)."""
+    "Pre-trained CNN: 7-classed emotion classifier (48x48 greyscale input)."
 
     EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
@@ -201,25 +219,24 @@ class FacialExpressionModel:
         self.model.load_weights(model_weights_path)
         self.model.make_predict_function()
 
-    # Alfie's
     def predict(self, img):
-        """Return (emotion_label, confidence) from the (1, 48, 48, 1) array."""
+        "Return (emotion_label, confidence) from the (1, 48, 48, 1) array."
         preds = self.model.predict(img, verbose=0)
         idx = np.argmax(preds)
         return self.EMOTIONS[idx], float(preds[0][idx])
 
 
 class SpeechEmotionModel:
-    """Pre-trained MLP for vocal emotion classification (WS-08)."""
+    "Pre-trained MLP for vocal emotion classification (WS-08)."
 
     EMOTIONS = ["calm", "happy", "fearful", "disgust"]
 
     def __init__(self, model_path):
         self.model = joblib.load(model_path)
 
-    @staticmethod # static because it requires no instance state (no self) as it's called directly from the game loop with just a WAV path argument
+    @staticmethod
     def extract_features(wav_path: str):
-        """Extract the same MFCC/chroma/mel feature vector used in WS-08 training."""
+        "Extract the same MFCC/chroma/mel feature vector used in WS-08 training."
         with sf.SoundFile(wav_path) as sound_file:
             audio = sound_file.read(dtype="float32")
             sample_rate = sound_file.samplerate
@@ -227,7 +244,7 @@ class SpeechEmotionModel:
         if audio.ndim > 1:
             audio = audio.mean(axis=1)
 
-        # peak-normalise so quieter speakers (post-stroke, brain-injured: target population) won't be penalised
+        # peak-normalise; helps quieter speakers
         audio = librosa.util.normalize(audio)
 
         n_fft = 2048
@@ -247,9 +264,8 @@ class SpeechEmotionModel:
 
         return np.concatenate([mfccs, chroma, mel])
 
-    # Alfie's
     def predict(self, wav_path: str) -> tuple[str, float]:
-        """Return (emotion_label, confidence) from a WAV file."""
+        "Return (emotion_label, confidence) from a WAV file."
         features = self.extract_features(wav_path)
         if features is None:
             return "neutral", 0.0
@@ -260,9 +276,8 @@ class SpeechEmotionModel:
         confidence = float(np.max(proba))
         return label, confidence
 
-# Alfie's
 def classify_speech_emotion(speech_model, wav_path: str) -> tuple[str, float]:
-    """Classify the vocal emotion from a WAV file."""
+    "Classify the vocal emotion from a WAV file."
     if speech_model is None:
         return "neutral", 0.0
     if LOCAL_MODE and not has_real_speech(wav_path):
@@ -283,10 +298,9 @@ class InferredState(Enum):
     THRIVING    = "thriving"
     COMFORTABLE = "comfortable"
     STRUGGLING  = "struggling"
-    DISENGAGED  = "disengaged" # thus re-engage
+    DISENGAGED  = "disengaged" # re-engage
     FRUSTRATED  = "frustrated"
 
-# Alfie's
 class GameType(Enum):
     NUMBERS = "numbers"
     LETTERS = "letters"
@@ -311,7 +325,7 @@ CONVERSATION GUIDELINES:
 
 @dataclass
 class GameState:
-    """Essentially tracks whether a countdown game is currently active."""
+    "Essentially tracks whether a countdown game is currently active."
     active:           bool   = False
     current_question: str    = ""
     current_answer:   str    = ""
@@ -323,7 +337,7 @@ class GameState:
 
 @dataclass # decorator for round results and adaptive decisions
 class RoundResult:
-    """Record of a single game round."""
+    "Record of a single game round."
     round_number:          int
     game_type:             GameType
     difficulty:            Difficulty
@@ -341,7 +355,7 @@ class RoundResult:
 
 @dataclass
 class AdaptiveDecision:
-    """Output of the adaptive engine (what to do next)"""
+    "Output of the adaptive engine (what to do next)"
     difficulty:         Difficulty
     game_type:          GameType
     inferred_state:     InferredState
@@ -352,7 +366,7 @@ class AdaptiveDecision:
 
 
 class AdaptiveEngine:
-    """Takes all five input signals and *infers* the user's real state. The adaptive engine also evaluates if its previous adaptation worked, feeding that evaluation into the next round's prompt."""
+    "Takes all five input signals and *infers* the user's real state. The adaptive engine also evaluates if its previous adaptation worked, feeding that evaluation into the next round's prompt."
 
     def __init__(self):
         self.history: list[RoundResult]   = []
@@ -368,11 +382,11 @@ class AdaptiveEngine:
         self.best_streak                   = 0
         # user's preferred name (captured at session start, persisted across sessions)
         self.user_name: str                = ""
-        # recent questions, fed into generator as a "DO NOT repeat" clause so GPT stops mode-collapsing onto the same ~100-target sets. Cap=10
+        # recent-questions blocklist; cap 10
         self.recent_questions: list[str]   = []
         self.recent_answers:   list[str]   = [] # answer-level dedup; catches mode-collapsed targets even when GPT rephrases the question text
         self.recent_game_types: list[str]  = [] # game-type rotation hint; avoids 5-in-a-row Numbers games
-        # adaptive think-budget; baselines updated per round by recommend_think_budget() — signals-driven user wait time
+        # adaptive think-budget; per-round baselines
         self.think_budget_secs       = float(RECORD_MAX_SECS) # hard ceiling
         self.silence_tolerance_secs  = float(SILENCE_DURATION) # post-speech silence
         self.no_speech_max_secs      = 5.0 # give up if no speech at all
@@ -392,26 +406,16 @@ class AdaptiveEngine:
     VOLUME_QUIET = 200 # below this -> low arousal (quiet/disengaged)
     VOLUME_LOUD  = 2000 # above this -> high arousal (excited/frustrated)
 
-    # Alfie's
     def infer_state(self, expression: str, response_time: float,
                     correct: bool, answer_text: str,
                     vocal_emotion: str = "neutral",
                     vocal_conf: float = 0.0,
                     volume_rms: float = 0.0) -> InferredState:
         """
-        Weigh all signals to infer the user's state.
-
-        Hierarchy is face-primary: the facial-expression CNN (WS-10) drives
-        every state decision; voice is consulted only when face is Neutral
-        and the voice signal is both high-confidence AND not `fearful`
-        (the MLP's ambient-noise attractor, stuck at 1.00 in silence).
-
-        Five signals in consideration:
-          1- facial expression  (CNN, WS-10)  : PRIMARY
-          2- answer correctness (performance) : PRIMARY
-          3- response time      (behavioural) : PRIMARY
-          4- speech volume/RMS  (arousal)     : secondary
-          5- vocal emotion      (MLP, WS-08)  : advisory tie-breaker only
+        Infer the user's state from all signals.
+        Face is primary; voice is only consulted when face is Neutral and
+        the voice signal is high-confidence and not "fearful" (the MLP
+        collapses to "fearful" in silence).
         """
         correctness = self.rolling_correctness()
         clean = answer_text.strip().lower()
@@ -421,7 +425,7 @@ class AdaptiveEngine:
         high_arousal = volume_rms > self.VOLUME_LOUD
         low_arousal  = 0 < volume_rms < self.VOLUME_QUIET
 
-        # voice is trusted only when it's confidently NOT-fearful; fearful is the MLP's silence attractor, never load-bearing
+        # voice trusted only when not-fearful
         trust_voice = (vocal_conf >= 0.9 and vocal_emotion != "fearful")
 
         if is_silent:
@@ -437,13 +441,13 @@ class AdaptiveEngine:
 
         # 1- FACE-PRIMARY RULES: these fire before voice is ever consulted
 
-        # thriving: performing well + fast responses (face is allowed to be anything here; correctness + speed carry the signal)
+        # thriving: good performance + fast responses
         if (correctness >= CORRECTNESS_CEILING and response_time < RESPONSE_TIME_BASELINE * 0.5):
             return InferredState.THRIVING
         if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
             return InferredState.COMFORTABLE
 
-        # disengaged: silence threshold, or face + slow response + poor performance (stroke-ward insight via Dr. Amir)
+        # disengaged: silence + slow + poor performance
         if self.consecutive_silences >= SILENCE_THRESHOLD:
             return InferredState.DISENGAGED
         if (expression == "Neutral"
@@ -454,7 +458,7 @@ class AdaptiveEngine:
                 and response_time > RESPONSE_TIME_BASELINE * 0.8):
             return InferredState.DISENGAGED
 
-        # frustrated: negative face + poor performance, or 3+ wrong + negative face, or high arousal + negative face + poor
+        # frustrated: negative face + poor performance
         if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
             return InferredState.FRUSTRATED
         if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
@@ -471,7 +475,7 @@ class AdaptiveEngine:
         if expression == "Fear" and not correct:
             return InferredState.STRUGGLING
 
-        # 2- VOICE TIE-BREAKERS: only fire when face is Neutral AND voice is trustworthy. Voice can nudge but never override a face-driven verdict.
+        # 2- voice tie-breakers; only when face neutral
         if expression == "Neutral" and trust_voice:
             if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
                 return InferredState.THRIVING
@@ -480,14 +484,14 @@ class AdaptiveEngine:
 
         return InferredState.COMFORTABLE # default: face gave no negative signal, performance is holding
 
-    # Alfie's — core-decision function
+    # core-decision function
     def decide(self, expression: str, expression_conf: float,
                response_time: float, correct: bool,
                answer_text: str,
                vocal_emotion: str = "neutral",
                vocal_conf: float = 0.0,
                volume_rms: float = 0.0) -> AdaptiveDecision:
-        """Return what to do next based on the inferred state."""
+        "Return what to do next based on the inferred state."
         state = self.infer_state(expression, response_time, correct, answer_text,
                                        vocal_emotion, vocal_conf=vocal_conf,
                                        volume_rms=volume_rms)
@@ -555,24 +559,22 @@ class AdaptiveEngine:
             tone=tone,
         )
 
-    # Alfie's
     def recommend_think_budget(self, state: InferredState, expression: str,
                                prev_response_time: float,
                                consecutive_silences: int, waiting: bool
                                ) -> tuple[float, float, float]:
         """
-        Decide how long to wait for the user this turn, from state +
-        signals (NOT-trigger phrases). Returns
-        (no_speech_max, silence_secs, record_max_secs) for this turn only.
-
-        The LLM's `request_more_time` tool only flips game_state.waiting; never bumps the budget directly. `waiting` is one signal; accumulated silence, previous response time, facial expression, inferred state contribute independently.
+        Choose how long to wait for the user this turn.
+        Slower or struggling users get more time, so a long pause does not
+        flip the system to "disengaged" too quickly.
+        Returns (no_speech_max, silence_secs, record_max_secs).
         """
         # baseline budget (fast-track: thriving / comfortable)
         no_speech_max   = 5.0
         silence_secs    = float(SILENCE_DURATION)
         record_max_secs = float(RECORD_MAX_SECS)
 
-        # round 1 (no history): stroke-recovery/aphasia users exceed the standard 1.5s silence tolerance. Placed before the rule block so later signals can still push higher.
+        # round 1: stroke-recovery silence tolerance
         if not self.history:
             no_speech_max   = max(no_speech_max, 7.0)
             silence_secs    = max(silence_secs, 2.5)
@@ -583,7 +585,7 @@ class AdaptiveEngine:
             silence_secs    = 2.5
             record_max_secs = 18.0
 
-        # accumulated silence: graduated extension *before* state flips to Disengaged — 1 turn nudges, 2 nudges more, 3 triggers Disengaged + extended baseline above
+        # graduated extension before disengaged flip
         if consecutive_silences > 0:
             no_speech_max = max(no_speech_max, 5.0 + consecutive_silences * 1.5)
             silence_secs  = max(silence_secs,  1.5 + consecutive_silences * 0.5)
@@ -602,7 +604,7 @@ class AdaptiveEngine:
             silence_secs    += 1.0
             record_max_secs += 5.0
 
-        # defensive ceiling: no signal combo pushes the window past 20s — keeps UX bounded, leaves headroom under CMD_TIMEOUT (60s) for future signals
+        # defensive ceiling 20s; under CMD_TIMEOUT
         record_max_secs = min(record_max_secs, 20.0)
 
         self.no_speech_max_secs     = no_speech_max
@@ -620,7 +622,6 @@ class AdaptiveEngine:
             self.total_correct += 1
         self.best_streak = max(self.best_streak, self.consecutive_correct)
 
-# Salman's
     def pick_different_game(self) -> GameType:
         if self.current_game == GameType.NUMBERS:
             return GameType.LETTERS
@@ -642,10 +643,10 @@ class AdaptiveEngine:
             "final_difficulty":   self.current_difficulty.name,
         }
 
-    # Alfie's (self-evaluative adaptation)
+    # self-evaluative adaptation
 
     def evaluate_adaptation(self) -> Optional[str]:
-        """Evaluate whether the previous round's adaptation worked."""
+        "Evaluate whether the previous round's adaptation worked."
         if len(self.adaptation_log) < 2 or len(self.history) < 2:
             return None
 
@@ -725,14 +726,14 @@ DIFFICULTY_DESCRIPTIONS = {
 # we tested OpenAI on the NAO robot perhaps too early)
 
 def ssh_connect():
-    """Open SSH connection to Pepper and return the client."""
+    "Open SSH connection to Pepper and return the client."
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(NAO_IP, username=NAO_USER, password=NAO_PASS, timeout=SSH_TIMEOUT)
     return ssh
 
 def nao_run(ssh, code):
-    """Execute a Python 2 snippet on Pepper via SSH."""
+    "Execute a Python 2 snippet on Pepper via SSH."
     escaped = code.replace("'", "'\\''")
     try:
         _, stdout, _ = ssh.exec_command(f"python -c '{escaped}'", timeout=CMD_TIMEOUT)
@@ -741,13 +742,12 @@ def nao_run(ssh, code):
         print(f"  Pepper SSH exec_command dropped: {e}")
         return ""
 
-# Salman's
 #listens silent
 #not triggered by noise
 def nao_calibrate_ambient(ssh) -> int:
-    """Calibrate the mic energy threshold to the room."""
+    "Calibrate the mic energy threshold to the room."
     try:
-        # NOTE: nao_run() payloads stay at column 0; `python -c` on Pepper rejects leading whitespace so these blocks can't be indented — I initially done this
+        # col 0 only; Pepper rejects indented python -c
         raw = nao_run(ssh, f"""
 from naoqi import ALProxy
 import time
@@ -756,7 +756,7 @@ audio = ALProxy("ALAudioDevice", "127.0.0.1", 9559)
 samples = []
 start = time.time()
 while (time.time() - start) < {CALIBRATION_SECS}:
-    # poll all four mics and take the max; off-axis speakers (e.g. user stood to Pepper's side) would otherwise be invisible to a front-mic-only baseline
+    # all four mics; side speakers else missed
     try:
         front = audio.getFrontMicEnergy()
         left  = audio.getLeftMicEnergy()
@@ -782,7 +782,6 @@ else:
         print(f"  Calibration failed ({e}), using default threshold: {DEFAULT_ENERGY_THRESHOLD}")
         return DEFAULT_ENERGY_THRESHOLD
 
-# Alfie's
 def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
                record_max_secs: float = RECORD_MAX_SECS,
                silence_secs: float = SILENCE_DURATION):
@@ -791,7 +790,7 @@ def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
         - calibrated energy threshold to avoid false positives from ambient noise 
         - if getFrontMicEnergy is unsupported (e.g. older firmware), fall back to a safe fixed-duration recording to ensure the demo still works, albeit without silence detection
     """
-    # SSH payload in a script wherein it tries to initialise ALAudioDevice to poll getFrontMicEnergy; if that fails due to older firmware fall back to a fixed-duration recording, thus ensuring the demo still works albeit without silence detection
+    # fixed-duration fallback for old firmware
     nao_run(ssh, f""" 
 from naoqi import ALProxy
 import time
@@ -816,7 +815,7 @@ try:
         if elapsed >= {record_max_secs}:
             break
 
-        # poll all four mics and take the MAX; a user stood to either side of Pepper registers on the side mics but not the front, so front-only polling misses them and the silence-detector stops recording mid-utterance
+        # all four mics; side speakers else missed
         try:
             energy = max(
                 audio.getFrontMicEnergy(),
@@ -856,28 +855,27 @@ rec.stopMicrophonesRecording()
     sftp = ssh.open_sftp()
     sftp.get(REMOTE_WAV, LOCAL_WAV)
     sftp.close()
-    # loudness normalisation removed: amplified near-silent room noise into Whisper hallucinations, hence force_mono_16k_wav() canonicalises without a gain stage.
+    # no gain stage; amplified room noise
 
     # WAV layout diagnostic; four-mic recording may land multi-channel
     try:
         with wave.open(LOCAL_WAV, "rb") as wf:
             secs = wf.getnframes() / float(wf.getframerate())
-            print(f"""  WAV debug: channels={wf.getnchannels()}, rate={wf.getframerate()}, frames={wf.getnframes()}, secs={secs:.2f}""")
+            print(f"  WAV debug: channels={wf.getnchannels()}, rate={wf.getframerate()}, frames={wf.getnframes()}, secs={secs:.2f}")
     except Exception as e:
         print(f"  WAV debug failed: {e}")
 
     # collapse to mono 16 kHz so downstream gates see a canonical layout
     force_mono_16k_wav(LOCAL_WAV)
 
-# Alfie's
 def force_mono_16k_wav(path: str) -> None:
-    """Canonicalise `path` to mono 16 kHz int16 PCM; pick Pepper's loudest mic by RMS rather than averaging the four (they're not phase-aligned, hence a mean partially cancels speech)."""
+    "Convert `path` to mono 16 kHz int16 PCM."
     try:
         audio, sr = sf.read(path, dtype="float32")
         if audio.size == 0:
             return
         if audio.ndim > 1:
-            # pick the loudest mic instead of averaging; Pepper's four mics aren't phase-aligned, so a mean would partially cancel speech
+            # loudest mic; mics not phase-aligned
             rms_by_channel = np.sqrt(np.mean(audio.astype(np.float64) ** 2, axis=0))
             audio = audio[:, int(np.argmax(rms_by_channel))]
         if sr != LOCAL_SAMPLE_RATE:
@@ -887,11 +885,10 @@ def force_mono_16k_wav(path: str) -> None:
     except Exception as e:
         print(f"  Mono conversion skipped ({e})")
 
-# Salman's
  #responses arrive in one block no splitting
 #delivered with no pauses
 def split_into_sentences(text: str) -> list[str]:
-    """Split dialogue into sentences for speech delivery."""
+    "Split dialogue into sentences for speech delivery."
     raw_segments = re.split(r'(?<=[.!?])\s+', text.strip())
     sentences = []
     for seg in raw_segments:
@@ -901,10 +898,9 @@ def split_into_sentences(text: str) -> list[str]:
                 sentences.append(cleaned)
     return sentences if sentences else [text.strip()]
 
-# Salman's
 #single ssh calls
 def nao_say(ssh, text):
-    """Speak text on Pepper with sentence-level pausing."""
+    "Speak text on Pepper with sentence-level pausing."
     sentences = split_into_sentences(text)
     safe_sentences = json.dumps(sentences)
 
@@ -924,10 +920,9 @@ except Exception as e:
     print("  [TTS failed] " + str(e))
 """)
 
-# Salman's
 #animations with speech
 def nao_say_animated(ssh, text):
-    """Try animated speech; fall back to plain TTS."""
+    "Try animated speech; fall back to plain TTS."
     safe = json.dumps(text)
     try:
         nao_run(ssh, f"""
@@ -939,7 +934,7 @@ ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
         nao_say(ssh, text)
 
 def nao_capture_image(ssh):
-    """Capture a photo from Pepper's camera and download it. Kept as a fallback for one-off stills; the live dashboard now uses pepper_video_loop()."""
+    "Capture a photo from Pepper's camera and download it. Kept as a fallback for one-off stills; the live dashboard now uses pepper_video_loop()."
     nao_run(ssh, f"""
 from naoqi import ALProxy
 pc = ALProxy("ALPhotoCapture","127.0.0.1",9559)
@@ -951,7 +946,6 @@ pc.takePicture("{os.path.dirname(REMOTE_IMG)}/", "{os.path.splitext(os.path.base
     sftp.get(REMOTE_IMG, LOCAL_IMG)
     sftp.close()
 
-# Alfie's
 PEPPER_VIDEO_PORT = 9558
 _pepper_video_channel = None
 
@@ -1003,13 +997,13 @@ def pepper_video_loop(ssh):
     ''').format(port=PEPPER_VIDEO_PORT)
 
     escaped = code.replace("'", "'\\''")
-    # exec_command async on purpose; nao_run() reads stdout and would block forever as the loop never exits whilst streaming
+    # async; nao_run() reads stdout, would otherwise block
     _stdin, stdout, _stderr = ssh.exec_command(f"python -c '{escaped}'")
     _pepper_video_channel = stdout.channel  # keep referenced so Paramiko doesn't GC the channel out from under the remote process
 
 
 def _recv_exact(sock, n):
-    """Receive exactly n bytes; raise if the socket closes mid-frame."""
+    "Receive exactly n bytes; raise if the socket closes mid-frame."
     data = b""
     while len(data) < n:
         packet = sock.recv(n - len(data))
@@ -1020,7 +1014,7 @@ def _recv_exact(sock, n):
 
 
 def pepper_camera_receive_loop(pepper_ip: str):
-    """Pull length-prefixed RGB frames off Pepper:9558 into _preview_frame for detect_thread_loop to consume; ten 1-second connect-retries because Pepper-side bind() needs a beat to land after exec_command."""
+    "Pull length-prefixed RGB frames off Pepper:9558 into _preview_frame for detect_thread_loop to consume; ten 1-second connect-retries because Pepper-side bind() needs a beat to land after exec_command."
     global _preview_frame
 
     sock = None
@@ -1062,7 +1056,7 @@ def pepper_camera_receive_loop(pepper_ip: str):
             pass
 
 def nao_track_face(ssh, enable=True):
-    """Toggle face tracking on Pepper."""
+    "Toggle face tracking on Pepper."
     try:
         if enable:
             nao_run(ssh, """
@@ -1086,7 +1080,6 @@ except Exception as e:
     except Exception as e:
         print(f"  Face tracking unavailable: {e}")
 
-# Salman's
 #leds
 def nao_set_leds(ssh, group, colour, duration=1.0):
     try:
@@ -1108,9 +1101,8 @@ LOCAL_MIN_SECS      = 1.0 # minimum recording before silence detection kicks in
 LOCAL_NO_SPEECH_MAX = 3.0 # stop if no speech detected at all after this many seconds; 5.0 → 3.0 (dominant lag)
 LOCAL_ENERGY_BUFFER = 25 # margin above ambient baseline for speech detection; 50 → 25 to catch quiet speech
 
-# Alfie's
 def local_calibrate_ambient() -> int:
-    """Calibrate the local-testing (Mac) mic's ambient noise level; mirrors nao_calibrate_ambient() so LOCAL_MODE testing behaves like the robot."""
+    "Calibrate the local-testing (Mac) mic's ambient noise level; mirrors nao_calibrate_ambient() so LOCAL_MODE testing behaves like the robot."
     global LOCAL_SILENCE_RMS
     dev_info   = sd.query_devices(kind="input")
     dev_index  = dev_info["index"]
@@ -1136,23 +1128,22 @@ def local_calibrate_ambient() -> int:
     threshold = ambient + LOCAL_ENERGY_BUFFER
     LOCAL_SILENCE_RMS = threshold
 
-    # re-tune transcription gate; 500 was hardcoded initially, too high for MacBook built-in mics
+    # 500 was too high for MacBook mic
     global VOLUME_THRESHOLD
     VOLUME_THRESHOLD = max(LOCAL_SILENCE_RMS * 4, 100)
 
-    # scale arousal thresholds to the room; static (200, 2000) would conflate a loud speaker in a quiet room with a quiet speaker in a noisy lab
-    AdaptiveEngine.VOLUME_QUIET = max(ambient * 2,  200) # twice as loud as an empty room, thus quiet; 200 enforces an absolute minimum to quiet
+    # scale to room; static thresholds confuse loud/quiet rooms
+    AdaptiveEngine.VOLUME_QUIET = max(ambient * 2,  200) # 200 = absolute quiet floor
     AdaptiveEngine.VOLUME_LOUD  = max(ambient * 10, 2000)
 
-    print(f"""  Ambient RMS: {ambient}, silence threshold: {threshold}, transcription gate: {VOLUME_THRESHOLD}""")
-    print(f"""  Arousal thresholds: QUIET={AdaptiveEngine.VOLUME_QUIET}, LOUD={AdaptiveEngine.VOLUME_LOUD}""")
+    print(f"  Ambient RMS: {ambient}, silence threshold: {threshold}, transcription gate: {VOLUME_THRESHOLD}")
+    print(f"  Arousal thresholds: QUIET={AdaptiveEngine.VOLUME_QUIET}, LOUD={AdaptiveEngine.VOLUME_LOUD}")
     return threshold
 
-# Alfie's and Salman's
 def local_record(max_secs: float = RECORD_MAX_SECS,
                  no_speech_max: float = LOCAL_NO_SPEECH_MAX,
                  silence_secs: float = LOCAL_SILENCE_SECS):
-    """Record audio from the Mac's built-in microphone to LOCAL_WAV with silence detection mirroring Pepper's dynamic recording."""
+    "Record audio from the Mac's built-in microphone to LOCAL_WAV with silence detection mirroring Pepper's dynamic recording."
     # select the default input device 
     dev_info    = sd.query_devices(kind="input")
     dev_index   = dev_info["index"]
@@ -1233,15 +1224,14 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
         wf.writeframes(audio_int16.tobytes())
     print(f"  Recording saved ({elapsed:.1f}s, speech={'yes' if speech_detected else 'no'}).")
 
-# Alfie's
 def local_say(text: str):
-    """Speak text using host OS built-in TTS (macOS `say` or Windows SAPI)."""
+    "Speak text using host OS built-in TTS (macOS `say` or Windows SAPI)."
     try:
         if sys.platform == "win32":
-            # Windows: System.Speech SAPI via PowerShell; text passed via env-var so quotes/apostrophes don't need escaping
+            # Windows: SAPI via PowerShell; env-var avoids escaping
             subprocess.run(
                 ["powershell", "-NoProfile", "-Command",
-                 """Add-Type -AssemblyName System.Speech;(New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak($env:GAZE_TTS_TEXT)"""],
+                 "Add-Type -AssemblyName System.Speech;(New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak($env:GAZE_TTS_TEXT)"],
                 env={**os.environ, "GAZE_TTS_TEXT": text},
                 check=True, timeout=30,
             )
@@ -1251,14 +1241,13 @@ def local_say(text: str):
         print(f"  Local TTS broke: {e}")
 
 def say(ssh_tts, text):
-    """Dispatch TTS to local or Pepper depending on mode."""
+    "Dispatch TTS to local or Pepper depending on mode."
     if LOCAL_MODE:
         local_say(text)
     else:
         nao_say(ssh_tts, text)
     time.sleep(0.5) # ensure text-to-speech (TTS) drains so it does not hear itself
 
-# Alfie's and Salman's
 def record(ssh, energy_threshold,
            no_speech_max: float = LOCAL_NO_SPEECH_MAX,
            silence_secs: float = LOCAL_SILENCE_SECS,
@@ -1274,9 +1263,8 @@ def record(ssh, energy_threshold,
                    record_max_secs=record_max_secs,
                    silence_secs=silence_secs)
 
-# GESTURE MAPPING (Alfie's): motions aligned to game/emotional context:
-# celebrate=arms up + bicep curls (thriving/milestones), encourage=arm forward + open hand (struggling), think=hand on chin (long pause),
-# wave=friendly re-engagement (disengaged), calm=slow open-arm (frustrated), energetic=quick open-arm raises (disengaged/thriving), neutral=resting
+# gesture mapping; motions per game/emotional context
+# tags: celebrate, encourage, think, wave, calm, energetic, neutral
 
 GESTURE_CODE = {
     "celebrate": """
@@ -1373,9 +1361,8 @@ m.setStiffnesses("Arms", 0.0)
 """,
 }
 
-# Salman's
 def nao_gesture(ssh, gesture_type: str):
-    """Execute a gesture on Pepper aligned to the game context."""
+    "Execute a gesture on Pepper aligned to the game context."
     code = GESTURE_CODE.get(gesture_type, GESTURE_CODE["neutral"])
     try:
         nao_run(ssh, code)
@@ -1383,9 +1370,8 @@ def nao_gesture(ssh, gesture_type: str):
         print(f"  Gesture {gesture_type!r} did not play: {e}")
 
 
-# Alfie's
 def measure_volume() -> float:
-    """RMS amplitude of the WAV; soundfile-based so multi-channel files collapse to mono cleanly."""
+    "RMS amplitude of the WAV; soundfile-based so multi-channel files collapse to mono cleanly."
     try:
         audio, _sr = sf.read(LOCAL_WAV, dtype="float32")
         if audio.size == 0:
@@ -1397,7 +1383,7 @@ def measure_volume() -> float:
         print(f"  Volume RMS calc failed: {e}")
         return 0.0
 
-# Whisper training-set tic-blacklist on silent/near-silent audio (YouTube outros, CJK fillers); stored pre-normalised so is_known_hallucination() matches regardless of decoration.
+# Whisper hallucination blacklist; pre-normalised
 WHISPER_HALLUCINATIONS = {
     "thank you for watching",
     "thanks for watching",
@@ -1420,12 +1406,12 @@ WHISPER_HALLUCINATIONS = {
 }
 
 def normalise_for_blacklist(text: str) -> str:
-    """Lowercase + NFKC + strip everything except letters/digits/spaces; thus the blacklist matches independent of Whisper's decorations"""
+    "Normalise so blacklist matches independent of Whisper output."
     t = unicodedata.normalize("NFKC", text).lower()
     kept = [ch for ch in t if ch.isalnum() or ch.isspace()]
     return " ".join("".join(kept).split())
 
-# Structural hallucination patterns: Whisper's training set leaked YouTube-description boilerplate ('Please see the complete disclaimer at https://sites.google.com...'), promo-video outros with URLs, etc. Exact-string blacklist can't keep up; these regexes catch the family.
+# regex blacklist; URL outros, promo boilerplate
 _URL_HALLUCINATION = re.compile(r"\bhttps?://|www\.|\b\w+\.(?:com|org|net|au|co\.uk|google|sites)\b", re.I)
 _DISCLAIMER_HALLUCINATION = re.compile(r"\b(please see|visit|subscribe|like and subscribe|disclaimer|description)\b.{0,40}\b(complete|full|link|below|above)\b", re.I)
 
@@ -1442,7 +1428,7 @@ def is_known_hallucination(text: str) -> bool:
 
 def has_real_speech(wav_path: str, min_speech_ms: int = 250,
                      threshold: float = 0.5) -> bool:
-    """Silero VAD pre-gate; relaxed defaults so short answers (yes/Tom/six) survive."""
+    "Silero VAD pre-gate; relaxed defaults so short answers (yes/Tom/six) survive."
     if _silero_model is None or get_speech_timestamps is None:
         return True
     try:
@@ -1461,11 +1447,8 @@ def has_real_speech(wav_path: str, min_speech_ms: int = 250,
 
 def has_wake_word(wav_path: str) -> bool:
     """
-    Vosk wake-word gate. True only if "Pepper" or "Gaze" is heard in the
-    WAV. The 3-token grammar restriction (pepper, gaze, [unk])
-    constrains but doesn't eliminate false positives; phonetic
-    near-neighbours may still match. Fail-open (returns True) if the
-    Vosk model didn't load so the four layers still protect from hallucinations.
+    Vosk wake-word gate. True if "Pepper" or "Gaze" is heard in the WAV.
+    Returns True if the Vosk model didn't load (optional dep).
     """
     if _vosk_model is None or KaldiRecognizer is None:
         return True
@@ -1485,37 +1468,25 @@ def has_wake_word(wav_path: str) -> bool:
         print(f"  Vosk wake-word check failed ({e}); falling through to Whisper")
         return True
 
-# Alfie & Salman's
 #open ai whisperings and incase fails and in silent
 def transcribe(bypass_wake_word: bool = False,
                whisper_prompt: str = "User answers a quiz or chats with a companion robot.") -> str:
     """
-    Transcribe the local WAV with Whisper via a five-layer defence:
-      1- existing RMS + speech_detected pre-gate (in conversation_loop)
-      2- Silero VAD hard gate (this function)
-      3- Vosk wake-word gate (requires "Pepper" or "Gaze")
-      4- Whisper's own no_speech_prob + avg_logprob (from verbose_json)
-      5- aggressively-normalised hallucination blacklist
-
-    Returns "" on failure, on any gate rejecting, or when the
-    transcription normalises to a known-hallucination phrase.
-
-    bypass_wake_word=True disables layer 3 for turns where no wake-word
-    is expected (e.g. the first-turn name prompt); the user wouldn't
-    say "Pepper Salman", and Vosk would otherwise silently drop the name.
-    whisper_prompt lets the caller steer Whisper's decoding bias (e.g.
-    toward first-name tokens, away from Whisper's year-number attractor
-    on short utterances like "Salman" → "2016").
+    Transcribe the local WAV with Whisper, gated against silence,
+    missing wake-word, and known hallucinated phrases.
+    Returns "" on any failure or rejection.
+    bypass_wake_word=True is for turns where no wake-word is expected
+    (e.g. first-turn name prompt; "Pepper Salman" would be unnatural).
     """
     if LOCAL_MODE and not _local_speech_detected:
         return ""
 
-    # Layer 2: Silero VAD hard gate; now applied to NAO too because force_mono_16k_wav() canonicalises the WAV before transcribe() runs
+    # Silero VAD hard gate; NAO + LOCAL
     if not has_real_speech(LOCAL_WAV):
         print("  Silero VAD found no speech; skipping Whisper.")
         return ""
 
-    # Layer 3: Vosk wake-word gate. User must say "Pepper"/"Gaze"; catches silent audio that slipped past Layers 1-2 (the original hallucination pain case). Skipped when the caller explicitly says so (name prompt).
+    # Vosk wake-word gate; bypass for name prompt
     if not bypass_wake_word and not has_wake_word(LOCAL_WAV):
         print("  No wake-word detected; skipping Whisper.")
         return ""
@@ -1533,7 +1504,7 @@ def transcribe(bypass_wake_word: bool = False,
         text = (getattr(resp, "text", "") or "").strip()
         print(f"  Whisper raw text: {text!r}")
 
-        # Layer 4: Whisper self-signals (no_speech_prob + avg_logprob + compression_ratio per segment). resp is a Pydantic TranscriptionVerbose thus attribute access (not dict indexing).
+        # Whisper self-signals from verbose_json
         segments = getattr(resp, "segments", None) or []
         if segments:
             no_speech_vals = [s.no_speech_prob for s in segments
@@ -1542,19 +1513,19 @@ def transcribe(bypass_wake_word: bool = False,
                             if getattr(s, "avg_logprob", None) is not None]
             compression_vals = [s.compression_ratio for s in segments
                                 if getattr(s, "compression_ratio", None) is not None]
-            print(f"""  Whisper diagnostics: no_speech={no_speech_vals}, avg_logprob={logprob_vals}, compression={compression_vals}""")
+            print(f"  Whisper diagnostics: no_speech={no_speech_vals}, avg_logprob={logprob_vals}, compression={compression_vals}")
             if no_speech_vals and max(no_speech_vals) > 0.6:
-                print(f"""  Whisper flagged silence (max no_speech_prob={max(no_speech_vals):.2f}); dropping {text!r}""")
+                print(f"  Whisper flagged silence (max no_speech_prob={max(no_speech_vals):.2f}); dropping {text!r}")
                 return ""
             if logprob_vals and min(logprob_vals) < -1.0:
-                print(f"""  Whisper low-confidence (min avg_logprob={min(logprob_vals):.2f}); dropping {text!r}""")
+                print(f"  Whisper low-confidence (min avg_logprob={min(logprob_vals):.2f}); dropping {text!r}")
                 return ""
-            # compression_ratio > 2.4 catches repetition loops (e.g. "Q1. Q1. Q1..."); repeating tokens compress well. 2.4 matches local Whisper's default.
+            # compression_ratio > 2.4 catches repetition loops
             if compression_vals and max(compression_vals) > 2.4:
-                print(f"""  Whisper repetition loop (max compression_ratio={max(compression_vals):.2f}); dropping {text!r}""")
+                print(f"  Whisper repetition loop (max compression_ratio={max(compression_vals):.2f}); dropping {text!r}")
                 return ""
 
-        # Layer 5: aggressively-normalised hallucination blacklist
+        # normalised hallucination blacklist
         if is_known_hallucination(text):
             print(f"  Filtered Whisper hallucination: {text!r}")
             return ""
@@ -1566,14 +1537,11 @@ def transcribe(bypass_wake_word: bool = False,
         print(f"  Whisper transcribe failed ({e}); returning empty")
         return ""
 
-# Alfie: FACIAL EXPRESSION PIPELINE
+# facial-expression pipeline
 
 def capture_thread_loop(camera):
-    """Tight capture loop: just grab the latest frame.
-       Decoupled from detection so the dashboard video
-       feed runs at the camera's native rate (~30 fps)
-       whilst the CNN/cascade detector runs at its own
-       lower cadence without starving the display."""
+    """Tight capture loop; just grab the latest frame.
+    Decoupled from detection so the dashboard runs at native fps."""
     global _preview_frame
     while True:
         ret, frame = camera.read()
@@ -1584,7 +1552,8 @@ def capture_thread_loop(camera):
             _preview_frame = frame
 
 def detect_thread_loop(face_model, face_cascade):
-    """Detection/classification: runs cascade + CNN on a downscaled copy of the latest raw frame, updates the cached bbox and emotion state. A face genuinely does not change emotion at 30 Hz; 6-7 Hz (`DETECT_INTERVAL_SECS=0.15`) is more than adequate for the adaptive engine's turn-based consumer."""
+    """Run cascade + CNN on a downscaled copy of the latest frame; update cached bbox + emotion.
+    6-7 Hz is plenty for a turn-based consumer."""
     global _last_emotion, _last_bbox
     while True:
         time.sleep(DETECT_INTERVAL_SECS)
@@ -1593,7 +1562,7 @@ def detect_thread_loop(face_model, face_cascade):
         if frame is None:
             continue
 
-        # downscale by 2× before cascade; ~4× fewer pixels, ~4× faster detection with no meaningful accuracy cost
+        # 2x downscale; 4x faster cascade
         small = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)
         gray  = cv2.cvtColor(small, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, 1.3, 5)
@@ -1617,7 +1586,7 @@ def detect_thread_loop(face_model, face_cascade):
         _last_emotion = emotion
 
 def start_preview_thread(camera, face_model, face_cascade):
-    """Start both the capture and the detection daemon threads."""
+    "Start both the capture and the detection daemon threads."
     cap_t = threading.Thread(target=capture_thread_loop,
                              args=(camera,),
                              daemon=True)
@@ -1628,16 +1597,15 @@ def start_preview_thread(camera, face_model, face_cascade):
     det_t.start()
     return cap_t, det_t
 
-# Alfie's
 def capture_and_classify(ssh, face_model, face_cascade,
                          local_camera=None) -> tuple[str, float]:
-    """Return (emotion, confidence). Local-camera branch reads + classifies inline; NAO branch reads cached state set by detect_thread_loop off the live Pepper video stream."""
+    "Return (emotion, confidence). Local-camera branch reads + classifies inline; NAO branch reads cached state set by detect_thread_loop off the live Pepper video stream."
     # local-camera + preview thread already running: just read the cache
     if DEBUG_PREVIEW and local_camera is not None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
 
-    # NAO branch: detect_thread_loop classifies continuously off pepper_camera_receive_loop, hence we just read the cached state rather than re-running cascade + CNN per turn
+    # NAO: read cached state from detect thread
     if local_camera is None:
         with _preview_lock:
             return _preview_state["emotion"], _preview_state["confidence"]
@@ -1674,10 +1642,9 @@ def capture_and_classify(ssh, face_model, face_cascade,
 
 API_TIMEOUT = 10  # 10-second timeout; prevents Pepper freezing if OpenAI/network stalls
 
-# Alfie's
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
-    """Verify the user's answer via GPT."""
+    "Verify the user's answer via GPT."
     if not user_answer.strip():
         return False
 
@@ -1686,7 +1653,7 @@ def check_answer(user_answer: str, correct_answer: str,
             model="gpt-4.1",
             messages=[{
                 "role": "system",
-                "content": """You are an answer checker. Given a question, the correct answer, and the user's spoken answer, determine if the user is correct. Be lenient with pronunciation, phrasing, and partial answers that demonstrate knowledge. Respond with ONLY 'correct' or 'incorrect'.""",
+                "content": "You are an answer checker. Given a question, the correct answer, and the user's spoken answer, determine if the user is correct. Be lenient with pronunciation, phrasing, and partial answers that demonstrate knowledge. Respond with ONLY 'correct' or 'incorrect'.",
             }, {
                 "role": "user",
                 "content": f"""Question: {question_context}
@@ -1696,12 +1663,16 @@ User's answer: {user_answer}""",
             temperature=0.0,
             timeout=API_TIMEOUT,
         )
-        return "correct" in resp.choices[0].message.content.strip().lower()
+        verdict = resp.choices[0].message.content.strip().lower()
+        return verdict == "correct"
     except Exception as e:
         print(f"  Answer verifier API failed: {e}")
-        return correct_answer.lower().strip() in user_answer.lower().strip()
+        fallback_answer = correct_answer.lower().strip()
+        fallback_user = user_answer.lower().strip()
 
-# Salman: SAVE/LOAD SESSIONS
+        return fallback_user == fallback_answer
+
+# save / load sessions
 
 def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = None,
                  quiet: bool = False):
@@ -1742,7 +1713,7 @@ def save_session(engine: AdaptiveEngine, preferred_game: Optional[GameType] = No
         print(f"  Session saved to {SAVE_FILE}")
 
 def load_session() -> Optional[dict]:
-    """Load a previously saved session, if one exists."""
+    "Load a previously saved session, if one exists."
     if not os.path.exists(SAVE_FILE):
         return None
     try:
@@ -1753,7 +1724,7 @@ def load_session() -> Optional[dict]:
         return None
 
 def restore_engine(save_data: dict) -> AdaptiveEngine:
-    """Restore engine state from saved data."""
+    "Restore engine state from saved data."
     engine = AdaptiveEngine()
     engine.user_name = save_data.get("user_name", "")
     engine.total_correct = save_data.get("total_correct", 0)
@@ -1772,18 +1743,18 @@ def restore_engine(save_data: dict) -> AdaptiveEngine:
     return engine
 
 def delete_save():
-    """Remove the save file after a completed session or on user request."""
+    "Remove the save file after a completed session or on user request."
     if os.path.exists(SAVE_FILE):
         os.remove(SAVE_FILE)
 
-# Alfie: OPENAI FUNCTION-CALLING TOOLS + CONVERSATION HELPERS
+# OpenAI function-calling + conversation helpers
 
 TOOLS = [
     {
         "type": "function",
         "function": {
             "name": "generate_game_question",
-            "description": """Generate a new countdown-style game question. Call this when the conversation naturally leads to playing a game.""",
+            "description": "Generate a new countdown-style game question. Call this when the conversation naturally leads to playing a game.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -1806,7 +1777,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "check_game_answer",
-            "description": """Verify whether the user's spoken answer to the current game question is correct. Call this after the user gives an answer to an active game question.""",
+            "description": "Verify whether the user's spoken answer to the current game question is correct. Call this after the user gives an answer to an active game question.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -1831,7 +1802,7 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "evaluate_last_adaptation",
-            "description": """Self-evaluate whether the previous round's adaptive strategy actually helped the user. Returns a natural-language evaluation.""",
+            "description": "Self-evaluate whether the previous round's adaptive strategy actually helped the user. Returns a natural-language evaluation.",
             "parameters": {"type": "object", "properties": {}},
         },
     },
@@ -1839,18 +1810,17 @@ TOOLS = [
         "type": "function",
         "function": {
             "name": "request_more_time",
-            "description": """The user has asked for more time to think about the current game question. Acknowledge their request warmly.""",
+            "description": "The user has asked for more time to think about the current game question. Acknowledge their request warmly.",
             "parameters": {"type": "object", "properties": {}},
         },
     },
 ]
 
-# Alfie's
 def build_signal_context(engine: AdaptiveEngine,
                          expression: str, expr_conf: float,
                          vocal_emo: str, vocal_conf: float,
                          vol_rms: float, response_time: float) -> str:
-    """Build a signal summary string injected alongside every user message so the LLM can adapt its behaviour to the user's real-time emotional state without explicit adaptive-engine instructions."""
+    "Build a signal summary string injected alongside every user message so the LLM can adapt its behaviour to the user's real-time emotional state without explicit adaptive-engine instructions."
     correctness = engine.rolling_correctness()
     recent_faces = [r.facial_expression for r in engine.history[-3:]]
     recent_vocal = [r.vocal_emotion for r in engine.history[-3:]]
@@ -1881,7 +1851,7 @@ def build_signal_context(engine: AdaptiveEngine,
     return "\n".join(lines)
 
 def converse(conversation: list, tools: list) -> object:
-    """General-conversation OpenAI chat-completion call with function calling."""
+    "General-conversation OpenAI chat-completion call with function calling."
     try:
         resp = client.chat.completions.create(
             model="gpt-5.4",
@@ -1897,13 +1867,12 @@ def converse(conversation: list, tools: list) -> object:
             content="I had a brief network hiccup. Let's keep going! [gesture:think]",
             tool_calls=None, role="assistant")
 
-# Alfie's
 def execute_tool_call(tool_name: str, tool_args: dict,
                       engine: AdaptiveEngine, game_state: GameState,
                       conversation: list,
                       preferred_game: Optional[GameType],
                       dashboard=None) -> str:
-    """Dispatch a function-calling tool invocation and return a JSON string result."""
+    "Dispatch a function-calling tool invocation and return a JSON string result."
     if tool_name == "generate_game_question":
         gt = tool_args.get("game_type", "numbers")
         diff = tool_args.get("difficulty", "MEDIUM")
@@ -1958,12 +1927,11 @@ def execute_tool_call(tool_name: str, tool_args: dict,
     else:
         return json.dumps({"error": f"Unknown tool: {tool_name}"})
     
-# Alfie's
 def process_llm_response(message, conversation: list,
                          engine: AdaptiveEngine, game_state: GameState,
                          preferred_game: Optional[GameType],
                          dashboard=None) -> str:
-    """Handle the LLM response, including any tool call chains."""
+    "Handle the LLM response, including any tool call chains."
     msg_dict = {"role": "assistant", "content": message.content or ""}
     if message.tool_calls: # if tool calls are required inject the function-call into convo history so LLM can decide persistence
         msg_dict["tool_calls"] = [
@@ -2017,10 +1985,9 @@ def process_llm_response(message, conversation: list,
 
     return current_msg.content or ""
 
-# Salman's
 #look for gestures
 def extract_gesture(text: str) -> str:
-    """Parse a [gesture:TYPE] tag from the LLM's response text."""
+    "Parse a [gesture:TYPE] tag from the LLM's response text."
     match = re.search(r'\[gesture:(\w+)\]', text) # regex to find [gesture:type]
     if match:
         gesture = match.group(1).lower()
@@ -2028,7 +1995,6 @@ def extract_gesture(text: str) -> str:
             return gesture
     return "neutral"
 
-# Alfie's
 def generate_game_question_internal(game_type_str: str, difficulty_str: str,
                                     recent: Optional[list[str]] = None,
                                     recent_answers: Optional[list[str]] = None,
@@ -2127,56 +2093,55 @@ class GazeDashboard:
     CAMERA_W, CAMERA_H = 400, 300
 
     def __init__(self, ssh=None, ssh_tts=None):
-        # ssh/ssh_tts are stashed for quit_app's farewell + LED-off; both stay None in LOCAL_MODE thus the quit path falls through cleanly.
+        # stashed for quit_app farewell + LED-off
         self._ssh     = ssh
         self._ssh_tts = ssh_tts
-        self.root = tk.Tk()                       # the single top-level Tk window
+        self.root = tk.Tk()
         self.root.title("GAZE Dashboard")
-        self.root.resizable(False, False)         # lock size; no reflow logic thus a resize would distort the widget positions
+        self.root.resizable(False, False)         # fixed layout; no reflow
 
-        # Frame = invisible container; grid() on the root splits it into two columns wherein the left holds video + conversation, the right holds stats/signals.
+        # left col: video + chat; right col: stats
         left = tk.Frame(self.root)
-        left.grid(row=0, column=0, padx=8, pady=8, sticky="n")   # sticky="n" anchors to cell-north so this column doesn't drift down if the right column grows taller
+        left.grid(row=0, column=0, padx=8, pady=8, sticky="n")
 
-        # Label doubles as the camera canvas; bg="black" so empty pixels letterbox cleanly. Each frame is pushed in via .configure(image=...) inside camera_refresh().
+        # camera canvas; black letterboxes empty pixels
         self.camera_label = tk.Label(left, bg="black",
                                      width=self.CAMERA_W, height=self.CAMERA_H)
-        self.camera_label.pack()                  # pack stacks children top-to-bottom inside the parent Frame
+        self.camera_label.pack()
 
-        tk.Label(left, text="Conversation:").pack(anchor="w", pady=(6, 0))   # anchor="w" = west-align, hence the section header sits flush-left
-        conv_frame = tk.Frame(left) # stick the conversation to far left of tk.Frame which is left-aligned relative to the whole window
+        tk.Label(left, text="Conversation:").pack(anchor="w", pady=(6, 0))
+        conv_frame = tk.Frame(left)
         conv_frame.pack()
-        # Text widget = multi-line scrollable log. state="disabled" makes it read-only by default; update_robot_speech / append_user_speech temporarily flip it to "normal" to insert, then re-disable.
+        # read-only by default; helpers flip to insert
         self._conv_text = tk.Text(conv_frame, font=("Courier", 10),
                                   width=50, height=10, wrap="word",
                                   state="disabled")
-        # Scrollbar isn't auto-wired; the bidirectional link is: bar->text via command=, text->bar via yscrollcommand=. Without both, dragging the bar won't move the text and scrolling text won't move the bar.
+        # scrollbar bidirectional wiring
         conv_scroll = tk.Scrollbar(conv_frame, command=self._conv_text.yview)
         self._conv_text.configure(yscrollcommand=conv_scroll.set)
-        self._conv_text.pack(side="left", fill="both", expand=True)   # text fills available space horizontally + vertically
-        conv_scroll.pack(side="right", fill="y")                       # scrollbar pinned right, stretches vertically only
+        self._conv_text.pack(side="left", fill="both", expand=True)
+        conv_scroll.pack(side="right", fill="y")
 
         right = tk.Frame(self.root)
-        right.grid(row=0, column=1, padx=(0, 8), pady=8, sticky="n")   # column 1 = right column of the root grid
+        right.grid(row=0, column=1, padx=(0, 8), pady=8, sticky="n")
 
         tk.Label(right, text="GAZE (Game-Adaptive Zone of Engagement) Dashboard",
                  font=("TkDefaultFont", 14, "bold")).pack(pady=(0, 4))
 
-        # StringVar = Tk's observable-string. Binding a Label via textvariable=var means a single var.set("...") call from anywhere repaints the Label automatically; no manual .configure() per update thus the update_signals() helper just sets the var and walks away.
         self._round_var = tk.StringVar(value="Round: -")
         self._score_var = tk.StringVar(value="Score: 0/0")
         self._streak_var = tk.StringVar(value="Streak: 0")
         for var in (self._round_var, self._score_var, self._streak_var):
             tk.Label(right, textvariable=var).pack(anchor="w")
 
-        # transcription: only what the user said; correct answer stays on stdout so watchers don't cheat-read it off-screen mid-game
+        # user transcription only; answer on stdout
         tk.Label(right, text="").pack()
         tk.Label(right, text="Transcription:",
                  font=("TkDefaultFont", 10, "bold")).pack(anchor="w")
         self._heard_var = tk.StringVar(value="You said: -")
         self._result_var = tk.StringVar(value="")
         tk.Label(right, textvariable=self._heard_var).pack(anchor="w")
-        # Holding a ref to _result_label (rather than chaining .pack() inline) thus update_signals() can later .configure(fg=...) the colour to green/red/grey based on correctness
+        # kept for fg recolour on correctness
         self._result_label = tk.Label(right, textvariable=self._result_var,
                                       font=("TkDefaultFont", 11, "bold"))
         self._result_label.pack(anchor="w")
@@ -2199,7 +2164,7 @@ class GazeDashboard:
         tk.Label(right, text="Adaptive Decision:",
                  font=("TkDefaultFont", 10, "bold")).pack(anchor="w")
         self._state_var = tk.StringVar(value="State: -")
-        # ref kept thus update_decision() can recolour fg per inferred state (green=thriving, red=frustrated, etc. — see _STATE_COLOURS)
+        # kept for state-coloured fg
         self._state_label = tk.Label(right, textvariable=self._state_var,
                                      font=("TkDefaultFont", 11, "bold"))
         self._state_label.pack(anchor="w")
@@ -2217,30 +2182,27 @@ class GazeDashboard:
                                     wraplength=340, justify="left")
         self._eval_label.pack(anchor="w")
 
-        # Button: command= takes a no-arg callable; Tk fires it on click. Same callable also wired to the keystrokes + window-close below thus all four quit paths converge on quit_app().
         tk.Button(right, text="Quit (Esc)",
                   command=self.quit_app).pack(pady=(10, 0))
 
-        # bind() = keystroke handler. Tk passes an Event object to the callback, hence the `lambda e:` swallow — quit_app takes no args.
         self.root.bind("<Escape>", lambda e: self.quit_app())
-        # cross-platform quit; Command-q is macOS-only and may TclError on Windows Tk builds, hence guard each binding
+        # Cmd-Q is macOS-only; guard each
         for combo in ("<Command-q>", "<Control-q>"):
             try:
                 self.root.bind(combo, lambda e: self.quit_app())
             except tk.TclError:
                 pass
-        # WM_DELETE_WINDOW = the window manager's "user clicked the X" signal. Intercepting it routes the close button through quit_app (farewell + LED-off + os._exit) instead of Tk's default abrupt destroy.
+        # route window-close through quit_app
         self.root.protocol("WM_DELETE_WINDOW", self.quit_app)
 
-        # kickoff: each refresh method re-schedules itself via root.after() at the end of its body, hence one initial call sustains the animation indefinitely.
         self.camera_refresh()
         self.signal_refresh()
-        self.root.update()                         # force one immediate redraw so the window is fully painted before main() hands control to mainloop()
+        self.root.update()                         # paint before mainloop()
 
 
     def camera_refresh(self):
         """Composite the latest raw frame with the cached detection overlay.
-        Raw frames arrive from capture_thread_loop at ~30 fps; bbox / emotion arrive from detect_thread_loop at ~6-7 Hz. Drawing the cached bbox on every fresh raw frame makes the video feed feel genuinely live whilst the detector runs at a sensible cadence."""
+        Bbox is drawn on every fresh raw frame so the feed looks live."""
         with _preview_lock:
             frame   = _preview_frame
             bbox    = _last_bbox
@@ -2273,7 +2235,7 @@ class GazeDashboard:
     # thread-safe scheduling: tkinter widgets are main-thread only (macOS); root.after(0, fn) queues fn onto the main loop.
 
     def on_main(self, fn):
-        """Schedule fn to run on the main (tkinter) thread."""
+        "Schedule fn to run on the main (tkinter) thread."
         try:
             self.root.after(0, fn)
         except tk.TclError:
@@ -2299,7 +2261,7 @@ class GazeDashboard:
         self.on_main(apply)
 
     def update_think_budget(self, secs: float):
-        """Update the dashboard's adaptive think-budget diagnostic row."""
+        "Update the dashboard's adaptive think-budget diagnostic row."
         def apply():
             self._budget_var.set(f"Think budget:  {secs:.1f}s")
         self.on_main(apply)
@@ -2360,7 +2322,7 @@ class GazeDashboard:
         print("\n  [Dashboard] Quit requested.")
         if not LOCAL_MODE and self._ssh is not None:
             nao_set_leds(self._ssh, "FaceLeds", 0x00000000, 0.5)
-        # say() routes to local_say in LOCAL_MODE thus self._ssh_tts being None is fine; in Pepper-mode it'll be the SSH-TTS connection for Pepper-eyes stream set up in main()
+        # local_say in LOCAL_MODE; SSH-TTS otherwise
         say(self._ssh_tts, "It was great to chat! See you next time, we'll keep getting better!")
         self.close()
         os._exit(0)
@@ -2392,7 +2354,7 @@ def is_goodbye(text: str) -> bool:
         bye = client.chat.completions.create(
             model="gpt-4.1-mini", max_completion_tokens=5, temperature=0.0,
             messages=[{"role": "system", "content":
-                """Did the user just signal they want to end the conversation (e.g. 'bye', 'goodbye', 'I'm done', 'see you later', 'I have to go')? Reply ONLY with 'GOODBYE' or 'CONTINUE'."""},
+                "Did the user just signal they want to end the conversation (e.g. 'bye', 'goodbye', 'I'm done', 'see you later', 'I have to go')? Reply ONLY with 'GOODBYE' or 'CONTINUE'."},
                 {"role": "user", "content": text}],
         ).choices[0].message.content.strip().upper()
     except Exception:
@@ -2459,7 +2421,7 @@ def ask_for_name(ssh, ssh_tts, dashboard,
 
 def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                        local_camera, ssh, ssh_tts, energy_threshold):
-    """Comprehensive main-conversation loop."""
+    "Comprehensive main-conversation loop."
     preferred_game = None
     engine         = AdaptiveEngine()
     game_state     = GameState()
@@ -2472,7 +2434,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         prev_correct = save_data.get("total_correct", 0)
 
         name_prefix = f", {saved_name}" if saved_name else ""
-        welcome_back = f"""Welcome back{name_prefix}! Last time you played {prev_rounds} rounds and got {prev_correct} correct. Want to continue where you left off, or start fresh?"""
+        welcome_back = f"Welcome back{name_prefix}! Last time you played {prev_rounds} rounds and got {prev_correct} correct. Want to continue where you left off, or start fresh?"
         if not LOCAL_MODE:
             nao_track_face(ssh, enable=True)
             nao_set_leds(ssh, "FaceLeds", 0x0000FF00, 1.0)
@@ -2508,14 +2470,14 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         else:
             print("  Heard: (silence)")
 
-        # GPT-4.1-mini intent classifier; robust to phrasing variation ("yeah pick up where we were", "nah start over") wherein the old keyword list mis-fires — e.g. "no thanks I'd rather continue" trips on the bare word 'continue' and incorrectly resumes. Default FRESH on silence / API failure thus the original fall-through behaviour is preserved.
+        # LLM intent classifier; defaults FRESH on failure
         intent = "FRESH"
         if resume_text:
             try:
                 intent = client.chat.completions.create(
                     model="gpt-4.1-mini", max_completion_tokens=5, temperature=0.0,
                     messages=[{"role": "system", "content":
-                        """The user was just asked whether they want to CONTINUE their previous session or start FRESH. Reply ONLY with 'CONTINUE' or 'FRESH'."""},
+                        "The user was just asked whether they want to CONTINUE their previous session or start FRESH. Reply ONLY with 'CONTINUE' or 'FRESH'."},
                         {"role": "user", "content": resume_text}],
                 ).choices[0].message.content.strip().upper()
             except Exception as e:
@@ -2523,7 +2485,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         if "CONTINUE" in intent:
             engine = restore_engine(save_data)
             preferred_game = engine.current_game
-            restore_msg = f"""Restoring your previous session{f', {engine.user_name}' if engine.user_name else ''}: {save_data.get('rounds_played', 0)} rounds on record."""
+            restore_msg = f"Restoring your previous session{f', {engine.user_name}' if engine.user_name else ''}: {save_data.get('rounds_played', 0)} rounds on record."
             say(ssh_tts, restore_msg)
             print(f"\nRobot: {restore_msg}")
         else:
@@ -2547,7 +2509,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     conversation = [{"role": "system", "content": build_system_prompt(engine.user_name)}]
 
     # Build a greeting user-prompt that mentions the name if we captured one; the LLM will weave it into a warm opener without being cheesy
-    greeting_directive = f"""[Give a warm, supportive greeting{f' that addresses the user by name ({engine.user_name})' if engine.user_name and engine.user_name != 'friend' else ''}. Mention you can chat, play games, or just hang out. Keep it to 2 sentences.] [gesture:wave]"""
+    greeting_directive = f"[Give a warm, supportive greeting{f' that addresses the user by name ({engine.user_name})' if engine.user_name and engine.user_name != 'friend' else ''}. Mention you can chat, play games, or just hang out. Keep it to 2 sentences.] [gesture:wave]"
     greeting_msg = converse(
         conversation + [{"role": "user", "content": greeting_directive}],
         TOOLS,
@@ -2624,7 +2586,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             vol_rms = measure_volume()
             print(f"  Volume RMS: {vol_rms:.0f}")
 
-            # (c) Transcribe; rely on per-chunk speech flag (LOCAL) or mic energy threshold (NAO). File-wide RMS double-gate removed; it averaged terse utterances down with surrounding silence and rejected legitimate speech. Silero VAD + Whisper no_speech_prob + hallucination blacklist remain as downstream defence, thus we're not unprotected.
+            # (c) transcribe; per-chunk gate, file-wide RMS removed
             if LOCAL_MODE:
                 if _local_speech_detected:
                     user_text = transcribe(bypass_wake_word=True)
@@ -2672,7 +2634,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                         {"role": "system",
                          "content": build_system_prompt(engine.user_name)},
                         {"role": "user",
-                         "content": f"""[The user {name_clause}has been quiet for 3 turns. Offer ONE brief, gentle check-in; no question, no nagging. 1 sentence max. Use their name if given.] [gesture:calm]"""},
+                         "content": f"[The user {name_clause}has been quiet for 3 turns. Offer ONE brief, gentle check-in; no question, no nagging. 1 sentence max. Use their name if given.] [gesture:calm]"},
                     ]
                     nudge_msg = converse(nudge_prompt, [])
                     nudge_text = (nudge_msg.content or "").strip()
@@ -2687,7 +2649,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                         dashboard.update_robot_speech(nudge_speech)
                     nudge_level = 1
 
-                # tier 2 — still silent post-check-in, switch game + warm re-invitation; threshold 4 not 5 because adaptive think-budget stretches each silent turn (5 silences ~= 35-47s of dead air, too long for an assistive-robot analogue, thus one processing turn between tiers suffices)
+                # tier 2: switch game, soft re-invitation
                 elif engine.consecutive_silences >= 4 and nudge_level < 2:
                     engine.current_game = engine.pick_different_game()
                     engine.game_switch_count += 1
@@ -2698,7 +2660,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                         {"role": "system",
                          "content": build_system_prompt(engine.user_name)},
                         {"role": "user",
-                         "content": f"""[The user {name_clause}has gone silent for 4 turns in a row, even after the gentle check-in. Open with ONE short sentence that directly and warmly acknowledges they've gone quiet (use their name; don't interrogate, don't apologise); THEN offer a {engine.current_game.value} round as a soft alternative. Two sentences total.] [gesture:calm]"""},
+                         "content": f"[The user {name_clause}has gone silent for 4 turns in a row, even after the gentle check-in. Open with ONE short sentence that directly and warmly acknowledges they've gone quiet (use their name; don't interrogate, don't apologise); THEN offer a {engine.current_game.value} round as a soft alternative. Two sentences total.] [gesture:calm]"},
                     ]
                     esc_msg    = converse(escalate_prompt, [])
                     esc_text   = (esc_msg.content or "").strip()
@@ -2866,11 +2828,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         streak_note = (f" Your best streak was {summary['best_streak']} in a row!"
                        if summary["best_streak"] >= 3 else "")
         if acc >= 0.8:
-            farewell = f"""Amazing session! You got {summary['correct']} out of {summary['rounds']} right.{streak_note} Brilliant work! Your progress is saved; see you next time!"""
+            farewell = f"Amazing session! You got {summary['correct']} out of {summary['rounds']} right.{streak_note} Brilliant work! Your progress is saved; see you next time!"
         elif acc >= 0.5:
-            farewell = f"""Great effort! You scored {summary['correct']} out of {summary['rounds']}.{streak_note} Well played! Your progress is saved; see you next time!"""
+            farewell = f"Great effort! You scored {summary['correct']} out of {summary['rounds']}.{streak_note} Well played! Your progress is saved; see you next time!"
         else:
-            farewell = f"""Thanks for playing! You got {summary['correct']} out of {summary['rounds']}.{streak_note} Every round is a learning opportunity. Your progress is saved; see you next time!"""
+            farewell = f"Thanks for playing! You got {summary['correct']} out of {summary['rounds']}.{streak_note} Every round is a learning opportunity. Your progress is saved; see you next time!"
     else:
         farewell = "It was lovely chatting! Your progress is saved; see you next time!"
 
@@ -2942,7 +2904,7 @@ def main():
         print("\nCalibrating ambient noise level (stay quiet for 3 seconds)...")
         energy_threshold = nao_calibrate_ambient(ssh)
 
-        # Pepper-camera live stream: persistent ALVideoDevice subscriber on Pepper + receiver on the laptop, hence the dashboard sees ~10 fps wherein detect_thread_loop reads the same buffer at ~6-7 Hz
+        # Pepper stream ~10 fps; detect at 6-7 Hz
         if not USE_LOCAL_CAMERA:
             print("  Starting Pepper camera stream...")
             threading.Thread(target=pepper_video_loop,
