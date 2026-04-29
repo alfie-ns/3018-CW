@@ -136,7 +136,7 @@ SILENCE_POLL_SECS  = 0.25 # polling interval for silence detection on Pepper
 SILENCE_DURATION   = 1.2 # seconds of silence after speech to trigger stop
 CALIBRATION_SECS   = 3 # duration of start-up ambient noise calibration
 ENERGY_BUFFER      = 80  # margin above ambient baseline to set speech threshold
-DEFAULT_ENERGY_THRESHOLD = 300  # fallback for if calibration fails
+DEFAULT_ENERGY_THRESHOLD = 300  # fallback in case calibration fails
 REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
@@ -931,7 +931,7 @@ ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
         nao_say(ssh, text)
 
 def nao_capture_image(ssh):
-    "Capture a photo from Pepper's camera and download it. Kept as a fallback for one-off stills; the live dashboard now uses pepper_video_loop()."
+    "Capture a photo from Pepper's camera and download it. Kept in case a one-off still is needed; the live dashboard now uses pepper_video_loop()."
     nao_run(ssh, f"""
 from naoqi import ALProxy
 pc = ALProxy("ALPhotoCapture","127.0.0.1",9559)
