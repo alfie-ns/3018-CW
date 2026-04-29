@@ -1482,19 +1482,38 @@ ROBOT_ECHO_SIMILARITY_THRESHOLD = 0.68
 MIN_TRANSCRIPT_CHARS = 2
 MAX_SINGLE_WORD_DIGITS = 4
 
+# short fillers: exact-match only, never fuzzy
+SHORT_FILLER_HALLUCINATIONS = {
+    "you", "mm", "hmm", "uh", "um",
+}
+# long-phrase hallucinations eligible for fuzzy matching
+PHRASE_HALLUCINATIONS = {
+    p for p in WHISPER_HALLUCINATIONS
+    if normalise_for_blacklist(p) not in SHORT_FILLER_HALLUCINATIONS
+}
+PHRASE_HALLUCINATION_NORMS = {
+    normalise_for_blacklist(p)
+    for p in PHRASE_HALLUCINATIONS
+}
+
 def similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a, b).ratio()
 
 def max_hallucination_similarity(text: str) -> tuple[float, str]:
-    "Highest similarity between transcript and known hallucinations."
+    "Highest similarity between transcript and long-phrase hallucinations only."
     norm = normalise_for_blacklist(text)
     best_score = 0.0
     best_phrase = ""
-    for phrase in WHISPER_HALLUCINATIONS:
+    if not norm:
+        return 1.0, ""
+    for phrase in PHRASE_HALLUCINATIONS:
         p = normalise_for_blacklist(phrase)
+        if not p:
+            continue
         score = similarity(norm, p)
-        # substring containment for fluffy variants
-        if p and (p in norm or norm in p):
+        phrase_word_count = len(p.split())
+        # containment: only when the hallucination phrase is inside the transcript
+        if phrase_word_count >= 3 and p in norm:
             score = max(score, 0.95)
         if score > best_score:
             best_score = score
@@ -1502,15 +1521,22 @@ def max_hallucination_similarity(text: str) -> tuple[float, str]:
     return best_score, best_phrase
 
 def looks_like_youtube_hallucination(text: str) -> bool:
-    "Pattern-match common YouTube-outro phrasings."
+    "YouTube-outro patterns; spares ordinary 'I like numbers' speech."
     norm = normalise_for_blacklist(text)
     youtube_patterns = [
-        r"\b(thank|thanks)\b.{0,30}\b(watching|viewing)\b",
-        r"\b(like|subscribe|subscribed|subscription)\b",
+        # clear outro phrases
+        r"\b(thank|thanks)\b.{0,40}\b(watching|viewing)\b",
+        # like/subscribe must co-occur with channel/video context
+        r"\bplease\b.{0,20}\b(like|subscribe)\b",
+        r"\b(like)\b.{0,25}\b(subscribe|channel|video)\b",
+        r"\b(subscribe)\b.{0,25}\b(like|channel|video)\b",
+        # bell / notification boilerplate
         r"\b(turn on|hit)\b.{0,20}\b(notification|bell)\b",
-        r"\b(link|links)\b.{0,20}\b(description|below)\b",
-        r"\bsee you\b.{0,20}\b(next time|in the next video)\b",
-        r"\bthis video\b",
+        # description / link boilerplate
+        r"\b(link|links)\b.{0,30}\b(description|below)\b",
+        # outro
+        r"\bsee you\b.{0,25}\b(next time|next video|in the next video)\b",
+        # channel intro / sponsor boilerplate
         r"\bwelcome back to\b.{0,30}\b(channel|video)\b",
         r"\bsponsored by\b",
     ]
@@ -1520,7 +1546,11 @@ def is_known_hallucination(text: str) -> bool:
     norm = normalise_for_blacklist(text)
     if norm == "":
         return True
-    if norm in WHISPER_HALLUCINATIONS:
+    # exact short filler only; never fuzzy
+    if norm in SHORT_FILLER_HALLUCINATIONS:
+        return True
+    # exact phrase match
+    if norm in PHRASE_HALLUCINATION_NORMS:
         return True
     # structural catch: Whisper leaks YouTube-description URLs on silence-amplified input
     if _URL_HALLUCINATION.search(text):
@@ -1540,15 +1570,24 @@ def is_known_hallucination(text: str) -> bool:
     return False
 
 def is_robot_echo(text: str) -> bool:
-    "Reject transcripts similar to last robot speech."
+    "Reject transcripts similar to last robot speech, sparing valid short answers."
     if not text or not _last_robot_speech:
         return False
     heard = normalise_for_blacklist(text)
     robot = normalise_for_blacklist(_last_robot_speech)
     if not heard or not robot:
         return False
-    # short transcripts: strict containment
-    if len(heard.split()) <= 3 and heard in robot:
+    heard_words = heard.split()
+    # short answers: only reject if near-identical to robot speech overall
+    if len(heard_words) <= 3:
+        score = similarity(heard, robot)
+        if score >= 0.92:
+            print(f"  Transcript rejected as short robot echo: {text!r} ({score:.2f})")
+            return True
+        return False
+    # longer transcripts: substring containment is suspicious
+    if len(heard_words) >= 4 and heard in robot:
+        print(f"  Transcript rejected as robot echo substring: {text!r}")
         return True
     score = similarity(heard, robot)
     if score >= ROBOT_ECHO_SIMILARITY_THRESHOLD:
@@ -1629,8 +1668,8 @@ Last robot speech: {_last_robot_speech!r}""",
         verdict = resp.choices[0].message.content.strip().upper()
         return verdict == "ACCEPT"
     except Exception as e:
-        print(f"  GPT transcript validator failed ({e}); accepting deterministic result.")
-        return True
+        print(f"  GPT transcript validator failed ({e}); rejecting borderline transcript.")
+        return False
 
 def has_real_speech(wav_path: str, min_speech_ms: int = 250,
                      threshold: float = 0.5) -> bool:
@@ -1800,12 +1839,33 @@ def transcribe_with_one_retry(ssh, energy_threshold,
         silence_secs=silence_secs,
         record_max_secs=min(record_max_secs, 8.0),
     )
+    retry_rms = measure_volume()
+    print(f"  Retry RMS diagnostic: {retry_rms:.0f}")
+    if not LOCAL_MODE and retry_rms < NAO_MIN_RMS_TO_TRANSCRIBE:
+        print(f"  Retry WAV near-empty ({retry_rms:.0f} < {NAO_MIN_RMS_TO_TRANSCRIBE}); skipping Whisper.")
+        return ""
     second = transcribe(
         bypass_wake_word=True,
         whisper_prompt=whisper_prompt,
         game_state=game_state,
     )
     return second
+
+def debug_filter_self_test():
+    "Boot-time sanity check; flag when filters reject valid speech."
+    tests = [
+        "numbers", "letters", "yes", "no", "100",
+        "how are you", "thank you", "thank you so much",
+        "I like numbers", "I liked that one",
+        "thanks for watching", "please like and subscribe",
+        "thank you guys for watching this video", "2019",
+    ]
+    print("\n--- Filter self-test ---")
+    for t in tests:
+        accepted = transcript_is_plausible_user_input(t)
+        score, phrase = max_hallucination_similarity(t)
+        print(f"{t!r:45} accepted={accepted} similarity={score:.2f} phrase={phrase!r}")
+    print("--- End filter self-test ---\n")
 
 # facial-expression pipeline
 
@@ -2905,7 +2965,11 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
             # (c) transcribe; per-chunk gate, file-wide RMS removed
             if LOCAL_MODE:
                 if _local_speech_detected:
-                    user_text = transcribe(bypass_wake_word=True)
+                    user_text = transcribe(
+                        bypass_wake_word=True,
+                        whisper_prompt=build_whisper_prompt(game_state),
+                        game_state=game_state,
+                    )
                 else:
                     print(f"  No speech chunk detected (floor={LOCAL_SILENCE_RMS}); skipping transcription.")
                     user_text = ""
@@ -3198,6 +3262,8 @@ def main():
     else:
         print(f"  Speech emotion model not found at {SPEECH_MODEL}; vocal signal disabled.")
         print("  Run train_speech_model.py to generate it.")
+
+    debug_filter_self_test()
 
     local_camera = None
     if USE_LOCAL_CAMERA:
