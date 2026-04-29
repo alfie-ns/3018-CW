@@ -299,6 +299,8 @@ Task 4: Programming Project
 
 # 1- Task (3) Literature Review
 
+- [ ] cite this lecture and book: /Users/alfienurse/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/learning/[ ] final: cognitive architecture
+
 - [X] [X] ## 1.1. Introduction
 
 Ageing populations and a shrinking care workforce positioned **assistive robotics** *(human-supportive robots within physical, cognitive, and social realms of impairment affecting daily-living activities)*; a prominent technological response to a widening care gap. The field spans physical prosthetics; surgical assistance; neurodivergent support; exoskeletal rehabilitation, and social companionship; this essay however focuses on *socially* assistive robotics ($SAR$), an assistive-robot subfield wherein the robot "focuses on helping human users through social rather than physical interaction" (Tapus, Matarić and Scassellati, 2007, Abstract), as here most active research and ethical tension converge.

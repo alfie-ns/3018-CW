@@ -1,0 +1,367 @@
+The cognitive staff function and hybrid cognitive architectures are the emergence.
+We understand that this can.
+Control or.
+Impede the knowledge about like memories, for example.
+It can have formalities like machine learning approaches for learning.
+It can have also programming mechanisms so that you can code it directly.
+We have the emergent coding architecture which is more basis for development.
+So it's something like I say memories, but the memories here is different.
+It's more about memories about from example saying that we have like neural system.
+So we understand like from neural networks.
+There are weights, for example, there are some parameters for the neural network.
+So the memories here is more about the parameters of the network that can encode or lead to behavioral system of the of the like.
+He was speak about phenology of like humans inspired by humans or form of the robots.
+So it's more how can we have the basic architecture for encoding the basic skills or the basic way that humans reply to for example to events, for example.
+And how can we allow this to develop to learn.
+So there is also formality for learning, but it meant to update these weighting parameters on this structural machine learning model or in the like embedded learning model of the like of the emergent coding architecture.
+So it's like how can I update the parameters there?
+It's about memory.
+So the cognitive one is like something that you can use more in your expert experiment experiments.
+For example, if you would like to use a memory for interaction with people and you use this kind of context, etc.
+This is a co approach.
+The hybrid is more mix between things.
+So hybrid cognitive architecture might use symbolic representation, which is a cognitivist way to encode abstract concepts, rules, but also incorporate neural networks of other processing techniques to support more flexible adaptive behavior.
+So this is actually an approach that allow Warsaws and we will highlight quickly this concept in the next slide.
+So this is what can be considered according to Kotsuruba and colleagues.
+And tossed was in 2020.
+2020.
+Certainly from 2020 up to now there are plenty of cognitive architectures appeared.
+So we have the branch of cognitivist cognitive architectures, the symbolic many, many, many, many.
+We have the hybrid that is symbolic or fully integrated.
+And we have the emergent ones neural modeling or logical systems.
+So when I say symbolic, I mean knowledge is represented explicitly using rules, simple facts, goals, plans.
+So for example, if I say if the robot sees a cup and the human asks for a drink, they pick up the cup.
+So there is actually more kind of rules that are embedded in the system that can allow to deal with a situation These rules have been learned through previous experience and it have been represented in such kind of explicit rule.
+If event happened then for example do such action.
+The sub symbolic knowledge is not represented as clear rules or explicit samples.
+Instead it represented through patterns, weights, activation, probabilities or learning association.
+As I have seen, as I already have explained it, it's more about the weights, activations, all the parameters of the neural networks that can learn such as neural network, reinforcement, learning, you know, all these kind of things.
+And it's suitable for.
+For speech recognition, vision control, many things like this.
+The following gradient means symbolic and subsymbolic fully integrated.
+It means it's not just you know, like the symbolic and non symbolic.
+It's not like.
+Like I said, the symbolic is about the explicit facts and other one is about model.
+Parameters of the model.
+Are not working side by side explicitly, but they're connected deeply so that they support each other during cognition perception.
+And this is the idea of full integration.
+So all of them work together and all of them are connected in some sense.
+So we will try to highlight one of these models which is the ACT R and the soar can you see for.
+So we will have.
+We'll highlight mainly the cognitive architecture soar and we'll have also the.
+Another cognitive architecture anchor.
+Certainly we don't to go through all this, but just a basic highlight mostly is the soar which is a very basic one for the full integrated hybrid.
+So as we understand from SOL stands for state operator and and result state operator and andresult.
+So this has been one of the systems candidates that have been candidates for the unified theory of condition.
+As we have highlighted previously as a cognitive system of cognitive architecture system can encode or represent the cognitive process that humans do, but in a specific way, in the way that is not emergent, in the way that allows using if and single rules.
+So what do we have here?
+It's rule based and it has cyclic.
+So we have like, you know, like we have seen below.
+Like there is a perception action.
+So this is like the working memory.
+The working memory is the memory that stores all the inputs and from there you give the output.
+So you observe an action and you try to represent it.
+Okay, first of all understand what is it.
+Find the rule and then prepare an action.
+So I said like before, if action A happened then for example do as I have seen in the previous slide when I said if for example Rose sees a cup and the human asks for a drink, then pick up the cup.
+Okay, so I have had some perceptual information or A perceptual side and then I had some action.
+So the working memory, okay, first of all, it includes the seeing and the perceptual information.
+There is so simply what SOAR actually does.
+It looks at the current working memory, find all the rules that match.
+It fire those rules to add useful information.
+Sometimes if it is not enough, it can make a new rule.
+So kind of what, what's called the chunking.
+The chunking refers to the process of creating new production rules by combining existing rules to create more journal.
+So if I, for example, the previous rule, if for example there is a cup or if the robot sees something and condition Y happening, then do for example condition Z.
+So several perceptual information happened.
+But the chunking means probably it can find that within this kind of context of information that have received, have been received, it's better to merge them or make chunking like associate them together, combine them together so that I can create more generic rules that fit with the situation.
+So what does it have?
+It have several parts like procedural memory, semantic memory, episodic memory, it has machine learning algorithms and it has symbolic working memory and other machine learning machine learning algorithms.
+So some part here, that lower part is related to like perception and action and the other part is related to interface with the memories.
+The most important video ever that you can see here is the main developer of SOAR and I invite you to watch here the first 15 minutes with me.
+I want to start off talking about the structure of complex AI systems.
+At the highest level we can think of, a task we're trying to achieve that we expect is not going to be sort of a trivial task, but something like an automated tutor.
+In order to do that, we look at lots of different aspects of AI, what we call cognitive capabilities, things like planning, having a theory of mind of what, what the student is some meta reasoning about their, the students reasoning, some problem solving and language processing.
+Each one of these, then we can think about decomposing into sort of lower level algorithms in AI and also then low level data structures.
+So if we look at multiple tasks such as automated driving, medical applications and so on, we see that we're going to have a of lot of different kind of capabilities.
+We're going to have a lot of different low level algorithms and then underlying data structures.
+One way to go after this problem is to.
+So as we can see, sorry for the interruption.
+As we can see, I have to probably stop here and show it in YouTube to have more control of it.
+Structure complex AI systems.
+At the last level we can Think of a task we're trying to achieve that we expect is not going to be sort of a trigger task, but something like an automated tutor.
+So here you speak about applications.
+We have seen this.
+Applications could have.
+Is some meta reasoning about there, students reasoning, some problem solving and language processing.
+Each one of these then we can think about decomposing into sort of lower level algorithms and AI and also then low level data structures.
+So if we look at multiple tasks, such as automated driving, medical applications and so on, we see that we're going to have a lot of different kinds of capabilities, going to have a lot of different low level algorithms and then underlying data structures.
+And this was a key.
+So identify all what could be in order to achieve these applications from higher level to lower level.
+What are the cognitive capabilities we need?
+What are the machine learning algorithms, for example, and low level data structure we need?
+So it's very sophisticated, as you can see, very sophisticated structure.
+And then cognitive architecture, try to build the blocks that allow you for example, to work on the cognitive capabilities area, the blue area.
+So you have to understand for example what SOAR receives, prepare the data that you need for soar.
+And for example, you use machine learning outside machine learning if needed or as needed for the specific task.
+One way to go after this problem is to think about the cognitive architecture approach.
+Here what we're trying to do is figure out what the class of low level algorithms and data structures are that are shared across all these different kinds of cognitive capabilities and then have a single system that supports all.
+So once we have that, we can support the cognitive capabilities and then we can do the applications.
+Now another approach which is also sort of popular I think in some of the robotics work, is to start with the cognitive capabilities and create separate independent systems that do these different kinds of things.
+So you might have a planner, you might have a natural language system, you might have a meta reasoning system.
+Our view is that it is at this lower level and that each of these then is being implemented within something that's going on at the lower level.
+That's our approach, not necessarily the right approach for other people that might be wanting to do it at that higher level, but that's the approach we're going to go after.
+And so the cognitive architecture hypothesis, which tries to answer how is sensing, action, reasoning and learning all integrated into an autonomous agent and hypothesis is that complex cognition arises from a combination of a fixed set of computational building blocks that's going to be a set of memories, processes, representations and learning mechanisms.
+And then on top of that is going to be the learned language, I'm sorry, the knowledge which is either innate or or learn from experience.
+And that's often going to be programmed by a human or hopefully a lot of it's going to be learned.
+But that's what's going to provide the different cognitive capabilities and be able to support the tasks.
+So the ideas behind this come from Alan Newell and John Anderson, both cognitive scientists.
+John Anderson has popularized the ACTA car architecture and Alan Newell together with me and Paul Rosenblum developed the SOAR cognitive architecture.
+That's what I'm going to be talking about more today is the SOAR cognitive architecture.
+It was developed as part of my thesis back in the early 80s with Paul Rosenblum and Alan Newell.
+The most recent and best reference for SOAR is the SOAR Cognitive Architecture book that I'm the author of and that came out in 2012 and is available by it press now.
+There's some aspects of the book that are no longer quite up to date, but it really is the best way to learn about soar.
+This was in an earlier time.
+So let's talk a little bit about what the goals of the SOAR architecture was.
+When we started it, what we wanted was to be able to support the development, development of multi method.
+Not just use one problem solving method, but many different kinds of problem solving methods.
+Be something that could be used for many different tasks.
+They didn't have a lot of expertise about a domain and they might end up having to do a lot of search but also knowledge rich agents so that if there was knowledge knowledge available there was not have to be a lot of search and the system was able to reason directly and make decisions very quickly.
+And also these would be systems that interact with the real world.
+So our inspiration comes both from psychology and computer science.
+From psychology we really do look at how humans solve problems, how humans reason about the world, how humans interact with the world and that is to a lot of the mechanisms.
+There's even inspiration from neuroscience in terms of how the brain is structured.
+We also look to computer science and AI for efficient and robust implementation.
+So our goal is not to do a low level modeling of human behaviors, specifically at the neural level.
+Some of our work does involve modeling human behavior say at 50 milliseconds or 100 milliseconds seconds level.
+And so we've done work in that area and a lot of that is inspired by work that's been done in actar.
+So there's a lot of overlap between the kinds of mechanisms we Use from the psychology side.
+But what distinguishes SOAR is that we've.
+Tried to open.
+And that is what we see here and that we try to focus on, on complex behavior, building large systems and that are.
+This is more about tasks.
+So these are systems that have both high level and low level cognitive capabilities.
+In terms of common different systems level, SOAR supports both.
+System one, reasoning, which is very fast, is using sort of a lot of implicit representations, but also system two, which which involves more deliberate reasoning, planning, metacognition.
+We also support many different kinds of learning, not just a single learning mechanism such as reinforcement learning, but also episodic learning, semantic learning and procedural learning.
+And finally, the goal is to have systems that are very efficient in execution and and scale to very large knowledge bases.
+So these are systems that can be real time in robotic applications or other kinds of embedded simulated worlds and that they can both be programmed with lots of knowledge or they can learn a lot of knowledge over time.
+So a short history of SOAR.
+We start back in the 1990s 80s where we look at the desired capabilities we had in the system.
+As I mentioned, we started off with wanting multiple tasks and multiple methods.
+We then wanted to add in different general learning mechanisms, interacting with the environment and being able to support large knowledge rich behaviors.
+And we've added task learning, more human collaborative capabilities.
+And what we'll talk about in a little bit is comprehensive task learning.
+In terms of the underlying mechanisms.
+We started out with a symbolic system that was based on problem spaces and rule based systems.
+We've also then added different mechanisms over the time.
+Over time.
+In the mid 2000s we added a lot of different memories and learning mechanisms.
+So test emotion as well.
+Reinforcement learning, episodic memory, semantic memory, mental imagery, emotion components.
+And we've also then developed a new implementation of the chunking mechanism.
+In terms of major applications.
+We started with tory problems.
+We then did some internal reasoning problem which was the R1 configuration problem.
+And then we started to do robotics.
+As you can see, we've done a lot with robotics over the years with autonomous vehicles, but we've also done synthetic characters.
+And as I mentioned, we did cognitive modeling and doing natural language understanding.
+So we try to do the whole gamut of different kinds of AI applications.
+This is the basic structure of the current version of Source or nine.
+This was an extension which did add new memories and learning mechanisms.
+If you see sort of central to the system is the symbolic working memory that holds the system's current goals, current state of the world.
+It also in order to feed into that we have information coming in from perception.
+But an important component of that is the spatial visual system.
+This takes the vision in, but then creates a scene graph representation which is both object based but also spatially based so that it has metric information.
+And from that we can extract relationships such as on top of, next to, to the right of, there are symbolic representations that the system can reason over.
+Having that kind of information in the working memory would be very expensive to match against.
+So that is a reason why we move this out to a spatial visual system and then do the reasoning symbolically.
+From there we have three different long term memories.
+The procedural memory, which is rule based, which is actually what controls the reasoning in the system.
+So it gives us context dependent reasoning, but it also supports things like planning and better reasoning.
+We have semantic memory which contains all the long term factual knowledge that the system has.
+And then episodic memory which is a continual trace of the system's reasoning over time and associated with all, all these learning.
+I mean these memory systems we have learning mechanisms.
+Finally then we have an action system that can go out to the world.
+So different learning systems and they have interfacing machine learning approaches to learn from all of them.
+I'm going to go through a simple example that is not reflective of what the system can do for robotic applications, but it gives you an idea for a human as to some of the kinds of reasoning SOAR can do.
+So we're going to start out and I'm going to just verbally ask maybe the subtitles, do some reasoning and then we'll go and sort of look at what that would be in soar.
+So I want you to imagine the word wow.
+Now I want you to flip it upside down and then I want you to think of the last time you saw the spouse of that person.
+The spouse of that person.
+So that would be maybe the last time you saw your father.
+And maybe that's never, but maybe that's been very recent or maybe it was a while ago, father passed away.
+But the point is you're using all these different components and it was effortless, hopefully for you.
+And it didn't seem like you were suddenly switching between.
+But that's what we would rec, that's what we would model in terms of that.
+So if we go through how that would happen in soar, we get audio perception of imagining the word wow.
+We then have to go to semantic memory in order to translate that into simple structures.
+And then once we have that, that's going to be used to access procedural knowledge that Actually will cause that to be imagined.
+So we have some skill about how to do imagination.
+And that then is imagined in the visual buffer.
+You then say rotate.
+And that's maybe nobody's ever asked you to rotate something in your visual memory before.
+But that would come in go to symbol rotate and then that would have to go into performed and then you would rotate that.
+And then this is where things get a little interesting I think is that we have this representation here that is a non symbolic representation.
+These are the actual characters and we have to re parse it.
+So we originally parsed wow.
+Coming into an audio channel.
+So when I say like for example, wow, this symbolic, this non symbolic model is something that's already actual cannabis.
+So we have to check when I.
+Say mom, it's actual representation, actual person.
+So I have to check in the memory who is that?
+So because I'm speaking the spouse of the mom.
+Spouse of the mom.
+Inverse.
+Wow.
+So I have to check okay, who's the spouse of the mom?
+So I have to check what does it mean Mom.
+And this is an experience that varies from person to another.
+So depend on the memory.
+In this case.
+Internal.
+I would claim visual representation.
+And then we're going contact to that to the symbol mom.
+And that's some.
+So we found it at the semantic memory spouse, e.g.
+Symbol mark the spouse in the semantic memory at e.g.
+Whatever address in the memory.
+Look up the, you know what, say something about a spouse that's going to have to go into semantic memory instead.
+Who's the spouse and mom?
+That would be your father.
+And then that would be something.
+We then go and search an episodic memory for when have we seen that person?
+And we might get some episode here it's E555 that we then retrieve and that has associated last Sunday.
+And so that's like which session take a subject memory about the episodes we have done with this person and when was the last time we have seen it.
+So we have replies that correspond to addresses like as you have seen.
+This is an idea of just how all these different memories and representations can be used in order to perform a task.
+So SOAR has been used in lots of different tasks.
+Here are some of the example.
+Virtual environments so has been used in where SORA is often used as a synthetic entity that's controlling something in an environment.
+So for example, we had a little game that we created called Haunt where SORA controlled the ghost.
+We've done some military applications where SOAR controls vehicles.
+We've also done games Where SOAR controls individual characters like in starcraft or in action games, games like Mario.
+And we even have a app that runs on iPhones that you can play against.
+It's called Buyer's Dice, where it is a component for you that you play against.
+So these are all different kinds of things that have been implemented in soar.
+We also have environments from Soar Technology, a company that uses SOAR for many of its applications.
+And these often are also where there's a synthetic entity, or in this case down here, a robot.
+So like this is a long video, certainly you can go through yourself, but what is the idea here?
+Like again, when we come to something like this.
+So like this is like, you know, like a copy, we need building blocks.
+It says it's whether you build it by yourself, good luck.
+And you decide, for example how information you encode information, how you think reasoning will interact with meta reasoning with the state of search, with learning with.
+Because like when you speak about one task or one module, you speak about one thing that the robot is doing, or one category or one task.
+I am making research about reasoning, for example, what is this context.
+But if you are interfacing reasoning with navigation and each data here have different representation with language processing and so on and so forth, many different data representations like the needs, learning, etc.
+So whether you do it by yourself, unit by unit, in a module by module, and try to connect it like this, or use something that's already existing, that is a framework like Big Luggage and you try to put your task on it.
+So, so this is the idea of cognitive architecture in this sense.
+Another example that he was referring to is.
+ACT R. So ACT R it's similar, but the difference in both is like SOAR is more general purpose architecture that can be used to model wide range of cognitive processes.
+SOAR has a stronger emphasis on learning and adaptation.
+So you can use it as a variety of applications that you have referred to robotics, decision making systems, natural language processing, games, etc.
+Etc.
+Etc.
+Act R is more specialized focused on modeling specific cognitive domains such as memory, attention, perception.
+So it's more used for applications like for example cognitive psychology, neuroscience.
+So it's symbolic rule based.
+So there are different kind of.
+Use.
+Cases for these cognitive architectures, but there are all following the same arrangement.
+One just what we will find inside is just the difference between one and another is the basic building blocks and for example certainly the low level specifications, for example, which language or data structure you need to interface between such kind of models and many things like that so each data, what data types it takes each data.
+Cognitive literature has different data structures and algorithms that it works with, and so on and so forth.
+So cognitive the act R. This was also a candidate of unified theory of cognition.
+So unified theory of cognition.
+Let's say people say, okay, I would like 14 tasks.
+Another say, okay, so soar.
+And the meaning it's not only so like we have this kind of figure, sophisticated figure, many do the same thing.
+And then if you need to use cognitive architecture, you have to have a look what is the best for your data.
+Like machine learning, you have to look at, okay, this model suitable for me, suitable for my data, etc.
+But most of them will have the same building blocks.
+The difference is how that more like the modeling, the interaction between model between sub models and so on.
+This is something that needs exactly like similar machine learning.
+Which machine learning should I use?
+Certainly depends on your exact case and the data type and many things like that.
+So here it has different building blocks.
+So we can see from the external world.
+We have manual module, that's for motor, motor perception, motor acts 1 also for the occipital, the another version module we have visual buffers or manual buffers.
+We have different kind of matching, okay, that separate the visual and manual buffer.
+And with respect to the goal and retrieval.
+So the declarative, from top to down, declarative module.
+This module represents knowledge that's stored in long term memory, such as facts, concepts, etc, which means you have cognitive architecture that has already some facts that can be embedded or you can store it yourself because you have a cognitive.
+Or you'd like to build a cognitive architecture for particular use.
+So you might have facts, for example, build.
+You build these facts then, okay, With a logical representation using F and Zen, for example.
+That's like in swar and you store them in the memory.
+There is a visual module, the visual module that represents the visual information such as what we see in the environment, okay?
+And it's responsible for processing visual information and sending it to other modules for future processing.
+The manual module.
+This module represents motor action, such as ray, qi and the grasping.
+So if I see an object and I would like to make an action on an object, how long distance should I go to act on this object?
+And they grasp it and make an action.
+The goal module represents the current goals and intentions of the system, okay?
+So it's responsible for maintaining and updating these goals.
+So it starts from down and ends by the goal where you do an action.
+Okay?
+So you observe from the world bottom as you go up to the intention or the goal where you'd like to react on the environment.
+And the procedural module is a model represents the knowledge about how to perform a specific action.
+If I'd like to grasp how should I grasp?
+Should I grasp for example according to the environment.
+Should I grasp directly by from top or from the handle or from where Exactly.
+So this is just.
+The purpose was to give you general and rough idea about cognitive architectures.
+We understand it itself.
+SOAR is making one complete book.
+So itself SOAR can make a curriculum.
+We certainly cannot cover everything in curriculum.
+But the idea is like to highlight.
+Give you some idea about what in general what is could be cognitive architectures.
+And then is like machine learning.
+As I say, machine learning.
+Okay.
+All will depend on when you have like for example, let's say in graduation project, for example, when you have like a comp 3000 or in masters, for example dissertation or something like this where you have plenty of time.
+And you'd like to say, okay, I learned the machine learning this approach and I don't know about it, but I think I can do it.
+For example, in the trial to apply this algorithm here or there in some way to do it.
+Given that you have time is important and you have the resources.
+Okay, so do you have question for this short one?
+Yeah.
+Was it called John E. Yeah.
+You have the link in the.
+Okay, classic.
+Can we cite his book?
+Sorry, Could I cite his book?
+If you search it online or search the library.
+But it's okay to do that?
+Yeah.
+Yeah.
+Great.
+Yeah.
+Any question?
+No.
+Yes.
+Okay.
+So we can come back to the workshop then.
+So this is the end of the module for lectures.
+And then we can start by.
+So I can.
+Let's transfer the machines.
+But you need.
+You are a worker.
+You are ready to work on the robot you are doing.
+Yeah, so.
+Sorry.
+The book is called the SORA Cognitive Architecture.
+So you are working with.
+I think you're working with.
+Somebody can come from this group.
+I don't know if I can find the proper version on the Internet.
+Can we just use the.
+Is it on the library as well?
+I think if you ask the admin of the library, Kate Russell, she can find it for you.
+All right, thanks.
+Is that all working?
+I hold back on the animal just.
+Because I really want something that works.
+So.
+Yeah.
+So desperate to see it working.

@@ -3,11 +3,11 @@ GAZE: Game-Adaptive Zone of Engagement.
 
 A Pepper / NAO countdown game host. The robot adapts difficulty,
 pacing and feedback per turn from five signals:
-    1- facial expression  (CNN, WS-10)         
-    2- answer correctness (performance)        
-    3- response time      (behavioural)        
-    4- speech volume      (RMS)               
-    5- vocal emotion      (MLP, WS-08)        
+    1- facial expression  (CNN, WS-10)         primary
+    2- answer correctness (performance)        primary
+    3- response time      (behavioural)        primary
+    4- speech volume      (RMS)                secondary
+    5- vocal emotion      (MLP, WS-08)         tie-breaker
 
 No single signal is trusted alone. Voice is only consulted when the
 face is neutral and confidence is high, because the speech model
@@ -25,20 +25,53 @@ Things noticed during testing:
     - The emotion classifiers are lightweight, not clinical instruments.
 
 Authorship (per proposal):
-    Alfie: architecture, OpenAI integration, facial-expression pipeline, AdaptiveEngine.
+    Alfie  - architecture, OpenAI integration, facial-expression pipeline, AdaptiveEngine.
     Salman - game flow, gestures, LEDs, TTS pacing, save/load, testing.
 
 CRITICAL:
 - **PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN**
 - **CONFIG NAO IP INTO ENV LIKE LAST TIME**
+
+TODO:
+
+Live demo checklist:
+- [ ] fix dashboard as it is just black when NAO
+- [ ] eye colours should change 
+
+ - `transcribe()` with Vosk wake-word gate + `
+- [X] offload simpler tasks? to either computation or mini model
+- [ ] ensure all facial expression inference is sufficently commented
+- [X] ensure it notices and mitigates when user's disengaged
+
+- [ ] fix continouation from previous game 5 games to 3 make it says results every 3 rounds for exampe 2 out of 3 is correct and then adapts based in that
+
+- [X] pirotise face over voice in mulit-singal inference
+- [ ] states persist instead of how you look right now
+- [ ] re-sensitise how adpative it is based on your constant state e.g. remember how you looked a minute ago
+- [ ] ensure it saves all the time not just at least 5 
+times 
+
+- [ ] so to get dashboard working use choreography app?
+
+- [X] refine the arm movement its too jiterry
+- [X] after escalate directly address user's disengagent 
+- [X] make it more random for more games as currently it keeps giving mainly the same answers even despite how hard it it is
+- [X] make voice very not important
+- [X] make it ask for name straight away 
+- [ ] saves each time as right now i think only saves after five rounds but adapt at lesst evrery two times
+
+- [ ] configure audio frequency to work better maybe for the nao as it doesnt hear you a lot of the time? Also duplicate a file which just fixes by removing 
+
+- [ ] saying name to tbe robot doesnt work for example
+- [ ] make dashboard camera FPS much more fluid because its way too slow now; fix was to make it stream via TCP to computer
+
 """ 
 
-import os, re, sys, json, time, types, wave, struct, socket, base64, textwrap, tempfile, threading, subprocess, unicodedata
+import os, re, sys, json, time, types, wave, struct, socket, textwrap, tempfile, threading, subprocess, unicodedata
 import tkinter as tk
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Optional
-from difflib import SequenceMatcher
 
 print("[booting...] stdlib loaded", flush=True)
 
@@ -111,7 +144,7 @@ REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 120  # RMS; dashboard label only ("quiet" vs "normal"). Not a transcription gate; see NAO_MIN_RMS_TO_TRANSCRIBE.
-NAO_MIN_RMS_TO_TRANSCRIBE = 120  # near-empty WAV floor for the NAO-mode pre-transcribe gate; Silero + Whisper + blacklist do the real filtering downstream.
+NAO_MIN_RMS_TO_TRANSCRIBE = 100  # near-empty WAV floor for the NAO-mode pre-transcribe gate; Silero + Whisper + blacklist do the real filtering downstream.
 FACE_CONFIDENCE_THRESHOLD  = 0.5  # below: face uncertain, treat neutral
 VOICE_CONFIDENCE_THRESHOLD = 0.5  # threshold for vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
@@ -607,14 +640,14 @@ class AdaptiveEngine:
         total   = len(self.history)
         correct = sum(1 for r in self.history if r.correct)
         return {
-            "rounds": total,
-            "correct": correct,
-            "accuracy": round(correct / total, 2),
-            "avg_response_time": round(sum(r.response_time for r in self.history) / total, 1),
-            "games_played": {g.value: c for g, c in self.games_played.items() if c > 0}, # for each game played report count if it's above 0
-            "game_switches": self.game_switch_count,
-            "best_streak": self.best_streak,
-            "final_difficulty": self.current_difficulty.name,
+            "rounds":             total,
+            "correct":            correct,
+            "accuracy":           round(correct / total, 2),
+            "avg_response_time":  round(sum(r.response_time for r in self.history) / total, 1),
+            "games_played":       {g.value: c for g, c in self.games_played.items() if c > 0},
+            "game_switches":      self.game_switch_count,
+            "best_streak":        self.best_streak,
+            "final_difficulty":   self.current_difficulty.name,
         }
 
     # self-evaluative adaptation
@@ -872,79 +905,40 @@ def split_into_sentences(text: str) -> list[str]:
                 sentences.append(cleaned)
     return sentences if sentences else [text.strip()]
 
-TTS_LOCK = threading.Lock()
-_last_robot_speech = ""
-_TTS_REPLACEMENTS = {
-    "‘": "'", "’": "'",
-    "“": '"', "”": '"',
-    "–": "-", "—": "-", "−": "-",
-    "…": "...", " ": " ",
-}
-
-def clean_for_tts(text: str) -> str:
-    "Strip gesture tags and Unicode escapes for Pepper TTS."
-    text = text or ""
-    text = re.sub(r'\[gesture:\w+\]', '', text)
-    text = unicodedata.normalize("NFKC", text)
-    for bad, good in _TTS_REPLACEMENTS.items():
-        text = text.replace(bad, good)
-    # animated-speech tags
-    text = re.sub(r'\^[A-Za-z_]+(?:\([^)]*\))?', '', text)
-    # ALTextToSpeech tags
-    text = re.sub(r'\\[A-Za-z]{2,8}=[^\\]*\\', '', text)
-    # literal \uXXXX leftovers
-    text = re.sub(r'\\u[0-9a-fA-F]{4}', '', text)
-    # control characters
-    text = re.sub(r'[\x00-\x1f\x7f-\x9f]', ' ', text)
-    return re.sub(r'\s+', ' ', text).strip()
-
-def _b64_utf8_json(obj) -> str:
-    "Base64-encode JSON for safe SSH transport."
-    raw = json.dumps(obj, ensure_ascii=False).encode("utf-8")
-    return base64.b64encode(raw).decode("ascii")
-
 #single ssh calls
 def nao_say(ssh, text):
-    "Speak text on Pepper via base64 UTF-8 transport."
-    text = clean_for_tts(text)
-    sentences = [clean_for_tts(s) for s in split_into_sentences(text)]
-    sentences = [s for s in sentences if s]
-    if not sentences:
-        return
-    payload_b64 = _b64_utf8_json(sentences)
-    print(f"  Pepper TTS payload (cleaned): {sentences!r}", flush=True)
-    code = f"""
+    "Speak text on Pepper with sentence-level pausing."
+    sentences = split_into_sentences(text)
+    safe_sentences = json.dumps(sentences)
+
+    nao_run(ssh, f"""
 from naoqi import ALProxy
-import time, json, base64
-payload_b64 = "{payload_b64}"
-raw = base64.b64decode(payload_b64)
+import time
+
 try:
-    raw = raw.decode("utf-8")
-except AttributeError:
-    pass
-sentences = json.loads(raw)
-tts = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
-try:
-    tts.setLanguage("English")
-except Exception:
-    pass
-for i, sentence in enumerate(sentences):
-    try:
-        if isinstance(sentence, unicode):
-            sentence = sentence.encode("utf-8")
-    except NameError:
-        pass
-    tts.say(sentence)
-    if i < len(sentences) - 1:
-        time.sleep(0.4)
-"""
-    with TTS_LOCK:
-        nao_run(ssh, code)
+    tts = ALProxy("ALTextToSpeech", "127.0.0.1", 9559)
+    sentences = {safe_sentences}
+
+    for i, sentence in enumerate(sentences):
+        tts.say(sentence)
+        if i < len(sentences) - 1:
+            time.sleep(0.4)
+except Exception as e:
+    print("  [TTS failed] " + str(e))
+""")
 
 #animations with speech
 def nao_say_animated(ssh, text):
-    "Plain TTS until Unicode transport verified."
-    nao_say(ssh, text)
+    "Try animated speech; fall back to plain TTS."
+    safe = json.dumps(text)
+    try:
+        nao_run(ssh, f"""
+from naoqi import ALProxy
+ALProxy("ALAnimatedSpeech","127.0.0.1",9559).say({safe})
+""")
+    except Exception as e:
+        print(f"  Animated speech failed mid-sentence: {e}")
+        nao_say(ssh, text)
 
 def nao_capture_image(ssh):
     "Capture a photo from Pepper's camera and download it. Kept as a fallback for one-off stills; the live dashboard now uses pepper_video_loop()."
@@ -1112,7 +1106,7 @@ _local_speech_detected = False # set by local_record(); used as transcription ga
 LOCAL_SILENCE_SECS  = 1.2 # seconds of post-speech silence to stop recording; 1.5 → 1.2 (aphasia-safe)
 LOCAL_MIN_SECS      = 1.0 # minimum recording before silence detection kicks in
 LOCAL_NO_SPEECH_MAX = 3.0 # stop if no speech detected at all after this many seconds; 5.0 → 3.0 (dominant lag)
-LOCAL_ENERGY_BUFFER = 25 # margin above ambient baseline for speech detection; 50 → 25 to catch quiet speech
+LOCAL_ENERGY_BUFFER = 60 # margin above ambient baseline for speech detection; 50 → 25 to catch quiet speech
 
 def local_calibrate_ambient() -> int:
     "Calibrate the local-testing (Mac) mic's ambient noise level; mirrors nao_calibrate_ambient() so LOCAL_MODE testing behaves like the robot."
@@ -1239,7 +1233,6 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
 
 def local_say(text: str):
     "Speak text using host OS built-in TTS (macOS `say` or Windows SAPI)."
-    text = clean_for_tts(text)
     try:
         if sys.platform == "win32":
             # Windows: SAPI via PowerShell; env-var avoids escaping
@@ -1256,15 +1249,11 @@ def local_say(text: str):
 
 def say(ssh_tts, text):
     "Dispatch TTS to local or Pepper depending on mode."
-    global _last_robot_speech
-    text = clean_for_tts(text) if "clean_for_tts" in globals() else text
-    _last_robot_speech = text
     if LOCAL_MODE:
         local_say(text)
     else:
         nao_say(ssh_tts, text)
-    # Pepper TTS tail and room echo
-    time.sleep(1.2)
+    time.sleep(0.5) # ensure text-to-speech (TTS) drains so it does not hear itself
 
 def record(ssh, energy_threshold,
            no_speech_max: float = LOCAL_NO_SPEECH_MAX,
@@ -1283,7 +1272,6 @@ def record(ssh, energy_threshold,
 
 # gesture mapping; motions per game/emotional context
 # tags: celebrate, encourage, think, wave, calm, energetic, neutral
-# negative values indicate inward movement
 
 GESTURE_CODE = {
     "celebrate": """
@@ -1477,160 +1465,16 @@ def normalise_for_blacklist(text: str) -> str:
 _URL_HALLUCINATION = re.compile(r"\bhttps?://|www\.|\b\w+\.(?:com|org|net|au|co\.uk|google|sites)\b", re.I)
 _DISCLAIMER_HALLUCINATION = re.compile(r"\b(please see|visit|subscribe|like and subscribe|disclaimer|description)\b.{0,40}\b(complete|full|link|below|above)\b", re.I)
 
-HALLUCINATION_SIMILARITY_THRESHOLD = 0.74
-ROBOT_ECHO_SIMILARITY_THRESHOLD = 0.68
-MIN_TRANSCRIPT_CHARS = 2
-MAX_SINGLE_WORD_DIGITS = 4
-
-def similarity(a: str, b: str) -> float:
-    return SequenceMatcher(None, a, b).ratio()
-
-def max_hallucination_similarity(text: str) -> tuple[float, str]:
-    "Highest similarity between transcript and known hallucinations."
-    norm = normalise_for_blacklist(text)
-    best_score = 0.0
-    best_phrase = ""
-    for phrase in WHISPER_HALLUCINATIONS:
-        p = normalise_for_blacklist(phrase)
-        score = similarity(norm, p)
-        # substring containment for fluffy variants
-        if p and (p in norm or norm in p):
-            score = max(score, 0.95)
-        if score > best_score:
-            best_score = score
-            best_phrase = phrase
-    return best_score, best_phrase
-
-def looks_like_youtube_hallucination(text: str) -> bool:
-    "Pattern-match common YouTube-outro phrasings."
-    norm = normalise_for_blacklist(text)
-    youtube_patterns = [
-        r"\b(thank|thanks)\b.{0,30}\b(watching|viewing)\b",
-        r"\b(like|subscribe|subscribed|subscription)\b",
-        r"\b(turn on|hit)\b.{0,20}\b(notification|bell)\b",
-        r"\b(link|links)\b.{0,20}\b(description|below)\b",
-        r"\bsee you\b.{0,20}\b(next time|in the next video)\b",
-        r"\bthis video\b",
-        r"\bwelcome back to\b.{0,30}\b(channel|video)\b",
-        r"\bsponsored by\b",
-    ]
-    return any(re.search(p, norm, re.I) for p in youtube_patterns)
-
 def is_known_hallucination(text: str) -> bool:
     norm = normalise_for_blacklist(text)
-    if norm == "":
-        return True
-    if norm in WHISPER_HALLUCINATIONS:
+    if norm == "" or norm in WHISPER_HALLUCINATIONS:
         return True
     # structural catch: Whisper leaks YouTube-description URLs on silence-amplified input
     if _URL_HALLUCINATION.search(text):
         return True
     if _DISCLAIMER_HALLUCINATION.search(text):
         return True
-    if looks_like_youtube_hallucination(text):
-        print(f"  Transcript rejected as YouTube-style hallucination: {text!r}")
-        return True
-    score, phrase = max_hallucination_similarity(text)
-    if score >= HALLUCINATION_SIMILARITY_THRESHOLD:
-        print(
-            f"  Transcript rejected by fuzzy hallucination match: "
-            f"{text!r} ~ {phrase!r} ({score:.2f})"
-        )
-        return True
     return False
-
-def is_robot_echo(text: str) -> bool:
-    "Reject transcripts similar to last robot speech."
-    if not text or not _last_robot_speech:
-        return False
-    heard = normalise_for_blacklist(text)
-    robot = normalise_for_blacklist(_last_robot_speech)
-    if not heard or not robot:
-        return False
-    # short transcripts: strict containment
-    if len(heard.split()) <= 3 and heard in robot:
-        return True
-    score = similarity(heard, robot)
-    if score >= ROBOT_ECHO_SIMILARITY_THRESHOLD:
-        print(f"  Transcript rejected as robot echo: {text!r} ~ last robot speech ({score:.2f})")
-        return True
-    return False
-
-def transcript_is_plausible_user_input(text: str,
-                                       game_state: Optional[GameState] = None) -> bool:
-    "Final deterministic transcript filter."
-    if not text:
-        return False
-    stripped = text.strip()
-    norm = normalise_for_blacklist(stripped)
-    if len(norm) < MIN_TRANSCRIPT_CHARS:
-        return False
-    if is_known_hallucination(stripped):
-        return False
-    if is_robot_echo(stripped):
-        return False
-    # numbers game allows numeric answers
-    active_numbers_game = (
-        game_state is not None
-        and game_state.active
-        and game_state.category
-        and "number" in game_state.category.lower()
-    )
-    if not active_numbers_game:
-        if re.fullmatch(r"(19|20)\d{2}", norm):
-            print(f"  Transcript rejected as lone year hallucination: {stripped!r}")
-            return False
-    # generic noise non-answers
-    if norm in {"you", "yeah", "okay", "ok"} and len(norm.split()) == 1:
-        return False
-    return True
-
-def gpt_transcript_validator(text: str,
-                             game_state: Optional[GameState] = None,
-                             response_time: float = 0.0,
-                             vol_rms: float = 0.0) -> bool:
-    "Last-resort GPT validator for borderline transcripts."
-    if not text.strip():
-        return False
-    context = "general conversation"
-    if game_state is not None and game_state.active:
-        context = f"active game question: {game_state.current_question}"
-    try:
-        resp = client.chat.completions.create(
-            model="gpt-5.4-mini",
-            temperature=0.0,
-            max_completion_tokens=5,
-            timeout=API_TIMEOUT,
-            messages=[
-                {
-                    "role": "system",
-                    "content": """You are a strict transcript validator for a noisy robot microphone.
-Decide whether the transcript is plausible user speech or should be rejected.
-Reject if it resembles:
-- YouTube outro text
-- "thanks for watching"
-- "like and subscribe"
-- website or disclaimer text
-- robot echo
-- random lone year/date hallucination
-- generic silence filler
-Reply ONLY with ACCEPT or REJECT.""",
-                },
-                {
-                    "role": "user",
-                    "content": f"""Transcript: {text!r}
-Context: {context}
-Volume RMS: {vol_rms}
-Response time: {response_time}
-Last robot speech: {_last_robot_speech!r}""",
-                },
-            ],
-        )
-        verdict = resp.choices[0].message.content.strip().upper()
-        return verdict == "ACCEPT"
-    except Exception as e:
-        print(f"  GPT transcript validator failed ({e}); accepting deterministic result.")
-        return True
 
 def has_real_speech(wav_path: str, min_speech_ms: int = 250,
                      threshold: float = 0.5) -> bool:
@@ -1676,8 +1520,7 @@ def has_wake_word(wav_path: str) -> bool:
 
 #open ai whisperings and incase fails and in silent
 def transcribe(bypass_wake_word: bool = False,
-               whisper_prompt: str = "User answers a quiz or chats with a companion robot.",
-               game_state: Optional[GameState] = None) -> str:
+               whisper_prompt: str = "User answers a quiz or chats with a companion robot.") -> str:
     """
     Transcribe the local WAV with Whisper, gated against silence,
     missing wake-word, and known hallucinated phrases.
@@ -1705,15 +1548,11 @@ def transcribe(bypass_wake_word: bool = False,
                 file=fh,
                 response_format="verbose_json",
                 temperature=0.0,
-                language="en",
                 prompt=whisper_prompt,
                 timeout=API_TIMEOUT,
             )
         text = (getattr(resp, "text", "") or "").strip()
         print(f"  Whisper raw text: {text!r}")
-
-        if is_robot_echo(text):
-            return ""
 
         # Whisper self-signals from verbose_json
         segments = getattr(resp, "segments", None) or []
@@ -1728,7 +1567,7 @@ def transcribe(bypass_wake_word: bool = False,
             if no_speech_vals and max(no_speech_vals) > 0.6:
                 print(f"  Whisper flagged silence (max no_speech_prob={max(no_speech_vals):.2f}); dropping {text!r}")
                 return ""
-            if logprob_vals and min(logprob_vals) < -1.0:
+            if logprob_vals and min(logprob_vals) < -0.85:
                 print(f"  Whisper low-confidence (min avg_logprob={min(logprob_vals):.2f}); dropping {text!r}")
                 return ""
             # compression_ratio > 2.4 catches repetition loops
@@ -1736,76 +1575,17 @@ def transcribe(bypass_wake_word: bool = False,
                 print(f"  Whisper repetition loop (max compression_ratio={max(compression_vals):.2f}); dropping {text!r}")
                 return ""
 
+        # normalised hallucination blacklist
+        if is_known_hallucination(text):
+            print(f"  Filtered Whisper hallucination: {text!r}")
+            return ""
+
         # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
         stripped = re.sub(r'(?i)^\s*(pepper|gaze)\b[,.\s]*', '', text).strip()
-        if not transcript_is_plausible_user_input(stripped, game_state=game_state):
-            print(f"  Filtered implausible transcript: {stripped!r}")
-            return ""
-        # borderline case: ask GPT
-        score, _phrase = max_hallucination_similarity(stripped)
-        borderline = 0.55 <= score < HALLUCINATION_SIMILARITY_THRESHOLD
-        if borderline:
-            if not gpt_transcript_validator(stripped, game_state=game_state):
-                print(f"  GPT validator rejected transcript: {stripped!r}")
-                return ""
         return stripped
     except Exception as e:
         print(f"  Whisper transcribe failed ({e}); returning empty")
         return ""
-
-def build_whisper_prompt(game_state: Optional[GameState]) -> str:
-    "Narrow Whisper prompt per turn to reduce silence completions."
-    if game_state is not None and game_state.active:
-        q = game_state.current_question or ""
-        return f"""The user is answering a spoken Countdown-style game question.
-The current question is: {q}
-Expected answer style:
-- short number expression, number, word, or brief spoken answer
-- not a YouTube outro
-- not a web link
-- not "thank you for watching"
-"""
-    return """The user is speaking briefly to a companion robot.
-Expected style:
-- short conversational reply
-- name
-- answer to a quiz
-- request to continue, stop, or play
-Not expected:
-- YouTube outro
-- website link
-- sponsorship sentence
-- "thank you for watching"
-"""
-
-def transcribe_with_one_retry(ssh, energy_threshold,
-                              no_speech_max: float,
-                              silence_secs: float,
-                              record_max_secs: float,
-                              game_state: Optional[GameState] = None,
-                              whisper_prompt: str = "User answers a quiz or chats with a companion robot.") -> str:
-    "Transcribe once; on rejection, silently re-record once and retry."
-    first = transcribe(
-        bypass_wake_word=True,
-        whisper_prompt=whisper_prompt,
-        game_state=game_state,
-    )
-    if first:
-        return first
-    print("  Transcript rejected or empty; one silent retry.")
-    record(
-        ssh,
-        energy_threshold,
-        no_speech_max=no_speech_max,
-        silence_secs=silence_secs,
-        record_max_secs=min(record_max_secs, 8.0),
-    )
-    second = transcribe(
-        bypass_wake_word=True,
-        whisper_prompt=whisper_prompt,
-        game_state=game_state,
-    )
-    return second
 
 # facial-expression pipeline
 
@@ -1920,7 +1700,7 @@ def check_answer(user_answer: str, correct_answer: str,
 
     try:
         resp = client.chat.completions.create(
-            model="gpt-5.4",
+            model="gpt-4.1",
             messages=[{
                 "role": "system",
                 "content": "You are an answer checker. Given a question, the correct answer, and the user's spoken answer, determine if the user is correct. Be lenient with pronunciation, phrasing, and partial answers that demonstrate knowledge. Respond with ONLY 'correct' or 'incorrect'.",
@@ -2295,7 +2075,6 @@ def extract_gesture(text: str) -> str:
         if gesture in GESTURE_CODE:
             return gesture
     return "neutral"
-
 def generate_game_question_internal(game_type_str: str, difficulty_str: str,
                                     recent: Optional[list[str]] = None,
                                     recent_answers: Optional[list[str]] = None,
@@ -2338,7 +2117,7 @@ Respond with a JSON object only — no markdown, no code fences:
 
     try:
         resp = client.chat.completions.create(
-            model="gpt-5.4",
+            model="gpt-4.1",
             messages=[
                 {"role": "system", "content": "You generate countdown-style game questions. Respond ONLY with valid JSON. Follow all rules in the user prompt exactly."},
                 {"role": "user", "content": prompt},
@@ -2362,16 +2141,6 @@ Respond with a JSON object only — no markdown, no code fences:
             "answer": "42",
             "category": "arithmetic fallback",
         }
-
-# LED COLOUR MAP — hues chosen for max visual separation on Pepper's LED ring (off-white and pale-yellow killed: near-identical on grey plastic)
-LED_COLOURS = {
-    InferredState.THRIVING:    0x0000FF00,   # green
-    InferredState.COMFORTABLE: 0x0000FFFF,   # cyan
-    InferredState.STRUGGLING:  0x00FFFF00,   # yellow
-    InferredState.FRUSTRATED:  0x00FF0000,   # red
-    InferredState.DISENGAGED:  0x00FF00FF,   # magenta
-}
-
 
 _STATE_COLOURS = {
     InferredState.THRIVING:     "green",
@@ -2657,7 +2426,7 @@ def is_goodbye(text: str) -> bool:
         return False
     try:
         bye = client.chat.completions.create(
-            model="gpt-5.4-mini", max_completion_tokens=5, temperature=0.0,
+            model="gpt-4.1-mini", max_completion_tokens=5, temperature=0.0,
             timeout=API_TIMEOUT,
             messages=[{"role": "system", "content":
                 "Did the user just signal they want to end the conversation (e.g. 'bye', 'goodbye', 'I'm done', 'see you later', 'I have to go')? Reply ONLY with 'GOODBYE' or 'CONTINUE'."},
@@ -2704,10 +2473,10 @@ def ask_for_name(ssh, ssh_tts, dashboard,
         if is_goodbye(raw):
             dashboard.quit_app()
 
-        # GPT-5.4-mini users' names extraction
+        # GPT-4.1-mini users' names extraction
         try:
             n = client.chat.completions.create(
-                model="gpt-5.4-mini", max_completion_tokens=10,
+                model="gpt-4.1-mini", max_completion_tokens=10,
                 timeout=API_TIMEOUT,
                 messages=[{"role": "system", "content": """
                            Infer the user's name from the utterance.
@@ -2784,7 +2553,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
         if resume_text:
             try:
                 intent = client.chat.completions.create(
-                    model="gpt-5.4-mini", max_completion_tokens=5, temperature=0.0,
+                    model="gpt-4.1-mini", max_completion_tokens=5, temperature=0.0,
                     timeout=API_TIMEOUT,
                     messages=[{"role": "system", "content":
                         "The user was just asked whether they want to CONTINUE their previous session or start FRESH. Reply ONLY with 'CONTINUE' or 'FRESH'."},
@@ -2828,7 +2597,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     )
     greeting_text = greeting_msg.content or "Hello, lovely to meet you!"
     greeting_gesture = extract_gesture(greeting_text)
-    greeting_speech  = clean_for_tts(re.sub(r'\[gesture:\w+\]', '', greeting_text).strip())
+    greeting_speech  = re.sub(r'\[gesture:\w+\]', '', greeting_text).strip()
 
     conversation.append({"role": "assistant", "content": greeting_text})
 
@@ -2911,15 +2680,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     user_text = ""
             elif vol_rms >= NAO_MIN_RMS_TO_TRANSCRIBE:
                 print(f"  NAO RMS diagnostic: {vol_rms:.0f} (gate floor {NAO_MIN_RMS_TO_TRANSCRIBE})")
-                user_text = transcribe_with_one_retry(
-                    ssh,
-                    energy_threshold,
-                    no_speech_max=no_speech_max,
-                    silence_secs=silence_secs,
-                    record_max_secs=record_max_secs,
-                    game_state=game_state,
-                    whisper_prompt=build_whisper_prompt(game_state),
-                )
+                user_text = transcribe(bypass_wake_word=True)
             else:
                 print(f"  WAV near-empty ({vol_rms:.0f} < {NAO_MIN_RMS_TO_TRANSCRIBE}); skipping transcription.")
                 user_text = ""
@@ -2963,7 +2724,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     ]
                     nudge_msg = converse(nudge_prompt, [])
                     nudge_text = (nudge_msg.content or "").strip()
-                    nudge_speech = clean_for_tts(re.sub(r'\[gesture:\w+\]', '', nudge_text).strip())
+                    nudge_speech = re.sub(r'\[gesture:\w+\]', '', nudge_text).strip()
                     if not LOCAL_MODE:
                         # recolour eyes to signal the state has shifted; user sees the shift even if they say nothing back
                         nao_set_leds(ssh, "FaceLeds",
@@ -2989,7 +2750,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     ]
                     esc_msg    = converse(escalate_prompt, [])
                     esc_text   = (esc_msg.content or "").strip()
-                    esc_speech = clean_for_tts(re.sub(r'\[gesture:\w+\]', '', esc_text).strip())
+                    esc_speech = re.sub(r'\[gesture:\w+\]', '', esc_text).strip()
                     if not LOCAL_MODE:
                         nao_set_leds(ssh, "FaceLeds",
                                      LED_COLOURS[InferredState.DISENGAGED], 0.4)
@@ -3036,7 +2797,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 response_text = "I'm here! What would you like to talk about? [gesture:neutral]"
 
             gesture_type = extract_gesture(response_text)
-            speech_text  = clean_for_tts(re.sub(r'\[gesture:\w+\]', '', response_text).strip())
+            speech_text  = re.sub(r'\[gesture:\w+\]', '', response_text).strip()
 
             if not LOCAL_MODE:
                 if engine.adaptation_log:
@@ -3056,7 +2817,10 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 )
                 gesture_thread.start()
 
-            say(ssh_tts, speech_text)
+            if not LOCAL_MODE and gesture_type in ("celebrate", "encourage"):
+                nao_say_animated(ssh_tts, speech_text)
+            else:
+                say(ssh_tts, speech_text)
 
             print(f"\nRobot: {speech_text}")
             if game_state.active:
