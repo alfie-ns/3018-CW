@@ -138,7 +138,7 @@ SILENCE_POLL_SECS  = 0.25 # polling interval for silence detection on Pepper
 SILENCE_DURATION   = 1.2 # seconds of silence after speech to trigger stop
 CALIBRATION_SECS   = 3 # duration of start-up ambient noise calibration
 ENERGY_BUFFER      = 80  # margin above ambient baseline to set speech threshold
-DEFAULT_ENERGY_THRESHOLD = 300  # fallback for if calibration fails
+DEFAULT_ENERGY_THRESHOLD = 80  # fallback for if calibration fails
 REMOTE_WAV   = "/var/persistent/home/nao/input.wav"
 REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
@@ -1278,27 +1278,28 @@ GESTURE_CODE = {
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("Arms", 0.6)
-# hands to knees first — safe known starting position
+m.setStiffnesses("Arms", 1.0)
+# step 1 — park to knees slowly with stiffness so position is guaranteed
 safe = ["LShoulderPitch","LShoulderRoll","LElbowYaw","LElbowRoll","RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll"]
-m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [3.0]*8, True)
-time.sleep(0.4)
-# lean right arm out first to create clearance before raising
-m.angleInterpolation(["RShoulderRoll","LShoulderRoll"], [-0.4, 0.4], [2.0]*2, True)
-time.sleep(0.3)
-# raise arms slowly in two stages — forward first then up
-names = ["LShoulderPitch","LShoulderRoll","RShoulderPitch","RShoulderRoll"]
-m.angleInterpolation(names, [0.6, 0.3, 0.6, -0.3], [3.0]*4, True)
-time.sleep(0.3)
-m.angleInterpolation(names, [-0.2, 0.2, -0.2, -0.2], [3.5]*4, True)
-time.sleep(0.3)
-# slow gentle elbow curls — low stiffness so if it meets resistance it doesn't force through
-for _ in range(2):
-    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-0.7, 0.7], [2.0]*2, True)
-    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-0.3, 0.3], [2.0]*2, True)
-time.sleep(0.3)
-# return to knees position slowly
 m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [3.5]*8, True)
+time.sleep(0.4)
+# step 2 — lean arms outward first to create clearance
+m.angleInterpolation(["LShoulderRoll","RShoulderRoll"], [0.5, -0.5], [2.5]*2, True)
+time.sleep(0.3)
+# step 3 — raise forward slowly (not straight up — avoids head collision)
+names = ["LShoulderPitch","LShoulderRoll","RShoulderPitch","RShoulderRoll"]
+m.angleInterpolation(names, [0.6, 0.3, 0.6, -0.3], [3.5]*4, True)
+time.sleep(0.3)
+# step 4 — continue raising upward slowly
+m.angleInterpolation(names, [-0.2, 0.2, -0.2, -0.2], [4.0]*4, True)
+time.sleep(0.3)
+# step 5 — gentle elbow curls, reduced range so arms don't lock
+for _ in range(2):
+    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-0.7, 0.7], [2.5]*2, True)
+    m.angleInterpolation(["LElbowRoll","RElbowRoll"], [-0.3, 0.3], [2.5]*2, True)
+time.sleep(0.3)
+# step 6 — return to knees very slowly
+m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [4.0]*8, True)
 m.setStiffnesses("Arms", 0.0)
 """,
 
@@ -1306,17 +1307,18 @@ m.setStiffnesses("Arms", 0.0)
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("RArm", 0.6)
-# hands to knees first
+m.setStiffnesses("RArm", 1.0)
+# park to knees first
 safe = ["RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RHand"]
-m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [2.5]*5, True)
+m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [3.0]*5, True)
 time.sleep(0.2)
-# lean right slightly first for clearance then extend forward
-m.angleInterpolation(["RShoulderRoll"], [-0.4], [1.5], True)
+# lean right for clearance before extending
+m.angleInterpolation(["RShoulderRoll"], [-0.45], [2.0], True)
+time.sleep(0.2)
 names = ["RShoulderPitch","RShoulderRoll","RElbowRoll","RHand"]
-m.angleInterpolation(names, [0.5, -0.2, 0.5, 0.8], [2.5]*4, True)
+m.angleInterpolation(names, [0.5, -0.2, 0.5, 0.8], [3.0]*4, True)
 time.sleep(0.8)
-m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [2.5]*5, True)
+m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [3.0]*5, True)
 m.setStiffnesses("RArm", 0.0)
 """,
 
@@ -1324,16 +1326,17 @@ m.setStiffnesses("RArm", 0.0)
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("RArm", 0.6)
-# hands to knees first
+m.setStiffnesses("RArm", 1.0)
+# park to knees first
 safe = ["RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RHand"]
-m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [2.5]*5, True)
+m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [3.0]*5, True)
 time.sleep(0.2)
-# lean right slightly then raise to chin
-m.angleInterpolation(["RShoulderRoll"], [-0.35], [1.5], True)
-m.angleInterpolation(safe, [-0.2, -0.1, 0.5, 1.2, 0.3], [3.0]*5, True)
+# lean right slightly then raise slowly to chin
+m.angleInterpolation(["RShoulderRoll"], [-0.35], [2.0], True)
+time.sleep(0.2)
+m.angleInterpolation(safe, [-0.2, -0.1, 0.5, 1.2, 0.3], [3.5]*5, True)
 time.sleep(2.0)
-m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [2.5]*5, True)
+m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0], [3.0]*5, True)
 m.setStiffnesses("RArm", 0.0)
 """,
 
@@ -1341,20 +1344,21 @@ m.setStiffnesses("RArm", 0.0)
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("RArm", 0.6)
-# hands to knees first
+m.setStiffnesses("RArm", 1.0)
+# park to knees first
 safe = ["RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RWristYaw","RHand"]
-m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0, 0.0], [2.5]*6, True)
+m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0, 0.0], [3.0]*6, True)
 time.sleep(0.2)
-# lean right first to clear the body before raising
-m.angleInterpolation(["RShoulderRoll"], [-0.4], [1.5], True)
+# lean right first for clearance
+m.angleInterpolation(["RShoulderRoll"], [-0.45], [2.0], True)
 time.sleep(0.2)
-m.angleInterpolation(safe, [-0.3, -0.3, 1.0, 1.0, 0.0, 1.0], [2.5]*6, True)
+# raise to wave position
+m.angleInterpolation(safe, [-0.3, -0.3, 1.0, 1.0, 0.0, 1.0], [3.0]*6, True)
 for _ in range(3):
-    m.angleInterpolation(["RWristYaw"], [0.5], [1.0], True)
-    m.angleInterpolation(["RWristYaw"], [-0.5], [1.0], True)
+    m.angleInterpolation(["RWristYaw"], [0.5], [1.2], True)
+    m.angleInterpolation(["RWristYaw"], [-0.5], [1.2], True)
 time.sleep(0.4)
-m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0, 0.0], [2.5]*6, True)
+m.angleInterpolation(safe, [1.0, -0.15, 1.2, 0.4, 0.0, 0.0], [3.0]*6, True)
 m.setStiffnesses("RArm", 0.0)
 """,
 
@@ -1362,19 +1366,20 @@ m.setStiffnesses("RArm", 0.0)
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("Arms", 0.6)
-# hands to knees first
+m.setStiffnesses("Arms", 1.0)
+# park to knees first
 safe = ["LShoulderPitch","LShoulderRoll","LElbowYaw","LElbowRoll","LHand","RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll","RHand"]
-m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 0.0, 1.0, -0.15, 1.2, 0.4, 0.0], [2.5]*10, True)
-time.sleep(0.2)
-# lean both arms out slightly before opening
-m.angleInterpolation(["LShoulderRoll","RShoulderRoll"], [0.4, -0.4], [1.5]*2, True)
-names = ["LShoulderPitch","LShoulderRoll","LHand","RShoulderPitch","RShoulderRoll","RHand"]
-m.angleInterpolation(names, [0.8, 0.4, 0.8, 0.8, -0.4, 0.8], [3.0]*6, True)
-time.sleep(0.5)
-m.angleInterpolation(["LShoulderPitch","RShoulderPitch"], [1.0, 1.0], [2.5]*2, True)
-time.sleep(0.3)
 m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 0.0, 1.0, -0.15, 1.2, 0.4, 0.0], [3.0]*10, True)
+time.sleep(0.2)
+# lean both arms out first
+m.angleInterpolation(["LShoulderRoll","RShoulderRoll"], [0.45, -0.45], [2.0]*2, True)
+time.sleep(0.2)
+names = ["LShoulderPitch","LShoulderRoll","LHand","RShoulderPitch","RShoulderRoll","RHand"]
+m.angleInterpolation(names, [0.8, 0.4, 0.8, 0.8, -0.4, 0.8], [3.5]*6, True)
+time.sleep(0.5)
+m.angleInterpolation(["LShoulderPitch","RShoulderPitch"], [1.0, 1.0], [3.0]*2, True)
+time.sleep(0.3)
+m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 0.0, 1.0, -0.15, 1.2, 0.4, 0.0], [3.5]*10, True)
 m.setStiffnesses("Arms", 0.0)
 """,
 
@@ -1382,21 +1387,19 @@ m.setStiffnesses("Arms", 0.0)
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("Arms", 0.6)
-# hands to knees first
+m.setStiffnesses("Arms", 1.0)
+# park to knees first
 safe = ["LShoulderPitch","LShoulderRoll","LElbowYaw","LElbowRoll","RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll"]
-m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [2.5]*8, True)
+m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [3.0]*8, True)
 time.sleep(0.2)
-# lean arms out slightly for clearance before raises
-m.angleInterpolation(["LShoulderRoll","RShoulderRoll"], [0.35, -0.35], [1.5]*2, True)
+# lean arms out for clearance
+m.angleInterpolation(["LShoulderRoll","RShoulderRoll"], [0.4, -0.4], [2.0]*2, True)
+time.sleep(0.2)
+# controlled raises from known position
 for _ in range(2):
-    m.angleInterpolation(
-        ["LShoulderPitch","RShoulderPitch"],
-        [0.4, 0.4], [1.8]*2, True)
-    m.angleInterpolation(
-        ["LShoulderPitch","RShoulderPitch"],
-        [1.0, 1.0], [1.8]*2, True)
-m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [2.5]*8, True)
+    m.angleInterpolation(["LShoulderPitch","RShoulderPitch"], [0.4, 0.4], [2.0]*2, True)
+    m.angleInterpolation(["LShoulderPitch","RShoulderPitch"], [1.0, 1.0], [2.0]*2, True)
+m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [3.0]*8, True)
 m.setStiffnesses("Arms", 0.0)
 """,
 
@@ -1404,10 +1407,10 @@ m.setStiffnesses("Arms", 0.0)
 from naoqi import ALProxy
 import time
 m = ALProxy("ALMotion","127.0.0.1",9559)
-m.setStiffnesses("Arms", 0.6)
+m.setStiffnesses("Arms", 1.0)
 # return hands to knees gently
 safe = ["LShoulderPitch","LShoulderRoll","LElbowYaw","LElbowRoll","RShoulderPitch","RShoulderRoll","RElbowYaw","RElbowRoll"]
-m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [2.5]*8, True)
+m.angleInterpolation(safe, [1.0, 0.15, -1.2, -0.4, 1.0, -0.15, 1.2, 0.4], [3.0]*8, True)
 m.setStiffnesses("Arms", 0.0)
 """,
 }
@@ -1567,7 +1570,7 @@ def transcribe(bypass_wake_word: bool = False,
             if no_speech_vals and max(no_speech_vals) > 0.6:
                 print(f"  Whisper flagged silence (max no_speech_prob={max(no_speech_vals):.2f}); dropping {text!r}")
                 return ""
-            if logprob_vals and min(logprob_vals) < -0.85:
+            if logprob_vals and min(logprob_vals) < -1.3:
                 print(f"  Whisper low-confidence (min avg_logprob={min(logprob_vals):.2f}); dropping {text!r}")
                 return ""
             # compression_ratio > 2.4 catches repetition loops
@@ -2075,6 +2078,33 @@ def extract_gesture(text: str) -> str:
         if gesture in GESTURE_CODE:
             return gesture
     return "neutral"
+def validate_numbers_round(numbers: list, target: int) -> bool:
+    """Brute-force check that target is reachable from the given numbers.
+    Tries all permutations and operator combinations recursively.
+    Returns True if reachable, False if not. Fails open on error."""
+    def solve(nums):
+        if len(nums) == 1:
+            return {round(nums[0], 6)}
+        results = set()
+        for i in range(len(nums)):
+            for j in range(len(nums)):
+                if i == j:
+                    continue
+                rest = [nums[k] for k in range(len(nums)) if k != i and k != j]
+                a, b = nums[i], nums[j]
+                candidates = [a + b, a - b, a * b]
+                if b != 0:
+                    candidates.append(a / b)
+                for c in candidates:
+                    results |= solve(rest + [c])
+        return results
+    try:
+        reachable = solve([float(n) for n in numbers])
+        return float(target) in reachable
+    except Exception:
+        return True  # fail open — let it through if check crashes
+
+
 def generate_game_question_internal(game_type_str: str, difficulty_str: str,
                                     recent: Optional[list[str]] = None,
                                     recent_answers: Optional[list[str]] = None,
@@ -2131,7 +2161,28 @@ Respond with a JSON object only — no markdown, no code fences:
             if content.endswith("```"):
                 content = content[:-3]
             content = content.strip()
-        return json.loads(content)
+        result = json.loads(content)
+
+        # validate numbers rounds — GPT regularly hallucinates unreachable targets
+        if game_type_str == "numbers":
+            try:
+                import re
+                q = result.get("question", "")
+                nums = list(map(int, re.findall(r'\b\d+\b', q.split("make")[0])))
+                target_match = re.search(r'make.*?(\d+)', q)
+                if target_match and nums:
+                    target = int(target_match.group(1))
+                    if not validate_numbers_round(nums, target):
+                        print(f"  GPT produced unreachable target {target} from {nums}; using fallback")
+                        return {
+                            "question": "Using 25, 50, 3, 6, 4, and 2, make the target 100.",
+                            "answer": "25 x 4 = 100",
+                            "category": "numbers fallback",
+                        }
+            except Exception as ve:
+                print(f"  Numbers validation skipped: {ve}")
+
+        return result
     except json.JSONDecodeError:
         return {"question": content if 'content' in locals() else "", "answer": "", "category": "general"}
     except Exception as e:

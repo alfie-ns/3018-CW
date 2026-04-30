@@ -1,36 +1,38 @@
 {
-  "user_name": "Alfie",
   "total_correct": 0,
   "total_rounds_played": 1,
   "best_streak": 0,
   "games_played": {
-    "numbers": 0,
-    "letters": 1
+    "numbers": 1,
+    "letters": 0
   },
   "game_switches": 0,
-  "last_difficulty": 1,
-  "last_game": "letters",
+  "last_difficulty": 2,
+  "last_game": "numbers",
   "preferred_game": null,
   "rounds_played": 1,
   "recent_questions": [
-    "Letters round: Using the 9 letters T, E, R, A, S, L, I, N, O, form the longest word possible. You may use each letter only once."
+    "Use the numbers 2, 3, 5, 7, 10, and 25 to make 30. You may use each number at most once.",
+    "Use the numbers 1, 4, 6, 8, 25, and 50 to make 159. You may use each number at most once."
   ],
   "recent_answers": [
-    "relations"
+    "25+5=30",
+    "(25-6)*8+4+3? No \u2014 valid solution: 50+25+84=159 is invalid with given numbers, so use (25-6)*8+4+3 not possible. Correct solution: (8*25)-50+6+4-1=159"
   ],
   "recent_game_types": [
-    "letters"
+    "numbers",
+    "numbers"
   ],
   "round_log": [
     {
-      "round": 5,
-      "game": "letters",
-      "difficulty": 1,
+      "round": 8,
+      "game": "numbers",
+      "difficulty": 2,
       "correct": false,
-      "time": 5.8,
+      "time": 15.4,
       "expression": "Neutral",
       "vocal": "calm",
-      "state": "comfortable"
+      "state": "disengaged"
     }
   ]
 }

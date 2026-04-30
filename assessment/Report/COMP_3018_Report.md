@@ -5,7 +5,7 @@ header-includes:
   - \usepackage{graphicx}
   - \usepackage{caption}
   - \usepackage{tikz}
-  - \usetikzlibrary{positioning, arrows.meta}
+  - \usetikzlibrary{positioning, arrows.meta, fit}
   - \usepackage{xcolor}
   - \usepackage{float}
   - \usepackage{array}
@@ -315,9 +315,43 @@ However, most-current assistive robots operate at what Sciutti et al. (2023, p. 
 
 - [ ] verify following lecture slides
 
-Vernon, Metta and Sandini (2007, p. TODO) synthesise the field's definitional plurality into a core cycle. The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 definitions of cognition, yet the common thread therein is: anticipation, learning, and adaptation, intersected with perception and action to create autonomy. This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(i.e. prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, TODO: verify p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state from observable behaviour.
+Vernon, Metta and Sandini (2007, p. TODO) synthesise the field's definitional plurality into a core cycle. The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 definitions of cognition, yet the common thread therein is: anticipation, learning, and adaptation, intersected with perception and action to create autonomy (\mbox{Fig.~\ref{fig:soar-cycle}}). This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(i.e. prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, TODO: verify p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state from observable behaviour.
 
-Furthermore, memory is not monolithic. Vernon, Metta and Sandini (2007, p. TODO) distinguish *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*. For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is exactly what assistive robotics demands.
+Furthermore, memory is not monolithic. Vernon, Metta and Sandini (2007, p. TODO) distinguish *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)*; a typology Laird (2012, p. 225) crystallises in implementational terms: episodic memory is "what you 'remember'" whilst semantic memory is "what you 'know'". For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is exactly what assistive robotics demands.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    every node/.style={font=\sffamily\small},
+    rnode/.style={draw, rounded corners=4pt, minimum height=8mm, minimum width=14mm, inner sep=2pt, fill=blue!5},
+    bnode/.style={draw, rectangle, minimum height=8mm, minimum width=18mm, inner sep=2pt, fill=orange!10},
+    arr/.style={-{Stealth[length=4pt]}, thick}
+]
+\node[rnode] (input) {Input};
+\node[bnode, right=10mm of input] (elab1) {Elaboration};
+\node[rnode, right=4mm of elab1] (decision) {Decision};
+\node[bnode, right=14mm of decision] (elab2) {Elaboration};
+\node[bnode, right=4mm of elab2] (apply) {Application};
+\node[rnode, right=10mm of apply] (output) {Output};
+
+\node[draw, dashed, rounded corners=2pt, fit=(elab1)(decision), inner sep=5pt] (sel) {};
+\node[font=\sffamily\itshape\small, anchor=south] at (sel.north) {Operator Selection};
+\node[draw, dashed, rounded corners=2pt, fit=(elab2)(apply), inner sep=5pt] (app) {};
+\node[font=\sffamily\itshape\small, anchor=south] at (app.north) {Operator Application};
+
+\draw[arr] (input) -- (elab1);
+\draw[arr] (elab1) -- (decision);
+\draw[arr] (decision) -- (elab2);
+\draw[arr] (elab2) -- (apply);
+\draw[arr] (apply) -- (output);
+\draw[arr] (elab1.south west) .. controls +(-3mm,-3mm) and +(-3mm,0) .. (elab1.west);
+\draw[arr] (elab2.south west) .. controls +(-3mm,-3mm) and +(-3mm,0) .. (elab2.west);
+\draw[arr] (apply.south) .. controls +(0,-5mm) and +(0,-5mm) .. (elab2.south);
+\draw[arr] (output.east) -- ++(4mm,0) |- ([yshift=-14mm]input.south) -| (input.south);
+\end{tikzpicture}
+\caption{Soar's processing cycle, adapted from Laird (2012, fig. 4.7, p. 79), as a concrete instantiation of Vernon, Metta and Sandini's (2007) cognition cycle. Laird specifies that the cycle ``consists of four phases: Input, Operator Selection, Operator Application, and Output'' (Laird, 2012, p. 79), wherein Input maps to perception, Operator Selection draws on episodic and semantic memory to anticipate consequences (i.e. \textit{prospection}), Operator Application executes the chosen behaviour through parallel rule-firing waves, and Output returns the agent to the environment whilst the loop hands control back to Input for continual adaptation. This architecture exposes the deficit of reactive systems: PARO, for instance, implements only Input $\to$ Output, lacking the substate-driven Operator Selection wherein deliberation over latent user states could occur. Furthermore, Laird argues that ``the most significant effect of chunking is that it eliminates processing in substates for situations similar to ones experienced in the past'' (Laird, 2012, p. 164), wherein repeated deliberations compile into procedural rules; a mechanism distinct from POMDP belief-space approximation, yet complementary thereto in addressing real-time embodied operation under care-time constraints.}
+\label{fig:soar-cycle}
+\end{figure}
 
 - [ ] ## 1.3. Applications
 
@@ -325,7 +359,7 @@ Furthermore, memory is not monolithic. Vernon, Metta and Sandini (2007, p. TODO)
 
 The PARO therapeutic seal robot represents one of the most-widely deployed platforms within socially assistive robotics (Tapus, Matarić and Scassellati, 2007, p. TODO). Wada and Shibata (2007, p. 974) demonstrate that PARO reduces agitation and improves mood in patients with dementia, utilising tactile sensors and auditory processing to modulate its behaviour in response to touch and voice. Clinical trials report that urinary stress indicators "significantly improved" after PARO's introduction (Wada and Shibata, 2007, TODO: verify: p. 978, Table II), therefore the platform has been adopted in care homes across Japan, Europe, and the United States.
 
-Notwithstanding the benefits, PARO operates at the reactive layer: it possesses no theory of mind (it cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously. A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts via prospection $\to$ recall that music soothed this patient yesterday via episodic memory $\to$ adapt its strategy via metacognition. Insofar as PARO's effectiveness plateaus because it cannot personalise its responses over time, the cognitive gap is not just theoretical but potentially clinically consequential. Fong, Nourbakhsh and Dautenhahn (2003, p. TODO-verify 145) formalise this gap via Breazeal's taxonomy: PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, TODO verify: p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level. The distance between these levels is the cognitive deficit assistive robotics should close.
+Notwithstanding the benefits, PARO operates at the reactive layer: it possesses no theory of mind (it cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously. A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts via prospection $\to$ recall that music soothed this patient yesterday via episodic memory $\to$ adapt its strategy via metacognition. Insofar as PARO's effectiveness plateaus because it cannot personalise its responses over time, the cognitive gap is not just theoretical but potentially clinically consequential. The architectural cost is precise: without episodic memory, the agent's perception is "limited both spatially and temporally—that is, to the here and now" (Laird, 2012, p. 233), wherein each session resets to the immediate present. Fong, Nourbakhsh and Dautenhahn (2003, p. TODO-verify 145) formalise this gap via Breazeal's taxonomy: PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, TODO verify: p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level. The distance between these levels is the cognitive deficit assistive robotics should close.
 
 ### [ ] 1.3.2 Medication Adherence and Daily Living Support
 
@@ -438,6 +472,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [ ] [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387-12406. Available at: https://link.springer.com/article/10.1007/s10462-023-10448-w (Accessed: 20 March 2026).
 - [ ] [ ] Hancock, P. A., Billings, D. R., Schaefer, K. E., Chen, J. Y. C., de Visser, E. J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: https://journals.sagepub.com/doi/10.1177/0018720811417254 (Accessed: 15 March 2026).
 - [ ] [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf (Accessed: 13 March 2026).
+- [ ] [ ] Laird, J. E. (2012) *The Soar Cognitive Architecture*. Cambridge, MA: MIT Press.
 - [ ] [ ] Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392 (Accessed: 15 March 2026).
 - [ ] [ ] Matarić, M. J., Eriksson, J., Feil-Seifer, D. J. and Winstein, C. J. (2007) 'Socially assistive robotics for post-stroke rehabilitation', *Journal of NeuroEngineering and Rehabilitation*, 4(5), pp. 1-9. Available at: https://pmc.ncbi.nlm.nih.gov/articles/PMC1821334/ (Accessed: 25 March 2026).
 - [ ] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
@@ -598,7 +633,7 @@ essentially in many cases the robot will output text which controld descisiom-ma
 - [ ] PROOFREAD
   **2- Verbal Answer (speech-based).** Pepper records through all four microphones (the `[1,1,1,1]` mask) via `ALAudioRecorder` at 16 kHz, whilst `ALAudioDevice` polls the maximum energy across all four mics, hence catching off-axis speakers a front-only poll would miss. Recording terminates after 1.2 seconds of post-speech silence or at the adaptive hard ceiling. After SFTP, `force_mono_16k_wav()` selects the loudest channel by RMS and rewrites mono 16 kHz PCM. The canonical WAV is then transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract). Turn-taking is strictly sequential, wherein the mic disengages during TTS playback; barge-in (user-initiated interrupt mid-utterance) was therefore deliberately omitted, owing to NAOqi's imperfect acoustic echo cancellation (which would have the robot's own voice fire false interrupts) and the resultant false-trigger risk under noisy demo conditions.
 
-\begin{lstlisting}[style=python, caption={\texttt{nao\_record}: calibrated-threshold silence detection polling the max energy across all four Pepper mics, with firmware fallback. Recording uses the \texttt{[1,1,1,1]} channel mask; \texttt{force\_mono\_16k\_wav()} downstream picks the loudest channel by RMS so Whisper, Silero-VAD, the WS-08 MLP, and \texttt{measure\_volume()} all see one canonical mono 16~kHz layout.}, label={lst:nao-record}]
+\begin{lstlisting}[caption={\texttt{nao\_record}: calibrated-threshold silence detection polling the max energy across all four Pepper mics, with firmware fallback. Recording uses the \texttt{[1,1,1,1]} channel mask; \texttt{force\_mono\_16k\_wav()} downstream picks the loudest channel by RMS so Whisper, Silero-VAD, the WS-08 MLP, and \texttt{measure\_volume()} all see one canonical mono 16~kHz layout.}, label={lst:nao-record}]
 def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
                record_max_secs: float = RECORD_MAX_SECS,
                silence_secs: float = SILENCE_DURATION):
@@ -678,7 +713,7 @@ rec.stopMicrophonesRecording()
 - [ ] PROOFREAD
   Whisper hallucinates on near-silent audio, emitting training-set tics (CJK gibberish, prompt-primed repetition); the latter NLG *degeneration* wherein models get "stuck in repetitive loops" (Ji et al., 2023, p. 3). Transcription is gated by five layers: 1) a near-empty-file RMS floor (`NAO_MIN_RMS_TO_TRANSCRIBE = 30`, emergency only; the older 120 wrongly rejected short answers like "yes" or "Tom"); 2) Silero-VAD, applied to both LOCAL and NAO modes since `force_mono_16k_wav()` canonicalises beforehand; 3) Vosk grammar-restricted wake-word gate ("Pepper"/"Gaze"), bypassable for the first-turn name prompt; 4) Whisper's own `no_speech_prob` / `avg_logprob` / `compression_ratio` signals; 5) an aggressively-normalised hallucination blacklist.
 
-\begin{lstlisting}[style=python, caption={\texttt{transcribe}: five-layer defence chain against Whisper hallucination on near-silent audio (gaze.py, lines ~1357--1427).}, label={lst:whisper}]
+\begin{lstlisting}[caption={\texttt{transcribe}: five-layer defence chain against Whisper hallucination on near-silent audio (gaze.py, lines ~1357--1427).}, label={lst:whisper}]
 def transcribe(bypass_wake_word: bool = False,
                whisper_prompt: str = "User answers a quiz or chats with a companion robot.") -> str:
     """
@@ -762,7 +797,7 @@ def transcribe(bypass_wake_word: bool = False,
 - [ ] waveform peak-normalisation -- accessibility for quieter brain-injured users beyond RAVDESS
 -->
 
-\begin{lstlisting}[style=python, caption={\texttt{SpeechEmotionModel.extract\_features}: MFCC + chroma + mel-spectrogram feature vector matching the WS-08 training pipeline, with peak-normalisation for quieter brain-injured users (gaze.py, lines ~192--220).}, label={lst:extract-features}]
+\begin{lstlisting}[caption={\texttt{SpeechEmotionModel.extract\_features}: MFCC + chroma + mel-spectrogram feature vector matching the WS-08 training pipeline, with peak-normalisation for quieter brain-injured users (gaze.py, lines ~192--220).}, label={lst:extract-features}]
 
 # PASTE SpeechEmotionModel.extract_features FROM gaze.py HERE (lines ~192--220, including the @staticmethod decorator)
 

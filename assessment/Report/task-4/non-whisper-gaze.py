@@ -18,8 +18,8 @@ Modes:
     LOCAL_MODE=false  Pepper over SSH, ALAudio mics, robot TTS.
 
 Things noticed during testing:
-    - Pepper audio is noisy, so Whisper is gated by Silero VAD, a
-      wake-word check, no_speech_prob and a hallucination blacklist.
+    - Pepper audio is noisy, so transcription is gated by Silero VAD
+      and a wake-word check.
     - Pepper camera streaming runs at about 10 fps; the local webcam
       runs at about 30.
     - The emotion classifiers are lightweight, not clinical instruments.
@@ -61,7 +61,7 @@ except ImportError:
     VoskModel = None
     KaldiRecognizer = None
     _vosk_import_ok = False
-# Silero VAD; pre-Whisper speech gate
+# Silero VAD; pre-transcription speech gate
 try:
     from silero_vad import load_silero_vad, read_audio, get_speech_timestamps
     _silero_import_ok = True
@@ -111,7 +111,7 @@ REMOTE_IMG   = "/var/persistent/home/nao/capture.jpg"
 LOCAL_WAV    = os.path.join(tempfile.gettempdir(), "gaze_input.wav")
 LOCAL_IMG    = os.path.join(tempfile.gettempdir(), "gaze_capture.jpg")
 VOLUME_THRESHOLD = 120  # RMS; dashboard label only ("quiet" vs "normal"). Not a transcription gate; see NAO_MIN_RMS_TO_TRANSCRIBE.
-NAO_MIN_RMS_TO_TRANSCRIBE = 120  # near-empty WAV floor for the NAO-mode pre-transcribe gate; Silero + Whisper + blacklist do the real filtering downstream.
+NAO_MIN_RMS_TO_TRANSCRIBE = 120  # near-empty WAV floor for the NAO-mode pre-transcribe gate; Silero + Vosk + blacklist do the real filtering downstream.
 FACE_CONFIDENCE_THRESHOLD  = 0.5  # below: face uncertain, treat neutral
 VOICE_CONFIDENCE_THRESHOLD = 0.5  # threshold for vocal emotion is too uncertain; treat as neutral
 SSH_TIMEOUT  = 10
@@ -841,7 +841,7 @@ try:
         time.sleep({SILENCE_POLL_SECS})
 
 except Exception as e:
-    # firmware fallback; demo continues, host RMS/Silero/Whisper filters take over
+    # firmware fallback; demo continues, host RMS/Silero/Vosk filters take over
     speech_detected = True
     print("  [Silence detection failed: " + str(e) + "] Falling back to fixed-duration recording")
     time.sleep({record_max_secs})
@@ -1152,7 +1152,7 @@ ALProxy("ALLeds","127.0.0.1",9559).fadeRGB("{group}", {colour}, {duration})
 
 # AUDIO MODE HELPERS
 
-LOCAL_SAMPLE_RATE = 16000   # Whisper expects 16 kHz; we resample from native rate
+LOCAL_SAMPLE_RATE = 16000   # Vosk small-en model expects 16 kHz; we resample from native rate
 
 LOCAL_SILENCE_RMS   = 40 # default RMS; overridden by local_calibrate_ambient()
 _local_speech_detected = False # set by local_record(); used as transcription gate
@@ -1268,7 +1268,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
 
     if buffer:
         audio_native = np.concatenate(buffer).flatten().astype(np.float32) / 32768.0
-        # resample to 16 kHz for Whisper
+        # resample to 16 kHz for Vosk
         audio_16k = librosa.resample(audio_native, orig_sr=native_rate, target_sr=LOCAL_SAMPLE_RATE)
         audio_int16 = (audio_16k * 32768.0).astype(np.int16)
     else:
@@ -1495,106 +1495,18 @@ def measure_volume() -> float:
         print(f"  Volume RMS calc failed: {e}")
         return 0.0
 
-# Whisper hallucination blacklist; pre-normalised
-WHISPER_HALLUCINATIONS = {
-    "thank you for watching",
-    "thanks for watching",
-    "thank you so much for watching",
-    "thanks so much for watching",
-    "if you enjoyed the video please subscribe and like it",
-    "if you enjoyed this video please like and subscribe",
-    "please subscribe and like",
-    "please like and subscribe",
-    "subscribe and like",
-    "ill see you next time",
-    "see you next time",
-    "you", "mm", "hmm", "uh", "um",
-    "おいしいねにかねしたかな",
-    "ご視聴ありがとうございました",
-    "ありがとうございました",
-    "이 영상은 유료광고를 포함하고 있습니다",
-    "구독과 좋아요 부탁드립니다",
-}
+ROBOT_ECHO_SIMILARITY_THRESHOLD = 0.68
+MIN_TRANSCRIPT_CHARS = 2
 
 def normalise_for_blacklist(text: str) -> str:
-    "Normalise so blacklist matches independent of Whisper output."
+    "Normalise text for echo-similarity comparison."
     t = unicodedata.normalize("NFKC", text).lower()
     kept = [ch for ch in t if ch.isalnum() or ch.isspace()]
     return " ".join("".join(kept).split())
 
-# regex blacklist; URL outros, promo boilerplate
-_URL_HALLUCINATION = re.compile(r"\bhttps?://|www\.|\b\w+\.(?:com|org|net|au|co\.uk|google|sites)\b", re.I)
-_DISCLAIMER_HALLUCINATION = re.compile(r"\b(please see|visit|subscribe|like and subscribe|disclaimer|description)\b.{0,40}\b(complete|full|link|below|above)\b", re.I)
-
-HALLUCINATION_SIMILARITY_THRESHOLD = 0.74
-ROBOT_ECHO_SIMILARITY_THRESHOLD = 0.68
-MIN_TRANSCRIPT_CHARS = 2
-MAX_SINGLE_WORD_DIGITS = 4
-
-# short fillers: exact-match only, never fuzzy
-SHORT_FILLER_HALLUCINATIONS = {
-    "you", "mm", "hmm", "uh", "um",
-}
-# long-phrase hallucinations eligible for fuzzy matching
-PHRASE_HALLUCINATIONS = {
-    p for p in WHISPER_HALLUCINATIONS
-    if normalise_for_blacklist(p) not in SHORT_FILLER_HALLUCINATIONS
-}
-PHRASE_HALLUCINATION_NORMS = {
-    normalise_for_blacklist(p)
-    for p in PHRASE_HALLUCINATIONS
-}
-
 def similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a, b).ratio()
 
-def max_hallucination_similarity(text: str) -> tuple[float, str]:
-    "Highest similarity between transcript and long-phrase hallucinations only."
-    norm = normalise_for_blacklist(text)
-    best_score = 0.0
-    best_phrase = ""
-    if not norm:
-        return 1.0, ""
-    for phrase in PHRASE_HALLUCINATIONS:
-        p = normalise_for_blacklist(phrase)
-        if not p:
-            continue
-        score = similarity(norm, p)
-        phrase_word_count = len(p.split())
-        # containment: only when the hallucination phrase is inside the transcript
-        if phrase_word_count >= 3 and p in norm:
-            score = max(score, 0.95)
-        if score > best_score:
-            best_score = score
-            best_phrase = phrase
-    return best_score, best_phrase
-
-def looks_like_youtube_hallucination(text: str) -> bool:
-    "YouTube-outro patterns; spares ordinary 'I like numbers' speech."
-    norm = normalise_for_blacklist(text)
-    youtube_patterns = [
-        # clear outro phrases
-        r"\b(thank|thanks)\b.{0,40}\b(watching|viewing)\b",
-        # like/subscribe must co-occur with channel/video context
-        r"\bplease\b.{0,20}\b(like|subscribe)\b",
-        r"\b(like)\b.{0,25}\b(subscribe|channel|video)\b",
-        r"\b(subscribe)\b.{0,25}\b(like|channel|video)\b",
-        # bell / notification boilerplate
-        r"\b(turn on|hit)\b.{0,20}\b(notification|bell)\b",
-        # description / link boilerplate
-        r"\b(link|links)\b.{0,30}\b(description|below)\b",
-        # outro
-        r"\bsee you\b.{0,25}\b(next time|next video|in the next video)\b",
-        # channel intro / sponsor boilerplate
-        r"\bwelcome back to\b.{0,30}\b(channel|video)\b",
-        r"\bsponsored by\b",
-    ]
-    return any(re.search(p, norm, re.I) for p in youtube_patterns)
-
-def is_known_hallucination(text: str) -> bool:
-    "Reverted to the simple working filter; exact-match against the static blacklist or empty."
-    norm = normalise_for_blacklist(text)
-    return norm == "" or norm in (PHRASE_HALLUCINATION_NORMS | SHORT_FILLER_HALLUCINATIONS)
 def is_robot_echo(text: str) -> bool:
     "Reject transcripts similar to last robot speech, sparing valid short answers."
     if not text or not _last_robot_speech:
@@ -1625,8 +1537,8 @@ def transcript_is_plausible_user_input(text: str,
                                        game_state: Optional[GameState] = None) -> bool:
     """
     Final transcript filter.
-    Rule: audio gates decide whether speech exists.
-    This text filter only removes obvious impossible outputs.
+    Audio gates decide whether speech exists; this just discards
+    empties, near-empties, and the robot's own echo.
     """
     if not text:
         return False
@@ -1637,75 +1549,10 @@ def transcript_is_plausible_user_input(text: str,
     if len(norm) < MIN_TRANSCRIPT_CHARS:
         return False
 
-    if is_known_hallucination(stripped):
-        print(f"  Filtered known hallucination: {stripped!r}")
-        return False
-
     if is_robot_echo(stripped):
         return False
 
-    active_numbers_game = (
-        game_state is not None
-        and game_state.active
-        and game_state.category
-        and "number" in game_state.category.lower()
-    )
-
-    # Lone years are common Whisper short-audio hallucinations,
-    # but allow numbers during numbers games.
-    if not active_numbers_game:
-        if re.fullmatch(r"(19|20)\d{2}", norm):
-            print(f"  Transcript rejected as lone year hallucination: {stripped!r}")
-            return False
-
     return True
-
-def gpt_transcript_validator(text: str,
-                             game_state: Optional[GameState] = None,
-                             response_time: float = 0.0,
-                             vol_rms: float = 0.0) -> bool:
-    "Last-resort GPT validator for borderline transcripts."
-    if not text.strip():
-        return False
-    context = "general conversation"
-    if game_state is not None and game_state.active:
-        context = f"active game question: {game_state.current_question}"
-    try:
-        resp = client.chat.completions.create(
-            model="gpt-5.4-mini",
-            temperature=0.0,
-            max_completion_tokens=5,
-            timeout=API_TIMEOUT,
-            messages=[
-                {
-                    "role": "system",
-                    "content": """You are a strict transcript validator for a noisy robot microphone.
-Decide whether the transcript is plausible user speech or should be rejected.
-Reject if it resembles:
-- YouTube outro text
-- "thanks for watching"
-- "like and subscribe"
-- website or disclaimer text
-- robot echo
-- random lone year/date hallucination
-- generic silence filler
-Reply ONLY with ACCEPT or REJECT.""",
-                },
-                {
-                    "role": "user",
-                    "content": f"""Transcript: {text!r}
-Context: {context}
-Volume RMS: {vol_rms}
-Response time: {response_time}
-Last robot speech: {_last_robot_speech!r}""",
-                },
-            ],
-        )
-        verdict = resp.choices[0].message.content.strip().upper()
-        return verdict == "ACCEPT"
-    except Exception as e:
-        print(f"  GPT transcript validator failed ({e}); rejecting borderline transcript.")
-        return False
 
 def has_real_speech(wav_path: str, min_speech_ms: int = 250,
                      threshold: float = 0.5) -> bool:
@@ -1723,7 +1570,7 @@ def has_real_speech(wav_path: str, min_speech_ms: int = 250,
         )
         return bool(segments)
     except Exception as e:
-        print(f"  Silero VAD check failed ({e}); falling through to Whisper")
+        print(f"  Silero VAD check failed ({e}); falling through to transcription")
         return True
 
 def has_wake_word(wav_path: str) -> bool:
@@ -1746,17 +1593,15 @@ def has_wake_word(wav_path: str) -> bool:
         text = (final.get("text") or "").lower()
         return "pepper" in text or "gaze" in text
     except Exception as e:
-        print(f"  Vosk wake-word check failed ({e}); falling through to Whisper")
+        print(f"  Vosk wake-word check failed ({e}); falling through to transcription")
         return True
 
-#open ai whisperings and incase fails and in silent
+# Vosk full transcription; offline, no API
 def transcribe(bypass_wake_word: bool = False,
-               whisper_prompt: str = "User answers a quiz or chats with a companion robot.",
                game_state: Optional[GameState] = None) -> str:
     """
-    Transcribe the local WAV with Whisper, gated against silence,
-    missing wake-word, and known hallucinated phrases.
-    Returns "" on any failure or rejection.
+    Transcribe the local WAV with Vosk, gated against silence
+    and missing wake-word. Returns "" on any failure or rejection.
     bypass_wake_word=True is for turns where no wake-word is expected
     (e.g. first-turn name prompt; "Pepper Salman" would be unnatural).
     """
@@ -1767,73 +1612,53 @@ def transcribe(bypass_wake_word: bool = False,
 
     # Silero VAD hard gate; NAO + LOCAL
     if not has_real_speech(LOCAL_WAV):
-        print("  Silero VAD found no speech; skipping Whisper.")
+        print("  Silero VAD found no speech; skipping transcription.")
         return ""
 
     # Vosk wake-word gate; bypass for name prompt
     if not bypass_wake_word and not has_wake_word(LOCAL_WAV):
-        print("  No wake-word detected; skipping Whisper.")
+        print("  No wake-word detected; skipping transcription.")
+        return ""
+
+    if _vosk_model is None or KaldiRecognizer is None:
+        print("  Vosk unavailable; cannot transcribe.")
         return ""
 
     try:
-        with open(LOCAL_WAV, "rb") as fh:
-            resp = client.audio.transcriptions.create(
-                model="whisper-1",
-                file=fh,
-                response_format="verbose_json",
-                temperature=0.0,
-                language="en",
-                prompt=whisper_prompt,
-                timeout=API_TIMEOUT,
-            )
-        text = (getattr(resp, "text", "") or "").strip()
-        print(f"  Whisper raw text: {text!r}")
+        # Vosk full-vocabulary recogniser; no grammar restriction here
+        rec = KaldiRecognizer(_vosk_model, LOCAL_SAMPLE_RATE)
+        rec.SetWords(True)
+        with wave.open(LOCAL_WAV, "rb") as wf:
+            while True:
+                data = wf.readframes(4000)
+                if len(data) == 0:
+                    break
+                rec.AcceptWaveform(data)
+        final = json.loads(rec.FinalResult())
+        text = (final.get("text") or "").strip()
+        print(f"  Vosk raw text: {text!r}")
+
+        if is_robot_echo(text):
+            return ""
 
         # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
         stripped = re.sub(r'(?i)^\s*(pepper|gaze)\b[,.\s]*', '', text).strip()
-        if is_known_hallucination(stripped):
-            print(f"  Filtered Whisper hallucination: {stripped!r}")
+        if not transcript_is_plausible_user_input(stripped, game_state=game_state):
+            print(f"  Filtered implausible transcript: {stripped!r}")
             return ""
         return stripped
     except Exception as e:
-        print(f"  Whisper transcribe failed ({e}); returning empty")
+        print(f"  Vosk transcribe failed ({e}); returning empty")
         return ""
-
-def build_whisper_prompt(game_state: Optional[GameState]) -> str:
-    "Narrow Whisper prompt per turn to reduce silence completions."
-    if game_state is not None and game_state.active:
-        q = game_state.current_question or ""
-        return f"""The user is answering a spoken Countdown-style game question.
-The current question is: {q}
-Expected answer style:
-- short number expression, number, word, or brief spoken answer
-- not a YouTube outro
-- not a web link
-- not "thank you for watching"
-"""
-    return """The user is speaking briefly to a companion robot.
-Expected style:
-- short conversational reply
-- name
-- answer to a quiz
-- request to continue, stop, or play
-Not expected:
-- YouTube outro
-- website link
-- sponsorship sentence
-- "thank you for watching"
-"""
 
 def transcribe_with_one_retry(ssh, energy_threshold,
                               no_speech_max: float,
                               silence_secs: float,
                               record_max_secs: float,
-                              game_state: Optional[GameState] = None,
-                              whisper_prompt: str = "User answers a quiz or chats with a companion robot.") -> str:
+                              game_state: Optional[GameState] = None) -> str:
     "Transcribe once; on rejection, silently re-record once and retry."
     first = transcribe(
         bypass_wake_word=True,
-        whisper_prompt=whisper_prompt,
         game_state=game_state,
     )
     if first:
@@ -1849,33 +1674,16 @@ def transcribe_with_one_retry(ssh, energy_threshold,
     retry_rms = measure_volume()
     print(f"  Retry RMS diagnostic: {retry_rms:.0f}")
     if not LOCAL_MODE and not _nao_speech_detected:
-        print("  Retry had no NAO speech chunk; skipping Whisper.")
+        print("  Retry had no NAO speech chunk; skipping transcription.")
         return ""
     if not LOCAL_MODE and retry_rms < NAO_MIN_RMS_TO_TRANSCRIBE:
-        print(f"  Retry WAV near-empty ({retry_rms:.0f} < {NAO_MIN_RMS_TO_TRANSCRIBE}); skipping Whisper.")
+        print(f"  Retry WAV near-empty ({retry_rms:.0f} < {NAO_MIN_RMS_TO_TRANSCRIBE}); skipping transcription.")
         return ""
     second = transcribe(
         bypass_wake_word=True,
-        whisper_prompt=whisper_prompt,
         game_state=game_state,
     )
     return second
-
-def debug_filter_self_test():
-    "Boot-time sanity check; flag when filters reject valid speech."
-    tests = [
-        "numbers", "letters", "yes", "no", "100",
-        "how are you", "thank you", "thank you so much",
-        "I like numbers", "I liked that one",
-        "thanks for watching", "please like and subscribe",
-        "thank you guys for watching this video", "2019",
-    ]
-    print("\n--- Filter self-test ---")
-    for t in tests:
-        accepted = transcript_is_plausible_user_input(t)
-        score, phrase = max_hallucination_similarity(t)
-        print(f"{t!r:45} accepted={accepted} similarity={score:.2f} phrase={phrase!r}")
-    print("--- End filter self-test ---\n")
 
 # facial-expression pipeline
 
@@ -2206,7 +2014,7 @@ def converse(conversation: list, tools: list) -> object:
     except Exception as e:
         print(f"converse() API failed... : {e}")
         return types.SimpleNamespace(
-            content="I had a brief network hiccup [gesture:think]",
+            content="I had a brief network hiccup. Let's keep going! [gesture:think]",
             tool_calls=None, role="assistant")
 
 def execute_tool_call(tool_name: str, tool_args: dict,
@@ -2901,7 +2709,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 if _local_speech_detected:
                     user_text = transcribe(
                         bypass_wake_word=True,
-                        whisper_prompt=build_whisper_prompt(game_state),
                         game_state=game_state,
                     )
                 else:
@@ -2912,7 +2719,6 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                 if _nao_speech_detected:
                     user_text = transcribe(
                     bypass_wake_word=True,
-                    whisper_prompt=build_whisper_prompt(game_state),
                     game_state=game_state,
                 )
                 else:
@@ -3190,8 +2996,6 @@ def main():
     else:
         print(f"  Speech emotion model not found at {SPEECH_MODEL}; vocal signal disabled.")
         print("  Run train_speech_model.py to generate it.")
-
-    debug_filter_self_test()
 
     local_camera = None
     if USE_LOCAL_CAMERA:
