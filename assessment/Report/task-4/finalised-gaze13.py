@@ -902,9 +902,34 @@ def split_into_sentences(text: str) -> list[str]:
                 sentences.append(cleaned)
     return sentences if sentences else [text.strip()]
 
+_TTS_REPLACEMENTS = {
+    "‘": "'", "’": "'",
+    "“": '"', "”": '"',
+    "–": "-", "—": "-", "−": "-",
+    "…": "...", " ": " ",
+}
+
+def clean_for_tts(text: str) -> str:
+    "Strip gesture tags and Unicode escapes for Pepper TTS."
+    text = text or ""
+    text = re.sub(r'\[gesture:\w+\]', '', text)
+    text = unicodedata.normalize("NFKC", text)
+    for bad, good in _TTS_REPLACEMENTS.items():
+        text = text.replace(bad, good)
+    # animated-speech tags
+    text = re.sub(r'\^[A-Za-z_]+(?:\([^)]*\))?', '', text)
+    # ALTextToSpeech tags
+    text = re.sub(r'\\[A-Za-z]{2,8}=[^\\]*\\', '', text)
+    # literal \uXXXX leftovers
+    text = re.sub(r'\\u[0-9a-fA-F]{4}', '', text)
+    # control characters
+    text = re.sub(r'[\x00-\x1f\x7f-\x9f]', ' ', text)
+    return re.sub(r'\s+', ' ', text).strip()
+
 #single ssh calls
 def nao_say(ssh, text):
     "Speak text on Pepper with sentence-level pausing."
+    text = clean_for_tts(text)
     sentences = split_into_sentences(text)
     safe_sentences = json.dumps(sentences)
 
@@ -1230,6 +1255,7 @@ def local_record(max_secs: float = RECORD_MAX_SECS,
 
 def local_say(text: str):
     "Speak text using host OS built-in TTS (macOS `say` or Windows SAPI)."
+    text = clean_for_tts(text)
     try:
         if sys.platform == "win32":
             # Windows: SAPI via PowerShell; env-var avoids escaping
@@ -1246,6 +1272,7 @@ def local_say(text: str):
 
 def say(ssh_tts, text):
     "Dispatch TTS to local or Pepper depending on mode."
+    text = clean_for_tts(text)
     if LOCAL_MODE:
         local_say(text)
     else:
