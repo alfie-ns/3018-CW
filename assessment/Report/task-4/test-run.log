@@ -25,27 +25,6 @@ Loading facial expression model...
   Facial model loaded.
 Loading speech emotion model...
   Speech model loaded.
-
---- Filter self-test ---
-'numbers'                                     accepted=True similarity=0.25 phrase='see you next time'
-'letters'                                     accepted=True similarity=0.36 phrase='ill see you next time'
-'yes'                                         accepted=True similarity=0.20 phrase='see you next time'
-'no'                                          accepted=True similarity=0.19 phrase='thanks for watching'
-'100'                                         accepted=True similarity=0.00 phrase=''
-'how are you'                                 accepted=True similarity=0.38 phrase='ill see you next time'
-'thank you'                                   accepted=True similarity=0.58 phrase='thank you for watching'
-'thank you so much'                           accepted=True similarity=0.72 phrase='thank you so much for watching'
-'I like numbers'                              accepted=True similarity=0.51 phrase='please like and subscribe'
-'I liked that one'                            accepted=True similarity=0.39 phrase='please like and subscribe'
-  Filtered known hallucination: 'thanks for watching'
-'thanks for watching'                         accepted=False similarity=1.00 phrase='thanks for watching'
-  Filtered known hallucination: 'please like and subscribe'
-'please like and subscribe'                   accepted=False similarity=1.00 phrase='please like and subscribe'
-'thank you guys for watching this video'      accepted=True similarity=0.73 phrase='thank you for watching'
-  Transcript rejected as lone year hallucination: '2019'
-'2019'                                        accepted=False similarity=0.00 phrase=''
---- End filter self-test ---
-
   Using local webcam for expression detection.
   Preview thread started.
 
@@ -53,182 +32,29 @@ Loading speech emotion model...
 
 Calibrating Mac microphone ambient noise level...
 Calibrating Mac mic (stay quiet for 3s)...
-  Ambient RMS: 1018, silence threshold: 1043, transcription gate: 4172
-  Arousal thresholds: QUIET=2036, LOUD=10180
+  Ambient RMS: 8, silence threshold: 68, transcription gate: 272
+  Arousal thresholds: QUIET=200, LOUD=2000
   Dashboard launched.
 
-Robot: Welcome back! Last time you played 0 rounds and got 0 correct. Want to continue where you left off, or start fresh?
+Robot: Welcome back! Last time you played 1 rounds and got 0 correct. Want to continue where you left off, or start fresh?
 
 Listening for continue/fresh...
-  Recording from Mac mic (up to 10.0s, stops after silence)...
-    [0.5s] RMS: 7400 ▓    [0.8s] RMS: 4779 ▓    [1.0s] RMS: 1083 ▓    [1.2s] RMS: 740 ░    [1.5s] RMS: 679 ░    [1.8s] RMS: 687 ░    [2.0s] RMS: 810 ░    [2.2s] RMS: 918 ░    [2.5s] RMS: 607 ░    [2.8s] RMS: 755 ░    [3.0s] RMS: 585 ░    [3.2s] RMS: 633 ░    [3.5s] RMS: 1341 ▓    [3.8s] RMS: 678 ░    [4.0s] RMS: 1264 ▓    [4.2s] RMS: 729 ░    [4.5s] RMS: 752 ░    [4.8s] RMS: 700 ░    [5.0s] RMS: 762 ░    [5.2s] RMS: 603 ░    [5.5s] RMS: 573 ░    [5.8s] RMS: 627 ░    [6.0s] RMS: 701 ░    [6.2s] RMS: 3486 ▓    [6.5s] RMS: 4541 ▓    [6.8s] RMS: 5281 ▓    [7.0s] RMS: 7414 ▓    [7.2s] RMS: 2005 ▓    [7.5s] RMS: 2603 ▓    [7.8s] RMS: 1917 ▓    [8.0s] RMS: 3787 ▓    [8.2s] RMS: 4999 ▓    [8.5s] RMS: 560 ░    [8.8s] RMS: 3165 ▓    [9.0s] RMS: 4506 ▓    [9.2s] RMS: 5223 ▓    [9.5s] RMS: 3963 ▓    [9.8s] RMS: 2864 ▓    [10.0s] RMS: 1077 ▓
-  Recording saved (10.0s, speech=yes).
-  Whisper raw text: "Start fresh. It's probably because, yeah, it's because the ambient sound and..."
-  Heard: Start fresh. It's probably because, yeah, it's because the ambient sound and...
+  Recording from Mac mic (up to 6.0s, stops after silence)...
+    [0.5s] RMS: 0 ░    [0.8s] RMS: 0 ░    [1.0s] RMS: 5286 ▓    [1.2s] RMS: 1995 ▓    [1.5s] RMS: 2659 ▓    [1.8s] RMS: 3208 ▓    [2.0s] RMS: 4322 ▓    [2.2s] RMS: 751 ▓    [2.5s] RMS: 57 ░    [2.8s] RMS: 34 ░    [3.0s] RMS: 38 ░    [3.2s] RMS: 53 ░    [3.5s] RMS: 16 ░    [3.8s] RMS: 20 ░    [4.0s] RMS: 37 ░    [4.2s] RMS: 83 ▓    [4.5s] RMS: 61 ░    [4.8s] RMS: 400 ▓    [5.0s] RMS: 140 ▓    [5.2s] RMS: 21 ░    [5.5s] RMS: 38 ░    [5.8s] RMS: 24 ░    [6.0s] RMS: 12 ░
+  Recording saved (6.0s, speech=yes).
+  Whisper transcribe failed (Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************WzAA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}); returning empty
+  Heard: (silence)
 
 Robot: No worries, starting fresh! Your previous save has been cleared.
+converse() API failed... : Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************WzAA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
 
-Robot: Hi, it's lovely to be with you. I'm here to chat, play a game, or just hang out together.
+Robot: I had a brief network hiccup. Let's keep going!
 
 ---------------------------------------- Turn 1 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.53)
+  Expression: Neutral (0.57)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 309 ░    [0.8s] RMS: 604 ░    [1.0s] RMS: 670 ░    [1.2s] RMS: 565 ░    [1.5s] RMS: 975 ░    [1.8s] RMS: 801 ░    [2.0s] RMS: 1019 ░    [2.2s] RMS: 756 ░    [2.5s] RMS: 2256 ▓    [2.8s] RMS: 5241 ▓    [3.0s] RMS: 3486 ▓    [3.2s] RMS: 3505 ▓    [3.5s] RMS: 2490 ▓    [3.8s] RMS: 776 ░    [4.0s] RMS: 821 ░    [4.2s] RMS: 5002 ▓    [4.5s] RMS: 6155 ▓    [4.8s] RMS: 5280 ▓    [5.0s] RMS: 2365 ▓    [5.2s] RMS: 7126 ▓    [5.5s] RMS: 5504 ▓    [5.8s] RMS: 4385 ▓    [6.0s] RMS: 3753 ▓    [6.2s] RMS: 1344 ▓    [6.5s] RMS: 798 ░    [6.8s] RMS: 4202 ▓    [7.0s] RMS: 4698 ▓    [7.2s] RMS: 2762 ▓    [7.5s] RMS: 3580 ▓    [7.8s] RMS: 2775 ▓    [8.0s] RMS: 3015 ▓    [8.2s] RMS: 3812 ▓    [8.5s] RMS: 2253 ▓    [8.8s] RMS: 3308 ▓    [9.0s] RMS: 3421 ▓    [9.2s] RMS: 2890 ▓    [9.5s] RMS: 2757 ▓    [9.8s] RMS: 1205 ▓    [10.0s] RMS: 3116 ▓    [10.2s] RMS: 2828 ▓    [10.5s] RMS: 2858 ▓    [10.8s] RMS: 2725 ▓    [11.0s] RMS: 1062 ▓    [11.2s] RMS: 931 ░    [11.5s] RMS: 879 ░    [11.8s] RMS: 712 ░    [12.0s] RMS: 664 ░    [12.2s] RMS: 686 ░    [12.5s] RMS: 692 ░    [12.8s] RMS: 2028 ▓    [13.0s] RMS: 1706 ▓    [13.2s] RMS: 2019 ▓    [13.5s] RMS: 2966 ▓    [13.8s] RMS: 1257 ▓    [14.0s] RMS: 3516 ▓    [14.2s] RMS: 2703 ▓    [14.5s] RMS: 2168 ▓    [14.8s] RMS: 1025 ░    [15.0s] RMS: 899 ░
-  Recording saved (15.0s, speech=yes).
-  Vocal emotion: calm (0.99)
-  Volume RMS: 2914
-  Whisper raw text: 'Oh, shit, um... Oh, just a numerical game. I removed the- on this version, I think I removed where you- it asks your name. Um, and addresses by your name, like...'
-  Heard: Oh, shit, um... Oh, just a numerical game. I removed the- on this version, I think I removed where you- it asks your name. Um, and addresses by your name, like...
-  Calling tool generate_game_question({'game_type': 'numbers', 'difficulty': 'EASY'})
-  Tool returned: {"question": "Use the numbers 2, 3, 5, 7, 10, and 25 to make 30. You may use each number at most once.", "answer": "25+5
-
-Robot: That's okay - a numerical game works nicely, and skipping the name part is completely fine. Here's an easy one: use 2, 3, 5, 7, 10, and 25 to make 30, using each number at most once.
-(Game answer: 25+5=30)
-
----------------------------------------- Turn 2 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.39): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 376 ░    [0.8s] RMS: 945 ░    [1.0s] RMS: 810 ░    [1.2s] RMS: 785 ░    [1.5s] RMS: 1293 ▓    [1.8s] RMS: 2613 ▓    [2.0s] RMS: 2786 ▓    [2.2s] RMS: 721 ░    [2.5s] RMS: 587 ░    [2.8s] RMS: 654 ░    [3.0s] RMS: 619 ░    [3.2s] RMS: 635 ░    [3.5s] RMS: 669 ░    [3.8s] RMS: 868 ░    [4.0s] RMS: 1510 ▓    [4.2s] RMS: 1072 ▓    [4.5s] RMS: 1373 ▓    [4.8s] RMS: 1206 ▓    [5.0s] RMS: 662 ░    [5.2s] RMS: 651 ░    [5.5s] RMS: 635 ░    [5.8s] RMS: 674 ░    [6.0s] RMS: 3889 ▓    [6.2s] RMS: 2947 ▓    [6.5s] RMS: 1865 ▓    [6.8s] RMS: 778 ░    [7.0s] RMS: 723 ░    [7.2s] RMS: 790 ░    [7.5s] RMS: 1992 ▓    [7.8s] RMS: 2853 ▓    [8.0s] RMS: 641 ░    [8.2s] RMS: 936 ░    [8.5s] RMS: 1053 ▓    [8.8s] RMS: 929 ░    [9.0s] RMS: 652 ░    [9.2s] RMS: 891 ░    [9.5s] RMS: 885 ░    [9.8s] RMS: 5345 ▓    [10.0s] RMS: 1158 ▓    [10.2s] RMS: 846 ░    [10.5s] RMS: 2253 ▓    [10.8s] RMS: 3813 ▓    [11.0s] RMS: 2720 ▓    [11.2s] RMS: 4413 ▓    [11.5s] RMS: 1909 ▓    [11.8s] RMS: 710 ░    [12.0s] RMS: 1909 ▓    [12.2s] RMS: 4545 ▓    [12.5s] RMS: 3885 ▓    [12.8s] RMS: 2392 ▓    [13.0s] RMS: 3855 ▓    [13.2s] RMS: 734 ░    [13.5s] RMS: 875 ░    [13.8s] RMS: 3191 ▓    [14.0s] RMS: 3718 ▓    [14.2s] RMS: 3954 ▓    [14.5s] RMS: 1610 ▓    [14.8s] RMS: 3642 ▓    [15.0s] RMS: 3424 ▓
-  Recording saved (15.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 2186
-  Whisper raw text: "Wait, what? You've got to make 30... Yeah, no... So... Uh... What is it? Wait, isn't it... Might be wrong, but... Did it say 3? Yeah..."
-  Heard: Wait, what? You've got to make 30... Yeah, no... So... Uh... What is it? Wait, isn't it... Might be wrong, but... Did it say 3? Yeah...
-
-Robot: Yes, 3 is one of the numbers, and you're thinking in the right direction. Take your time - you only need a very simple way to make 30 from the list.
-(Game answer: 25+5=30)
-  [Auto-save]
-
----------------------------------------- Turn 3 ----------------------------------------
-Capturing expression...
-  Expression: Sad (0.39): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 833 ░    [0.8s] RMS: 2371 ▓    [1.0s] RMS: 1418 ▓    [1.2s] RMS: 2749 ▓    [1.5s] RMS: 2874 ▓    [1.8s] RMS: 3237 ▓    [2.0s] RMS: 2913 ▓    [2.2s] RMS: 1647 ▓    [2.5s] RMS: 1705 ▓    [2.8s] RMS: 1001 ░    [3.0s] RMS: 1429 ▓    [3.2s] RMS: 1853 ▓    [3.5s] RMS: 1321 ▓    [3.8s] RMS: 739 ░    [4.0s] RMS: 810 ░    [4.2s] RMS: 917 ░    [4.5s] RMS: 781 ░    [4.8s] RMS: 716 ░    [5.0s] RMS: 723 ░    [5.2s] RMS: 851 ░    [5.5s] RMS: 826 ░    [5.8s] RMS: 789 ░    [6.0s] RMS: 759 ░    [6.2s] RMS: 700 ░
-  Recording saved (6.2s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1660
-  Whisper raw text: "I forgot, I didn't see that you had to make 30. I thought, um..."
-  Heard: I forgot, I didn't see that you had to make 30. I thought, um...
-
-Robot: That's alright - easy mistake. The goal is just to make 30, and there's a very short answer hiding in the list.
-(Game answer: 25+5=30)
-
----------------------------------------- Turn 4 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.59)
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 2919 ▓    [0.8s] RMS: 5181 ▓    [1.0s] RMS: 4769 ▓    [1.2s] RMS: 2793 ▓    [1.5s] RMS: 6689 ▓    [1.8s] RMS: 2940 ▓    [2.0s] RMS: 1895 ▓    [2.2s] RMS: 690 ░    [2.5s] RMS: 750 ░    [2.8s] RMS: 819 ░    [3.0s] RMS: 939 ░    [3.2s] RMS: 1014 ░    [3.5s] RMS: 1769 ▓    [3.8s] RMS: 2317 ▓    [4.0s] RMS: 2666 ▓    [4.2s] RMS: 2159 ▓    [4.5s] RMS: 688 ░    [4.8s] RMS: 569 ░    [5.0s] RMS: 1259 ▓    [5.2s] RMS: 2814 ▓    [5.5s] RMS: 3598 ▓    [5.8s] RMS: 2819 ▓    [6.0s] RMS: 2617 ▓    [6.2s] RMS: 2724 ▓    [6.5s] RMS: 2938 ▓    [6.8s] RMS: 3081 ▓    [7.0s] RMS: 2249 ▓    [7.2s] RMS: 2311 ▓    [7.5s] RMS: 1511 ▓    [7.8s] RMS: 743 ░    [8.0s] RMS: 646 ░    [8.2s] RMS: 676 ░    [8.5s] RMS: 683 ░    [8.8s] RMS: 1029 ░    [9.0s] RMS: 3471 ▓    [9.2s] RMS: 2962 ▓    [9.5s] RMS: 3593 ▓    [9.8s] RMS: 3217 ▓    [10.0s] RMS: 2396 ▓    [10.2s] RMS: 1286 ▓    [10.5s] RMS: 1957 ▓    [10.8s] RMS: 1491 ▓    [11.0s] RMS: 937 ░    [11.2s] RMS: 927 ░    [11.5s] RMS: 937 ░    [11.8s] RMS: 852 ░    [12.0s] RMS: 786 ░    [12.2s] RMS: 818 ░    [12.5s] RMS: 755 ░    [12.8s] RMS: 755 ░    [13.0s] RMS: 945 ░    [13.2s] RMS: 881 ░    [13.5s] RMS: 816 ░
-  Recording saved (13.5s, speech=yes).
-  Vocal emotion: disgust (0.62)
-  Volume RMS: 2344
-  Whisper raw text: "Make a... make a harder game. It's just the thing is, this won't work. I mean, it does work, but it doesn't work that well on a robot. It definitely works better on the computer."
-  Heard: Make a... make a harder game. It's just the thing is, this won't work. I mean, it does work, but it doesn't work that well on a robot. It definitely works better on the computer.
-  Calling tool generate_game_question({'game_type': 'numbers', 'difficulty': 'MEDIUM'})
-  Tool returned: {"question": "Use the numbers 1, 4, 6, 8, 25, and 50 to make 159. You may use each number at most once.", "answer": "(25
-
-Robot: Got it - I'll make it a bit more interesting. Try this: use 1, 4, 6, 8, 25, and 50 to make 159, using each number at most once.
-(Game answer: (25-6)*8+4+3? No — valid solution: 50+25+84=159 is invalid with given numbers, so use (25-6)*8+4+3 not possible. Correct solution: (8*25)-50+6+4-1=159)
-  [Auto-save]
-
----------------------------------------- Turn 5 ----------------------------------------
-Capturing expression...
-  Expression: Sad (0.34): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 344 ░    [0.8s] RMS: 654 ░    [1.0s] RMS: 649 ░    [1.2s] RMS: 748 ░    [1.5s] RMS: 692 ░    [1.8s] RMS: 642 ░    [2.0s] RMS: 733 ░    [2.2s] RMS: 776 ░    [2.5s] RMS: 632 ░    [2.8s] RMS: 677 ░    [3.0s] RMS: 724 ░    [3.2s] RMS: 656 ░    [3.5s] RMS: 731 ░    [3.8s] RMS: 640 ░    [4.0s] RMS: 694 ░    [4.2s] RMS: 676 ░    [4.5s] RMS: 689 ░    [4.8s] RMS: 651 ░    [5.0s] RMS: 799 ░    [5.2s] RMS: 802 ░    [5.5s] RMS: 716 ░    [5.8s] RMS: 695 ░    [6.0s] RMS: 767 ░    [6.2s] RMS: 709 ░    [6.5s] RMS: 725 ░    [6.8s] RMS: 768 ░    [7.0s] RMS: 773 ░
-  Recording saved (7.0s, speech=no).
-  Vocal emotion: neutral (0.00): LOW CONFIDENCE, treating as neutral
-  Volume RMS: 697
-  No speech chunk detected (floor=1043); skipping transcription.
-  Heard: (silence)
-
----------------------------------------- Turn 6 ----------------------------------------
-Capturing expression...
-  Expression: Sad (0.35): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 390 ░    [0.8s] RMS: 1106 ▓    [1.0s] RMS: 999 ░    [1.2s] RMS: 1006 ░    [1.5s] RMS: 896 ░    [1.8s] RMS: 915 ░    [2.0s] RMS: 676 ░    [2.2s] RMS: 706 ░    [2.5s] RMS: 788 ░    [2.8s] RMS: 804 ░    [3.0s] RMS: 779 ░    [3.2s] RMS: 958 ░    [3.5s] RMS: 748 ░
-  Recording saved (3.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 847
-  Whisper raw text: '\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570�'
-  Filtered Whisper hallucination: '\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570\ue570�'
-  Heard: (silence)
-
----------------------------------------- Turn 7 ----------------------------------------
-Capturing expression...
-  Expression: Fear (0.38): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 523 ░    [0.8s] RMS: 912 ░    [1.0s] RMS: 766 ░    [1.2s] RMS: 1010 ░    [1.5s] RMS: 725 ░    [1.8s] RMS: 963 ░    [2.0s] RMS: 852 ░    [2.2s] RMS: 857 ░    [2.5s] RMS: 778 ░    [2.8s] RMS: 725 ░    [3.0s] RMS: 761 ░    [3.2s] RMS: 801 ░    [3.5s] RMS: 864 ░    [3.8s] RMS: 822 ░    [4.0s] RMS: 793 ░    [4.2s] RMS: 948 ░    [4.5s] RMS: 917 ░    [4.8s] RMS: 1410 ▓    [5.0s] RMS: 770 ░    [5.2s] RMS: 788 ░    [5.5s] RMS: 941 ░    [5.8s] RMS: 867 ░    [6.0s] RMS: 1296 ▓    [6.2s] RMS: 1194 ▓    [6.5s] RMS: 970 ░    [6.8s] RMS: 703 ░    [7.0s] RMS: 721 ░    [7.2s] RMS: 712 ░    [7.5s] RMS: 919 ░    [7.8s] RMS: 1091 ▓    [8.0s] RMS: 873 ░    [8.2s] RMS: 1022 ░    [8.5s] RMS: 763 ░    [8.8s] RMS: 884 ░    [9.0s] RMS: 868 ░    [9.2s] RMS: 1121 ▓    [9.5s] RMS: 1042 ░    [9.8s] RMS: 1331 ▓    [10.0s] RMS: 1225 ▓    [10.2s] RMS: 1222 ▓    [10.5s] RMS: 1074 ▓    [10.8s] RMS: 1034 ░    [11.0s] RMS: 938 ░    [11.2s] RMS: 1054 ▓    [11.5s] RMS: 919 ░    [11.8s] RMS: 775 ░    [12.0s] RMS: 723 ░    [12.2s] RMS: 954 ░    [12.5s] RMS: 842 ░    [12.8s] RMS: 1253 ▓    [13.0s] RMS: 755 ░    [13.2s] RMS: 849 ░    [13.5s] RMS: 798 ░    [13.8s] RMS: 655 ░    [14.0s] RMS: 1031 ░    [14.2s] RMS: 1031 ░    [14.5s] RMS: 2457 ▓    [14.8s] RMS: 2356 ▓    [15.0s] RMS: 892 ░
-  Recording saved (15.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1012
-  Whisper raw text: 'Use the numbers 1, 4, 6, 8, 25, and 50 to make 159.'
-  Heard: Use the numbers 1, 4, 6, 8, 25, and 50 to make 159.
-
-Robot: Yes, that's the question exactly. Want to talk through it together, or would you like me to give you a tiny hint?
-(Game answer: (25-6)*8+4+3? No — valid solution: 50+25+84=159 is invalid with given numbers, so use (25-6)*8+4+3 not possible. Correct solution: (8*25)-50+6+4-1=159)
-
----------------------------------------- Turn 8 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.41): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 411 ░    [0.8s] RMS: 730 ░    [1.0s] RMS: 712 ░    [1.2s] RMS: 516 ░    [1.5s] RMS: 3479 ▓    [1.8s] RMS: 3413 ▓    [2.0s] RMS: 2893 ▓    [2.2s] RMS: 4088 ▓    [2.5s] RMS: 2032 ▓    [2.8s] RMS: 3859 ▓    [3.0s] RMS: 1151 ▓    [3.2s] RMS: 968 ░    [3.5s] RMS: 833 ░    [3.8s] RMS: 2536 ▓    [4.0s] RMS: 814 ░    [4.2s] RMS: 707 ░    [4.5s] RMS: 3928 ▓    [4.8s] RMS: 1620 ▓    [5.0s] RMS: 3019 ▓    [5.2s] RMS: 2516 ▓    [5.5s] RMS: 2612 ▓    [5.8s] RMS: 2086 ▓    [6.0s] RMS: 2184 ▓    [6.2s] RMS: 686 ░    [6.5s] RMS: 575 ░    [6.8s] RMS: 670 ░    [7.0s] RMS: 619 ░    [7.2s] RMS: 837 ░    [7.5s] RMS: 2793 ▓    [7.8s] RMS: 2136 ▓    [8.0s] RMS: 1460 ▓    [8.2s] RMS: 721 ░    [8.5s] RMS: 710 ░    [8.8s] RMS: 618 ░    [9.0s] RMS: 851 ░    [9.2s] RMS: 1128 ▓    [9.5s] RMS: 1239 ▓    [9.8s] RMS: 1171 ▓    [10.0s] RMS: 1012 ░    [10.2s] RMS: 1451 ▓    [10.5s] RMS: 1398 ▓    [10.8s] RMS: 1101 ▓    [11.0s] RMS: 734 ░    [11.2s] RMS: 635 ░    [11.5s] RMS: 605 ░    [11.8s] RMS: 662 ░    [12.0s] RMS: 852 ░    [12.2s] RMS: 2873 ▓    [12.5s] RMS: 4204 ▓    [12.8s] RMS: 3330 ▓    [13.0s] RMS: 797 ░    [13.2s] RMS: 829 ░    [13.5s] RMS: 719 ░    [13.8s] RMS: 3681 ▓    [14.0s] RMS: 3031 ▓    [14.2s] RMS: 2004 ▓    [14.5s] RMS: 713 ░    [14.8s] RMS: 699 ░    [15.0s] RMS: 746 ░
-  Recording saved (15.0s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 1957
-  Whisper raw text: "No, is the answer 6 multiplied by 25, add 6, oh no, I can't use it twice. Oh, add 8, add 1."
-  Heard: No, is the answer 6 multiplied by 25, add 6, oh no, I can't use it twice. Oh, add 8, add 1.
-  Calling tool check_game_answer({'user_answer': "6 multiplied by 25, add 6, oh no, I can't use it twice. Oh, add 8, add 1.", 'correct_answer': '(8*25)-50+6+4-1=159', 'question_context': 'Use the numbers 1, 4, 6, 8, 25, and 50 to make 159. You may use each number at most once.'})
-  Tool returned: {"correct": false}
-
-Robot: Nice try - you caught the repeated 6 yourself, which was really good spotting. You're very close to a useful idea with 25 and 8; want one small hint?
-  [Auto-save]
-
----------------------------------------- Turn 9 ----------------------------------------
-Capturing expression...
-  Expression: Neutral (0.52)
-Listening...
-  Recording from Mac mic (up to 18.0s, stops after silence)...
-    [0.5s] RMS: 360 ░    [0.8s] RMS: 647 ░    [1.0s] RMS: 663 ░    [1.2s] RMS: 667 ░    [1.5s] RMS: 679 ░    [1.8s] RMS: 732 ░    [2.0s] RMS: 762 ░    [2.2s] RMS: 773 ░    [2.5s] RMS: 669 ░    [2.8s] RMS: 676 ░    [3.0s] RMS: 662 ░    [3.2s] RMS: 692 ░    [3.5s] RMS: 690 ░    [3.8s] RMS: 1311 ▓    [4.0s] RMS: 948 ░    [4.2s] RMS: 707 ░    [4.5s] RMS: 756 ░    [4.8s] RMS: 796 ░    [5.0s] RMS: 809 ░    [5.2s] RMS: 1095 ▓    [5.5s] RMS: 735 ░    [5.8s] RMS: 988 ░    [6.0s] RMS: 2050 ▓    [6.2s] RMS: 1016 ░    [6.5s] RMS: 728 ░    [6.8s] RMS: 689 ░    [7.0s] RMS: 699 ░    [7.2s] RMS: 1096 ▓    [7.5s] RMS: 3528 ▓    [7.8s] RMS: 2086 ▓    [8.0s] RMS: 2593 ▓    [8.2s] RMS: 2438 ▓    [8.5s] RMS: 2351 ▓    [8.8s] RMS: 1243 ▓    [9.0s] RMS: 2966 ▓    [9.2s] RMS: 1668 ▓    [9.5s] RMS: 708 ░    [9.8s] RMS: 786 ░    [10.0s] RMS: 902 ░    [10.2s] RMS: 666 ░    [10.5s] RMS: 876 ░    [10.8s] RMS: 1858 ▓    [11.0s] RMS: 2510 ▓    [11.2s] RMS: 2509 ▓    [11.5s] RMS: 773 ░    [11.8s] RMS: 738 ░    [12.0s] RMS: 695 ░    [12.2s] RMS: 688 ░    [12.5s] RMS: 4059 ▓    [12.8s] RMS: 2590 ▓    [13.0s] RMS: 1626 ▓    [13.2s] RMS: 760 ░    [13.5s] RMS: 765 ░    [13.8s] RMS: 693 ░    [14.0s] RMS: 664 ░    [14.2s] RMS: 729 ░    [14.5s] RMS: 697 ░    [14.8s] RMS: 824 ░    [15.0s] RMS: 721 ░    [15.2s] RMS: 786 ░    [15.5s] RMS: 695 ░    [15.8s] RMS: 751 ░
-  Recording saved (15.8s, speech=yes).
-  Vocal emotion: disgust (0.94)
-  Volume RMS: 1398
-  Whisper raw text: '6 multiplied by 25, add 8, add 1'
-  Heard: 6 multiplied by 25, add 8, add 1
-  Calling tool check_game_answer({'user_answer': '6 multiplied by 25, add 8, add 1', 'correct_answer': '(8*25)-50+6+4-1=159', 'question_context': 'Use the numbers 1, 4, 6, 8, 25, and 50 to make 159. You may use each number at most once.'})
-  Tool returned: {"correct": false, "error": "no active game question"}
-
-Robot: Not quite, but that's a strong attempt. A helpful route is to start with 8 times 25 to get 200, then adjust downward.
-
----------------------------------------- Turn 10 ----------------------------------------
-Capturing expression...
-  Expression: Sad (0.56)
-Listening...
-  Recording from Mac mic (up to 18.0s, stops after silence)...
-    [0.5s] RMS: 341 ░    [0.8s] RMS: 639 ░    [1.0s] RMS: 608 ░    [1.2s] RMS: 543 ░    [1.5s] RMS: 714 ░    [1.8s] RMS: 686 ░    [2.0s] RMS: 659 ░    [2.2s] RMS: 696 ░    [2.5s] RMS: 621 ░    [2.8s] RMS: 698 ░    [3.0s] RMS: 581 ░    [3.2s] RMS: 686 ░    [3.5s] RMS: 715 ░    [3.8s] RMS: 669 ░    [4.0s] RMS: 744 ░    [4.2s] RMS: 709 ░    [4.5s] RMS: 711 ░    [4.8s] RMS: 751 ░    [5.0s] RMS: 693 ░    [5.2s] RMS: 730 ░    [5.5s] RMS: 672 ░    [5.8s] RMS: 620 ░    [6.0s] RMS: 647 ░    [6.2s] RMS: 706 ░    [6.5s] RMS: 730 ░    [6.8s] RMS: 677 ░    [7.0s] RMS: 726 ░    [7.2s] RMS: 614 ░    [7.5s] RMS: 752 ░    [7.8s] RMS: 917 ░    [8.0s] RMS: 771 ░
-  Recording saved (8.0s, speech=no).
-  Vocal emotion: neutral (0.00): LOW CONFIDENCE, treating as neutral
-  Volume RMS: 684
-  No speech chunk detected (floor=1043); skipping transcription.
-  Heard: (silence)
-
----------------------------------------- Turn 11 ----------------------------------------
-Capturing expression...
-  Expression: Sad (0.50): LOW CONFIDENCE, treating as Neutral
-Listening...
-  Recording from Mac mic (up to 18.0s, stops after silence)...
-    [0.5s] RMS: 459 ░    [0.8s] RMS: 829 ░    [1.0s] RMS: 835 ░    [1.2s] RMS: 861 ░    [1.5s] RMS: 800 ░    [1.8s] RMS: 1210 ▓    [2.0s] RMS: 766 ░    [2.2s] RMS: 812 ░    [2.5s] RMS: 1357 ▓    [2.8s] RMS: 1067 ▓    [3.0s] RMS: 766 ░    [3.2s] RMS: 708 ░    [3.5s] RMS: 618 ░    [3.8s] RMS: 716 ░    [4.0s] RMS: 1125 ▓    [4.2s] RMS: 1023 ░    [4.5s] RMS: 697 ░    [4.8s] RMS: 809 ░    [5.0s] RMS: 1148 ▓    [5.2s] RMS: 1369 ▓    [5.5s] RMS: 1231 ▓    [5.8s] RMS: 1396 ▓    [6.0s] RMS: 966 ░    [6.2s] RMS: 1064 ▓    [6.5s] RMS: 1093 ▓    [6.8s] RMS: 843 ░    [7.0s] RMS: 1400 ▓    [7.2s] RMS: 1096 ▓    [7.5s] RMS: 900 ░    [7.8s] RMS: 1040 ░    [8.0s] RMS: 1064 ▓    [8.2s] RMS: 2513 ▓    [8.5s] RMS: 2049 ▓    [8.8s] RMS: 2008 ▓    [9.0s] RMS: 2558 ▓    [9.2s] RMS: 1374 ▓    [9.5s] RMS: 2115 ▓    [9.8s] RMS: 1388 ▓    [10.0s] RMS: 1921 ▓    [10.2s] RMS: 1152 ▓    [10.5s] RMS: 1751 ▓    [10.8s] RMS: 881 ░    [11.0s] RMS: 598 ░    [11.2s] RMS: 647 ░    [11.5s] RMS: 767 ░    [11.8s] RMS: 712 ░    [12.0s] RMS: 621 ░    [12.2s] RMS: 590 ░    [12.5s] RMS: 624 ░    [12.8s] RMS: 613 ░    [13.0s] RMS: 662 ░    [13.2s] RMS: 2232 ▓    [13.5s] RMS: 2822 ▓    [13.8s] RMS: 3606 ▓    [14.0s] RMS: 2494 ▓    [14.2s] RMS: 1824 ▓    [14.5s] RMS: 1907 ▓    [14.8s] RMS: 1394 ▓
+    [0.5s] RMS: 0 ░    [0.8s] RMS: 0 ░    [1.0s] RMS: 35 ░    [1.2s] RMS: 18 ░    [1.5s] RMS: 16 ░    [1.8s] RMS: 11 ░
   [Dashboard] Quit requested.
-    [15.0s] RMS: 1715 ▓    [15.2s] RMS: 1510 ▓    [15.5s] RMS: 796 ░    [15.8s] RMS: 694 ░    [16.0s] RMS: 650 ░    [16.2s] RMS: 3245 ▓    [16.5s] RMS: 4206 ▓    [16.8s] RMS: 4449 ▓    [17.0s] RMS: 2772 ▓    [17.2s] RMS: 1076 ▓    [17.5s] RMS: 678 ░    [17.8s] RMS: 4898 ▓    [18.0s] RMS: 2877 ▓
-  Recording saved (18.0s, speech=yes).
-  Vocal emotion: calm (0.62)
-  Volume RMS: 1695
+    [2.0s] RMS: 10 ░    [2.2s] RMS: 11 ░    [2.5s] RMS: 10 ░    [2.8s] RMS: 11 ░    [3.0s] RMS: 11 ░    [3.2s] RMS: 14 ░    [3.5s] RMS: 29 ░    [3.8s] RMS: 19 ░    [4.0s] RMS: 31 ░    [4.2s] RMS: 13 ░    [4.5s] RMS: 10 ░    [4.8s] RMS: 10 ░    [5.0s] RMS: 18 ░    [5.2s] RMS: 15 ░    [5.5s] RMS: 10 ░    [5.8s] RMS: 9 ░

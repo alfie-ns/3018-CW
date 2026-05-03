@@ -52,5 +52,5 @@ cleanup() {
 }
 trap cleanup INT TERM
 
-"$VENV_PYTHON" -u gaze.py &
+"$VENV_PYTHON" -u gaze22.py &
 wait $!
