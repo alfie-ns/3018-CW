@@ -67,6 +67,8 @@ The five segments above are preserved as historical reference; the restructured 
 
 **If you freeze, anchor on:** *It watches five things at once and no single one wins on its own; they vote.*
 
+> *"The architecture is hybrid: perception and inference run on the Mac (mic, webcam, all classifiers) whilst Pepper handles output (TTS, gestures, LEDs). And indeed this split is deliberate -- Pepper's onboard mic is noisy enough to make Whisper hallucinate (the Khmer-script test is herein) and its camera streams at ~10 fps against the local webcam's ~30; thus the brain works locally to offload inference and display, whilst Pepper handles embodied delivery."*
+
 References:
 - gaze22.py:{very exact page number when screen recording} (docstring header; 5-signal hierarchy, voice rationale, modes, Whisper-gating stack, wake-word history, TCP plus decoupled-detection, authorship -- all in the docstring block)
 - gaze22.py:{very exact page number when screen recording} (`has_wake_word()` Vosk gate; **bypassed in production** via `transcribe(bypass_wake_word=True)`; the function is preserved as engineering history)
@@ -165,6 +167,7 @@ On-screen evidence: model-summary print of the WS-10 CNN architecture; before/af
 - "Five-state belief estimate, not a binary engaged-or-not"
 - "The engine adapts difficulty and infers the user's state based on the fraction correct over the most recent (up to) five rounds" -- defines rolling correctness in one sentence; spoken cleanly, no jargon
 - "The prompt is never the same twice; adaptivity lives in prompt-state, not in the LLM weights"
+- "The architecture is hybrid: input and inference local, output via Pepper -- the brain sits where the signals are clean, the body sits where the embodied delivery is"
 
 ## Edge Cases to Avoid During Filming
 
