@@ -2,13 +2,14 @@
 GAZE: Game-Adaptive Zone of Engagement.
 
 A Pepper (NAO) countdown-game host. The robot adapts difficulty,
-pacing and feedback per turn from five signals (each paired with the function wherein it is produced):
+pacing and feedback per turn from six signals (each paired with the function wherein it is produced):
     1- facial expression:  (CNN, WS-10)         primary       --->     capture_and_classify() / FacialExpressionModel.predict()
     2- answer correctness: (performance)        primary       --->     check_answer() (GPT-4.1 verifier)
     3- response time:      (behavioural)        primary       --->     time.time() - question_start (main loop)
-    4- speech volume:      (RMS)                secondary     --->     local_record() / nao_record() (RMS per audio chunk)
-    5- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() / SpeechEmotionModel.predict()
-    All five fan in to: AdaptiveEngine.infer_state() -> AdaptiveEngine.decide()
+    4- verbal answer:      (Whisper text)       primary       --->     transcribe() (Whisper-1 verbose_json)
+    5- volume RMS:         (acoustic arousal)   secondary     --->     measure_volume() (RMS over the canonical 16 kHz WAV)
+    6- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() / SpeechEmotionModel.predict()
+    All six fan in to: AdaptiveEngine.infer_state() -> AdaptiveEngine.decide()
 
 NOVELTY:
 Multi-signal integration: single signals are not trusted alone. Voice is only consulted when the
@@ -23,7 +24,7 @@ ARCHITECTURE: gpt-5.4 converse with access to four function-calling tools:
 
 Initially used a wake-word defence but became unnecessary
 
-`AdaptiveEngine`: five signals and adapt (change based on inference) difficulty, pacing/think-budget, and game-switching:
+`AdaptiveEngine`: six signals and adapt (change based on inference) difficulty, pacing/think-budget, and game-switching:
  - GPT-4.1 for yes/no checks (check_answer, is_goodbye, resume-intent)
  - GPT-5.4 for the main converse loop and question generation.
 
@@ -410,7 +411,7 @@ class AdaptiveDecision:
 
 
 class AdaptiveEngine:
-    "Takes all five input signals and *infers* the user's real state. The adaptive engine also evaluates if its previous adaptation worked, feeding that evaluation into the next round's prompt."
+    "Takes all six input signals and *infers* the user's real state. The adaptive engine also evaluates if its previous adaptation worked, feeding that evaluation into the next round's prompt."
 
     def __init__(self):
         self.history: list[RoundResult] = []
