@@ -1,5 +1,5 @@
 ---
-title: "COMP3018: Report (Literature Review & Programming Project)"
+title: "COMP3018: Report (Task-3 Literature Review & Task-4 Programming Project)"
 subtitle: "Cognitive Robotics"
 header-includes:
   - \usepackage{graphicx}
@@ -30,303 +30,6 @@ header-includes:
         showstringspaces=false
       }
 ---
-<!--
-# TODO
-
-- [X] verify word count — Task 3 post Tier-1 trim: 1183 strict (excluding quotes/captions/code/math/refs/citations) → under 1800; 1842 standard (counting inline-quoted prose) → +42 over by lenient reading. Cuts: §1.4.2 digital-divide para (-30w), §1.2 euCognition opener (-10w), §1.3.1 prospection example (-4w), §1.5 future-applications sentence (-35w) = -79w total. 2026-05-03
-
-<!--
-### VERIFY PAGE NUMBERS (check each against the actual PDF)
-
-#### Sandini, Sciutti and Vernon (2021) -- `papers/2021_Sandini_et_al.pdf`
-
-| OK?   | Line(s) | Section | Citation as written                      | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | ---------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 363     | S1.1    | Sandini, Sciutti and Vernon (2021, Overview) | NO VISIBLE PAGE | "Cognitive Robotics" Springer encyclopaedia entry. The first PDF page has NO visibly-printed page number — the "1, 2, 3" superscripts next to authors are affiliation markers, not page numbers. Quoted phrase appears in the **Overview** section (right column, paragraph "In fact, the field of cognitive robotics combines..."): "system-level integration of a range of cognitive abilities, including sensorimotor skills, knowledge representation and reasoning, and social interaction". Cited by section per `feedback_visual_page_numbers`. The original prose contained a fabricated quoted phrase ("sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot") that does NOT appear verbatim in this source nor in Vernon 2007 nor Sciutti 2023; replaced with verbatim wording. Reference entry added to bibliography with link http://www.vernon.eu/publications/2021_Sandini_et_al.pdf. verified 2026-05-03 |
-
-#### Vernon, Metta and Sandini (2007) -- `papers/Vernon, Metta and Sandini (2007) - A Survey of Artificial Cognitive Systems.pdf`
-
-| OK?   | Line(s)  | Section    | Citation as written           | Go to page... | You should see...                                                                                    |
-| ----- | -------- | ---------- | ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | ~~298, 304~~ | ~~S1.1, S1.2~~ | RESOLVED 2026-05-03 | RESOLVED      | Misattributed first sentence dropped from line 319; cycle is now attributed only via figure caption (Vernon, Metta and Sandini, 2007) which legitimately backs the "virtuous cycle" framing on p. 151. Vernon (2007) still cited at line 311 (p. 151) for the original cycle quote |
-| - [X] | ~~306~~      | ~~S1.2~~       | RESOLVED 2026-05-03 | RESOLVED      | Vernon citation dropped from line 321; Laird (2012, p. 225) now carries the episodic-vs-semantic typology alone. Saves 5 words and removes misattribution                                                                                                                                                                                                                                                       |
-| - [X] | 311      | S1.1       | Vernon, Metta and Sandini (2007, p. 151) | p. 151 | "virtuous cycle that is embedded in an ongoing process of action and perception" appears on p. 151 (between PDF start and visible "152" header). verified 2026-05-03 |
-
-#### Sciutti et al. (2023) -- `papers/Sciutti et al. (2023) - The Present and the Future of Cognitive Robotics.pdf`
-
-| OK?   | Line(s)            | Section   | Citation as written                                                                 | Go to page... | You should see...                                                                                                                 |
-| ----- | ------------------ | --------- | ----------------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 298, 304, 314, 509 | S1.1-S2.2 | Sciutti et al. (2023, p. 160)                                                       | p. 160        | "flexible, context-sensitive action, knowing what they are doing and why"; "reason about their actions and modify their behavior". verified 2026-05-03 via PDF extraction (article spans pp. 160-163; "163" footer visible on PDF p. 4) |
-| - [X] | ~~302~~ → 316 | ~~S1.2~~ | RESOLVED: re-attributed to Sandini, Sciutti and Vernon (2021) encyclopaedia entry | RESOLVED | The "intersection of Robotics, Artificial Intelligence, and Cognitive Sciences" framing is from the Sandini, Sciutti & Vernon (2021) encyclopaedia entry, not Sciutti et al. (2023). Citation corrected at line 316 to the right source. resolved 2026-05-03 |
-| - [X] | 350                | S1.5      | Sciutti et al. (2023, p. 161)                                                       | p. 161        | "integrating machine learning techniques with model-based approaches" appears solely on p. 161 (between visible "161" header and visible "162" header). Citation corrected from pp. 162-163. verified 2026-05-03 |
-
-#### Tapus, Matarić and Scassellati (2007) -- `papers/Tapus, Matarić and Scassellati (2007) - Socially Assistive Robotics.pdf`
-
-| OK?   | Line(s) | Section | Citation as written          | Go to page... | You should see...                                                     |
-| ----- | ------- | ------- | ---------------------------- | ------------- | --------------------------------------------------------------------- |
-| - [X] | 312     | S1.3.1  | Tapus et al. (2007, *.pdf*-p. 1) | *.pdf*-p. 1   | PARO listed: "robotic animal toys, such as a seal (i.e., PARO [2])". verified 2026-05-03; visible "1" in PDF preprint header (manuscript pagination; published IEEE version starts at p. 35) |
-| - [X] | 603     | S2.2    | Tapus et al. (2007, *.pdf*-p. 1) | *.pdf*-p. 1   | "helping human users through social rather than physical interaction" on local PDF p. 1 (visible "1" in IEEE preprint header; published IEEE pagination is pp. 35-42). Citation corrected from p. 35 to *.pdf*-p. 1 per `feedback_pdf_page_prefix`. verified 2026-05-03 |
-
-#### Wada and Shibata (2007) -- `papers/Wada and Shibata (2007) - Living With Seal Robots.pdf`
-
-| OK?   | Line(s)  | Section        | Citation as written             | Go to page... | You should see...                                                                                  |
-| ----- | -------- | -------------- | ------------------------------- | ------------- | -------------------------------------------------------------------------------------------------- |
-| - [X] | 309, 361, 391 | S1.3.1, S1.4.2 | Wada and Shibata (2007, p. 972, p. 973, p. 978) | pp. 972/973/978 | p. 972 (Abstract): "increased their social interaction"; p. 973: "more active and more communicative, both with each other and their caregivers" (line 107-109 of layout extraction, between visible "973" and "974" headers); p. 978 (Table II): hormone "significantly improved". Citations corrected from blanket p. 974 to specific journal pages. verified 2026-05-03 |
-
-#### Fong, Nourbakhsh and Dautenhahn (2003) -- `papers/Fong, Nourbakhsh and Dautenhahn (2003) - A Survey of Socially Interactive Robots.pdf`
-
-| OK?   | Line(s)  | Section      | Citation as written        | Go to page... | You should see...                                                                                                                                      |
-| ----- | -------- | ------------ | -------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| - [X] | 314      | S1.3.1       | Fong et al. (2003, p. 145) | p. 145        | Section 1.2; Breazeal's four classes of social robots; "shallow models of social cognition" under Social Interface. verified 2026-05-03; visible "145" in page header                                  |
-| - [X] | 375      | S1.3.3       | Fong et al. (2003, p. 149) | p. 149        | Section 2.3 Embodiment introduction: "embodiment as 'that which establishes a basis for structural coupling by creating the potential for mutual perturbation between system and environment'... perturbatory channels" — visible "149" in PDF page header. verified 2026-05-03 |
-| - [X] | ~~603~~ | ~~S2.2~~     | RESOLVED: citation removed | RESOLVED      | Original citation `(Fong et al., 2003, p. 148)` was misattributed; p. 148 covers "Functionally designed" approach, not single-signal/unisensory affect detection. Calvo and D'Mello (2010, p. 28) cited in next sentence already supports the unisensory claim. Fong citation dropped from line 603. resolved 2026-05-03 |
-
-#### Lee and See (2004) -- `papers/Lee and See (2004) - Trust in Automation Designing for Appropriate Reliance.pdf`
-
-| OK?   | Line(s) | Section | Citation as written       | Go to page... | You should see...                                                                                                                                         |
-| ----- | ------- | ------- | ------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 367     | S1.3.2  | Lee and See (2004, *.pdf*-p. 6) | *.pdf*-p. 6 | Italicized formal definition: "Trust is the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability" — visible "6" page header on local PDF (Word manuscript draft, October 2003). Journal pp. 50-80; local p. 6 = journal p. 55. Citation corrected from p. 54 to *.pdf*-p. 6 per `feedback_pdf_page_prefix`. verified 2026-05-03 |
-
-#### Hancock et al. (2011) -- `papers/Hancock et al. (2011) - A Meta-Analysis of Factors Affecting Trust in Human-Robot Interaction.pdf`
-
-| OK?   | Line(s)  | Section        | Citation as written                                                         | Go to page... | You should see...                                                                               |
-| ----- | -------- | -------------- | --------------------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
-| - [X] | 369, 383 | S1.3.2, S1.4.1 | Hancock et al. (2011, p. 522) -- performance strongest predictor            | p. 522        | Table 1 + surrounding prose: "performance factors were more strongly associated (r = +0.34) with trust development" + Cohen's d values. visible "522" page header confirmed. verified 2026-05-03 |
-| - [X] | ~~318~~  | ~~S1.3.2~~    | RESOLVED: replaced with Kaelbling p. 105 | RESOLVED | Misattributed POMDP-style "observation cannot reliably disambiguate" claim was originally cited to Hancock p. 522, but Hancock does not make this POMDP claim. Now cited to Kaelbling, Littman and Cassandra (1998, p. 105, *3. Partial observability*) which uses "disambiguation of the states" verbatim. resolved 2026-05-03 |
-| - [X] | 383      | S1.4.1         | Hancock et al. (2011, p. 522) -- moderate variance                          | p. 522        | Body text on p. 522: "moderate global effect between trust and all factors influencing HRI (r– = +0.26)". "29 studies" total is in the abstract (p. 517), but moderate-variance finding is on p. 522 where the citation is positioned. Prose updated from "modest" to "moderate" (paper's exact wording). verified 2026-05-03 |
-
-#### Chen et al. (2020) -- `papers/Chen et al. (2020) - Trust-Aware Decision Making for Human-Robot Collaboration.pdf`
-
-| OK?   | Line(s) | Section | Citation as written      | Go to page...          | You should see...                                                                                                      |
-| ----- | ------- | ------- | ------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 369     | S1.3.2  | Chen et al. (2020, p. 6) | p. 6 (article page :6) | Section 3.4 "Maximizing team performance" begins on p. 6; Fig. 3 (Trust-POMDP graphical model) on p. 6; "We maintain a belief b over the human's trust" appears within p. 6 (between visible ":6" and ":7" article-page headers). verified 2026-05-03 |
-
-#### Garcez and Lamb (2023) -- `papers/Garcez and Lamb (2023) - Neurosymbolic AI The 3rd Wave.pdf`
-
-| OK?   | Line(s)       | Section            | Citation as written              | Go to page...                                                                          | You should see...                                                                                                              |
-| ----- | ------------- | ------------------ | -------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| - [X] | 320, 511, 663 | S1.3.2, S2.2, S2.5 | Garcez and Lamb (2023, *.pdf*-p. 1) | *.pdf*-p. 1 (arXiv preprint pagination) | Title "Neurosymbolic AI: The 3rd Wave" + introduction lays out third-wave framing. Local PDF is arXiv preprint with visible "1" footer; journal pp. 12387-12406 NOT printed on this PDF, so cited via visible preprint page with `*.pdf*-` prefix per `feedback_pdf_page_prefix`. verified 2026-05-03 |
-
-#### Nikolaidis, Hsu and Srinivasa (2017) -- `papers/Nikolaidis, Hsu and Srinivasa (2017) - Human-Robot Mutual Adaptation in Collaborative Tasks.pdf`
-
-| OK?   | Line(s)  | Section        | Citation as written              | Go to page... | You should see...                                                                               |
-| ----- | -------- | -------------- | -------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
-| - [X] | 369, 977 | S1.3.2, S2.3.3 | Nikolaidis et al. (2017, p. 625) | p. 625        | "U = 180, p = 0.048" + "69 samples" both appear on p. 625 (between visible "624" and "626" page headers; also visible "Nikolaidis et al. 625" odd-page header). verified 2026-05-03 |
-| - [X] | 383      | S1.4.1         | Nikolaidis et al. (2017, p. 626) | p. 626        | r = -0.066 stat + "We attribute this to the MOMDP formulation allowing the robot to reason over its estimate on the adaptability of its teammate" lies on p. 626 (between visible "626" and "627"/section 7.3 headers). Citation corrected from p. 627 to p. 626. verified 2026-05-03 |
-
-#### Brooks (1991) -- `papers/Brooks (1991).pdf`
-
-| OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                                                                    |
-| ----- | ------- | ------- | ---------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 326     | S1.3.3  | Brooks (1991, Introduction) | NO VISIBLE PAGE | "use the world as its own model" in §1 Introduction (PDF page 1); journal pagination (139) is NOT printed on PDF. Cited by section per `feedback_visual_page_numbers`. verified 2026-05-03 |
-
-#### Matarić et al. (2007) -- `papers/Mataric et al. (2007).pdf`
-
-| OK?   | Line(s) | Section | Citation as written             | Go to page... | You should see...                                                                                           |
-| ----- | ------- | ------- | ------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
-| - [X] | 326     | S1.3.3  | Matarić et al. (2007, *.pdf*-p. 7) | *.pdf*-p. 7   | Embodiment Results section: "physically present robot to be the most watchful and enjoyable... pilot study support the hypothesis". verified 2026-05-03; visible "Page 7 of 9" footer (BMC open-access pagination, not journal)                                |
-
-#### Tapus, Ţăpuş and Matarić (2008) -- `papers/Tapus, Tapus and Mataric (2008).pdf`
-
-| OK?   | Line(s) | Section | Citation as written                          | Go to page... | You should see...                                                                                                |
-| ----- | ------- | ------- | -------------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------- |
-| - [X] | 326     | S1.3.3  | Tapus, Ţăpuş and Matarić (2008, Abstract) | NO VISIBLE PAGE | Abstract: "interaction distances/proxemics, speed, and vocal content... toward customized post-stroke rehabilitation therapy based on the user's personality traits and task performance". HAL preprint has no visible page number on abstract. verified 2026-05-03 |
-
-#### Papadimitriou and Tsitsiklis (1987) -- `papers/Papadimitriou and Tsitsiklis (1987) - The Complexity of Markov Decision Processes.pdf`
-
-| OK?   | Line(s) | Section | Citation as written                         | Go to page... | You should see...                                          |
-| ----- | ------- | ------- | ------------------------------------------- | ------------- | ---------------------------------------------------------- |
-| - [X] | 332     | S1.4.1  | Papadimitriou and Tsitsiklis (1987, p. 448) | p. 448        | Theorem 6: "The partially observed problem is PSPACE-hard, even if the process is stationary...". verified 2026-05-03; visible "448" in page header (PDF is image scan; visually verified) |
-
-#### Pineau, Gordon and Thrun (2003) -- `papers/Pineau, Gordon and Thrun (2003) - Point-Based Value Iteration An Anytime Algorithm for POMDPs.pdf`
-
-| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                     |
-| ----- | ------- | ------- | ----------------------------- | ------------- | --------------------------------------------------------------------- |
-| - [X] | 381     | S1.4.1  | Pineau et al. (2003, p. 1025) | p. 1025       | First page abstract: "This paper introduces the Point-Based Value Iteration (PBVI) algorithm for POMDP planning". Visible "1025" page header confirmed. verified 2026-05-03 |
-
-#### Kaelbling, Littman and Cassandra (1998) -- `papers/Kaelbling, Littman and Cassandra (1998) - Planning and Acting in Partially Observable Stochastic Domains.pdf`
-
-| OK?   | Line(s)  | Section      | Citation as written             | Go to page... | You should see...                                                                                                                              |
-| ----- | -------- | ------------ | ------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 367      | S1.3.2       | Kaelbling et al. (1998, p. 105, *3. Partial observability*) | p. 105 | "disambiguation of the states" wording in §3 Partial observability is the canonical statement. Citation moved here from misattributed Hancock context. resolved 2026-05-03 |
-| - [X] | ~~381, 663~~ | ~~S1.4.1, S2.5~~ | RESOLVED: dropped from p. 1025 PBVI citation | RESOLVED | Original p. 120 was wrong (tiger toy problem, not PBVI). Pineau, Gordon and Thrun (2003, p. 1025) alone correctly covers PBVI introduction; Kaelbling 1998 doesn't introduce PBVI. Citation removed from line 381. resolved 2026-05-03 |
-
-#### Silver and Veness (2010) -- `papers/Silver and Veness (2010) - Monte-Carlo Planning in Large POMDPs.pdf`
-
-| OK?   | Line(s) | Section | Citation as written            | Go to page... | You should see...                                                     |
-| ----- | ------- | ------- | ------------------------------ | ------------- | --------------------------------------------------------------------- |
-| - [X] | 381     | S1.4.1  | Silver and Veness (2010, p. 1) | p. 1          | Abstract: "This paper introduces a Monte-Carlo algorithm for online planning in large POMDPs". First page; visible "1" page header. verified 2026-05-03 |
-
-#### Broadbent, Stafford and MacDonald (2009) -- `papers/Broadbent et al. (2009).pdf`
-
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see... |
-| ----- | ------- | ------- | -------------------------------- | ------------- | ----------------- |
-| - [X] | 334     | S1.4.1  | Broadbent et al. (2009, Abstract) | NO VISIBLE PAGE | Abstract: "matching the robot's role, appearance and behaviour to these needs... another way to increase acceptance may be to modify the expectations of users". PDF p. 1 has no visible "319" header; only "Int J Soc Robot (2009) 1: 319-330" volume:pages. verified 2026-05-03 |
-
-#### Desai et al. (2013) -- `papers/Desai et al. (2013) - Impact of Robot Failures and Feedback on Real-Time Trust.pdf`
-
-| OK?   | Line(s)  | Section        | Citation as written         | Go to page... | You should see...                                                                                                                                                        |
-| ----- | -------- | -------------- | --------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| - [X] | 383, 843 | S1.4.1, S2.3.3 | Desai et al. (2013) -- no page | NO VISIBLE PAGE | Local PDF is HRI 2013 conference paper with no printed page numbers anywhere. Page number dropped from all three citations (lines 383, 837, 843) per `feedback_visual_page_numbers`. Cited as `(Desai et al., 2013)` without page. resolved 2026-05-03 |
-
-#### Wachter, Mittelstadt and Floridi (2017) -- `papers/Wachter, Mittelstadt and Floridi (2017) - Why a Right to Explanation Does Not Exist in the GDPR.pdf`
-
-| OK?   | Line(s) | Section | Citation as written            | Go to page...                                     | You should see...                                                                                                        |
-| ----- | ------- | ------- | ------------------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| - [X] | 340     | S1.4.2  | Wachter et al. (2017, Abstract) | NO VISIBLE PAGE | Title + Abstract: "Why a right to explanation of automated decision-making does not exist in the GDPR... there are several reasons to doubt both the legal existence and the feasibility of such a right". SSRN preprint title page has no visible page number. verified 2026-05-03 |
-
-#### Sharkey (2014) -- `papers/Sharkey (2014) - Robots and Human Dignity.pdf`
-
-| OK?   | Line(s) | Section | Citation as written           | Go to page...                   | You should see...                                                                                                                                             |
-| ----- | ------- | ------- | ----------------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 342     | S1.4.2  | Sharkey (2014, *.pdf*-p. 6)   | *.pdf*-p. 6                     | "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences would also be likely to negatively affect their feelings of dignity" in Nordenfelt Dignity of Identity context. verified 2026-05-03; visible "6" at PDF p. 7 footer (manuscript pagination, not journal) |
-
-#### Sharkey and Sharkey (2012) -- `papers/Sharkey and Sharkey (2012) - Granny and the Robots Ethical Issues in Robot Care for the Elderly.pdf`
-
-| OK?   | Line(s) | Section | Citation as written               | Go to page... | You should see...                                                                               |
-| ----- | ------- | ------- | --------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
-| - [X] | 401     | S1.5    | Sharkey and Sharkey (2012, *.pdf*-p. 1) | *.pdf*-p. 1 | Abstract on local PDF p. 1 (visible "1" page footer): the six ethical concerns including "(i) the potential reduction in the amount of human contact" — supports the replacement-vs-supplement claim. Local manuscript pagination (preprint); journal pp. 27-40 not printed. Citation corrected from p. 27 to *.pdf*-p. 1 per `feedback_pdf_page_prefix`. verified 2026-05-03 |
-
-#### Ahn et al. (2022) -- `papers/Ahn et al. (2022) - Do As I Can Not As I Say Grounding Language in Robotic Affordances.pdf`
-
-| OK?   | Line(s) | Section | Citation as written     | Go to page... | You should see...                                                                                                       |
-| ----- | ------- | ------- | ----------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 605, 623 | S2.2, S2.3.1 | Ahn et al. (2022, *.pdf*-p. 1) | *.pdf*-p. 1 | Abstract on local arXiv preprint p. 1 (visible "1" header): "constrain the model to propose natural language actions that are both feasible and contextually appropriate". arXiv:2204.01691v2 preprint pagination distinct from CoRL 2022 PMLR proceedings pagination. Citation updated to *.pdf*-p. 1 per `feedback_pdf_page_prefix`. verified 2026-05-03 |
-
-#### Smedegaard (2019) -- `papers/Smedegaard (2019) - Reframing the Role of Novelty within Social HRI from Noise to Information.pdf`
-
-| OK?   | Line(s)  | Section    | Citation as written     | Go to page...               | You should see...                                                                                                                    |
-| ----- | -------- | ---------- | ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| - [X] | 605, 1025 | S2.2, S2.5 | Smedegaard (2019, p. 414, Experiential novelty) | p. 414 | Section "B. Experiential novelty" content with three insights about novelty including "novelty is essentially an 'original feature of experience'" appears on p. 414 (visible "414" page footer; HRI '19 proceedings pagination is what's printed on the PDF). Citation corrected from p. 4 (local) to p. 414 (visible/proceedings) per `feedback_visual_page_numbers`. verified 2026-05-03 |
-
-#### Ji et al. (2023) -- `papers/Ji et al. (2023) - Survey of Hallucination in Natural Language Generation.pdf`
-
-| OK?   | Line(s) | Section | Citation as written    | Go to page... | You should see...                                                                                                                                                                                        |
-| ----- | ------- | ------- | ---------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 712, 1008 | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | §1 INTRODUCTION on p. 3 introduces both *degeneration* ("bland, incoherent, or gets stuck in repetitive loops") AND hallucination ("Researchers started referring to such undesirable generation as hallucination... Hallucination in NLG is concerning because it hinders performance and raises safety concerns"). Visible "3" odd-page header. Both citations on p. 3 verified. verified 2026-05-03 |
-| - [X] | 596     | S2.3.2  | Ji et al. (2023, p. 3) | p. 3          | *degeneration* defined; output that is "bland, incoherent, or gets stuck in repetitive loops" (§1 INTRODUCTION, para. 2, sent. 3). verified 2026-04-22 via PDF extraction (cross-checked with Gemini) |
-
-#### Laird (2012) -- `papers/The-Soar-Cognitive-Architecture-The-MIT-Press-2012-John-E-Laird.pdf`
-
-| OK?   | Line(s) | Section | Citation as written       | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | ------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 322     | S1.2    | Laird (2012, p. 225)      | p. 225        | Chapter 9 Episodic Memory opens p. 225: "It is what you 'remember,' and it includes contextualized information about specific events"; "In contrast, semantic memory is what you 'know'". verified 2026-05-03 |
-| - [X] | 354     | S1.2 (fig caption) | Laird (2012, fig. 4.7, p. 79); Laird (2012, p. 79); Laird (2012, p. 164) | pp. 79, 164 | p. 79: §4.3 "The Soar Processing Cycle" with figure 4.7 + "consists of four phases: Input, Operator Selection, Operator Application, and Output". p. 164: §6.2 "The most significant effect of chunking is that it eliminates processing in substates for situations similar to ones experienced in the past" (followed by visible "Chunking 165" page header). verified 2026-05-03 |
-| - [X] | 364     | S1.3.1  | Laird (2012, p. 233)      | p. 233        | "Episodic Memory 233" page header followed by "An agent's perception of its environment is limited both spatially and temporally—that is, to the here and now". verified 2026-05-03 |
-
-#### Calvo and D'Mello (2010) -- `papers/Calvo D'Mello (2010).pdf`
-
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | -------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 604     | S2.2    | Calvo and D'Mello (2010, p. 28)  | p. 28         | "the inherent challenges with unisensory affect detection, which increase in multisensory environments" — content begins right after visible "28 IEEE TRANSACTIONS ON AFFECTIVE COMPUTING" left-page header. verified 2026-05-03 |
-
-#### Poria et al. (2017) -- `papers/Poria (2017).pdf`
-
-| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 604     | S2.2    | Poria et al. (2017, p. 99)    | p. 99         | "systems were consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83% (median of 6.60%)" — quote appears just before visible "100 S. Poria et al. / Information Fusion 37 (2017) 98-125" page header, hence on p. 99. verified 2026-05-03 |
-
-#### Ekman and Friesen (1971) -- `papers/Ekman Friesen (1971).pdf`
-
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | -------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 630     | S2.3.2  | Ekman and Friesen (1971, p. 128) | p. 128        | DISCUSSION section on p. 128 (visible "Constants Across Cultures in the Face and Emotion 128" odd-page header): "particular facial behaviors are universally associated with particular emotions"; "minimal opportunity to have learned to recognize uniquely Western facial expressions". PDF is image-scan; page numbers visually verified. Citation corrected from pp. 127-128 to p. 128 (p. 127 has Tables 1+2 + methodology, neither quote appears there). verified 2026-05-03 |
-
-#### Li and Deng (2020) -- `papers/Li Deng (2020).pdf`
-
-| OK?   | Line(s) | Section | Citation as written      | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | ------------------------ | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 630     | S2.3.2  | Li and Deng (2020, p. 1) | p. 1          | §1 Introduction on p. 1 (visible "1" page header): "[the discrete-emotion view] is still the most popular perspective for FER due to its pioneering investigations". verified 2026-05-03 |
-
-#### El Ayadi, Kamel and Karray (2011) -- `papers/El Ayadi (2011).pdf`
-
-| OK?   | Line(s) | Section | Citation as written                              | Go to page... | You should see...                                                                                    |
-| ----- | ------- | ------- | ------------------------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------- |
-| - [X] | 792     | S2.3.2  | El Ayadi, Kamel and Karray (2011, p. 578)        | p. 578        | "the spectral features such as the MFCC are the most promising features for speech representation" appears on p. 578 (between visible "578 M. El Ayadi..." and "...579" page headers). Citation corrected from p. 577 to p. 578. verified 2026-05-03 |
-| - [X] | 792     | S2.3.2  | El Ayadi, Kamel and Karray (2011, p. 573)        | p. 573        | "Stevens [135] found that acted emotions tend to be more exaggerated than real ones" appears on p. 573 (between visible "...573" header at line 79 and "574..." header at line 148 of layout extraction). verified 2026-05-03 |
-| - [X] | 792     | S2.3.2  | (ibid., p. 574)                                  | p. 574        | "temporal information present in speech signals is completely lost" appears on p. 574 (between visible "574..." header at line 148 and "...575" header at line 228). verified 2026-05-03 |
-
-#### Picard (1997) -- `papers/Picard (1997) - Affective Computing.pdf`
-
-| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                                                                                   |
-| ----- | ------- | ------- | ----------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 517     | S2.2    | Picard (1997, p. 1, Abstract) | p. 1          | Abstract: "affective computing," computing that relates to, arises from, or influences emotions" (full founding definition). verified 2026-04-14 via PDF extraction |
-
-#### Spezialetti, Placidi and Rossi (2020) -- `papers/Spezialetti, Placidi and Rossi (2020) - Emotion Recognition for Human-Robot Interaction.pdf`
-
-| OK?   | Line(s) | Section | Citation as written                                          | Go to page... | You should see...                                                                                                                                                                           |
-| ----- | ------- | ------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 517     | S2.2    | Spezialetti, Placidi and Rossi (2020, pp. 1-2, Introduction) | pp. 1-2       | Introduction; bullet "Ability of robots to infer the human emotional state" (p. 2); reviews recognition across facial, vocal, brain, peripheral physiological channels. verified 2026-04-14 |
-
-#### Radford et al. (2023) -- `papers/Radford et al. (2023) - Robust Speech Recognition via Large-Scale Weak Supervision.pdf`
-
-| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                                                                                                               |
-| ----- | ------- | ------- | -------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| - [X] | 544     | S2.3.2  | (Radford et al., 2023, Abstract) | p. 1          | Abstract (final sentence): "When compared to humans, the models approach their accuracy and robustness". No inline page cited (PMLR volume-pagination not printed on page). verified 2026-04-14 |
-
----
-
-- [X] cite Iuliia Kotseruba1 · John K. Tsotsos1 — added at line 369 (cognitive checklist) + bibliography entry between Kaelbling and Laird, 2026-05-03
-- [X] use 'inference' natrually, i.e., not so perfect that it is likely ai generated but instead slightly not 100% correct like a human would do, ygm? — scanned 2026-05-03; usage already varied (italicised emphasis, contextual phrases like "from observable behaviour" / "from noisy behavioural proxies"), no AI-pattern detected
-
-## Mentor
-
-Scenario 1) patient takes meds = + 100 points
-Scenario 2) Patient is annoyed = -10 points
-When you implement tis you need to be careful to structure the rewards such that the system does not pester the patient as it seeks to maximise it's rewards
-You'll need to play around with the precise ratios between 1 (behaviour you want to encourage) and 2 (behaviour you want to discourage) to achieve the desired attitude from the robot
-
-## DR ALY QUESTIONS:
-
-- [ ] so maths and code won't affect word count right? However I never explcitly knew if captions within a figure-diagram count towards word count?
-
----
-
-## First-to-do:
-
-- [ ] **Most critical:** verify all page numbers and sentences manually
-- [ ] **Most critical:** verify all links to papers manually
-- [ ] do all page number TODOs
-- [ ] implement loads of peer-reviewed papers everywhere again
-
-## General:
-
-- [ ] ensure no overused complex words
-- [ ] Download Broadbent via Plymouth library
-- [ ] use wording from 3018 Task-4 Proposal Google Doc
-- [ ] talk about the LfD (learning-from-demonstration)
-- [ ] talk about IRL (inverse reinforcement learning)
-- [ ] relatively talk about how it relates to others, motivation
-- [X] USE ‘misclassified’- [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
-  `
-- [ ] ‘persons’
-  - [ ] maths and diagrams affect wordcount?
-  - [X] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
-- [X] peer-reviewed or conference papers
-- [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
-- [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
-- [ ] Then, refer to some studies that have utilised neural networks and naïve Bayes models in your area using the selected database
-- [ ] Ensure your literature review in the introduction explicitly cites papers that use your specific dataset (or very similar ones), establishing a clear baseline before you begin
-- [ ] TODO: talk about the LfD (learn-from-demonstration)
-
-  - [ ] TODO: talk about IRL (inverse reinforcement learning)
-- [ ] TODO: talk about the LfD (learn-from-demonstration)
-
-  - [ ] TODO: talk about IRL (inverse reinforcement learning)
-
-LECTURE 9 – TODOs FOR ASSESSMENT 2 REPORT
-Task 3: Literature Review (Assistive Robotics Essay):
-	- [X] Frame assistive robotics as requiring cognitive capabilities, not just social behaviour – use Aly’s hierarchy: “intelligence deployed over the social layer, not vice versa”
-	- [X] Reference Sciutti et al. (2023) definition of cognitive robotics (replaced Cangelosi book -- not peer-reviewed)
-	- [X] Use Vernon, Metta and Sandini (2007) cognition cycle (replaced Vernon 2014 book -- not peer-reviewed)
-	- [X] Discuss theory of mind, prospection, and episodic memory as future directions/current gaps in assistive robotics
-	- [X] Acknowledge the 42-definitions problem to argue the field still lacks consensus on what cognition actually is (shows critical thinking)
-	- [X] Connect embodied cognition (“intelligence means body”) to ethical implications of robots entering intimate care spaces
-Task 4: Programming Project (POMDP version superseded by GAZE)
-	- [X]	GET APPROVAL FROM ALY – confirm extending set exercises POMDP into cognitive architecture implementation is acceptable; confirm simulation-only is fine
-	- [X]	Wait for Lectures 10/11 on cognitive architectures before finalising design – Aly said the building blocks reappear in those lectures
--->
-
 # 1- Task (3) Literature Review
 
 ## 1.1. Introduction
@@ -341,9 +44,9 @@ However, most-current assistive robots operate at what Sciutti et al. (2023, p. 
 
 *Cognitive robotics:* defined by Sandini, Sciutti and Vernon (2021, Overview), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, integrating "sensorimotor skills, knowledge representation and reasoning, and social interaction." This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why*, and adapts accordingly, is *cognitive*.
 
-42 catalogued definitions of cognition (euCognition) share a common thread: anticipation, learning, and adaptation, intersected with perception and action to create autonomy (\mbox{Fig.~\ref{fig:soar-cycle}}). This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(i.e. prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Kotseruba and Tsotsos's (2020, Abstract) survey of 84 cognitive architectures organises them along precisely these abilities, thus corroborating the checklist's standing in the field. Sciutti et al. (2023, p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state.
+42 catalogued definitions of cognition share the common thread: anticipation, learning, and adaptation, intersected with perception and action to create autonomy (\mbox{Fig.~\ref{fig:soar-cycle}}). This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(i.e. prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Kotseruba and Tsotsos's (2020, Abstract) survey of 84 cognitive architectures organises them along precisely these abilities, thus corroborating the checklist's standing in the field. Sciutti et al. (2023, p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state.
 
-Furthermore, memory is not treated as a single uniform store (monolithic); Laird (2012, Chapter 9) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)* in implementational terms: episodic memory is "what you 'remember'" whilst semantic memory is "what you 'know'". For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered.
+Memory is not treated as a single uniform store (monolithic); Laird (2012, Chapter 9) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)* in implementational terms: episodic memory is "what you 'remember'" whilst semantic memory is "what you 'know'". For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered.
 
 \begin{figure}[H]
 \centering
@@ -364,7 +67,7 @@ Notwithstanding these benefits PARO operates at the reactive layer, possessing n
 
 Medication non-adherence imposes substantial costs on healthcare systems, and elderly patients with polypharmacy regimens particularly are vulnerable to missed or incorrect doses. Robots in this domain face a different challenge from therapeutic companionship: trust and cognitive load are latent variables, inferred only from *noisy-behavioural signals*. Lee and See (2004, *.pdf*-p. 6) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the unobservable nature that necessitates probabilistic modelling. A user might comply with a medication prompt despite low trust (e.g. time pressure), or indeed refuse despite high trust (e.g. task complexity), and thus, the observation alone cannot reliably disambiguate the underlying state (Kaelbling, Littman and Cassandra, 1998, p. 105, *3. Partial observability*).
 
-The Partially Observable Markov Decision Process (POMDP) provides formal machinery for this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a belief distribution over trust and selects actions that maximise long-term collaboration, showing belief-space planning outperforms fixed strategies. Garcez and Lamb (2023, *.pdf*-p. 1) advocate a neuro-symbolic paradigm wherein neural subsystems handle perception whilst symbolic subsystems (e.g. POMDPs) handle temporal reasoning. Nikolaidis, Hsu and Srinivasa (2017, p. 625) provide empirical corroboration: in a collaborative task (n = 69), robots utilising mutual adaptation via a Mixed Observability MDP (modelling human adaptability as a latent variable) were rated significantly more trustworthy than fixed-policy alternatives (U = 180, p = 0.048). This aligns with Hancock et al.'s (2011, p. 522) finding that performance is the strongest trust predictor.
+The Partially Observable Markov Decision Process (`POMDP`) provides formal machinery for this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a belief distribution over trust and selects actions that maximise long-term collaboration, showing belief-space planning outperforms fixed strategies. Garcez and Lamb (2023, *.pdf*-p. 1) advocate a neuro-symbolic paradigm wherein neural subsystems handle perception whilst symbolic subsystems (e.g. POMDPs) handle temporal reasoning. Nikolaidis, Hsu and Srinivasa (2017, p. 625) provide empirical corroboration: in a collaborative task (n = 69), robots utilising mutual adaptation via a Mixed Observability MDP (modelling human adaptability as a latent variable) were rated significantly more trustworthy than fixed-policy alternatives (U = 180, p = 0.048). This aligns with Hancock et al.'s (2011, p. 522) finding that performance is the strongest trust predictor.
 
 ### 1.3.3 Physical Rehabilitation and Mobility <!-- [ ] -->
 
@@ -378,7 +81,7 @@ Embodied cognition becomes essential. Brooks (1991, Introduction) argues that in
 
 Tapus, Matarić and Scassellati (2007, *.pdf*-p. 6) projected that by 2012 SAR systems would demonstrate "marked improvement in learning/training/recovery of the user"; yet PARO, the most-deployed platform nearly twenty years later, *still* cannot remember yesterday's session. Three challenges explain this. Firstly, computational intractability: solving $POMDPs$ exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple unobserved variables (trust, load, emotion) require tracking simultaneously.
 
-Secondly, the measurement problem: trust, cognitive load, and emotional state are not directly observable; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only moderate variance, whilst Broadbent, Stafford and MacDonald (2009, Abstract) note that acceptance depends on matching robot behaviour to user expectations, not trust alone. Desai et al. (2013) demonstrate trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into wrong actions. Nikolaidis, Hsu and Srinivasa (2017, p. 626), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner.
+Secondly, the measurement problem: trust, cognitive load, and emotional state are not directly observable; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only moderate variance, whilst Broadbent, Stafford and MacDonald (2009, Abstract) note that acceptance depends on matching robot behaviour to user expectations, not trust alone. Desai et al. (2013) demonstrate trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade. Nikolaidis, Hsu and Srinivasa (2017, p. 626), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner. Complementary paradigms address the same fragility differently: Learning-from-Demonstration (Argall et al., 2009, p. 469, Abstract) acquires policies from human-provided demonstrations, whilst Inverse Reinforcement Learning (Ng and Russell, 2000, *.pdf*-p. 1, Abstract) infers the user's reward function from observed behaviour rather than requiring it specified upfront, hence both bypass the brittleness of hand-coded thresholds.
 
 Finally, adaptation without exploitation: a robot that runs inference on cognitive load could time its medication requests to coincide with periods of high vulnerability, maximising compliance at the expense of user autonomy. The POMDP reward function should therefore encode ethical constraints alongside clinicians' objectives.
 
@@ -463,6 +166,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 **REMOVE: one checkmark for working link second for insight gathered**
 -->
 
+- Argall, B. D., Chernova, S., Veloso, M. and Browning, B. (2009) 'A survey of robot learning from demonstration', *Robotics and Autonomous Systems*, 57(5), pp. 469-483. Available at: [https://www.cs.cmu.edu/~mmv/papers/09ras-survey.pdf](https://www.cs.cmu.edu/~mmv/papers/09ras-survey.pdf) (Accessed: 3 May 2026).
 - Broadbent, E., Stafford, R. and MacDonald, B. (2009) 'Acceptance of Healthcare Robots for the Older Population: Review and Future Directions', *International Journal of Social Robotics*, 1(4), pp. 319-330. Available at: [https://www.researchgate.net/publication/220397395_Acceptance_of_Healthcare_Robots_for_the_Older_Population_Review_and_Future_Directions](https://www.researchgate.net/publication/220397395_Acceptance_of_Healthcare_Robots_for_the_Older_Population_Review_and_Future_Directions) (Accessed: 25 March 2026).
 - Brooks, R. A. (1991) 'Intelligence without representation', *Artificial Intelligence*, 47(1-3), pp. 139-159. Available at: [https://people.csail.mit.edu/brooks/papers/representation.pdf](https://people.csail.mit.edu/brooks/papers/representation.pdf) (Accessed: 24 March 2026).
 - Chen, M., Nikolaidis, S., Soh, H., Hsu, D. and Srinivasa, S. (2020) 'Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning', *ACM Transactions on Human-Robot Interaction*, 9(2), pp. 1-23. Available at: [https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf](https://personalrobotics.cs.washington.edu/publications/chen2019trust.pdf) (Accessed: 15 March 2026).
@@ -475,6 +179,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - Laird, J. E. (2012) *The Soar Cognitive Architecture*. Cambridge, MA: MIT Press.
 - Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: [https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392](https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392) (Accessed: 15 March 2026).
 - Matarić, M. J., Eriksson, J., Feil-Seifer, D. J. and Winstein, C. J. (2007) 'Socially assistive robotics for post-stroke rehabilitation', *Journal of NeuroEngineering and Rehabilitation*, 4(5), pp. 1-9. Available at: https://pmc.ncbi.nlm.nih.gov/articles/PMC1821334/ (Accessed: 25 March 2026).
+- Ng, A. Y. and Russell, S. (2000) 'Algorithms for inverse reinforcement learning', in *Proceedings of the 17th International Conference on Machine Learning (ICML 2000)*, pp. 663-670. Available at: [https://ai.stanford.edu/~ang/papers/icml00-irl.pdf](https://ai.stanford.edu/~ang/papers/icml00-irl.pdf) (Accessed: 3 May 2026).
 - Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
 - Papadimitriou, C. H. and Tsitsiklis, J. N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf (Accessed: 13 March 2026).
 - Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: An anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*, pp. 1025-1030. Available at: http://www.cs.cmu.edu/~ggordon/jpineau-ggordon-thrun.ijcai03.pdf (Accessed: 24 March 2026).
