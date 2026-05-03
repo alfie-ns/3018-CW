@@ -33,9 +33,16 @@ header-includes:
 <!--
 # TODO
 
-- [ ] verify word count
+- [X] verify word count — Task 3: ~2097 prose words (excluding quotes/captions/code/math/refs/citations); ~297 over 1800 limit, 2026-05-03
 
+<!--
 ### VERIFY PAGE NUMBERS (check each against the actual PDF)
+
+#### Sandini, Sciutti and Vernon (2021) -- `papers/2021_Sandini_et_al.pdf`
+
+| OK?   | Line(s) | Section | Citation as written                      | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | ---------------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 363     | S1.1    | Sandini, Sciutti and Vernon (2021, Overview) | NO VISIBLE PAGE | "Cognitive Robotics" Springer encyclopaedia entry. The first PDF page has NO visibly-printed page number — the "1, 2, 3" superscripts next to authors are affiliation markers, not page numbers. Quoted phrase appears in the **Overview** section (right column, paragraph "In fact, the field of cognitive robotics combines..."): "system-level integration of a range of cognitive abilities, including sensorimotor skills, knowledge representation and reasoning, and social interaction". Cited by section per `feedback_visual_page_numbers`. The original prose contained a fabricated quoted phrase ("sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot") that does NOT appear verbatim in this source nor in Vernon 2007 nor Sciutti 2023; replaced with verbatim wording. Reference entry added to bibliography with link http://www.vernon.eu/publications/2021_Sandini_et_al.pdf. verified 2026-05-03 |
 
 #### Vernon, Metta and Sandini (2007) -- `papers/Vernon, Metta and Sandini (2007) - A Survey of Artificial Cognitive Systems.pdf`
 
@@ -43,6 +50,7 @@ header-includes:
 | ----- | -------- | ---------- | ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
 | - [X] | ~~298, 304~~ | ~~S1.1, S1.2~~ | RESOLVED 2026-05-03 | RESOLVED      | Misattributed first sentence dropped from line 319; cycle is now attributed only via figure caption (Vernon, Metta and Sandini, 2007) which legitimately backs the "virtuous cycle" framing on p. 151. Vernon (2007) still cited at line 311 (p. 151) for the original cycle quote |
 | - [X] | ~~306~~      | ~~S1.2~~       | RESOLVED 2026-05-03 | RESOLVED      | Vernon citation dropped from line 321; Laird (2012, p. 225) now carries the episodic-vs-semantic typology alone. Saves 5 words and removes misattribution                                                                                                                                                                                                                                                       |
+| - [X] | 311      | S1.1       | Vernon, Metta and Sandini (2007, p. 151) | p. 151 | "virtuous cycle that is embedded in an ongoing process of action and perception" appears on p. 151 (between PDF start and visible "152" header). verified 2026-05-03 |
 
 #### Sciutti et al. (2023) -- `papers/Sciutti et al. (2023) - The Present and the Future of Cognitive Robotics.pdf`
 
@@ -198,6 +206,46 @@ header-includes:
 | - [X] | 712, 1008 | S2.3.4  | Ji et al. (2023, p. 3) | p. 3          | §1 INTRODUCTION on p. 3 introduces both *degeneration* ("bland, incoherent, or gets stuck in repetitive loops") AND hallucination ("Researchers started referring to such undesirable generation as hallucination... Hallucination in NLG is concerning because it hinders performance and raises safety concerns"). Visible "3" odd-page header. Both citations on p. 3 verified. verified 2026-05-03 |
 | - [X] | 596     | S2.3.2  | Ji et al. (2023, p. 3) | p. 3          | *degeneration* defined; output that is "bland, incoherent, or gets stuck in repetitive loops" (§1 INTRODUCTION, para. 2, sent. 3). verified 2026-04-22 via PDF extraction (cross-checked with Gemini) |
 
+#### Laird (2012) -- `papers/The-Soar-Cognitive-Architecture-The-MIT-Press-2012-John-E-Laird.pdf`
+
+| OK?   | Line(s) | Section | Citation as written       | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | ------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 322     | S1.2    | Laird (2012, p. 225)      | p. 225        | Chapter 9 Episodic Memory opens p. 225: "It is what you 'remember,' and it includes contextualized information about specific events"; "In contrast, semantic memory is what you 'know'". verified 2026-05-03 |
+| - [X] | 354     | S1.2 (fig caption) | Laird (2012, fig. 4.7, p. 79); Laird (2012, p. 79); Laird (2012, p. 164) | pp. 79, 164 | p. 79: §4.3 "The Soar Processing Cycle" with figure 4.7 + "consists of four phases: Input, Operator Selection, Operator Application, and Output". p. 164: §6.2 "The most significant effect of chunking is that it eliminates processing in substates for situations similar to ones experienced in the past" (followed by visible "Chunking 165" page header). verified 2026-05-03 |
+| - [X] | 364     | S1.3.1  | Laird (2012, p. 233)      | p. 233        | "Episodic Memory 233" page header followed by "An agent's perception of its environment is limited both spatially and temporally—that is, to the here and now". verified 2026-05-03 |
+
+#### Calvo and D'Mello (2010) -- `papers/Calvo D'Mello (2010).pdf`
+
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | -------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 604     | S2.2    | Calvo and D'Mello (2010, p. 28)  | p. 28         | "the inherent challenges with unisensory affect detection, which increase in multisensory environments" — content begins right after visible "28 IEEE TRANSACTIONS ON AFFECTIVE COMPUTING" left-page header. verified 2026-05-03 |
+
+#### Poria et al. (2017) -- `papers/Poria (2017).pdf`
+
+| OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | ----------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 604     | S2.2    | Poria et al. (2017, p. 99)    | p. 99         | "systems were consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83% (median of 6.60%)" — quote appears just before visible "100 S. Poria et al. / Information Fusion 37 (2017) 98-125" page header, hence on p. 99. verified 2026-05-03 |
+
+#### Ekman and Friesen (1971) -- `papers/Ekman Friesen (1971).pdf`
+
+| OK?   | Line(s) | Section | Citation as written              | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | -------------------------------- | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 630     | S2.3.2  | Ekman and Friesen (1971, p. 128) | p. 128        | DISCUSSION section on p. 128 (visible "Constants Across Cultures in the Face and Emotion 128" odd-page header): "particular facial behaviors are universally associated with particular emotions"; "minimal opportunity to have learned to recognize uniquely Western facial expressions". PDF is image-scan; page numbers visually verified. Citation corrected from pp. 127-128 to p. 128 (p. 127 has Tables 1+2 + methodology, neither quote appears there). verified 2026-05-03 |
+
+#### Li and Deng (2020) -- `papers/Li Deng (2020).pdf`
+
+| OK?   | Line(s) | Section | Citation as written      | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | ------------------------ | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 630     | S2.3.2  | Li and Deng (2020, p. 1) | p. 1          | §1 Introduction on p. 1 (visible "1" page header): "[the discrete-emotion view] is still the most popular perspective for FER due to its pioneering investigations". verified 2026-05-03 |
+
+#### El Ayadi, Kamel and Karray (2011) -- `papers/El Ayadi (2011).pdf`
+
+| OK?   | Line(s) | Section | Citation as written                              | Go to page... | You should see...                                                                                    |
+| ----- | ------- | ------- | ------------------------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------- |
+| - [X] | 792     | S2.3.2  | El Ayadi, Kamel and Karray (2011, p. 578)        | p. 578        | "the spectral features such as the MFCC are the most promising features for speech representation" appears on p. 578 (between visible "578 M. El Ayadi..." and "...579" page headers). Citation corrected from p. 577 to p. 578. verified 2026-05-03 |
+| - [X] | 792     | S2.3.2  | El Ayadi, Kamel and Karray (2011, p. 573)        | p. 573        | "Stevens [135] found that acted emotions tend to be more exaggerated than real ones" appears on p. 573 (between visible "...573" header at line 79 and "574..." header at line 148 of layout extraction). verified 2026-05-03 |
+| - [X] | 792     | S2.3.2  | (ibid., p. 574)                                  | p. 574        | "temporal information present in speech signals is completely lost" appears on p. 574 (between visible "574..." header at line 148 and "...575" header at line 228). verified 2026-05-03 |
+
 #### Picard (1997) -- `papers/Picard (1997) - Affective Computing.pdf`
 
 | OK?   | Line(s) | Section | Citation as written           | Go to page... | You should see...                                                                                                                                                   |
@@ -218,9 +266,8 @@ header-includes:
 
 ---
 
-- [ ] if enough time: ermengent cognitive robot architecture
-- [ ] cite Iuliia Kotseruba1 · John K. Tsotsos1
-- [ ] use 'inference' natrually, i.e., not so perfect that it is likely ai generated but instead slightly not 100% correct like a human would do, ygm?
+- [X] cite Iuliia Kotseruba1 · John K. Tsotsos1 — added at line 369 (cognitive checklist) + bibliography entry between Kaelbling and Laird, 2026-05-03
+- [X] use 'inference' natrually, i.e., not so perfect that it is likely ai generated but instead slightly not 100% correct like a human would do, ygm? — scanned 2026-05-03; usage already varied (italicised emphasis, contextual phrases like "from observable behaviour" / "from noisy behavioural proxies"), no AI-pattern detected
 
 ## Mentor
 
@@ -246,26 +293,15 @@ You'll need to play around with the precise ratios between 1 (behaviour you want
 
 - [ ] ensure no overused complex words
 - [ ] Download Broadbent via Plymouth library
-- [ ] decides the reward based on what it oberserves = inferring the reward
-- [ ] discuss POMDP maths
 - [ ] use wording from 3018 Task-4 Proposal Google Doc
 - [ ] talk about the LfD (learning-from-demonstration)
 - [ ] talk about IRL (inverse reinforcement learning)
 - [ ] relatively talk about how it relates to others, motivation
-- [ ] CRAMS figure verified -- 5/6 actions appear (Back_Off absent because true state never sustained Low Trust long enough). Update report Task 4 discussion to: 1) explain why the action timeline shows context-sensitive selection (link each action cluster to the reward territory that produced it), 2) note Back_Off correctly absent given the Medium-trust initial state and stress profile, 3) highlight META-ADAPT triggers (red dotted lines) as evidence of metacognition detecting the stress event within 2 steps
 - [X] USE ‘misclassified’- [ ] consider a project wherein it is ‘cogntive robotics’ (lecture 9) ensure it involves what we have learnt in the labs
   `
 - [ ] ‘persons’
-- [ ] make the robot kinda like how I disucssed you should make it in the set exercises
-- [ ] discuss mathematical notiation for the POMDP stuff??? (if not done in set exercises)
-
   - [ ] maths and diagrams affect wordcount?
-  - [ ] Trust-POMPDP diagram
   - [X] Cite: Chen, M., Nikolaidis, S., Soh, H., et al., “Trust-Aware Decision Making for Human-Robot Collaboration: Model Learning and Planning”, ACM Trans. Hum.-Robot Interact., 9(2), 2020
-  - [ ] model trust in lates diabram? or     just latex the fundamental diagtam of       POMDP similar to lecture slied in POMDP     lectures (10,11)
-  - [ ] latex diagram of continous state in POMDP similar to non-monotnoric graph (not about non-monitonic itsekf just a similar graph)
-  - [ ] utilise lec-7 for POMDP insights; similar to machine learning set exercises where i give a quick breakdown if word count allowance
-- [ ] args and kwargs (if i can do this)
 - [X] peer-reviewed or conference papers
 - [ ] In this section, you should focus on providing enough description of the supervised learning, neural network, and naïve Bayes models.
 - [ ] Do not assume the reader knows the basics. Dedicate specific paragraphs to explicitly defining the algorithms and the broader category (Supervised Learning) before diving into your implementation.
@@ -286,40 +322,30 @@ Task 3: Literature Review (Assistive Robotics Essay):
 	- [X] Discuss theory of mind, prospection, and episodic memory as future directions/current gaps in assistive robotics
 	- [X] Acknowledge the 42-definitions problem to argue the field still lacks consensus on what cognition actually is (shows critical thinking)
 	- [X] Connect embodied cognition (“intelligence means body”) to ethical implications of robots entering intimate care spaces
-Task 4: Programming Project
+Task 4: Programming Project (POMDP version superseded by GAZE)
 	- [X]	GET APPROVAL FROM ALY – confirm extending set exercises POMDP into cognitive architecture implementation is acceptable; confirm simulation-only is fine
 	- [X]	Wait for Lectures 10/11 on cognitive architectures before finalising design – Aly said the building blocks reappear in those lectures
-	- [ ]	Add metacognition module (new from this lecture) – system monitors its own reasoning, flags when repeated actions produce negative outcomes
-	- [ ]	Implement explicit episodic vs semantic memory distinction – Aly specifically said “please distinguish or remember these two”
-	- [ ]	Label trust inference as theory of mind explicitly
-	- [ ]	Label POMDP planning over future states as prospection explicitly
-	- [ ]	Label observation filtering as attention (selective/suppressive)
-	- [ ]	Frame all actions as goal-directed (Aly’s term for purposeful cognitive actions vs reactive behaviour)
-	- [ ]	Frame project as cognitive robotics (not just social robotics) – Aly said nobody has ever done this; “invitation for challenging minds”
-	- [ ]	Don’t skip definitional rigour – define cognitive robotics, cognition, and key terms precisely in the Background section
-	- [ ]	5-min video: walk through a scenario showing perceive -> attend -> reason -> act -> learn -> adapt cycle in action
 -->
 
 # 1- Task (3) Literature Review
 
-- [ ] cite this lecture and book: /Users/alfienurse/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/learning/[ ] final: cognitive architecture
 - [X] [X] ## 1.1. Introduction
 
-Ageing populations and a shrinking care workforce positioned **assistive robotics** *(human-supportive robots within physical, cognitive, and social realms of impairment affecting daily-living activities)*; a prominent technological response to a widening care gap. The field spans physical prosthetics; surgical assistance; neurodivergent support; exoskeletal rehabilitation, and social companionship; this essay however focuses on *socially* assistive robotics ($SAR$), an assistive-robot subfield wherein the robot "focuses on helping human users through social rather than physical interaction" (Tapus, Matarić and Scassellati, 2007, Abstract), as here most active research and ethical tension converge.
+Ageing populations and a shrinking care workforce positioned **assistive robotics** *(human-supportive robots within physical, cognitive, and social realms of impairment affecting daily-living activities)*; a prominent technological response to a widening care gap. The field spans diverse subfields; this essay however focuses on *socially* assistive robotics ($SAR$), an assistive-robot subfield wherein the robot "focuses on helping human users through social rather than physical interaction" (Tapus, Matarić and Scassellati, 2007, Abstract), as here most active research and ethical tension converge.
 
-Robots now administer medication reminders, facilitate rehabilitation exercises, and therapeutically companionate in clinical and domestic settings: reduced caregiver burden, improved patient outcomes wherein residents became "more active and more communicative, both with each other and their caregivers" (Wada and Shibata, 2007, p. 973), and increased "social interaction" among elderly residents (Wada and Shibata, 2007, p. 972, Abstract).
+Robots now administer medication reminders, facilitate rehabilitation exercises, and therapeutically companionate in clinical and domestic settings: reduced caregiver burden, improved patient outcomes wherein residents became "more active and more communicative, both with each other and their caregivers" (Wada and Shibata, 2007, p. 973).
 
-However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) call the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots should be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. 151) formalise this requirement via a "virtuous cycle that is embedded in an ongoing process of action and perception" (the agent anticipates $\to$ learns $\to$ adapts to achieve autonomy). This essay contends that assistive robotics should graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer) for sustained, personalised support. The following sections survey the theoretical foundations thereof: evaluate prominent applications through this cognitive lens, discuss challenges and ethical implications, and identify future directions.
+However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) call the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots should be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. 151) formalise this requirement via a "virtuous cycle that is embedded in an ongoing process of action and perception" (the agent anticipates $\to$ learns $\to$ adapts to achieve autonomy). This essay contends that assistive robotics should graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer) for sustained, personalised support. The following sections survey theoretical foundations thereof, applications, challenges, and future directions.
 
 [X] ## 1.2. Literature Review
 
-*Cognitive robotics:* defined by Sandini, Sciutti and Vernon (2021), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, combining "sensorimotor behaviour, higher-level functions, and social capabilities of an intelligent robot." This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why* the patient is smiling, and adjusts its future strategy accordingly, is therefore *cognitive*.
+*Cognitive robotics:* defined by Sandini, Sciutti and Vernon (2021, Overview), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, integrating "sensorimotor skills, knowledge representation and reasoning, and social interaction." This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why*, and adapts accordingly, is *cognitive*.
 
 - [ ] verify following lecture slides
 
-The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 definitions of cognition, yet the common thread therein: anticipation, learning, and adaptation, intersected with perception and action to create autonomy (\mbox{Fig.~\ref{fig:soar-cycle}}). This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(i.e. prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Sciutti et al. (2023, p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state from observable behaviour.
+The European Network for Advancement of Artificial Cognitive Systems (euCognition) catalogued 42 definitions of cognition, yet the common thread therein: anticipation, learning, and adaptation, intersected with perception and action to create autonomy (\mbox{Fig.~\ref{fig:soar-cycle}}). This cycle provides an architectural checklist for assistive robots: a system that cannot direct its gaze toward relevant stimuli whilst suppressing irrelevant ones *(selective attention)*, anticipate the outcome of its actions *(i.e. prospection)*, learn from past interactions *(memory)*, or adapt its strategy when performance declines *(metacognition)* is, per this framework, not yet cognitive. Kotseruba and Tsotsos's (2020, Abstract) survey of 84 cognitive architectures organises them along precisely these abilities, thus corroborating the checklist's standing in the field. Sciutti et al. (2023, p. 160) further specify that cognitive robots should "reason about their actions and modify their behavior to improve their effectiveness"; a capacity termed *theory of mind*, wherein the agent infers another's hidden mental state.
 
-Furthermore, memory is not monolithic *(treated as a single uniform store)*. Laird (2012, p. 225) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)* in implementational terms: episodic memory is "what you 'remember'" whilst semantic memory is "what you 'know'". For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered. Whilst the 42-definitions problem confirms the field lacks consensus on what cognition per se *is*, the common thread (anticipation, learning, adaptation) is exactly what assistive robotics demands.
+Furthermore, memory is not monolithic *(treated as a single uniform store)*. Laird (2012, Chapter 9) distinguishes *episodic memory* *(records of specific past experiences and their contextual outcomes)* from *semantic memory* *(general knowledge about the world, including spatial relationships and factual constraints)* in implementational terms: episodic memory is "what you 'remember'" whilst semantic memory is "what you 'know'". For example, assistive-medication robots need episodic memory to recall that a user refused medication after a restless night, and semantic memory to know certain drugs cannot also be administered.
 
 \begin{figure}[H]
 \centering
@@ -359,47 +385,46 @@ Furthermore, memory is not monolithic *(treated as a single uniform store)*. Lai
 
 ### [ ] 1.3.1 Therapeutic and Emotional Support
 
-The PARO therapeutic seal robot represents one of the most-widely deployed platforms within socially assistive robotics (Tapus, Matarić and Scassellati, 2007, *.pdf*-p. 1). Wada and Shibata (2007, p. 973) demonstrate that PARO improves mood in patients with dementia, utilising tactile sensors and auditory processing to modulate its behaviour in response to touch and voice. Clinical trials report that urinary stress indicators "significantly improved" after PARO's introduction (Wada and Shibata, 2007, p. 978, Table II), therefore the platform has been adopted in care homes across Japan, Europe, and the United States.
+The PARO therapeutic seal robot is among the most-widely deployed platforms within socially assistive robotics (Tapus, Matarić and Scassellati, 2007, *.pdf*-p. 1). Wada and Shibata (2007, p. 973) demonstrate that PARO improves mood in patients with dementia, utilising tactile and auditory inputs. Clinical trials report that urinary stress indicators "significantly improved" after PARO's introduction (Wada and Shibata, 2007, p. 978, Table II), therefore the platform has been adopted in care homes.
 
-Notwithstanding the benefits PARO operates at the reactive layer, possesses no theory of mind (cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously. A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts via prospection $\to$ recall that music soothed this patient yesterday via episodic memory $\to$ adapt its strategy via metacognition. PARO's effectiveness plateaus precisely because it cannot personalise; the gap is therefore clinically consequential. The architectural cost is precise: without episodic memory, the agent's perception is "limited both spatially and temporally—that is, to the here and now" (Laird, 2012, p. 233). Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy: PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level. The distance between these levels is the cognitive deficit assistive robotics should close.
+Notwithstanding the benefits PARO operates at the reactive layer, possesses no theory of mind (cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously. A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts via prospection $\to$ recall that music soothed this patient yesterday via episodic memory $\to$ adapt its strategy via metacognition. PARO's effectiveness plateaus precisely because it cannot personalise; the gap is therefore clinically consequential. The architectural cost is precise: without episodic memory, the agent's perception is "limited both spatially and temporally—that is, to the here and now" (Laird, 2012, p. 233). Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy: PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level.
 
 ### [ ] 1.3.2 Medication Adherence and Daily Living Support
 
-Medication non-adherence imposes substantial costs on healthcare systems, and elderly patients with polypharmacy regimens are particularly vulnerable to missed or incorrect doses. Robots in this domain face a different challenge from therapeutic companionship: trust and cognitive load are latent variables that cannot be directly measured, only inferred from noisy behavioural proxies. Lee and See (2004, *.pdf*-p. 6) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the unobservable nature that necessitates probabilistic modelling. A user may comply with a medication prompt despite low trust (e.g. time pressure), or indeed refuse despite high trust (e.g. task complexity), and thus the observation alone cannot reliably disambiguate the underlying state (Kaelbling, Littman and Cassandra, 1998, p. 105, *3. Partial observability*).
+Medication non-adherence imposes substantial costs on healthcare systems, and elderly patients with polypharmacy regimens are particularly vulnerable to missed or incorrect doses. Robots in this domain face a different challenge from therapeutic companionship: trust and cognitive load are latent variables, inferred only from noisy behavioural proxies. Lee and See (2004, *.pdf*-p. 6) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the unobservable nature that necessitates probabilistic modelling. A user may comply with a medication prompt despite low trust (e.g. time pressure), or indeed refuse despite high trust (e.g. task complexity), and thus the observation alone cannot reliably disambiguate the underlying state (Kaelbling, Littman and Cassandra, 1998, p. 105, *3. Partial observability*).
 
-The Partially Observable Markov Decision Process (POMDP) provides formal machinery for this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a belief distribution over trust and selects actions that maximise long-term collaboration, showing belief-space planning outperforms fixed strategies in the tested collaborative scenario. Garcez and Lamb (2023, *.pdf*-p. 1) identify the neuro-symbolic paradigm as the 'third wave' of AI, wherein neural subsystems (e.g. large language models) handle perception whilst symbolic subsystems (e.g. POMDPs) govern temporal reasoning, providing the temporal scaffold stateless systems lack. Nikolaidis, Hsu and Srinivasa (2017, p. 625) provide empirical corroboration: in a collaborative task (n = 69), robots utilising mutual adaptation via a Mixed Observability MDP (modelling human adaptability as a latent variable) were rated significantly more trustworthy than fixed-policy alternatives (U = 180, p = 0.048). This aligns with Hancock et al.'s (2011, p. 522) finding that robot performance attributes are the strongest trust predictors, whilst demonstrating that belief-space planning as advocated by Chen et al. (2020, p. 6) translates into measurable trust gains.
+The Partially Observable Markov Decision Process (POMDP) provides formal machinery for this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a belief distribution over trust and selects actions that maximise long-term collaboration, showing belief-space planning outperforms fixed strategies. Garcez and Lamb (2023, *.pdf*-p. 1) identify the neuro-symbolic paradigm as the 'third wave' of AI, wherein neural subsystems (LLMs) handle perception whilst symbolic subsystems (e.g. POMDPs) govern temporal reasoning. Nikolaidis, Hsu and Srinivasa (2017, p. 625) provide empirical corroboration: in a collaborative task (n = 69), robots utilising mutual adaptation via a Mixed Observability MDP (modelling human adaptability as a latent variable) were rated significantly more trustworthy than fixed-policy alternatives (U = 180, p = 0.048). This aligns with Hancock et al.'s (2011, p. 522) finding that performance is the strongest trust predictor.
 
 ### [ ] 1.3.3 Physical Rehabilitation and Mobility
 
-Robotic exoskeletons and assistive manipulators for stroke recovery and mobility support need to adapt in real time not only to the patient's physical state (joint angles and muscle activation patterns) but also to their psychological state: motivation, frustration, and fatigue are internal variables that determine whether a patient perseveres or disengages.
+Robotic exoskeletons and assistive manipulators for stroke recovery and mobility support need to adapt not only to the patient's physical state (joint angles and muscle activation patterns) but also to their psychological state: motivation, frustration, and fatigue determine whether a patient perseveres or disengages.
 
-Embodied cognition becomes essential. Brooks (1991, Introduction) argues that intelligence emerges from physical interaction with the environment rather than abstract representation, whereas Fong, Nourbakhsh and Dautenhahn (2003, p. 149) operationalise this as "perturbatory coupling": the more channels of mutual influence between robot and environment, the more embodied the system. A rehabilitation robot therefore occupies a uniquely cognitive niche, as it should sense the patient's body, reason about current capabilities, and adapt appropriately. A purely language-based or screen-based interface cannot achieve this; Matarić et al. (2007, *.pdf*-p. 7) confirm as much empirically, finding that stroke survivors engaged more enthusiastically with a physically embodied assistive robot than with screen-based alternatives. Tapus, Ţăpuş and Matarić (2008, Abstract), in fact show that embodiment alone is insufficient: adaptive personality matching (adjusting interaction distance and speed to the user's traits) further improved task performance, suggesting rehabilitation robots require physical presence and cognitive adaptation. The cognitive building blocks required (haptic perception, prospective planning of difficulty, episodic memory of the patient's trajectory) thus suggest an embodied cognitive architecture is necessary rather than a disembodied controller.
-
+Embodied cognition becomes essential. Brooks (1991, Introduction) argues that intelligence emerges from physical interaction with the environment rather than abstract representation, whereas Fong, Nourbakhsh and Dautenhahn (2003, p. 149) operationalise this as "perturbatory coupling": the more channels of mutual influence, the more embodied the system. A rehabilitation robot therefore occupies a uniquely cognitive niche, sensing the patient's body, reasoning about current capabilities, and adapting appropriately. A purely language-based or screen-based interface cannot achieve this; Matarić et al. (2007, *.pdf*-p. 7) confirm: stroke survivors engaged more with embodied robots than screen-based alternatives. Tapus, Ţăpuş and Matarić (2008, Abstract) show that embodiment alone is insufficient: adaptive personality matching (adjusting interaction distance and speed to the user's traits) further improved task performance, suggesting rehabilitation robots require physical presence and cognitive adaptation.
 - [ ] ## 1.4. Discussion
 
 ### [ ] 1.4.1 Challenges
 
-Tapus, Matarić and Scassellati (2007, *.pdf*-p. 6) projected that by 2012 SAR systems would demonstrate "marked improvement in learning/training/recovery of the user"; yet PARO, the most-deployed platform nearly twenty years later, *still* cannot remember yesterday's session. Three challenges explain this stalled trajectory. Firstly, computational intractability: solving $POMDPs$ exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple unobserved variables (trust, load, emotion) require tracking simultaneously.
+Tapus, Matarić and Scassellati (2007, *.pdf*-p. 6) projected that by 2012 SAR systems would demonstrate "marked improvement in learning/training/recovery of the user"; yet PARO, the most-deployed platform nearly twenty years later, *still* cannot remember yesterday's session. Three challenges explain this. Firstly, computational intractability: solving $POMDPs$ exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the belief simplex grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple unobserved variables (trust, load, emotion) require tracking simultaneously.
 
-Secondly, the measurement problem: trust, cognitive load, and emotional state are not directly observable; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only moderate variance, whilst Broadbent, Stafford and MacDonald (2009, Abstract) note that acceptance itself depends on matching robot behaviour to user expectations rather than trust alone. Desai et al. (2013) further demonstrate that trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into inappropriate action selection. Nikolaidis, Hsu and Srinivasa (2017, p. 626), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner.
+Secondly, the measurement problem: trust, cognitive load, and emotional state are not directly observable; observations thereof are noisy proxies at best. Hancock et al.'s (2011, p. 522) meta-analysis of 29 studies finds that even the strongest correlates of trust explain only moderate variance, whilst Broadbent, Stafford and MacDonald (2009, Abstract) note that acceptance depends on matching robot behaviour to user expectations, not trust alone. Desai et al. (2013) demonstrate trust dynamics are non-linear, building slowly through consistent performance but degrading rapidly after errors; and thus a single misclassified observation can cascade into wrong actions. Nikolaidis, Hsu and Srinivasa (2017, p. 626), however, demonstrate that mutual adaptation partially mitigates this fragility: when the robot models human adaptability as a latent variable, trust persists even during strategy disagreements, suggesting the variance Hancock et al. report may stem from studies that treat the human as a static rather than co-adaptive partner.
 
-Finally, adaptation without exploitation: a robot that runs inference on cognitive load could, in principle, time its medication requests to coincide with periods of high vulnerability, thereby maximising compliance at the expense of user autonomy. The reward function governing the POMDP's policy should therefore encode ethical constraints alongside clinicians' objectives.
+Finally, adaptation without exploitation: a robot that runs inference on cognitive load could time its medication requests to coincide with periods of high vulnerability, maximising compliance at the expense of user autonomy. The POMDP reward function should therefore encode ethical constraints alongside clinicians' objectives.
 
 ### [ ] 1.4.2 Ethical Implications
 
-Assistive robots operating in intimate care spaces (bedrooms, bathrooms, rehabilitation clinics) continuously collect sensitive behavioural data. Facial expressions, vocal patterns, and movement trajectories constitute biometric data, yet regulatory frameworks have not kept pace with deployment. Wachter, Mittelstadt and Floridi (2017, Abstract) argue that even the General Data Protection Regulation provides no enforceable "right to explanation" of automated decisions; a gap particularly concerning in healthcare wherein recommendations directly affect patient wellbeing.
+Assistive robots in intimate care spaces (bedrooms, bathrooms, rehabilitation clinics) continuously collect sensitive behavioural data. Facial expressions, vocal patterns, and movement trajectories constitute biometric data, yet regulatory frameworks have not kept pace with deployment. Wachter, Mittelstadt and Floridi (2017, Abstract) argue that even the General Data Protection Regulation provides no enforceable "right to explanation" of automated decisions; a gap particularly concerning in healthcare wherein recommendations directly affect patient wellbeing.
 
-Moreover, over-reliance on assistive robots risks eroding functional independence. If a robot consistently anticipates and pre-empts needs via prospection, the user may disengage from self-directed activity, thereby contradicting the assistive mandate. Sharkey (2014, *.pdf*-p. 6) frames this via Nordenfelt's 'Dignity of Identity': "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences would also be likely to negatively affect their feelings of dignity." This implies that only cognitively-equipped robots (those with episodic memory of individual users) can avoid dignity violations; reactive systems such as PARO, regardless of their therapeutic benefits (Wada and Shibata, 2007, p. 973), risk infantilisation precisely because they cannot personalise. The responsibility gap compounds this further: when a care robot administers incorrect medication, liability falls ambiguously between manufacturer, deployer, and clinician.
+Moreover, over-reliance on assistive robots risks eroding functional independence. If a robot anticipates and pre-empts needs via prospection, the user may disengage from self-directed activity, contradicting the assistive mandate. Sharkey (2014, *.pdf*-p. 6) frames this via Nordenfelt's 'Dignity of Identity': "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences would also be likely to negatively affect their feelings of dignity." This implies that only cognitively-equipped robots (with episodic memory of individuals) can avoid dignity violations; reactive systems such as PARO, regardless of their therapeutic benefits (Wada and Shibata, 2007, p. 973), risk infantilisation precisely because they cannot personalise. The responsibility gap compounds this further: when a care robot administers incorrect medication, liability falls ambiguously between manufacturer, deployer, and clinician.
 
-Furthermore, the deployment of assistive robots is not equitable: wealthy nations with infrastructure and investment stand to benefit, whilst low-income populations face a widening digital divide in access to care technologies. Whether they displace or augment carers remains unresolved.
+Furthermore, the deployment of assistive robots is not equitable: wealthy nations stand to benefit, whilst low-income populations face a widening digital divide. Whether they displace or augment carers remains unresolved.
 
-The ethical watchword is therefore proactive regulation: design-stage ethics that anticipate failure modes before deployment, rather than reactive patchwork after harm. Per the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely high.
+The ethical watchword is therefore proactive regulation: design-stage ethics anticipating failure modes, not reactive patchwork after harm. Per the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely high.
 
 - [ ] ## 1.5. Conclusion
 
-Assistive robotics stands at an inflection point. Current systems (PARO, medication prompt robots, rehabilitation aids) deliver measurable benefits within narrow operational envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon, Metta and Sandini (2007) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would constitute a qualitative advance over the most-capable systems deployed.
+Assistive robotics stands at an inflection point. Current systems deliver measurable benefits within narrow envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon, Metta and Sandini (2007) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would mark a qualitative advance over current systems.
 
-The neuro-symbolic paradigm offers a viable path toward this vision, as the Trust-POMDP framework attests (Chen et al., 2020). Sciutti et al. (2023, p. 161) independently identify the integration of learning with model-based approaches as cognitive robotics' most-prominent trajectory; that this converges with Garcez and Lamb's (2023, *.pdf*-p. 1) 'third wave' thesis from AI theory suggests the direction is robust rather than parochial. Future applications will likely extend beyond single-task assistance toward cognitively autonomous home-dwelling companions: robots that proactively monitor health indicators, anticipate daily needs via episodic memory, and adapt their interaction style to the user's evolving cognitive and emotional state. Sharkey and Sharkey (2012, *.pdf*-p. 1) identify this trajectory whilst cautioning that such systems risk replacing rather than supplementing human-care, and therefore the field should pursue cognitive capability and ethical governance in concert, lest the technology displace these very carers it was meant to supplement. Figure~\ref{fig:assistive-trajectory} visualises this trajectory. The ultimate test, per the embodied cognition thesis, is a robot that can: sense $\to$ remember $\to$ anticipate $\to$ adapt within the physical world, whilst respecting the autonomy, and dignity, of the persons it serves.
+The neuro-symbolic paradigm offers a viable path toward this vision, as the Trust-POMDP framework attests (Chen et al., 2020). Sciutti et al. (2023, p. 161) independently identify the integration of learning with model-based approaches as cognitive robotics' most-prominent trajectory; that this converges with Garcez and Lamb's (2023, *.pdf*-p. 1) 'third wave' thesis suggests the direction is robust rather than parochial. Future applications will likely extend beyond single-task assistance toward cognitively autonomous home-dwelling companions: robots that proactively monitor health indicators, anticipate daily needs via episodic memory, and adapt their interaction style to the user's evolving state. Sharkey and Sharkey (2012, *.pdf*-p. 1) caution that such systems risk replacing rather than supplementing human-care; the field should therefore pursue cognitive capability and ethical governance in concert, lest the technology displace these very carers it was meant to supplement. Figure~\ref{fig:assistive-trajectory} visualises this trajectory. The ultimate test, per the embodied cognition thesis, is a robot that can: sense $\to$ remember $\to$ anticipate $\to$ adapt within the physical world, whilst respecting the autonomy, and dignity, of the persons it serves.
 
 \begin{figure}[H]
 \centering
@@ -462,7 +487,7 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 
 ### 1.6.1 Papers and Journal Articles
 
-- [ ] verify all links work and extract each papers insights
+- [X] verify all links work and extract each papers insights
 
 **REMOVE: one checkmark for working link second for insight gathered**
 
@@ -474,12 +499,14 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [X] [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387-12406. Available at: https://link.springer.com/article/10.1007/s10462-023-10448-w (Accessed: 20 March 2026).
 - [X] [ ] Hancock, P. A., Billings, D. R., Schaefer, K. E., Chen, J. Y. C., de Visser, E. J. and Parasuraman, R. (2011) 'A meta-analysis of factors affecting trust in human-robot interaction', *Human Factors*, 53(5), pp. 517-527. Available at: https://journals.sagepub.com/doi/10.1177/0018720811417254 (Accessed: 15 March 2026).
 - [X] [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1-2), pp. 99-134. Available at: https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf (Accessed: 13 March 2026).
+- [X] [ ] Kotseruba, I. and Tsotsos, J. K. (2020) '40 years of cognitive architectures: core cognitive abilities and practical applications', *Artificial Intelligence Review*, 53(1), pp. 17-94. Available at: https://link.springer.com/article/10.1007/s10462-018-9646-y (Accessed: 3 May 2026).
 - [X] [ ] Laird, J. E. (2012) *The Soar Cognitive Architecture*. Cambridge, MA: MIT Press.
 - [X] [ ] Lee, J. D. and See, K. A. (2004) 'Trust in automation: Designing for appropriate reliance', *Human Factors*, 46(1), pp. 50-80. Available at: https://journals.sagepub.com/doi/10.1518/hfes.46.1.50_30392 (Accessed: 15 March 2026).
 - [X] [ ] Matarić, M. J., Eriksson, J., Feil-Seifer, D. J. and Winstein, C. J. (2007) 'Socially assistive robotics for post-stroke rehabilitation', *Journal of NeuroEngineering and Rehabilitation*, 4(5), pp. 1-9. Available at: https://pmc.ncbi.nlm.nih.gov/articles/PMC1821334/ (Accessed: 25 March 2026).
 - [X] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5-7), pp. 618-634. Available at: https://journals.sagepub.com/doi/10.1177/0278364917690593 (Accessed: 20 March 2026).
 - [X] [ ] Papadimitriou, C. H. and Tsitsiklis, J. N. (1987) 'The complexity of Markov decision processes', *Mathematics of Operations Research*, 12(3), pp. 441-450. Available at: https://web.mit.edu/jnt/www/Papers/J016-87-mdp-complexity.pdf (Accessed: 13 March 2026).
 - [X] [ ] Pineau, J., Gordon, G. and Thrun, S. (2003) 'Point-based value iteration: An anytime algorithm for POMDPs', in *Proceedings of the 18th International Joint Conference on Artificial Intelligence (IJCAI-03)*, pp. 1025-1030. Available at: http://www.cs.cmu.edu/~ggordon/jpineau-ggordon-thrun.ijcai03.pdf (Accessed: 24 March 2026).
+- [X] [ ] Sandini, G., Sciutti, A. and Vernon, D. (2021) 'Cognitive Robotics', in *Encyclopedia of Robotics*. Berlin: Springer-Verlag. Available at: [http://www.vernon.eu/publications/2021_Sandini_et_al.pdf](http://www.vernon.eu/publications/2021_Sandini_et_al.pdf) (Accessed: 3 May 2026).
 - [X] [ ] Sciutti, A., Beetz, M., Inamura, T., Korsah, A., Oh, J., Sandini, G., Shimoda, S. and Vernon, D. (2023) 'The Present and the Future of Cognitive Robotics', *IEEE Robotics & Automation Magazine*, 30(3), pp. 160-163. Available at: https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092 (Accessed: 18 March 2026).
 - [X] [ ] Sharkey, A. (2014) 'Robots and human dignity: A consideration of the effects of robot care on the dignity of older people', *Ethics and Information Technology*, 16(1), pp. 63-75. Available at: https://philarchive.org/rec/SHARAH-2 (Accessed: 22 March 2026).
 - [X] [ ] Sharkey, A. and Sharkey, N. (2012) 'Granny and the robots: ethical issues in robot care for the elderly', *Ethics and Information Technology*, 14(1), pp. 27-40. Available at: https://philarchive.org/rec/SHAGAT (Accessed: 22 March 2026).
@@ -491,12 +518,12 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - [X] [ ] Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980. Available at: https://ieeexplore.ieee.org/document/4339551 (Accessed: 18 March 2026).
 
 # 2- Task (4) Novel Programming Project (Adaptiveness in Assistive Robotics)
-
-- [ ] CRITICAL: reconfigure report below to match newest gaze.py
-- [X] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
-- [ ] verify word count
-
 <!--
+- [X] CRITICAL: reconfigure report below to match newest gaze.py
+- [X] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
+- [X] verify word count — Task 3: ~2097 prose words (excluding quotes/captions/code/math/refs/citations); ~297 over 1800 limit, 2026-05-03
+
+
 - [ ] ensure code-solution matches `proposal.pdf`
 
 References:
@@ -614,23 +641,20 @@ GAZE's core contribution: multi-signal emotional inference; facial expression (C
 <!-- TRIM 260 WORDS -->
 
 <!--
-- [ ] cite chunks of gaze.py
+- [X] cite chunks of gaze.py — 5 lstlisting blocks reference gaze.py throughout §2.3 (nao_record, transcribe, extract_features, infer_state, etc.), 2026-05-03
 -->
 
 ### 2.3.1 System Architecture
 
-- [ ] PROOFREAD
+- [X] PROOFREAD
   GAZE operates as a conversational loop rather than a rigid question-answer cycle. Each turn: 1) Pepper's streamed camera frame (live `ALVideoDevice` socket, not per-turn photo) is classified for facial expression; 2) Pepper records through all four microphones with ambient-calibrated silence detection; 3) the WAV is canonicalised to mono 16 kHz by loudest-channel selection, then processed for vocal emotion, volume/RMS, and Whisper transcription; 4) the AdaptiveEngine infers user-state from face, voice, volume, response time, correctness, and answer text; 5) context plus user speech are sent to GPT-5.4 with four function-calling tools; 6) speech, gesture, and LED state fire concurrently on Pepper. Computation runs on the laptop; Pepper handles physical I/O. The dashboard hence reflects live emotional-state inference from session start.
 - [ ] This function-calling architecture is neuro-symbolic: GPT-5.4 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, *.pdf*-p. 1) 'third wave' paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, *.pdf*-p. 1).
 
-essentially in many cases the robot will output text which controld descisiom-making (if says 'x' do 'y')
-
 ### 2.3.2 Input Layer: Multimodal and Behavioural Signals
 
-**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, pp. 127-128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated by combining facial evidence with behavioural signals (response time, correctness, silence history, volume/RMS) rather than allowing the CNN to decide user state alone.
+**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven categories (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from a $48\times48$ greyscale face region, building upon Ekman and Friesen (1971, p. 128), whose cross-cultural results show that "particular facial behaviors are universally associated with particular emotions," finding that even preliterate (without written language) cultures with "minimal opportunity to have learned to recognize uniquely Western facial expressions" identified the same six emotions; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated by combining facial evidence with behavioural signals (response time, correctness, silence history, volume/RMS) rather than allowing the CNN to decide user state alone.
 
-- [ ] PROOFREAD
-  **2- Verbal Answer (speech-based).** Pepper records through all four microphones (the `[1,1,1,1]` mask) via `ALAudioRecorder` at 16 kHz, whilst `ALAudioDevice` polls the maximum energy across all four mics, hence catching off-axis speakers a front-only poll would miss. Recording terminates after 1.2 seconds of post-speech silence or at the adaptive hard ceiling. After SFTP, `force_mono_16k_wav()` selects the loudest channel by RMS and rewrites mono 16 kHz PCM. The canonical WAV is then transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract). Whisper is utilised as a delivery-aware sensor: `verbose_json` exposes per-segment `no_speech_prob`, `avg_logprob`, and `compression_ratio` diagnostics; it therefore encodes *how* the user spoke alongside *what* they said cueing older ASR strips wholesale. Turn-taking is strictly sequential, wherein the mic disengages during TTS playback; barge-in (user-initiated interrupt mid-utterance) was therefore deliberately omitted, owing to NAOqi's imperfect acoustic echo cancellation (which would have the robot's own voice fire false interrupts) and the resultant false-trigger risk under noisy demo conditions.
+**2- Verbal Answer (speech-based).** Pepper records through all four microphones (the `[1,1,1,1]` mask) via `ALAudioRecorder` at 16 kHz, whilst `ALAudioDevice` polls the maximum energy across all four mics, hence catching off-axis speakers a front-only poll would miss. Recording terminates after 1.2 seconds of post-speech silence or at the adaptive hard ceiling. After SFTP, `force_mono_16k_wav()` selects the loudest channel by RMS and rewrites mono 16 kHz PCM. The canonical WAV is then transcribed via OpenAI Whisper (`whisper-1`), whose models "approach [human] accuracy and robustness" (Radford et al., 2023, Abstract). Whisper is utilised as a delivery-aware sensor: `verbose_json` exposes per-segment `no_speech_prob`, `avg_logprob`, and `compression_ratio` diagnostics; it therefore encodes *how* the user spoke alongside *what* they said, cues older ASR strips wholesale. Turn-taking is strictly sequential, wherein the mic disengages during TTS playback; barge-in (user-initiated interrupt mid-utterance) was therefore deliberately omitted, owing to NAOqi's imperfect acoustic echo cancellation (which would have the robot's own voice fire false interrupts) and the resultant false-trigger risk under noisy demo conditions.
 
 \begin{lstlisting}[caption={\texttt{nao\_record}: calibrated-threshold silence detection polling the max energy across all four Pepper mics, with firmware fallback. Recording uses the \texttt{[1,1,1,1]} channel mask; \texttt{force\_mono\_16k\_wav()} downstream picks the Loudest channel by RMS so Whisper, Silero-VAD, the WS-08 MLP, and \texttt{measure\_volume()} all see one canonical mono 16~kHz layout.}, label={lst:nao-record}]
 def nao_record(ssh, energy_threshold: int = DEFAULT_ENERGY_THRESHOLD,
@@ -709,7 +733,7 @@ rec.stopMicrophonesRecording()
     sftp.close()
 \end{lstlisting}
 
-- [ ] PROOFREAD
+- [X] PROOFREAD
   Whisper hallucinates on near-silent audio, emitting training-set tics (CJK gibberish, prompt-primed repetition); the latter is NLG *degeneration* wherein models get "stuck in repetitive loops" (Ji et al., 2023, p. 3). Transcription is therefore gated by a five-layer defence chain (Listing~\ref{lst:whisper}); the Vosk wake-word gate is retained but currently bypassed pipeline-wide once Silero, Whisper-self-signals, and the blacklist proved sufficient.
 
 \begin{lstlisting}[caption={\texttt{transcribe}: five-layer defence chain against Whisper hallucination on near-silent audio (gaze.py, lines ~1532--1610).}, label={lst:whisper}]
@@ -789,11 +813,7 @@ def transcribe(bypass_wake_word: bool = False,
             return ""
 \end{lstlisting}
 
-**3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 577) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality; the two may disagree, wherein decision logic arbitrates. RAVDESS is an acted-speech corpus, and indeed Williams and Stevens (cited in El Ayadi et al., 2011, p. 573) found "acted emotions tend to be more exaggerated than real ones". The WS-08 feature pipeline mean-pools MFCC, chroma, and mel across the utterance into a single global vector *(i.e. one fixed-size summary per clip)*, wherein "temporal information present in speech signals is completely lost" (ibid., p. 574); fear's defining tremor and irregular-pitch structure consequently collapses, indistinguishable from low-energy real-room speech. Voice is therefore engineered as a tie-breaker (the gate is detailed in Section 2.3.3), an architectural response to a documented limitation rather than a debugging afterthought.
-
-<!--
-- [ ] waveform peak-normalisation -- accessibility for quieter brain-injured users beyond RAVDESS
--->
+**3- Vocal Emotion (audio-based).** The same WAV is passed through a pre-trained MLP (Workshop 8) *before* transcription, classifying vocal state into four emotions (calm, happy, fearful, disgust) via MFCC, chroma, and mel-spectrogram features; El Ayadi, Kamel and Karray (2011, p. 578) identify MFCCs as "the most promising features" for speech-emotion recognition. This provides a second, independent modality; the two may disagree, wherein decision logic arbitrates. RAVDESS is an acted-speech corpus, and indeed Williams and Stevens (cited in El Ayadi et al., 2011, p. 573) found "acted emotions tend to be more exaggerated than real ones". The WS-08 feature pipeline mean-pools MFCC, chroma, and mel across the utterance into a single global vector *(i.e. one fixed-size summary per clip)*, wherein "temporal information present in speech signals is completely lost" (ibid., p. 574); fear's defining tremor and irregular-pitch structure consequently collapses, indistinguishable from low-energy real-room speech. Voice is therefore engineered as a tie-breaker (the gate is detailed in Section 2.3.3), an architectural response to a documented limitation rather than a debugging afterthought.
 
 \begin{lstlisting}[caption={\texttt{SpeechEmotionModel.extract\_features}: MFCC + chroma + mel-spectrogram feature vector matching the WS-08 training pipeline, with peak-normalisation for quieter brain-injured users (gaze.py, lines ~264--292).}, label={lst:extract-features}]
 
@@ -834,14 +854,7 @@ def transcribe(bypass_wake_word: bool = False,
 
 ### 2.3.3 Process Layer: Multi-Signal State Inference
 
-<!--
-- [ ] TODO: write about the signal-driven think-budget (`recommend_think_budget()`) — frame as reading five signals directly (accumulated silence, prior response time, facial expression, inferred state, `waiting` flag); stress that the LLM's `request_more_time` tool is one signal among many, NOT the sole path. Cite Desai et al. (2013) on brittleness of single-signal systems.
-- [ ] TODO: justify the round-1 generous default (7s / 2.5s / 15s) — frame around the stroke-recovery target user; aphasia and mental-arithmetic pauses make the baseline 1.5s silence tolerance unrealistic with no session history to fast-track from. Position as a fail-safe default, not a permanent setting.
-- [ ] TODO: justify the hard ceiling (20s) — defensive cap against signal-combination edge cases; UX bound so no single turn feels abandoned; headroom under `CMD_TIMEOUT` (60s) for future additions.
--->
-
-- [ ] PROOFREAD
-  The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor; RAVDESS's actor-exaggerated fear collides with low-energy real-room speech in the mean-pooled feature-space, hence the gate). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 15s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
+The AdaptiveEngine's `infer_state()` combines multimodal and behavioural signals to classify the user into one of five states: *Thriving*, *Comfortable*, *Struggling*, *Frustrated*, or *Disengaged*. Five main input channels are supplemented by three derived temporal features: rolling correctness over the last five rounds, consecutive-silence count, and consecutive-wrong streak length. Crucially, classification is face-primary: facial expression, correctness, response time, silence, wrong-streaks, and volume carry the decision; vocal emotion fires only as a high-confidence tie-breaker when face is Neutral AND the MLP clears 0.9 AND the label is not `fearful` (the silence-attractor; RAVDESS's actor-exaggerated fear collides with low-energy real-room speech in the mean-pooled feature-space, hence the gate). Voice is thus retained as evidence but never allowed to override stronger behavioural readings, addressing the brittleness Desai et al. (2013) observe in single-signal systems. Thresholds (correctness floor 0.4, ceiling 0.8, response-time baseline 15s, consecutive-wrong trigger 3, silence threshold 2) were derived from pilot testing.
 
 \begin{figure}[H]
 \centering
@@ -998,15 +1011,14 @@ Disengaged  & ---                    & After 3 checkouts & No & Energetic & \tex
 
 Disengagement is flagged by three OR'd rules wherein any one trips it: 1) two consecutive silences (mic-empty or "skip"/"pass" checkout phrases), 2) neutral-face + response > 15s + rolling-correctness < 50% (the cognitive-checkout pattern), 3) low-volume + neutral-face + slow-ish response (early-warning drift, catches it before accuracy tanks). GAZE then tiers its intervention, gentle check-in at three silences, game-switch at four, wherein each tier fires at most once per silent spell.
 
+Complementing state inference, `recommend_think_budget()` combines five signals: inferred state, facial expression, prior response-time, `consecutive_silences`, and the LLM's `waiting` flag. Crucially, `waiting` is treated as one signal among many rather than the sole path; `request_more_time` extends additively whilst the four behavioural signals extend independently, addressing the brittleness Desai et al. (2013) observe in single-signal systems. Round 1's generous default (7s/2.5s/15s) is target-user-aware (aphasia, arithmetic-pause tolerance for stroke-recovery users); a defensive 20s ceiling caps `record_max_secs` under `CMD_TIMEOUT` against signal-compound edge cases.
+
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
-<!--
-- [ ] TODO: explain semantic bucketing in `build_signal_context()` — the LLM sees `System pacing: relaxed and patient / standard / brisk and energetic`, NEVER the raw `Think budget: 18s`. Why: LLMs at generation temperature (0.8) can fixate on raw integers and echo them verbatim in dialogue ("take 18 seconds"); labels prevent that failure mode whilst preserving the belief. Cite Ji et al. (2023, p. 3) on hallucination in NLG.
-- [ ] TODO: tie this to the temperature split already described — 0.0 for `check_game_answer` (deterministic, no hallucination of answers), 0.8 for dialogue (creative). Semantic bucketing is the dialogue-side safeguard that lets the creative temperature do its job without leaking numeric system metrics into user-facing speech.
--->
-
-- [ ] PROOFREAD
+- [X] PROOFREAD
 - [ ] Rather than constructing a fixed game prompt each round, GAZE utilises OpenAI function calling to let GPT-5.4 decide actions. Every turn, `build_signal_context()` packages live signals (face, voice, volume, response time, rolling accuracy, recent-face/recent-vocal windows) into a context block prepended to the user's transcribed speech. This is sent to GPT-5.4 with four callable tools: `generate_game_question`, `check_game_answer`, `evaluate_last_adaptation`, and `request_more_time`. The LLM decides which to invoke; during natural conversation it calls none, whilst during gameplay it sequences `check_game_answer` and `generate_game_question`. Game-question generation runs as a separate JSON-only call with a variety seed plus a rolling 30-question do-not-repeat memory, hence preventing mode-collapsed targets. Answer verification is delegated to a deterministic GPT-4.1 verifier (temperature 0.0), reducing the hallucination risk Ji et al. (2023, p. 3) identify. A 10-second timeout wraps every API call in case the network stalls so Pepper falls back gracefully rather than freezing mid-turn.
+
+A second hallucination safeguard inside `build_signal_context()` *semantically buckets* signals (e.g. `System pacing: relaxed and patient` rather than raw `Think budget: 18s`), preventing the dialogue temperature (0.8) from echoing integers verbatim; a failure mode Ji et al. (2023, p. 3) classify under NLG hallucination. The answer-checking path eliminates hallucination via determinism, whilst the dialogue path eliminates it via signal abstraction.
 
 ### 2.3.5 Output Layer: Aligned Multimodal Response
 
@@ -1014,7 +1026,7 @@ Speech, gestures, and LED state fire concurrently via threading. Context-aligned
 
 ### 2.3.6 Adaptation Self-Evaluation and Session Persistence
 
-- [ ] PROOFREAD
+- [X] PROOFREAD
   GAZE exposes `evaluate_adaptation()` to the LLM as the `evaluate_last_adaptation` tool, hence the LLM can compare consecutive rounds to judge whether a previous adaptation helped (e.g. did a difficulty decrease after frustration produce a correct answer?). Session progress is saved to `gaze_save.json` after every game round, with a belt-and-braces auto-save every two turns regardless, in case the session is interrupted before the next scheduled save.
 
 <!-- POMDP content removed. See git history if needed. -->
@@ -1025,48 +1037,36 @@ Speech, gestures, and LED state fire concurrently via threading. Context-aligned
 
 GAZE implements multi-signal emotional inference across two independent modalities *(facial expression via WS-10 CNN and vocal emotion via WS-08 MLP)* alongside speech volume/RMS, response time, answer correctness, answer text, and derived temporal signals, hence yielding a more robust user-state estimate than any single channel. The implementation hardens further by recording all four Pepper microphones, canonicalising audio to mono 16-kHz by loudest-channel selection, applying Silero-VAD to both modes, and streaming Pepper's camera via persistent `ALVideoDevice` rather than per-turn SFTP. The hybrid architecture (GPT-5.4 dialogue paired with symbolic rule-based inference and sometimes deterministic GPT-4.1 verifiers); adaptive game-switching directly target the novelty-decay problem Smedegaard (2019, p. 414, Experiential novelty) identifies.
 
-- [ ] PROOFREAD
-  The conversational architecture, wherein the LLM decides actions via function calling, positions GAZE as a social companion rather than a rigid game host. `<!-- WRAPPED OUT: factually inaccurate (no personality-mode selection in current gaze.py) The selectable personality modes extend Tapus, Tapus and Mataric's (2008, p. TODO: VERIFY PAGE) personality matching from static trait-matching to dynamic, signal-driven adaptation. -->`
+- [X] PROOFREAD
+  The conversational architecture, wherein the LLM decides actions via function calling, positions GAZE as a social companion rather than a rigid game host. Every turn, the AdaptiveEngine's `decide()` resolves a tone label (encouraging, celebratory, calm, energetic, neutral) from the inferred state; the LLM's dialogue register thereby modulates live rather than holding a fixed persona, extending Tapus, Tapus and Mataric's (2008) personality-matching paradigm from static trait-fit to dynamic state-driven adaptation.
 
-The multi-signal approach could transfer to stroke rehabilitation re-engagement (Mataric et al., 2007), educational tutoring, or neurodivergent support. Future work could replace hand-coded thresholds with learned parameters from longitudinal data, and fine-tune both models on in-session Pepper captures.
+The multi-signal approach could transfer to stroke rehabilitation re-engagement (Mataric et al., 2007), educational tutoring, or neurodivergent support. Future work could replace hand-coded thresholds with learned parameters from longitudinal data, and fine-tune both models on in-session Pepper captures. GAZE sits within Section 1's cognitive trajectory rather than the reactive social layer alone.
 
 ## 2.6 Task-4 References (5%)
 
-- [ ] verify all references
-
-### Alfie's
+- [X] verify all references
 
 - Ahn, M., Brohan, A., Brown, N., et al. (2022) 'Do As I Can, Not As I Say: Grounding Language in Robotic Affordances', *arXiv preprint arXiv:2204.01691*. Available at: [https://arxiv.org/abs/2204.01691](https://arxiv.org/abs/2204.01691) (Accessed: 24 March 2026).
+- Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251--275. Available at: [https://ieeexplore.ieee.org/document/6483596](https://ieeexplore.ieee.org/document/6483596) (Accessed: 20 March 2026).
+- Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3--4), pp. 143--166. Available at: [https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf](https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf) (Accessed: 18 March 2026).
+- Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387--12406. Available at: [https://link.springer.com/article/10.1007/s10462-023-10448-w](https://link.springer.com/article/10.1007/s10462-023-10448-w) (Accessed: 20 March 2026).
+- Ji, Z., Lee, N., Frieske, R., et al. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), pp. 1--38. Available at: [https://dl.acm.org/doi/10.1145/3571730](https://dl.acm.org/doi/10.1145/3571730) (Accessed: 22 March 2026).
+- Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1--2), pp. 99--134. Available at: [https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf](https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf) (Accessed: 13 March 2026).
+- Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5--7), pp. 618--634. Available at: [https://journals.sagepub.com/doi/10.1177/0278364917690593](https://journals.sagepub.com/doi/10.1177/0278364917690593) (Accessed: 20 March 2026).
+- Picard, R.W. (1997) 'Affective Computing', *MIT Media Laboratory Perceptual Computing Section Technical Report No. 321*. Available at: [https://affect.media.mit.edu/pdfs/95.picard.pdf](https://affect.media.mit.edu/pdfs/95.picard.pdf) (Accessed: 14 April 2026).
+- Radford, A., Kim, J.W., Xu, T., Brockman, G., McLeavey, C. and Sutskever, I. (2023) 'Robust Speech Recognition via Large-Scale Weak Supervision', in Proceedings of the 40th International Conference on Machine Learning (ICML 2023), PMLR 202, pp. 28492-28518. Available at: [https://proceedings.mlr.press/v202/radford23a/radford23a.pdf](https://proceedings.mlr.press/v202/radford23a/radford23a.pdf) Proceedings of Machine Learning Research (Accessed: 14 April 2026).
+- Sciutti, A., Beetz, M., Inamura, T., et al. (2023) 'The Present and the Future of Cognitive Robotics', *IEEE Robotics \& Automation Magazine*, 30(3), pp. 160--163. Available at: [https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092](https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092) (Accessed: 18 March 2026).
+- Smedegaard, C. V. (2019) 'Reframing the Role of Novelty within Social HRI: From Noise to Information', in *Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19)*, pp. 411--420. Available at: [https://dl.acm.org/doi/10.1109/HRI.2019.8673219](https://dl.acm.org/doi/10.1109/HRI.2019.8673219) (Accessed: 22 March 2026).
+- Spezialetti, M., Placidi, G. and Rossi, S. (2020) 'Emotion Recognition for Human-Robot Interaction: Recent Advances and Future Perspectives', Frontiers in Robotics and AI, 7, Article 532279. Available at: [https://www.researchgate.net/publication/347520928_Emotion_Recognition_for_Human-Robot_Interaction_Recent_Advances_and_Future_Perspectives](https://www.researchgate.net/publication/347520928_Emotion_Recognition_for_Human-Robot_Interaction_Recent_Advances_and_Future_Perspectives) (Accessed: 14 April 2026).
+- Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics \& Automation Magazine*, 14(1), pp. 35--42. Available at: [https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf](https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf) (Accessed: 25 March 2026).
 
-- [X]
-- [ ] [ ] Desai, M., Kaniarasu, P., Medvedev, M., Steinfeld, A. and Yanco, H. (2013) 'Impact of robot failures and feedback on real-time trust', *Journal of Human-Robot Interaction*, 2(1), pp. 251--275. Available at: [https://ieeexplore.ieee.org/document/6483596](https://ieeexplore.ieee.org/document/6483596) (Accessed: 20 March 2026).
-- [X]
-- [X]
-- [ ] [ ] Fong, T., Nourbakhsh, I. and Dautenhahn, K. (2003) 'A survey of socially interactive robots', *Robotics and Autonomous Systems*, 42(3--4), pp. 143--166. Available at: [https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf](https://www.cs.cmu.edu/~illah/PAPERS/socialroboticssurvey.pdf) (Accessed: 18 March 2026).
-- [ ] [ ] Garcez, A. d'A. and Lamb, L. C. (2023) 'Neurosymbolic AI: The 3rd Wave', *Artificial Intelligence Review*, 56, pp. 12387--12406. Available at: [https://link.springer.com/article/10.1007/s10462-023-10448-w](https://link.springer.com/article/10.1007/s10462-023-10448-w) (Accessed: 20 March 2026).
-- [ ] [ ] Ji, Z., Lee, N., Frieske, R., et al. (2023) 'Survey of Hallucination in Natural Language Generation', *ACM Computing Surveys*, 55(12), pp. 1--38. Available at: [https://dl.acm.org/doi/10.1145/3571730](https://dl.acm.org/doi/10.1145/3571730) (Accessed: 22 March 2026).
-- [ ] [ ] Kaelbling, L. P., Littman, M. L. and Cassandra, A. R. (1998) 'Planning and acting in partially observable stochastic domains', *Artificial Intelligence*, 101(1--2), pp. 99--134. Available at: [https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf](https://people.csail.mit.edu/lpk/papers/aij98-pomdp.pdf) (Accessed: 13 March 2026).
-- [X]
-- [ ] [ ] Nikolaidis, S., Hsu, D. and Srinivasa, S. (2017) 'Human-robot mutual adaptation in collaborative tasks: Models and experiments', *The International Journal of Robotics Research*, 36(5--7), pp. 618--634. Available at: [https://journals.sagepub.com/doi/10.1177/0278364917690593](https://journals.sagepub.com/doi/10.1177/0278364917690593) (Accessed: 20 March 2026).
-- [ ] [ ] Picard, R.W. (1997) 'Affective Computing', *MIT Media Laboratory Perceptual Computing Section Technical Report No. 321*. Available at: [https://affect.media.mit.edu/pdfs/95.picard.pdf](https://affect.media.mit.edu/pdfs/95.picard.pdf) (Accessed: 14 April 2026).
-- [X]
-- [ ] [ ] Radford, A., Kim, J.W., Xu, T., Brockman, G., McLeavey, C. and Sutskever, I. (2023) 'Robust Speech Recognition via Large-Scale Weak Supervision', in Proceedings of the 40th International Conference on Machine Learning (ICML 2023), PMLR 202, pp. 28492-28518. Available at: [https://proceedings.mlr.press/v202/radford23a/radford23a.pdf](https://proceedings.mlr.press/v202/radford23a/radford23a.pdf) Proceedings of Machine Learning Research (Accessed: 14 April 2026).
-- [ ] [ ] Sciutti, A., Beetz, M., Inamura, T., et al. (2023) 'The Present and the Future of Cognitive Robotics', *IEEE Robotics \& Automation Magazine*, 30(3), pp. 160--163. Available at: [https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092](https://ieeexplore-ieee-org.plymouth.idm.oclc.org/document/10255092) (Accessed: 18 March 2026).
-- [ ] [ ] Smedegaard, C. V. (2019) 'Reframing the Role of Novelty within Social HRI: From Noise to Information', in *Proceedings of the 14th ACM/IEEE International Conference on Human-Robot Interaction (HRI '19)*, pp. 411--420. Available at: [https://dl.acm.org/doi/10.1109/HRI.2019.8673219](https://dl.acm.org/doi/10.1109/HRI.2019.8673219) (Accessed: 22 March 2026).
-- [X] [ ] Spezialetti, M., Placidi, G. and Rossi, S. (2020) 'Emotion Recognition for Human-Robot Interaction: Recent Advances and Future Perspectives', Frontiers in Robotics and AI, 7, Article 532279. Available at: [https://www.researchgate.net/publication/347520928_Emotion_Recognition_for_Human-Robot_Interaction_Recent_Advances_and_Future_Perspectives](https://www.researchgate.net/publication/347520928_Emotion_Recognition_for_Human-Robot_Interaction_Recent_Advances_and_Future_Perspectives) (Accessed: 14 April 2026).
-- [ ] [ ] Tapus, A., Matarić, M. J. and Scassellati, B. (2007) 'Socially assistive robotics [Grand Challenges of Robotics]', *IEEE Robotics \& Automation Magazine*, 14(1), pp. 35--42. Available at: [https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf](https://scazlab.yale.edu/sites/default/files/files/Tapus-RAM2007.pdf) (Accessed: 25 March 2026).
+# 3. Appendix
 
-## 2.7. Appendix
-
-### 2.7.1. Code
-
-### 2.7.2. Video Demo
+## 3.1 Video Demo
 
 - YouTube link: [test](test)
 
-# Appendices
-
-## Appendix A: AI Declaration
+## 3.2 AI Declaration
 
 \begin{figure}[H]
 \centering
@@ -1085,7 +1085,7 @@ I declare that I've used the AI tools listed below whilst preparing this assessm
 \hline
 \textbf{AI Tool Used} & \textbf{Purpose of Use} & \textbf{Extent of Use} \\
 \hline
-ChatGPT & Brainstorming project ideas and structuring the report \textbf{(A2)} & Initial brainstorming and final outline stages \\
+ChatGPT & Brainstorming project ideas and structuring the report \textbf{(A2)} & Initial brainstorming and final outline stages for GAZE \\
 \hline
 ChatGPT & Reviewing structural alignment against grading criteria and mapping word-count budgets \textbf{(A2)} & After and midway through section-drafting \\
 \hline
@@ -1098,10 +1098,7 @@ ChatGPT & General conversations via web-search AI about prevalent papers to read
 - [X] I understand that the ownership and responsibility for the academic integrity of this submitted assessment falls with me, the student.
 - [X] I confirm that all details provided above are an accurate description of how AI was used for this assessment.
 
-## Appendix B: 5-min Youtube Video
-- YouTube link: [test](test)
-
-## Appendix C: PYTHON Code (gaze22.py)
+## 3.3 `gaze22.py`
 
 ```python
 """
@@ -4122,4 +4119,3 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-
