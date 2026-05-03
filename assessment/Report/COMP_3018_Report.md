@@ -620,7 +620,7 @@ GAZE's core contribution: multi-signal emotional inference; facial expression (C
 GAZE operates as a conversational loop rather than a rigid question-answer cycle, wherein each turn fans five live signals into the AdaptiveEngine, GPT-5.4 generates an adapted response via function calling, and Pepper executes speech, gesture, and LED concurrently.
 
 <!-- - [ ] -->
-This function-calling architecture is neuro-symbolic: GPT-5.4 governs dialogue and decision-making, whilst the AdaptiveEngine and game logic are exposed as callable tools. This aligns with Garcez and Lamb's (2023, *.pdf*-p. 1) 'third wave' paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, *.pdf*-p. 1).
+This function-calling architecture is neuro-symbolic: GPT-5.4 controls dialogue and decision-making, whilst the AdaptiveEngine and game logic are callable tools. This aligns with Garcez and Lamb's (2023, *.pdf*-p. 1) *third wave* paradigm, wherein neural and symbolic components share a structured interface (cf. Ahn et al., 2022, *.pdf*-p. 1).
 
 \begin{figure}[H]
 \centering
@@ -649,7 +649,7 @@ This function-calling architecture is neuro-symbolic: GPT-5.4 governs dialogue a
 \draw[->] (pepper.south) -- ++(0,-1) -| node[below, pos=0.25, font=\sffamily\scriptsize] {evaluate\_adaptation()} (infer.south);
 
 \end{tikzpicture}
-\caption{GAZE's per-turn cycle mapped onto Laird's (2012, fig.~4.7, p.~79) Soar phases: five signals feed Input, \texttt{infer\_state()} and \texttt{decide()} perform Operator Selection, `gpt-5.4` handles Operator Application, and Pepper executes Output. Unlike Soar's implicit chunking, GAZE closes the loop via an explicit \texttt{evaluate\_adaptation()} step that feeds back into the next turn.}
+\caption{GAZE's per-turn cycle mapped onto Laird's (2012, fig.~4.7, p.~79) Soar phases: five signals feed Input, \texttt{infer\_state()} and \texttt{decide()} perform Operator Selection, \textit{gpt-5.4} handles Operator Application, whilst \textit{Pepper} executes Output. Unlike Soar's implicit chunking, GAZE instead closes the loop via an explicit \texttt{evaluate\_adaptation()} step that carries over to the next turn.}
 \label{fig:gaze-cycle}
 \end{figure}
 
