@@ -26,7 +26,7 @@ One sentence: *"GAZE's novel contribution is a multi-signal adaptive cognitive l
 
 Headline novelty. Separates GAZE from a single-signal classifier wire-up.
 
-- Show the four inputs feeding `infer_state()`: facial expression (WS-10 CNN, 7-class 48$\times$48 greyscale), vocal emotion (WS-08 MLP, MFCC/chroma/mel), response time, answer correctness.
+- Show the five inputs feeding `infer_state()`: facial expression (WS-10 CNN, 7-class 48$\times$48 greyscale), vocal emotion (WS-08 MLP, MFCC/chroma/mel), response time, answer correctness, and volume/RMS.
 - Show the cross-validation branches inside the function and the `InferredState` output that feeds everything downstream.
 - **Narrate:** *"The robot doesn't commit to one signal -- it triangulates. A happy face with a wrong answer and a long response time doesn't read as 'happy'; it reads as 'struggling but hiding it'. Workshop 10 and Workshop 8 gave me two independent inference paths; I use both as votes rather than as an oracle."*
 - **Salvage-line from the old script:** *"The camera says Angry but I answered fast and correctly, so the engine correctly infers Comfortable."* That example lands in one sentence; keep it.
@@ -149,7 +149,7 @@ On-screen evidence: model-summary print of the WS-10 CNN architecture; before/af
 ## Things to Say (mark-earning phrases)
 
 - "Multi-signal emotional inference" -- the novelty
-- "The engine weighs six signals simultaneously" -- shows depth
+- "The engine weighs five signals simultaneously" -- shows depth
 - "Cross-modal rules override the camera when performance signals contradict it" -- demonstrates critical design
 - "The architecture is neurosymbolic: symbolic rules for state inference, neural LLM for dialogue generation" -- shows awareness
 - "The prompt is never the same twice; it is dynamically constructed from live metrics every round" -- demonstrates genuine adaptation

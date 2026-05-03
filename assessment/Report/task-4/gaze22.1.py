@@ -3,11 +3,11 @@ GAZE: Game-Adaptive Zone of Engagement.
 
 A Pepper (NAO) countdown-game host. The robot adapts difficulty,
 pacing and feedback per turn from five signals (each paired with the function wherein it is produced):
-    1- facial expression  (CNN, WS-10)         primary       --->     capture_and_classify() / FacialExpressionModel.predict()
-    2- answer correctness (performance)        primary       --->     check_answer() (GPT-4.1 verifier)
-    3- response time      (behavioural)        primary       --->     time.time() - question_start (main loop)
-    4- speech volume      (RMS)                secondary     --->     local_record() / nao_record() (RMS per audio chunk)
-    5- vocal emotion      (MLP, WS-08)         tie-breaker due to difficulty with model selection ---> classify_speech_emotion() / SpeechEmotionModel.predict()
+    1- facial expression:  (CNN, WS-10)         primary       --->     capture_and_classify() / FacialExpressionModel.predict()
+    2- answer correctness: (performance)        primary       --->     check_answer() (GPT-4.1 verifier)
+    3- response time:      (behavioural)        primary       --->     time.time() - question_start (main loop)
+    4- speech volume:      (RMS)                secondary     --->     local_record() / nao_record() (RMS per audio chunk)
+    5- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() / SpeechEmotionModel.predict()
     All five fan in to: AdaptiveEngine.infer_state() -> AdaptiveEngine.decide()
 
 NOVELTY:
@@ -16,41 +16,44 @@ face is Neutral, vocal-emotion confidence is >= 0.9 and the label is not "fearfu
 collapse to it on quiet/noisy audio.
 
 ARCHITECTURE: gpt-5.4 converse with access to four function-calling tools:
-- def generate_game_question (generate values computationally); def check_game_answer 
-- def evaluate_last_adaptation; def request_more_time). 
+    - generate_game_question (GPT-5.4 generates; validate_numbers_round stubbed return True)
+    - check_game_answer (GPT-4.1 yes/no verifier)
+    - evaluate_last_adaptation (self-evaluates previous round's strategy)
+    - request_more_time (acknowledges user's request for more think-time)
 
 Initially used a wake-word defence but became unnecessary
 
-`AdaptiveEngine`: five signals
-and adapts difficulty, pacing/think-budget, and game-switching. A
-deterministic GPT-4.1 verifier handles answer-checking.
+`AdaptiveEngine`: five signals and adapt (change based on inference) difficulty, pacing/think-budget, and game-switching:
+ - GPT-4.1 for yes/no checks (check_answer, is_goodbye, resume-intent)
+ - GPT-5.4 for the main converse loop and question generation.
 
 VARIOUS MODES:
     1- LOCAL_MODE=true:
-        - webcam; works with Mac and Windows (NAO's direct camera )
+        - webcam; works with Mac and Windows (no NAO connectionc)
         - Mac/Windows mic
         - local TTS; just run entirely without robot-connection because all input/output is local to tester's computer
     2- LOCAL_MODE=false:
         - Pepper over SSH;
         - output (TTS, LEDs, gestures) on robot.
 
-    NAO-ran code must 
+    NAO-ran code must be non-indented to avoid processing issues with Pepper (Pepper's Python 2.7 interpreter chokes on leading whitespace)
 
     Now, everything is ran hybridly: dashboard stats, and the camera feed is streamed over TCP to the computer for
     display and facial-expression inference. Pepper's camera is too slow for a responsive experience, and local webcam is much smoother. The microphone path is governed by LOCAL_MODE, but can be forced to the local machine with HYBRID_LOCAL_INPUT so the operator can speak from the computer whilst Pepper still does the talking.
     
     3- HYBRID_LOCAL_INPUT (default = True):
         - mic input is forced to the Mac despite LOCAL_MODE's preference
-        - essentially the brain works locally to 
+        - essentially the brain works locally to offload inference and display whilst Pepper handles output (TTS, LEDs, gestures)
 
 TESTING OBSERVATIONS:
-    - Pepper's audio trainingset is *noisy*; due to training on podcasts, youtube Whisper is therefore gated by defences as follows:
+    - Pepper's onboard audio is *noisy*; Whisper (trained on podcasts, YouTube) therefore hallucinates on it and is gated by defences as follows:
       - Silero VAD 
       - no_speech_prob, and a hallucination blacklist.
+    
     - Vosk wake-word ensure (has_wake_word()) was indeed wired early-in to
     combat Whisper hallucinations on noisy Pepper audio. The
     hybrid-required switch fixed this; local Mac audio sometimes
-    produces these, whereas Pepper's stream more-often did, hence
+    produces these, whereas Pepper's stream more-often does, hence
     wake-word is now not necessary (transcribe(bypass_wake_word=True)).
 
     - Pepper camera streaming (~10 fps) < local webcam
@@ -66,12 +69,8 @@ PER-PROPOSAL AUTHORSHIP:
     Alfie: architecture, OpenAI integration, AdaptiveEngine. facial-expression pipeline, 
     Salman - game flow, gestures, LEDs, TTS pacing, save/load, testing.
 
-CRITICAL:
-- **PROPOSAL.PDF IS SOURCE OF TRUTH FOR THE INITIAL-INTENDED DESIGN**
-- **CONFIG NAO IP INTO ENV LIKE LAST TIME**
 
-
-LIVE DEMO-PREP CHECKLIST:
+LIVE PRE-DEMO CHECKLIST:
 - [X] fix dashboard as it is just black when NAO
 - [X] [X] eye colours should change 
 - [X] disregard all hallucinations until sufficent listened sentence
@@ -96,7 +95,7 @@ times
 
 - [X] make dashboard camera FPS much more fluid because its too slow now; fix was to make it stream via TCP to computer
 
-""" 
+"""
 
 import os, re, sys, json, time, types, wave, struct, socket, textwrap, tempfile, threading, subprocess, unicodedata
 import tkinter as tk
@@ -1915,7 +1914,7 @@ def build_signal_context(engine: AdaptiveEngine,
     recent_faces = [r.facial_expression for r in engine.history[-3:]]
     recent_vocal = [r.vocal_emotion for r in engine.history[-3:]]
 
-    # map raw budget to a semantic label so the LLM reflects pacing without ever seeing or repeating the raw seconds verbatim in dialogue
+    # think-budget (float) -> (str) word label for LLM
     if engine.think_budget_secs >= 17.0:
         pacing = "relaxed and patient"
     elif engine.think_budget_secs <= 13.0:
@@ -1972,7 +1971,7 @@ def execute_tool_call(tool_name: str, tool_args: dict,
             recent_answers=engine.recent_answers,
             recent_game_types=engine.recent_game_types,
         )
-        # Record question, answer, AND game_type so the next generation call sees the full do-not-repeat context; answer-level dedup catches mode-collapsed targets even when GPT rephrases the question; game-type history pushes rotation so we don't get 5 Numbers games in a row
+        # dedup: question + answer + game_type
         new_q = result.get("question", "").strip()
         new_a = str(result.get("answer", "")).strip()
         if new_q:
@@ -1983,7 +1982,7 @@ def execute_tool_call(tool_name: str, tool_args: dict,
             engine.recent_answers = engine.recent_answers[-30:]
         engine.recent_game_types.append(gt)
         engine.recent_game_types = engine.recent_game_types[-30:]
-        # Sync adaptive engine with LLM's chosen difficulty so the engine's next decide() starts from the correct baseline
+        # sync adaptive engine with LLM's chosen difficulty so the engine's next decide() starts from correct baseline
         try:
             engine.current_difficulty = Difficulty[diff]
         except (KeyError, ValueError):
@@ -2384,7 +2383,7 @@ class GazeDashboard:
 
 
     def update_robot_speech(self, text: str):
-        # enable /to insert /to see end /to disable: the Text widget is "disabled" (read-only) by default; flip to "normal" to write, scroll the view to "end" so newest message stays visible, then re-disable so the user can't accidentally type into the log.
+        # flip read-only widget to insert, scroll, re-disable
         def apply():
             self._conv_text.configure(state="normal")
             self._conv_text.insert("end", f"Robot: {text}\n\n")
@@ -2610,7 +2609,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
 
 
     turn_count = 0
-    # silent turns skip the LLM so the robot doesn't pester. Tiered disengagement: tier 1 check-in at 3 silences, tier 2 game-switch at 4; resets when user speaks
+    # tiered disengagement; check-in at 3, game-switch at 4
     nudge_level = 0
 
     try:
@@ -2711,7 +2710,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
                     streak=engine.consecutive_correct,
                 )
 
-                # 1- gentle check-in at 3 consecutive silences; nudge_level guards each tier to once per silent spell (proposal: "intervenes to re-engage them", assistive/stroke-rehab analogue)
+                # 1- check-in at 3 silences (proposal: "intervenes to re-engage them")
                 if engine.consecutive_silences >= 3 and nudge_level < 1:
                     nudge_prompt = [
                         {"role": "system",
@@ -2883,7 +2882,7 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
 
             game_state.last_answer_checked = False
 
-            # belt-and-braces auto-save: even on quiet/chat turns where no round was recorded, flush progress every 2 turns so mid-conversation state (name, recent_questions, streaks) is never stale by more than one turn
+            # auto-save every 2 turns
             if turn_count % 2 == 0:
                 save_session(engine, preferred_game, quiet=True)
                 print("  [Auto-save]")
@@ -2929,6 +2928,8 @@ def conversation_loop(dashboard, face_model, face_cascade, speech_model,
     dashboard.close()
     print("\nGAZE disconnected.")
 
+    # ---------------------------------- MAIN ENTRY-POINT ----------------------------------
+
 def main():
     print("----------------------------------------")
     print("  GAZE: Game-Adaptive Zone of Engagement")
@@ -2952,7 +2953,7 @@ def main():
     local_camera = None
     if USE_LOCAL_CAMERA:
         local_camera = cv2.VideoCapture(0)
-        # Set capture properties explicitly; `BUFFERSIZE=1` is the critical one: without it OpenCV buffers 3-5 frames and `camera.read()` pulls stale ones, compounding perceived latency even when every downstream stage is fast.
+        # BUFFERSIZE=1; else OpenCV buffers stale frames
         local_camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         local_camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         local_camera.set(cv2.CAP_PROP_FPS, 30)
