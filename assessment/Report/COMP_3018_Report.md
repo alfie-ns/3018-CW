@@ -55,6 +55,7 @@ header-includes:
   - [ ] TODO: talk about IRL (inverse reinforcement learning)
 
 -->
+
 # 1- Task (3) Literature Review
 
 ## 1.1. Introduction
@@ -65,7 +66,7 @@ Robots now administer medication reminders, facilitate rehabilitation exercises,
 
 However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) call the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots should be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. 151) formalise this requirement via a "virtuous cycle that is embedded in an ongoing process of action and perception" (the agent anticipates $\to$ learns $\to$ adapts to achieve autonomy). This essay contends that assistive robotics should graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer) for sustained, personalised support. The sections as follows survey the theoretical foundations and the resulting applications, alongside the challenges and future directions.
 
-## 1.2. Literature Review 
+## 1.2. Literature Review
 
 *Cognitive robotics:* defined by Sandini, Sciutti and Vernon (2021, Overview), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, integrating "sensorimotor skills, knowledge representation and reasoning, and social interaction." This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why*, and adapts accordingly, is *cognitive*.
 
@@ -80,7 +81,7 @@ Furthermore, memory is not treated as a single uniform store (monolithic); Laird
 \label{fig:soar-cycle}
 \end{figure}
 
-## 1.3. Applications <!-- - [ ] -->
+## 1.3. Applications
 
 ### 1.3.1 Therapeutic and Emotional Support
 
@@ -88,21 +89,21 @@ The PARO therapeutic seal robot is among the most-widely deployed platforms with
 
 Notwithstanding these benefits PARO operates at the reactive layer, possessing no theory of mind (cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously). A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts (prospection), recall what calmed the patient (episodic memory), and adapt its strategy (metacognition). PARO's effectiveness plateaus precisely because it cannot personalise; the gap is therefore clinically important. The architectural cost explicitly is: without episodic memory, the agent's perception is "limited both spatially and temporally—that is, to the here and now" (Laird, 2012, p. 233). Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy: PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level.
 
-### 1.3.2 Medication Adherence and Daily Living Support <!--- [ ] -->
+### 1.3.2 Medication Adherence and Daily Living Support
 
 Medication non-adherence imposes substantial costs on healthcare systems, and elderly patients with polypharmacy regimens particularly are vulnerable to missed or incorrect doses. Robots in this domain face a different challenge from therapeutic companionship: trust and cognitive load are latent variables, inferred only from *noisy-behavioural signals*. Lee and See (2004, *.pdf*-p. 6) define trust as "the attitude that an agent will help achieve an individual's goals in a situation characterized by uncertainty and vulnerability"; a definition foregrounding the unobservable nature that necessitates probabilistic modelling. A user might comply with a medication prompt despite low trust (e.g. time pressure), or indeed refuse despite high trust (e.g. task complexity), and thus, the observation alone cannot reliably disambiguate the underlying state (Kaelbling, Littman and Cassandra, 1998, p. 105, *3. Partial observability*).
 
 The Partially Observable Markov Decision Process (POMDP) provides formal machinery for this uncertainty. Chen et al. (2020, p. 6) demonstrate a Trust-POMDP wherein the robot maintains a belief distribution over trust and selects actions that maximise long-term collaboration, showing belief-space planning outperforms fixed strategies. Garcez and Lamb (2023, *.pdf*-p. 1) advocate a neuro-symbolic paradigm in which neural subsystems handle perception, and symbolic subsystems (e.g. POMDPs) handle temporal reasoning. Nikolaidis, Hsu and Srinivasa (2017, p. 625) provide empirical corroboration: in a collaborative task (n = 69), robots utilising mutual adaptation via a Mixed Observability MDP (modelling human adaptability as a latent variable) were rated significantly more trustworthy than fixed-policy alternatives (U = 180, p = 0.048). This aligns with Hancock et al.'s (2011, p. 522) finding that performance is the strongest trust predictor.
 
-### 1.3.3 Physical Rehabilitation and Mobility <!-- [ ] -->
+### 1.3.3 Physical Rehabilitation and Mobility
 
 Robotic exoskeletons and assistive manipulators for stroke recovery and mobility support need to adapt not only to the patient's physical state (joint angles and muscle activation patterns) but also to their psychological state: motivation, frustration, and fatigue determine whether a patient perseveres or disengages.
 
 Embodied cognition becomes essential. Brooks (1991, Introduction) argues that intelligence emerges from physical interaction with the environment instead of abstract representation, whereas Fong, Nourbakhsh and Dautenhahn (2003, p. 149) operationalise this as "perturbatory coupling": the more channels of mutual influence, the more embodied the system. A rehabilitation robot therefore occupies a uniquely cognitive niche, sensing the patient's body, reasoning about current capabilities, and adapting appropriately. A purely language-based or screen-based interface cannot achieve this; Matarić et al. (2007, *.pdf*-p. 7) confirm: stroke survivors engaged more with embodied robots than screen-based alternatives. Tapus, Ţăpuş and Matarić (2008, Abstract) show that embodiment alone is insufficient: adaptive personality matching (adjusting interaction distance and speed to the user's traits) further improved task performance, suggesting rehabilitation robots require physical presence and cognitive adaptation.
 
-## 1.4. Discussion <!-- - [ ] -->
+## 1.4. Discussion
 
-### 1.4.1 Challenges <!-- [ ] -->
+### 1.4.1 Challenges
 
 Tapus, Matarić and Scassellati (2007, *.pdf*-p. 6) projected that by 2012 SAR systems would demonstrate "marked improvement in learning/training/recovery of the user"; yet PARO, the most-deployed platform nearly twenty years later, *still* cannot remember yesterday's session. Three challenges explain this. Firstly, computational intractability: solving $POMDPs$ exactly is PSPACE-complete (Papadimitriou and Tsitsiklis, 1987, p. 448), and the belief simplex *(geometric space of all possible probability distributions over the hidden states)* grows exponentially with state-space dimensionality. Whilst approximate solvers such as point-based value iteration (Pineau, Gordon and Thrun, 2003, p. 1025) and online Monte-Carlo tree search (Silver and Veness, 2010, p. 1) mitigate this, real-time cognitive processing within embodied systems remains an open challenge, particularly when multiple unobserved variables (trust, load, emotion) require tracking simultaneously.
 
@@ -110,7 +111,7 @@ Secondly, the measurement problem: trust, cognitive load, and emotional state ar
 
 Finally, adaptation without exploitation: a robot that runs inference on cognitive load could time its medication requests to coincide with periods of high vulnerability, maximising compliance at the expense of user autonomy. The POMDP reward function should therefore encode ethical constraints alongside clinicians' objectives.
 
-### 1.4.2 Ethical Implications <!-- [ ] -->
+### 1.4.2 Ethical Implications
 
 Assistive robots in intimate care spaces (bedrooms, bathrooms, rehabilitation clinics) continuously collect sensitive behavioural data. Facial expressions, vocal patterns, and movement trajectories constitute biometric data, yet regulatory frameworks have not kept pace with deployment. Wachter, Mittelstadt and Floridi (2017, Abstract) argue that even the General Data Protection Regulation provides no enforceable "right to explanation" of automated decisions; a gap particularly concerning in healthcare where recommendations directly affect patient wellbeing.
 
@@ -118,7 +119,7 @@ Moreover, over-reliance on assistive robots risks eroding functional independenc
 
 The ethical watchword is therefore proactive regulation: design-stage ethics anticipating failure modes, not reactive patchwork after harm. Per the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely high.
 
-## 1.5. Conclusion <!-- - [ ] -->
+## 1.5. Conclusion
 
 Assistive robotics stands at an inflection point. Current systems deliver measurable benefits within narrow envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon, Metta and Sandini (2007) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would mark a qualitative advance over current systems.
 
@@ -218,82 +219,12 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as the Trus
 - Wada, K. and Shibata, T. (2007) 'Living with seal robots: its sociopsychological and physiological influences on the elderly at a care house', *IEEE Transactions on Robotics*, 23(5), pp. 972-980. Available at: [https://ieeexplore.ieee.org/document/4339551](https://ieeexplore.ieee.org/document/4339551) (Accessed: 18 March 2026).
 
 # 2- Task (4) Novel Programming Project (Adaptiveness in Assistive Robotics)
-<!--
-- [X] CRITICAL: reconfigure report below to match newest gaze.py
-- [X] multi-layer defence-in-depth: talk about how silero-vad was used to stop whisper hallucinations
-- [X] verify word count — Task 3 post Tier-1 trim: 1183 strict (excluding quotes/captions/code/math/refs/citations) → under 1800; 1842 standard (counting inline-quoted prose) → +42 over by lenient reading. Cuts: §1.4.2 digital-divide para (-30w), §1.2 euCognition opener (-10w), §1.3.1 prospection example (-4w), §1.5 future-applications sentence (-35w) = -79w total. 2026-05-03
-
-
-- [ ] ensure code-solution matches `proposal.pdf`
-
-References:
-
-```markdown
-
-### 1. Adaptive Companion / Socially Assistive Role (core concept)
-
-- Tapus, Mataric and Scassellati (2007) -- This is your single most important paper. Socially assistive robotics is precisely what GAZE does: a robot that adapts its behaviour to motivate and coach a user. Their framework for robot-assisted therapy (detecting disengagement, adjusting difficulty) maps almost 1:1 onto your core loop.
-- Fong, Nourbakhsh and Dautenhahn (2003) -- Foundational survey on socially interactive robots. Use it to ground GAZE within the broader taxonomy of social robots (companion, assistant, coach).
-- Kahn et al. (2008) -- Design patterns for sociality in HRI. Directly supports your robot personality modes (encouraging vs. sarcastic) and the idea of building rapport through game interaction.
-
-### 2. Affective Computing / Multi-Signal Fusion (core technical grounding)
-
-- Calvo, R.A. and D'Mello, S. (2010) 'Affect detection: An interdisciplinary review of models, methods, and their applications', *IEEE Transactions on Affective Computing*, 1(1), pp. 18-37. DOI: 10.1109/t-affc.2010.1 -- NOW CITED IN BACKGROUND. Surveys unreliability of single-modality affect detection.
-- Poria, S., Cambria, E., Bajpai, R. and Hussain, A. (2017) 'A review of affective computing: From unimodal analysis to multimodal fusion', *Information Fusion*, 37, pp. 98-125. DOI: 10.1016/j.inffus.2017.02.003 -- NOW CITED IN BACKGROUND. The review paper on why fusion beats single-modality.
-- Ekman, P. and Friesen, W.V. (1971) 'Constants across cultures in the face and emotion', *Journal of Personality and Social Psychology*, 17(2), pp. 124-129. DOI: 10.1037/h0030377 -- NOW CITED IN METHOD (facial expression). Foundational 7-class emotion taxonomy.
-- El Ayadi, M., Kamel, M.S. and Karray, F. (2011) 'Survey on speech emotion recognition: Features, classification schemes, and databases', *Pattern Recognition*, 44(3), pp. 572-587. DOI: 10.1016/j.patcog.2010.09.020 -- NOW CITED IN METHOD (vocal emotion). The SER survey.
-
-### 3. Multi-Signal User State Inference & Adaptive Engine
-
-- Nikolaidis, Hsu and Srinivasa (2017) -- Human-robot *mutual* adaptation in collaborative tasks. Directly supports your adaptive difficulty/game-switching mechanism where the robot adjusts based on inferred user state.
-- Kaelbling, Littman and Cassandra (1998) -- Your adaptive engine is essentially a POMDP: user emotional/cognitive state is partially observable (you see facial expression + response time + correctness but not the true internal state). Cite this to give your inference model theoretical grounding.
-- Pineau, Gordon and Thrun (2003) and Silver and Veness (2010) -- If you want to frame the adaptive engine formally, these are scalable POMDP solvers. Even if you don't implement a full POMDP, citing them shows you understand the decision-theoretic underpinning of what your weighted-signal inference is approximating.
-
-### 4. Trust & Engagement Over Time
-
-- Desai et al. (2013) -- Impact of robot failures and feedback on real-time trust. Directly relevant: if GAZE generates a bad question or misreads emotion, how does that affect user trust? Supports your feedback system idea.
-- Hancock et al. (2011) -- Meta-analysis of trust factors in HRI. Use to justify which signals matter for building trust (robot performance, reliability of adaptation).
-- Lee and See (2004) -- Trust in automation. Your system is making autonomous decisions (switching games, adjusting difficulty). This paper grounds *why* the user needs to trust those decisions.
-- Chen et al. (2020) -- Trust-aware decision making. Supports the idea that your adaptive engine should factor in whether the user trusts the robot's choices, not just performance metrics.
-- Smedegaard (2019) -- Novelty effects in social HRI. Critical for your proposal: initial engagement with Pepper may be high due to novelty, then decline. Your adaptive system needs to sustain engagement *beyond* the novelty phase. Cite this to show awareness of that challenge.
-
-### 5. LLM Integration (OpenAI for Game/Dialogue Generation)
-
-- Ahn et al. (2022) -- Grounding language in robotic affordances ("SayCan"). Cite to justify connecting an LLM to Pepper's physical capabilities (speech, gestures). The LLM generates the game content, but it should be grounded in what Pepper can actually *do*.
-- Ji et al. (2023) -- LLM hallucination survey. Critical to acknowledge: if OpenAI generates a trivia question, the answer could be wrong. Your system needs a correctness-verification layer. Shows awareness of a real technical risk.
-- Garcez and Lamb (2023) -- Neurosymbolic AI. Your architecture is inherently neurosymbolic: the LLM (neural) handles dialogue generation, but game logic, scoring, and state tracking are symbolic/rule-based. Cite to frame this hybrid approach deliberately rather than accidentally.
-
-### 6. Uncanny Valley / Robot Appearance
-
-- Mori (1970) -- Pepper sits in an interesting spot on the uncanny valley curve (humanoid but clearly not human). Brief cite to justify why Pepper is a suitable platform for a companion role without triggering discomfort.
-
-### 7. Ethics of Robot Companionship
-
-- Sharkey and Sharkey (2012) -- Ethical issues in robot care for the elderly. If GAZE has any therapeutic/wellbeing angle, cite this to show awareness of ethical considerations (e.g., should a robot be a substitute for human interaction?).
-- Sharkey (2014) -- Robots and human dignity. Supports ethical grounding of the companion role.
-- Wachter, Mittelstadt and Floridi (2017) -- If you're storing user progress/preferences, cite for GDPR and explainability considerations regarding the adaptive engine's decisions.
-
-### 8. Cultural Considerations (if relevant to your report)
-
-- Kaplan (2004), Lim, Rooksby and Cross (2021), Cirasa and Conti (2025) -- All address cultural differences in robot acceptance and trust. Useful if your report discusses how GAZE might be received differently across cultures.
-
-### Less Directly Relevant
-
-- Rios-Martinez et al. (2015) and Joosse et al. (2014) - Proxemics/navigation. Since Pepper is stationary, these are tangential unless you discuss the seating arrangement/distance.
-- Papadimitriou and Tsitsiklis (1987) - Complexity of MDPs. Only cite if you formally discuss the computational complexity of your adaptive decision-making.
-- Metz (2007), Winschiers-Theophilus and Bidwell (2013), Wyche and Steinfield (2016) - African moral theory / indigenous HCI / technology adoption. Not directly applicable unless you bring in a specific cultural-ethics angle.
-
-```
-
-- [ ] **Strongest citations for the core GAZE concept: Tapus et al. (2007), Sciutti et al. (2023), Nikolaidis et al. (2017), Ahn et al. (2022), and Smedegaard (2019). These five alone cover the adaptive-assistive role, cognitive framing, mutual adaptation, LLM-robot grounding, and the novelty-engagement challenge.**
--->
 
 ## 2.1. Introduction (10%; Salman)
 
-Gaze is an adaptive game hosting engagement coaching system that is designed to run on the pepper robot. it turns pepper into a responsive companion that plays both mathematical and letter countdown games while observing and adapting to the human. Gaze is a multi-signal emotional inference engine as the system cross validates three live data streams: facial expression recognition for emotional states, speech expression recognition and am engagement tracking feature that monitors response time, silence time and answer accuracy. Using these features helps recognising real emotional states and reduce risk or misleading readings for example a neutral face with slow responses and low accuracy means disengagement however tense expressions with fast and correct responses means focus. 
+Gaze is an adaptive game hosting engagement coaching system that is designed to run on the pepper robot. it turns pepper into a responsive companion that plays both mathematical and letter countdown games while observing and adapting to the human. Gaze is a multi-signal emotional inference engine as the system cross validates three live data streams: facial expression recognition for emotional states, speech expression recognition and am engagement tracking feature that monitors response time, silence time and answer accuracy. Using these features helps recognising real emotional states and reduce risk or misleading readings for example a neutral face with slow responses and low accuracy means disengagement however tense expressions with fast and correct responses means focus.
 
-Inspired by assistive robots gaze role is to keep users engaged. To ensure that it’s doing its job gaze detects when attention is fading and steps in to reengage by changing difficulty level and offering hints if the user is struggling. The questions are generated dynamically using Open AI which also verifies answers and shapes the answers based on users inferred state. The speech is transcribed using whisper which allows the system to freely form answers with responses combine speech, gestures and LED feedback. All progress is saved making gaze a system that doesn’t just host games but also adapts and coaches 
-
+Inspired by assistive robots gaze role is to keep users engaged. To ensure that it’s doing its job gaze detects when attention is fading and steps in to reengage by changing difficulty level and offering hints if the user is struggling. The questions are generated dynamically using Open AI which also verifies answers and shapes the answers based on users inferred state. The speech is transcribed using whisper which allows the system to freely form answers with responses combine speech, gestures and LED feedback. All progress is saved making gaze a system that doesn’t just host games but also adapts and coaches
 
 ## 2.2. Background (10%; Alfie)
 
@@ -311,7 +242,7 @@ GAZE's core contribution: multi-signal emotional inference; facial expression (C
 
 GAZE operates as a conversational loop rather than a simple question-answer cycle, wherein each turn fans six live signals into the AdaptiveEngine, GPT-5.4 generates an adapted response via function calling, and Pepper executes speech, gesture, and LED concurrently.
 
-<!-- - [ ] -->
+
 This function-calling architecture is neuro-symbolic (i.e., combining neural and symbolic components) GPT-5.4 controls dialogue and decision-making; the AdaptiveEngine and game logic are callable tools. This aligns with Garcez and Lamb's (2023, *.pdf*-p. 1) *third wave* paradigm: neural and symbolic components share a structured interface (cf. Ahn et al., 2022, *.pdf*-p. 1).
 
 \begin{figure}[H]
@@ -431,6 +362,7 @@ rec.stopMicrophonesRecording()
 \end{lstlisting}
 
 <!-- - [X] PROOFREAD -->
+
 Whisper hallucinates on near-silent audio, emitting training-set tics (CJK gibberish, prompt-primed repetition); the latter is NLG *degeneration*; models get "stuck in repetitive loops" (Ji et al., 2023, p. 3). Transcription is thus gated by this five-layer defence chain (Listing~\ref{lst:whisper}).
 
 \begin{lstlisting}[caption={\texttt{transcribe}: five-layer defence chain against Whisper hallucination on near-silent audio (gaze.py, lines ~1532--1610).}, label={lst:whisper}]
@@ -444,20 +376,20 @@ def transcribe(bypass_wake_word: bool = False,
         if INPUT_IS_LOCAL and not _local_speech_detected:
             return ""
 
-        # Silero VAD hard gate; NAO + LOCAL
+    # Silero VAD hard gate; NAO + LOCAL
         if not has_real_speech(LOCAL_WAV):
             print("  Silero VAD found no speech; skipping Whisper.")
             return ""
 
-        # Vosk wake-word gate; bypass for name prompt
+    # Vosk wake-word gate; bypass for name prompt
         if not bypass_wake_word and not has_wake_word(LOCAL_WAV):
             print("  No wake-word detected; skipping Whisper.")
             return ""
 
-        try:
+    try:
             with open(LOCAL_WAV, "rb") as fh:
                 resp = client.audio.transcriptions.create(
-                    model="whisper-1", # 
+                    model="whisper-1", #
                     file=fh, #
                     response_format="verbose_json", # get self-signals for hallucination detection
                     temperature=0.0, # zero randomness
@@ -467,7 +399,7 @@ def transcribe(bypass_wake_word: bool = False,
             text = (getattr(resp, "text", "") or "").strip()
             print(f"  Whisper raw text: {text!r}")
 
-            # Whisper self-signals from verbose_json
+    # Whisper self-signals from verbose_json
             segments = getattr(resp, "segments", None) or []
             suspected_hallucination = False
             if segments:
@@ -489,7 +421,7 @@ def transcribe(bypass_wake_word: bool = False,
                     print(f"  Whisper repetition loop (max compression_ratio={max(compression_vals):.2f}); flagging {text!r} as hallucination")
                     suspected_hallucination = True
 
-            # normalised hallucination blacklist + Whisper-self-signal hallucinations
+    # normalised hallucination blacklist + Whisper-self-signal hallucinations
             if suspected_hallucination or is_known_hallucination(text):
                 print(f"  Filtered Whisper hallucination: {text!r}")
                 if record_again is not None and (attempts_remaining is None or attempts_remaining > 0):
@@ -502,7 +434,7 @@ def transcribe(bypass_wake_word: bool = False,
                     continue
                 return ""
 
-            # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
+    # Strip leading "Pepper"/"Gaze" so handlers receive just the answer; \b blocks "Pepperoni"/"Gazebo" false positives..
             stripped = re.sub(r'(?i)^\s*(pepper|gaze)\b[,.\s]*', '', text).strip()
             return stripped
         except Exception as e:
@@ -521,28 +453,28 @@ def transcribe(bypass_wake_word: bool = False,
             audio = sound_file.read(dtype="float32")
             sample_rate = sound_file.samplerate
 
-        if audio.ndim > 1:
+    if audio.ndim > 1:
             audio = audio.mean(axis=1)
 
-        # peak-normalise; helps quieter speakers
+    # peak-normalise; helps quieter speakers
         audio = librosa.util.normalize(audio)
 
-        n_fft = 2048
+    n_fft = 2048
         if len(audio) < n_fft:
             return None
 
-        stft = np.abs(librosa.stft(audio, n_fft=n_fft))
+    stft = np.abs(librosa.stft(audio, n_fft=n_fft))
 
-        mfccs = np.mean(librosa.feature.mfcc(
+    mfccs = np.mean(librosa.feature.mfcc(
             y=audio, sr=sample_rate, n_mfcc=40).T, axis=0).flatten()
-        
-        chroma = np.mean(librosa.feature.chroma_stft(
+
+    chroma = np.mean(librosa.feature.chroma_stft(
             S=stft, sr=sample_rate).T, axis=0).flatten()
-        
-        mel = np.mean(librosa.feature.melspectrogram(
+
+    mel = np.mean(librosa.feature.melspectrogram(
             y=audio, sr=sample_rate).T, axis=0).flatten()
 
-        return np.concatenate([mfccs, chroma, mel])
+    return np.concatenate([mfccs, chroma, mel])
 \end{lstlisting}
 
 **4- Response Time (engagement-based).** A Python timer measures elapsed time from question delivery to recording completion; the Whisper call occurs *after* the timer halts, isolating deliberation time from API latency.
@@ -622,14 +554,14 @@ def infer_state(self, expression: str, response_time: float,
         clean = answer_text.strip().lower()
         is_silent = (not clean or clean in {"i don't know", "skip", "pass", "next"}) # if no meaningful input || input matches a skip-command phrase in the set (set over list because it's faster) then indeed silent (True)
 
-        # Arousal bounds calibrated against ambient noise
+    # Arousal bounds calibrated against ambient noise
         high_arousal = volume_rms > self.VOLUME_LOUD
         low_arousal = 0 < volume_rms < self.VOLUME_QUIET
 
-        # voice trusted only when not-fearful
+    # voice trusted only when not-fearful
         trust_voice = (vocal_conf >= 0.9 and vocal_emotion != "fearful")
 
-        if is_silent:
+    if is_silent:
             self.consecutive_silences += 1
         else:
             self.consecutive_silences = 0
@@ -640,15 +572,15 @@ def infer_state(self, expression: str, response_time: float,
             self.consecutive_wrong  += 1
             self.consecutive_correct = 0
 
-        # 1- FACE-PRIMARY RULES: these fire before voice is ever consulted
+    # 1- FACE-PRIMARY RULES: these fire before voice is ever consulted
 
-        # thriving: good performance + fast responses
+    # thriving: good performance + fast responses
         if (correctness >= CORRECTNESS_CEILING and response_time < RESPONSE_TIME_BASELINE * 0.5):
             return InferredState.THRIVING
         if expression == "Angry" and correct and response_time < RESPONSE_TIME_BASELINE * 0.6:
             return InferredState.COMFORTABLE
 
-        # disengaged: silence + slow + poor performance
+    # disengaged: silence + slow + poor performance
         if self.consecutive_silences >= SILENCE_THRESHOLD:
             return InferredState.DISENGAGED
         if (expression == "Neutral"
@@ -659,7 +591,7 @@ def infer_state(self, expression: str, response_time: float,
                 and response_time > RESPONSE_TIME_BASELINE * 0.8):
             return InferredState.DISENGAGED
 
-        # frustrated: negative face + poor performance
+    # frustrated: negative face + poor performance
         if expression in ("Angry", "Disgust") and correctness < CORRECTNESS_FLOOR:
             return InferredState.FRUSTRATED
         if self.consecutive_wrong >= 3 and expression in ("Angry", "Sad", "Fear"):
@@ -668,7 +600,7 @@ def infer_state(self, expression: str, response_time: float,
                 and correctness < CORRECTNESS_FLOOR):
             return InferredState.FRUSTRATED
 
-        # struggling: sadness + slow; poor correctness; fear + wrong
+    # struggling: sadness + slow; poor correctness; fear + wrong
         if expression == "Sad" and response_time > RESPONSE_TIME_BASELINE * 0.7:
             return InferredState.STRUGGLING
         if correctness < CORRECTNESS_FLOOR:
@@ -676,14 +608,14 @@ def infer_state(self, expression: str, response_time: float,
         if expression == "Fear" and not correct:
             return InferredState.STRUGGLING
 
-        # 2- voice tie-breakers; only when face neutral
+    # 2- voice tie-breakers; only when face neutral
         if expression == "Neutral" and trust_voice:
             if vocal_emotion == "happy" and correct and correctness >= CORRECTNESS_CEILING:
                 return InferredState.THRIVING
             if vocal_emotion == "calm" and correctness >= 0.5:
                 return InferredState.COMFORTABLE
 
-        return InferredState.COMFORTABLE # default: face gave no negative signal, performance is holding
+    return InferredState.COMFORTABLE # default: face gave no negative signal, performance is holding
 \end{lstlisting}
 
 The `decide()` function maps the inferred state to concrete adaptive actions, paralleling Nikolaidis, Hsu and Srinivasa's (2017, p. 625) mutual-adaptation paradigm; Table~\ref{tab:state-action} summarises the mapping.
@@ -714,7 +646,7 @@ Complementing state inference, `recommend_think_budget()` sets per-turn timing t
 ### 2.3.4 Generate Layer: Dynamic Prompt Construction
 
 <!-- - [X] PROOFREAD -->
-<!-- - [ ] -->
+
 Rather than constructing a fixed game prompt each round, GAZE utilises OpenAI function calling to let GPT-5.4 decide actions: `build_signal_context()` packages live signals into a context block sent with four callable tools. The LLM decides which to invoke; during natural conversation it calls none; during gameplay it sequences them. Game-question generation runs as a separate JSON-only call with a variety seed plus a rolling 30-question do-not-repeat memory, hence preventing mode-collapsed targets *(repeated narrow outputs that ignore prompt variation)*. Answer verification is delegated to a deterministic GPT-4.1 verifier (temperature 0.0), reducing the hallucination risk Ji et al. (2023, p. 3) identify; a 10-second timeout wraps every API call in case the network stalls so Pepper falls back gracefully.
 
 A second hallucination safeguard inside `build_signal_context()` *semantically buckets* signals (e.g. `System pacing: relaxed and patient` instead of raw `Think budget: 18s`), preventing the dialogue temperature (0.8) from echoing integers verbatim; a failure mode Ji et al. (2023, p. 3) classify under NLG hallucination. The answer-checking path eliminates hallucination via determinism; the dialogue path eliminates it via signal abstraction. Function-calling chains are capped at five rounds to prevent infinite tool loops; moreover, after `check_game_answer` fires, a same-chain `generate_game_question` is blocked so that `engine.decide()` can update difficulty before the next question is generated, thereby preserving the adaptation signal across the neuro-symbolic boundary. A sliding-window trim (`conversation[0] + conversation[-40:]`) prevents token-budget overflow in long sessions, retaining the system prompt and the last twenty exchanges for continuity.
@@ -726,28 +658,33 @@ Speech and LED state fire concurrently via threading; a celebratory gesture is a
 ### 2.3.6 Adaptation Self-Evaluation and Session Persistence
 
 <!-- - [X] PROOFREAD -->
+
 GAZE exposes `evaluate_adaptation()` as the `evaluate_last_adaptation` tool, compares consecutive rounds to judge whether a previous adaptation helped. Session progress saves to `gaze_save.json` every round, with a belt-and-braces auto-save every two turns regardless, in case of interruption.
 
 <!-- POMDP content removed. See git history if needed. -->
 
 ## 2.4. Outcome & System Analysis (30%; Salman)
 
-### 2.4.1 Overview 
+### 2.4.1 Overview
+
 Gaze was evaluated through local mode on laptop and using the Nao robot in labs. Each session involving a participant seated opposite pepper robot engaging in a game and testing each feature and the outcome. The local mode allowed continuous iteration and was replacing the robots camera and microphone with the laptops while keeping everything else the same.
 
-### 2.4.2 Local testing 
-The majority of the testing was done through local mode allowing to test the system calibration, recording, openAI question generation, question validation, facial expression detection and session save and resume to be tested without needing the robot. all the issues were detected and solved during the local testing like whisper hallucinations and question generation and validation as after first testing the system was showing correct to false answers so a validation function was added. After iteration testing the system repeated the same questions and to fix it `gpt-5.4` was used to ban questions that were used forcing it to create new questions and save each session instead of every 5 as some people won’t play 5 questions and to make sure their progress is saved all time it was changed to save every round.  One of the main set backs was hallucinations as when the mic captures ambient noise whisper would return youtube phrases from the training data rather than emptying the string this was fixed using Solero VAD as a check before whisper and banned words list for the common hallucinations however  with short words like yes or fresh were sometimes dropped as logprob scores were bellow threshold to balance it the threshold was turned down from -0.85 to 1.3 after iteration testing making it rejecting hallucination from short answers. 
+### 2.4.2 Local testing
+
+The majority of the testing was done through local mode allowing to test the system calibration, recording, openAI question generation, question validation, facial expression detection and session save and resume to be tested without needing the robot. all the issues were detected and solved during the local testing like whisper hallucinations and question generation and validation as after first testing the system was showing correct to false answers so a validation function was added. After iteration testing the system repeated the same questions and to fix it `gpt-5.4` was used to ban questions that were used forcing it to create new questions and save each session instead of every 5 as some people won’t play 5 questions and to make sure their progress is saved all time it was changed to save every round.  One of the main set backs was hallucinations as when the mic captures ambient noise whisper would return youtube phrases from the training data rather than emptying the string this was fixed using Solero VAD as a check before whisper and banned words list for the common hallucinations however  with short words like yes or fresh were sometimes dropped as logprob scores were bellow threshold to balance it the threshold was turned down from -0.85 to 1.3 after iteration testing making it rejecting hallucination from short answers.
 
 ### 2.4.3 Lab session testing
-The testing with the robot was conducted through 6 lab sessions with the Nao robot which had hardware that the system wasn’t tested on yet. The ambient noise calibration returned level of zero energy as the get front mic energy wasn’t supported on the Nao robot means that silence detection never triggered and robot records the full duration around 15 seconds each rather than stopping after speech detected which caused longer responses compared to local mode. The recording max was reduced from 8 to 6 seconds to help the long replies.  A hybrid mode was also introduced using external camera and microphone from the laptop for better facial expression detection and speech detection while still interacting with the robot. this solved the silence detection issue as the laptop microphone supports the energy calibration so the system can detect when the user has stopped speaking now and stop recording after it detects 2 seconds of silence rather than waiting the whole speech max duration.  The hybrid mode also  improved facial expression detection as the laptop camera shows a more clear image of the users face compared to the Nao robot as its important to establish the state as sit relies on facial expressions and this change resulted in better state detection giving more accurate results. 
-During the robot testing it was noted that the robot gesture movement wasn’t smooth and was too fast which was a robot safety concern as could lead to robots arm it getting stuck or hitting its body while performing a gesture. The interpolation time for all joint movements were increased from 1 second to 2-3 seconds and a safe park as a checkpoint before any movement is made its set into the safe position then goes away from body to ensure it doesn’t hit then arm goes up to perform the gesture. This change made the gesture movements safer and smoother to meet safety standards. 
-it was noted that gestures were firing too much slowing the interaction down and having more attention on gestures rather than the game. The gesture logic was reviewed then reduced so that the robot only waves at the start of the session to say hello as a welcoming and when a user gets a correct answer as a celebration he waves twice to make it different from a hello wave and at the end of a session as a goodbye. This change keeps the gesture meaningful and doesn’t draw too much attention rather than the game and interrupting the conversations and responses by slowing them down with gestures. 
+
+The testing with the robot was conducted through 6 lab sessions with the Nao robot which had hardware that the system wasn’t tested on yet. The ambient noise calibration returned level of zero energy as the get front mic energy wasn’t supported on the Nao robot means that silence detection never triggered and robot records the full duration around 15 seconds each rather than stopping after speech detected which caused longer responses compared to local mode. The recording max was reduced from 8 to 6 seconds to help the long replies.  A hybrid mode was also introduced using external camera and microphone from the laptop for better facial expression detection and speech detection while still interacting with the robot. this solved the silence detection issue as the laptop microphone supports the energy calibration so the system can detect when the user has stopped speaking now and stop recording after it detects 2 seconds of silence rather than waiting the whole speech max duration.  The hybrid mode also  improved facial expression detection as the laptop camera shows a more clear image of the users face compared to the Nao robot as its important to establish the state as sit relies on facial expressions and this change resulted in better state detection giving more accurate results.
+During the robot testing it was noted that the robot gesture movement wasn’t smooth and was too fast which was a robot safety concern as could lead to robots arm it getting stuck or hitting its body while performing a gesture. The interpolation time for all joint movements were increased from 1 second to 2-3 seconds and a safe park as a checkpoint before any movement is made its set into the safe position then goes away from body to ensure it doesn’t hit then arm goes up to perform the gesture. This change made the gesture movements safer and smoother to meet safety standards.
+it was noted that gestures were firing too much slowing the interaction down and having more attention on gestures rather than the game. The gesture logic was reviewed then reduced so that the robot only waves at the start of the session to say hello as a welcoming and when a user gets a correct answer as a celebration he waves twice to make it different from a hello wave and at the end of a session as a goodbye. This change keeps the gesture meaningful and doesn’t draw too much attention rather than the game and interrupting the conversations and responses by slowing them down with gestures.
 
 ## 2.5 Conclusion (10%; Alfie)
 
 GAZE implements multi-signal emotional inference across two independent modalities *(facial expression via WS-10 CNN and vocal emotion via WS-08 MLP)* alongside speech volume/RMS, response time, answer correctness, answer text, and derived temporal signals, hence yielding a more robust user-state estimate than any single channel. The implementation hardens further by recording all four Pepper microphones, canonicalising audio to mono 16-kHz by loudest-channel selection, applying Silero-VAD to both modes, and streaming Pepper's camera via persistent `ALVideoDevice` instead of per-turn SFTP. The hybrid architecture (GPT-5.4 dialogue paired with symbolic rule-based inference and deterministic GPT-4.1 answer verification) and adaptive game-switching directly target the novelty-decay assumption Smedegaard (2019, p. 414, Experiential novelty) reviews.
 
 <!-- - [X] PROOFREAD -->
+
 The conversational architecture (the LLM decides actions via function calling) positions GAZE as a social companion instead of a jarring game host. Every turn, the AdaptiveEngine's `decide()` resolves a tone label (encouraging, celebratory, calm, energetic, neutral) from the inferred state; the LLM's dialogue register thereby modulates live instead of holding a fixed persona, extending Tapus, Tapus and Mataric's (2008, Abstract) personality-matching paradigm and Kahn et al.'s (2008, pp. 97-104) design patterns for sociality from static trait-fit to dynamic state-driven adaptation.
 
 The multi-signal approach transfers to stroke rehabilitation re-engagement (Mataric et al., 2007, *.pdf*-p. 1, Abstract *"monitoring, encouragement, and reminders"*), educational tutoring, or neurodivergent support. Future work could replace hand-coded thresholds with learned parameters from across-session data, and fine-tune both models on in-session Pepper captures. GAZE sits within Section 1's cognitive trajectory rather than the reactive social layer alone.
@@ -782,7 +719,7 @@ GAZE's most important limitation is epistemic: Smedegaard's (2019, p. 414, Exper
 
 ## 3.1 Video Demo
 
-- YouTube link: [test](test)
+- YouTube link: [https://youtu.be/G9-pWalwjpA](https://youtu.be/G9-pWalwjpA)
 
 ## 3.2 AI Declaration
 
@@ -803,7 +740,7 @@ I declare that I've used the AI tools listed below whilst preparing this assessm
 \hline
 \textbf{AI Tool Used} & \textbf{Purpose of Use} & \textbf{Extent of Use} \\
 \hline
-ChatGPT & Brainstorming project ideas and structuring the report \textbf{(A2)} & Initial brainstorming and final outline stages for GAZE \\
+ChatGPT & Outlining the project structure and drafting the report hierarchy \textbf{(A2)} & Initial structuring and final outline stages for GAZE \\
 \hline
 ChatGPT & Reviewing structural alignment against grading criteria and mapping word-count budgets \textbf{(A2)} & After and midway through section-drafting \\
 \hline
@@ -829,7 +766,7 @@ pacing and feedback per turn from six signals (each paired with the function whe
     3- response time:      (behavioural)        primary       --->     time.time() - question_start (main loop)
     4- verbal answer:      (Whisper text)       primary       --->     transcribe() (Whisper-1 verbose_json)
     5- volume RMS:         (acoustic arousal)   secondary     --->     measure_volume() (RMS over the canonical 16 kHz WAV)
-    6- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() / SpeechEmotionModel.predict()
+    6- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() --> SpeechEmotionModel.predict()
     All six fan in to: AdaptiveEngine.infer_state() -> AdaptiveEngine.decide()
 
 NOVELTY:
@@ -868,7 +805,7 @@ VARIOUS MODES:
         - essentially the brain works locally to offload inference and display whilst Pepper handles output (TTS, LEDs, gestures)
 
 TESTING OBSERVATIONS:
-    - Pepper's onboard audio is *noisy*; Whisper (trained on podcasts, YouTube) is hallucination-prone on such input and is therefore gated by defences as follows:
+    - Pepper's onboard audio is *noisy*; Whisper (trained on podcasts, YouTube) therefore hallucinates on it and is gated by defences as follows:
       - Silero VAD 
       - no_speech_prob, and a hallucination blacklist.
     
@@ -1010,10 +947,7 @@ LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
     USE_LOCAL_CAMERA = True
 
-# Hybrid: TTS, LEDs and gestures stay on Pepper (governed by LOCAL_MODE),
-# but the microphone path is forced to the Mac so the operator can speak from
-# the computer whilst Pepper still does the talking. Set HYBRID_LOCAL_INPUT
-# False to fall back to whatever LOCAL_MODE prescribes for input 
+# Hybrid: TTS, LEDs and gestures stay on Pepper whereas input (camera + mic) is local
 HYBRID_LOCAL_INPUT = True
 INPUT_IS_LOCAL = LOCAL_MODE or HYBRID_LOCAL_INPUT
 
@@ -1262,7 +1196,7 @@ class AdaptiveEngine:
         return len(self.history) + 1
 
     def rolling_correctness(self) -> float:        
-        recent = self.history[-CORRECTNESS_WINDOW:]
+        recent = self.history[-CORRECTNESS_WINDOW:] # slice of 5 most recent rounds
         if not recent:
             return 0.5  # no data -> assume middle (neutral)
         return sum(1 for r in recent if r.correct) / len(recent)
@@ -1304,7 +1238,7 @@ class AdaptiveEngine:
             self.consecutive_wrong  += 1
             self.consecutive_correct = 0
 
-        # 1- FACE-PRIMARY RULES: these fire before voice is ever consulted
+        # 1- FACE-PRIMARY RULES
 
         # thriving: good performance + fast responses
         if (correctness >= CORRECTNESS_CEILING and response_time < RESPONSE_TIME_BASELINE * 0.5):
@@ -1434,7 +1368,7 @@ class AdaptiveEngine:
         flip the system to "disengaged" too quickly.
         Returns (no_speech_max, silence_secs, record_max_secs).
         """
-        # baseline budget (fast-track: thriving / comfortable)
+        # baseline budget
         no_speech_max = 5.0
         silence_secs = float(SILENCE_DURATION)
         record_max_secs = float(RECORD_MAX_SECS)
@@ -1509,8 +1443,7 @@ class AdaptiveEngine:
             "final_difficulty": self.current_difficulty.name,
         }
 
-    # self-evaluative adaptation
-
+    # Self-evaluative adaptation
     def evaluate_adaptation(self) -> Optional[str]:
         "Evaluate whether the previous round's adaptation worked."
         if len(self.adaptation_log) < 2 or len(self.history) < 2:

@@ -8,7 +8,7 @@ pacing and feedback per turn from six signals (each paired with the function whe
     3- response time:      (behavioural)        primary       --->     time.time() - question_start (main loop)
     4- verbal answer:      (Whisper text)       primary       --->     transcribe() (Whisper-1 verbose_json)
     5- volume RMS:         (acoustic arousal)   secondary     --->     measure_volume() (RMS over the canonical 16 kHz WAV)
-    6- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() / SpeechEmotionModel.predict()
+    6- vocal emotion:      (MLP, WS-08)         tie-breaker; MLP collapses to "fearful" on quiet/noisy audio ---> classify_speech_emotion() --> SpeechEmotionModel.predict()
     All six fan in to: AdaptiveEngine.infer_state() -> AdaptiveEngine.decide()
 
 NOVELTY:
@@ -189,10 +189,7 @@ LOCAL_MODE = os.getenv("GAZE_LOCAL_MODE", "false").lower() == "true"
 if LOCAL_MODE:
     USE_LOCAL_CAMERA = True
 
-# Hybrid: TTS, LEDs and gestures stay on Pepper (governed by LOCAL_MODE),
-# but the microphone path is forced to the Mac so the operator can speak from
-# the computer whilst Pepper still does the talking. Set HYBRID_LOCAL_INPUT
-# False to fall back to whatever LOCAL_MODE prescribes for input 
+# Hybrid: TTS, LEDs and gestures stay on Pepper whereas input (camera + mic) is local
 HYBRID_LOCAL_INPUT = True
 INPUT_IS_LOCAL = LOCAL_MODE or HYBRID_LOCAL_INPUT
 
@@ -441,7 +438,7 @@ class AdaptiveEngine:
         return len(self.history) + 1
 
     def rolling_correctness(self) -> float:        
-        recent = self.history[-CORRECTNESS_WINDOW:]
+        recent = self.history[-CORRECTNESS_WINDOW:] # slice of 5 most recent rounds
         if not recent:
             return 0.5  # no data -> assume middle (neutral)
         return sum(1 for r in recent if r.correct) / len(recent)
@@ -483,7 +480,7 @@ class AdaptiveEngine:
             self.consecutive_wrong  += 1
             self.consecutive_correct = 0
 
-        # 1- FACE-PRIMARY RULES: these fire before voice is ever consulted
+        # 1- FACE-PRIMARY RULES
 
         # thriving: good performance + fast responses
         if (correctness >= CORRECTNESS_CEILING and response_time < RESPONSE_TIME_BASELINE * 0.5):
@@ -613,7 +610,7 @@ class AdaptiveEngine:
         flip the system to "disengaged" too quickly.
         Returns (no_speech_max, silence_secs, record_max_secs).
         """
-        # baseline budget (fast-track: thriving / comfortable)
+        # baseline budget
         no_speech_max = 5.0
         silence_secs = float(SILENCE_DURATION)
         record_max_secs = float(RECORD_MAX_SECS)
@@ -688,8 +685,7 @@ class AdaptiveEngine:
             "final_difficulty": self.current_difficulty.name,
         }
 
-    # self-evaluative adaptation
-
+    # Self-evaluative adaptation
     def evaluate_adaptation(self) -> Optional[str]:
         "Evaluate whether the previous round's adaptation worked."
         if len(self.adaptation_log) < 2 or len(self.history) < 2:
