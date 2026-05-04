@@ -17,16 +17,16 @@ face is Neutral, vocal-emotion confidence is >= 0.9 and the label is not "fearfu
 collapse to it on quiet/noisy audio.
 
 ARCHITECTURE: gpt-5.4 converse with access to four function-calling tools:
-    - generate_game_question (GPT-5.4 generates; validate_numbers_round stubbed return True)
-    - check_game_answer (GPT-4.1 yes/no verifier)
+    - generate_game_question (gpt-5.4 generates; validate_numbers_round stubbed return True)
+    - check_game_answer (gpt-4.1 yes/no verifier)
     - evaluate_last_adaptation (self-evaluates previous round's strategy)
     - request_more_time (acknowledges user's request for more think-time)
 
 Initially used a wake-word defence but became unnecessary
 
 `AdaptiveEngine`: six signals and adapt (change based on inference) difficulty, pacing/think-budget, and game-switching:
- - GPT-4.1 for yes/no checks (check_answer, is_goodbye, resume-intent)
- - GPT-5.4 for the main converse loop and question generation.
+ - gpt-4.1 for yes/no checks (check_answer, is_goodbye, resume-intent)
+ - gpt-5.4 for the main converse loop and question generation.
 
 VARIOUS MODES:
     1- LOCAL_MODE=true:
@@ -425,7 +425,7 @@ class AdaptiveEngine:
         self.best_streak = 0
         # recent-questions blocklist; cap 10
         self.recent_questions: list[str] = []
-        self.recent_answers: list[str] = [] # answer-level dedup; catches mode-collapsed targets even when GPT rephrases the question text
+        self.recent_answers: list[str] = [] # answer-level dedup; catches mode-collapsed targets even when gpt rephrases the question text
         self.recent_game_types: list[str] = [] # game-type rotation hint; avoids 5-in-a-row Numbers games
         # adaptive think-budget; per-round baselines
         self.think_budget_secs = float(RECORD_MAX_SECS) # hard ceiling
@@ -1721,7 +1721,7 @@ API_TIMEOUT = 10  # 10-second timeout; prevents Pepper-freeze if OpenAI/network 
 
 def check_answer(user_answer: str, correct_answer: str,
                  question_context: str) -> bool:
-    "Verify the user's answer via GPT."
+    "Verify the user's answer via gpt."
     if not user_answer.strip():
         return False
 
@@ -2103,7 +2103,7 @@ def extract_gesture(text: str) -> str:
     "Returns wave always — only gesture now used."
     return "wave"
 def validate_numbers_round(numbers: list, target: int) -> bool:
-    """Skipped — too slow for real-time use. GPT is instructed to verify its own answer."""
+    """Skipped — too slow for real-time use. gpt is instructed to verify its own answer."""
     return True
 
 
@@ -2175,7 +2175,7 @@ def generate_game_question_internal(game_type_str: str, difficulty_str: str,
             content = content.strip()
         result = json.loads(content)
 
-        # validate numbers rounds as GPT regularly hallucinates unreachable targets
+        # validate numbers rounds as gpt normally hallucinates unreachable targets
         if game_type_str == "numbers":
             try:
                 import re
@@ -2185,7 +2185,7 @@ def generate_game_question_internal(game_type_str: str, difficulty_str: str,
                 if target_match and nums:
                     target = int(target_match.group(1))
                     if not validate_numbers_round(nums, target):
-                        print(f"  GPT produced unreachable target {target} from {nums}; using fallback")
+                        print(f"gpt produced unreachable target {target} from {nums}; using fallback")
                         return {
                             "question": "Using 25, 50, 3, 6, 4, and 2, make the target 100.",
                             "answer": "25 x 4 = 100",

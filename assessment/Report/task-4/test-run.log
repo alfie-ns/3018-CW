@@ -32,29 +32,41 @@ Loading speech emotion model...
 
 Calibrating Mac microphone ambient noise level...
 Calibrating Mac mic (stay quiet for 3s)...
-  Ambient RMS: 8, silence threshold: 68, transcription gate: 272
+  Ambient RMS: 62, silence threshold: 122, transcription gate: 488
   Arousal thresholds: QUIET=200, LOUD=2000
   Dashboard launched.
 
-Robot: Welcome back! Last time you played 1 rounds and got 0 correct. Want to continue where you left off, or start fresh?
-
-Listening for continue/fresh...
-  Recording from Mac mic (up to 6.0s, stops after silence)...
-    [0.5s] RMS: 0 ░    [0.8s] RMS: 0 ░    [1.0s] RMS: 5286 ▓    [1.2s] RMS: 1995 ▓    [1.5s] RMS: 2659 ▓    [1.8s] RMS: 3208 ▓    [2.0s] RMS: 4322 ▓    [2.2s] RMS: 751 ▓    [2.5s] RMS: 57 ░    [2.8s] RMS: 34 ░    [3.0s] RMS: 38 ░    [3.2s] RMS: 53 ░    [3.5s] RMS: 16 ░    [3.8s] RMS: 20 ░    [4.0s] RMS: 37 ░    [4.2s] RMS: 83 ▓    [4.5s] RMS: 61 ░    [4.8s] RMS: 400 ▓    [5.0s] RMS: 140 ▓    [5.2s] RMS: 21 ░    [5.5s] RMS: 38 ░    [5.8s] RMS: 24 ░    [6.0s] RMS: 12 ░
-  Recording saved (6.0s, speech=yes).
-  Whisper transcribe failed (Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************WzAA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}); returning empty
-  Heard: (silence)
-
-Robot: No worries, starting fresh! Your previous save has been cleared.
-converse() API failed... : Error code: 401 - {'error': {'message': 'Incorrect API key provided: sk-proj-********************************************************************************************************************************************************WzAA. You can find your API key at https://platform.openai.com/account/api-keys.', 'type': 'invalid_request_error', 'code': 'invalid_api_key', 'param': None}, 'status': 401}
-
-Robot: I had a brief network hiccup. Let's keep going!
+Robot: Hi, I’m really glad to be with you right now. We can have a little chat, play a game, or just sit together and hang out—whatever feels best for you.
 
 ---------------------------------------- Turn 1 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.57)
+  Expression: Neutral (0.44): LOW CONFIDENCE, treating as Neutral
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 0 ░    [0.8s] RMS: 0 ░    [1.0s] RMS: 35 ░    [1.2s] RMS: 18 ░    [1.5s] RMS: 16 ░    [1.8s] RMS: 11 ░
+    [0.5s] RMS: 85 ░    [0.8s] RMS: 176 ▓    [1.0s] RMS: 379 ▓    [1.2s] RMS: 1489 ▓    [1.5s] RMS: 1178 ▓    [1.8s] RMS: 874 ▓    [2.0s] RMS: 1441 ▓    [2.2s] RMS: 1070 ▓    [2.5s] RMS: 798 ▓    [2.8s] RMS: 775 ▓    [3.0s] RMS: 28 ░    [3.2s] RMS: 15 ░    [3.5s] RMS: 20 ░    [3.8s] RMS: 9 ░    [4.0s] RMS: 10 ░    [4.2s] RMS: 8 ░    [4.5s] RMS: 9 ░    [4.8s] RMS: 8 ░    [5.0s] RMS: 12 ░    [5.2s] RMS: 10 ░    [5.5s] RMS: 8 ░
+  Recording saved (5.5s, speech=yes).
+  Vocal emotion: calm (1.00)
+  Volume RMS: 639
+  Whisper raw text: "Let's just play a numbers game."
+  Whisper diagnostics: no_speech=[0.044630859047174454], avg_logprob=[-0.4285944700241089], compression=[0.7948718070983887]
+  Heard: Let's just play a numbers game.
+  Calling tool generate_game_question({'game_type': 'numbers', 'difficulty': 'MEDIUM'})
+  Tool returned: {"question": "Use the numbers 100, 75, 9, 8, 4, and 2 to make 683. You may use addition, subtraction, multiplication, an
+
+Robot: Great, let’s do a numbers round. Use 100, 75, 9, 8, 4, and 2 to make 683, using each number at most once with plus, minus, times, or divide.
+(Game answer: (8 + 2) * 75 - 9 * (100 - 75 + 4) = 683)
+
+---------------------------------------- Turn 2 ----------------------------------------
+Capturing expression...
+  Expression: Neutral (0.71)
+Listening...
+  Recording from Mac mic (up to 15.0s, stops after silence)...
+    [0.5s] RMS: 6 ░    [0.8s] RMS: 12 ░    [1.0s] RMS: 476 ▓    [1.2s] RMS: 1500 ▓    [1.5s] RMS: 1175 ▓    [1.8s] RMS: 581 ▓    [2.0s] RMS: 990 ▓    [2.2s] RMS: 1704 ▓    [2.5s] RMS: 621 ▓    [2.8s] RMS: 1282 ▓    [3.0s] RMS: 92 ░    [3.2s] RMS: 9 ░    [3.5s] RMS: 8 ░    [3.8s] RMS: 10 ░    [4.0s] RMS: 8 ░    [4.2s] RMS: 8 ░    [4.5s] RMS: 9 ░    [4.8s] RMS: 7 ░    [5.0s] RMS: 9 ░    [5.2s] RMS: 8 ░    [5.5s] RMS: 9 ░
+  Recording saved (5.5s, speech=yes).
+  Vocal emotion: calm (1.00)
+  Volume RMS: 678
+  Whisper raw text: 'Wait, actually I need to go.'
+  Whisper diagnostics: no_speech=[0.1564096212387085], avg_logprob=[-0.6908331513404846], compression=[0.7777777910232544]
+  Heard: Wait, actually I need to go.
+
   [Dashboard] Quit requested.
-    [2.0s] RMS: 10 ░    [2.2s] RMS: 11 ░    [2.5s] RMS: 10 ░    [2.8s] RMS: 11 ░    [3.0s] RMS: 11 ░    [3.2s] RMS: 14 ░    [3.5s] RMS: 29 ░    [3.8s] RMS: 19 ░    [4.0s] RMS: 31 ░    [4.2s] RMS: 13 ░    [4.5s] RMS: 10 ░    [4.8s] RMS: 10 ░    [5.0s] RMS: 18 ░    [5.2s] RMS: 15 ░    [5.5s] RMS: 10 ░    [5.8s] RMS: 9 ░
