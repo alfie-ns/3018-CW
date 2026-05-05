@@ -1,1 +1,99 @@
-Hello, my name is Salman and this is my contribution. So at the beginning was the noise calibration. So the robot doesn't listen to the background noises. So the beginning was um the celerad listens to the room and measures how loud the room is. So using that average energy it creates a safety buffer. So it the threshold can differentiate between the background noises and the speech. So it waits a couple seconds so it doesn't cut you off. Then it takes the speech which is the energy above the threshold. Uh then it wait till it goes back down which means that person has stopped speaking. It records and send it to whisper. And in case of anything uh it stops by its own so it doesn't keep going and listening. After the robot detects a speech it get sent back to open AI. Then open AAI comes back with replies. However the replies come back as one block with no structure. So the code over here splits it using full stops and marks and it handles a new lines in case reply has line breaks. And if you cannot split it then it just sends it back as one sentence and sends all the sentences using SSH instead of one call per sentence. After a session is played sore the best streak and difficulty to adapt to either go easy or harder and which games have been played so it doesn't repeat. And once we start, it checks if there is any sessions have been played and rebuilds the engine based on it. So it says the score streak, difficulty, and game type to where it was, unless the user says start fresh, then it deletes and start fresh again. After a question gets answered, it goes through open AI to detect whether the answer is correct or wrong. And so it turns it back to the robot. And here's an example of a wrong answer. >> Try the 89, so it's not there. You were very close with the 25 and 6* 9 part. Want to try once more? >> The robot has different LED colors and each color represent a state. And it has different gestures where it waves his hand. So at the beginning where it starts for example over here the wizard of sand and when you get a correct answer also waves my last contribution is the testing and as you can see here we have a full test of the project. >> Nicely done. Would you like another sign? >> Let's play another game. Let's play another numbers game. >> As you can see the facial detection and the state is uncomfortable. So the robot's cut eyes color was blue. >> Lovely. Here's another easy one. Use 25 and three to make 75. The answer is 25 * 3. >> As you can see, it's texted that the answer is correct. >> Exactly right. 25 * 3 is 75. You're doing really well. Shall I make the next one a little trickier? >> Make the next one trickier. >> As you can see, the wave as it takes a correct answer. It's a kind of a celebration. As you can see here, the multi signal state and was tested to show the different states and they refresh in every single session. And as you can see here, what happens after a correct answer? >> Yes, that's right. Well done. You reached 352 nicely. Would you like another number one or a letters round? >> As a way of guidance to help the user. >> Gaz's novel contribution is a multi- signal adaptive cognitive loop where it will first infer the state, adapt, and then evaluate if adaption actually helped. So the architecture was finalized as a hybrid one where perception and inference run on the computer and then pepper handles output text to speech gestures and LEDs. Pepper's mic was so bad it would just succumb to the noise which would cause whisperations that are blacklisted. and it come stream is roughly just 10 frames per second whereas the local one is 30 fps. So the brain sits where the signals are clean to get. So the first defense the cyro f uses relax defaults for um to get short answers such as yes or no. Then also whispers own no speech probability. So if whisper itself collects it silence and we just drop a transcription. Then this function that checks if the input is likely a hallucination and if so it will drop it despite this being um frozen like that is I can't train it anymore. What makes it adaptive is this function because each time the live signals block is rebuilt from the face voice volume response time and roll and quickness and hence each turns prompt is dynamically adjusted based on these updated signals. It's basically just prompt engineered as the symbolic engine describes the user to chat plain text and then it writes writes reply based on that description. So it is neurosury symbolic in the literal sense as the symbolic part is how it reads the user and the neural part is how it talks back and the pacing label turns the budget into words such as like relaxed or brisk. So then the model just won't parrot numbers back to the user. So this function call that I called evaluate last adaption basically evaluates if the previous um if previous adaptation worked and the GBT reads this it reads description so it knows when to use it. So so adaptive engine the brain of the robot where there's four methods that perceive decide pace and evaluate each time. So the infer state method which uses six signals to infer five different states which could be thriving disengaged frustrated struggling or if it doesn't really know it would be more a neutral comfortable version. So then this bit it checks in two ways. Once just a correctness through the GBT verifier and then once through the is silent check which treats any of these skip phrases like I don't know as disengagement. Um so it's like it's not wrong that it's engaged. And by the way this function is the GPT verifier for checking if it's correct. Face is a primary signal and the voice is only consulted when the face reads as neutral and the vote confidence is above 0.9 like that is it's too noisy or it's too quiet. And then rolling correctness which um checks within five most recent rounds how correct they're being. Then second decide turns info state into a policy. So like if the user's thriving then it will like escalate difficulty. If they are struggling it will ease off. Uh if they're disengaged um it will change it. It will change the game type. Then the recommend think budget function which just basically lengthens these things. So like say if a user is struggling then it will then give 8 seconds of time which they can be decided before the robot does or something. All right. So for example like if there's no history I mean like the user hasn't played the game yet then like struggle recovery it will give them 7 seconds um before it starts pestering them. And about finally for the evaluation um so it first checks the previous state they're in and the current state they were in and like if they were if they were disengaged in their previous state but now the current state is they're not disengaged then it means that they've been re-engaged without this function the robot would adapt blindly.
+Hello, my name is Salman and this is my contribution.
+
+So at the beginning was the noise calibration.
+So the robot doesn't listen to the background noises.
+So the beginning was um the celerad listens to the room and measures how loud the room is.
+So using that average energy it creates a safety buffer.
+So it the threshold can differentiate between the background noises and the speech.
+So it waits a couple seconds so it doesn't cut you off.
+
+Then it takes the speech which is the energy above the threshold.
+Uh then it wait till it goes back down which means that person has stopped speaking.
+It records and send it to whisper.
+And in case of anything uh it stops by its own so it doesn't keep going and listening.
+
+After the robot detects a speech it get sent back to open AI.
+Then open AAI comes back with replies.
+However the replies come back as one block with no structure.
+So the code over here splits it using full stops and marks and it handles a new lines in case reply has line breaks.
+And if you cannot split it then it just sends it back as one sentence and sends all the sentences using SSH instead of one call per sentence.
+
+After a session is played sore the best streak and difficulty to adapt to either go easy or harder and which games have been played so it doesn't repeat.
+And once we start, it checks if there is any sessions have been played and rebuilds the engine based on it.
+So it says the score streak, difficulty, and game type to where it was, unless the user says start fresh, then it deletes and start fresh again.
+
+After a question gets answered, it goes through open AI to detect whether the answer is correct or wrong.
+And so it turns it back to the robot.
+And here's an example of a wrong answer.
+
+>> Try the 89, so it's not there. You were very close with the 25 and 6* 9 part. Want to try once more?
+
+>> The robot has different LED colors and each color represent a state.
+And it has different gestures where it waves his hand.
+So at the beginning where it starts for example over here the wizard of sand and when you get a correct answer also waves my last contribution is the testing and as you can see here we have a full test of the project.
+
+>> Nicely done. Would you like another sign?
+
+>> Let's play another game. Let's play another numbers game.
+
+>> As you can see the facial detection and the state is uncomfortable.
+So the robot's cut eyes color was blue.
+
+>> Lovely. Here's another easy one. Use 25 and three to make 75. The answer is 25 * 3.
+
+>> As you can see, it's texted that the answer is correct.
+
+>> Exactly right. 25 * 3 is 75. You're doing really well. Shall I make the next one a little trickier?
+
+>> Make the next one trickier.
+
+>> As you can see, the wave as it takes a correct answer.
+It's a kind of a celebration.
+As you can see here, the multi signal state and was tested to show the different states and they refresh in every single session.
+And as you can see here, what happens after a correct answer?
+
+>> Yes, that's right. Well done. You reached 352 nicely. Would you like another number one or a letters round?
+
+>> As a way of guidance to help the user.
+
+>> Gaz's novel contribution is a multi- signal adaptive cognitive loop where it will first infer the state, adapt, and then evaluate if adaption actually helped.
+
+So the architecture was finalized as a hybrid one where perception and inference run on the computer and then pepper handles output text to speech gestures and LEDs.
+Pepper's mic was so bad it would just succumb to the noise which would cause whisperations that are blacklisted.
+and it come stream is roughly just 10 frames per second whereas the local one is 30 fps.
+So the brain sits where the signals are clean to get.
+
+So the first defense the cyro f uses relax defaults for um to get short answers such as yes or no.
+Then also whispers own no speech probability.
+So if whisper itself collects it silence and we just drop a transcription.
+Then this function that checks if the input is likely a hallucination and if so it will drop it despite this being um frozen like that is I can't train it anymore.
+
+What makes it adaptive is this function because each time the live signals block is rebuilt from the face voice volume response time and roll and quickness and hence each turns prompt is dynamically adjusted based on these updated signals.
+It's basically just prompt engineered as the symbolic engine describes the user to chat plain text and then it writes writes reply based on that description.
+So it is neurosury symbolic in the literal sense as the symbolic part is how it reads the user and the neural part is how it talks back and the pacing label turns the budget into words such as like relaxed or brisk.
+So then the model just won't parrot numbers back to the user.
+
+So this function call that I called evaluate last adaption basically evaluates if the previous um if previous adaptation worked and the GBT reads this it reads description so it knows when to use it.
+
+So so adaptive engine the brain of the robot where there's four methods that perceive decide pace and evaluate each time.
+
+So the infer state method which uses six signals to infer five different states which could be thriving disengaged frustrated struggling or if it doesn't really know it would be more a neutral comfortable version.
+So then this bit it checks in two ways.
+Once just a correctness through the GBT verifier and then once through the is silent check which treats any of these skip phrases like I don't know as disengagement.
+Um so it's like it's not wrong that it's engaged.
+And by the way this function is the GPT verifier for checking if it's correct.
+Face is a primary signal and the voice is only consulted when the face reads as neutral and the vote confidence is above 0.9 like that is it's too noisy or it's too quiet.
+And then rolling correctness which um checks within five most recent rounds how correct they're being.
+
+Then second decide turns info state into a policy.
+So like if the user's thriving then it will like escalate difficulty.
+If they are struggling it will ease off.
+Uh if they're disengaged um it will change it.
+It will change the game type.
+
+Then the recommend think budget function which just basically lengthens these things.
+So like say if a user is struggling then it will then give 8 seconds of time which they can be decided before the robot does or something.
+All right.
+So for example like if there's no history I mean like the user hasn't played the game yet then like struggle recovery it will give them 7 seconds um before it starts pestering them.
+
+And about finally for the evaluation um so it first checks the previous state they're in and the current state they were in and like if they were if they were disengaged in their previous state but now the current state is they're not disengaged then it means that they've been re-engaged without this function the robot would adapt blindly.
