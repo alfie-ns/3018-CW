@@ -58,7 +58,7 @@ header-includes:
 
 # 1- Task (3) Literature Review
 
-## 1.1. Introduction
+## 1.1 Introduction
 
 Ageing populations and a shrinking care workforce positioned **assistive robotics** *(human-supportive robots within physical, cognitive, and social realms of impairment affecting daily-living activities)*; a prominent technological response to a widening care gap. The field spans diverse subfields; this essay however focuses on *socially* assistive robotics ($SAR$), an assistive-robot subfield in which the robot "focuses on helping human users through social rather than physical interaction" (Tapus, Matarić and Scassellati, 2007, Abstract), as here most active research and ethical tension converge.
 
@@ -66,7 +66,7 @@ Robots now administer medication reminders, guide rehabilitation exercises, and 
 
 However, most-current assistive robots operate at what Sciutti et al. (2023, p. 160) call the social layer: they react to immediate stimuli but lack the cognitive depth to anticipate user needs, remember past interactions, or reason about their own performance. Sciutti et al. argue that effective assistive robots should be *cognitive*: capable of "flexible, context-sensitive action, knowing what they are doing and why they are doing it." Vernon, Metta and Sandini (2007, p. 151) formalise this requirement via a "virtuous cycle that is embedded in an ongoing process of action and perception" (the agent anticipates $\to$ learns $\to$ adapts to achieve autonomy). This essay contends that assistive robotics should graduate from reactive social behaviour to cognitive capability (intelligence deployed *over* the social layer) for sustained, personalised support.
 
-## 1.2. Literature Review
+## 1.2 Literature Review
 
 *Cognitive robotics:* defined by Sandini, Sciutti and Vernon (2021, Overview), lies at the intersection of Robotics, Artificial Intelligence, and Cognitive and Biological Sciences, integrating "sensorimotor skills, knowledge representation and reasoning, and social interaction." This interdisciplinary grounding distinguishes it from conventional robotics *(treats the robot as purely engineered)* and from social robotics *(addresses interaction behaviour without necessarily modelling cognitive processes)*. The distinction is consequential: a robot that smiles when a patient smiles is social; a robot that infers *why*, and adapts accordingly, is *cognitive*.
 
@@ -119,7 +119,7 @@ Moreover, over-reliance on assistive robots risks eroding functional independenc
 
 The ethical watchword is therefore proactive regulation: design-stage ethics anticipating failure modes, not reactive patchwork after harm. Per the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely high.
 
-## 1.5. Conclusion
+## 1.5 Conclusion
 
 Assistive robotics stands at an inflection point. Current systems deliver measurable benefits within narrow envelopes, yet their reactive architectures limit sustained, personalised effectiveness. The Vernon, Metta and Sandini (2007) cognition cycle provides the architectural blueprint for graduating beyond this plateau: assistive robots that anticipate (prospection), remember (episodic and semantic memory), reason about others' mental states (theory of mind), and monitor their own performance (metacognition) would mean a qualitative advance over current systems.
 
@@ -220,13 +220,13 @@ The neuro-symbolic paradigm offers a viable path toward this vision, as Trust-PO
 
 # 2- Task (4) Novel Programming Project (Adaptiveness in Assistive Robotics)
 
-## 2.1. Introduction (10%; Salman)
+## 2.1 Introduction (10%; Salman)
 
 Gaze is an adaptive game hosting engagement coaching system that is designed to run on the pepper robot. it turns pepper into a responsive companion that plays both mathematical and letter countdown games while observing and adapting to the human. Gaze is a multi-signal emotional inference engine as the system cross validates three live data streams: facial expression recognition for emotional states, speech expression recognition and am engagement tracking feature that monitors response time, silence time and answer accuracy. Using these features helps recognising real emotional states and reduce risk or misleading readings for example a neutral face with slow responses and low accuracy means disengagement however tense expressions with fast and correct responses means focus.
 
 Inspired by assistive robots gaze role is to keep users engaged. To ensure that it’s doing its job gaze detects when attention is fading and steps in to reengage by changing difficulty level and offering hints if the user is struggling. The questions are generated dynamically using Open AI which also verifies answers and shapes the answers based on users inferred state. The speech is transcribed using whisper which allows the system to freely form answers with responses combine speech, gestures and LED feedback. All progress is saved making gaze a system that doesn’t just host games but also adapts and coaches
 
-## 2.2. Background (10%; Alfie)
+## 2.2 Background (10%; Alfie)
 
 GAZE sits within socially assistive robotics *(the deployment of robots to support users through social interaction instead of physical contact)* and affective computing, which Picard (1997, p. 1, Abstract) founds as "computing that relates to, arises from, or influences emotions"; Tapus, Matarić and Scassellati (2007, *.pdf*-p. 1) define this sub-field as systems that "assist users through social interaction." Most-current platforms react to a single input signal, suffering the single-signal problem: a facial-expression classifier misreads resting faces as displeasure; a response-time metric mistakes deliberation for disengagement. Poria et al. (2017, p. 99) report multimodal systems were "consistently (85% of systems) more accurate than their best unimodal counterparts, with an average improvement of 9.83%"; Spezialetti, Placidi and Rossi (2020, pp. 1-2, Introduction) substantiate this within HRI via reviewings of recognition systems across facial, vocal, and physiological channels. This demands multi-signal fusion (the system weighs complementary channels together instead of trusting any one alone).
 
@@ -275,7 +275,7 @@ GAZE's per-turn cycle (Fig.~\ref{fig:gaze-cycle}) is neuro-symbolic *(LLM does t
 
 ### 2.3.2 Input Layer: Multimodal and Behavioural Signals
 
-**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into seven Ekman categories, building upon Ekman and Friesen (1971, p. 128), whose cross-cultural results show "particular facial behaviors are universally associated with particular emotions"; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated by combining facial with behavioural signals (§2.3.3).
+**1- Facial Expression (vision-based).** A pre-trained CNN (Workshop 10) classifies the user's expression into six Ekman categories plus a Neutral (*'don't know' thus classify as expressionless*) class, building upon Ekman and Friesen (1971, p. 128), whose cross-cultural results show "particular facial behaviors are universally associated with particular emotions"; this taxonomy remains "still the most popular perspective for FER" (Li and Deng, 2020, p. 1). Known limitations (cultural bias, resting-face misclassification) are mitigated by combining facial with behavioural signals (§2.3.3).
 
 The pipeline is two-stage: a Haar cascade *(OpenCV's Viola-Jones detector; locates faces via fast rectangular brightness-contrast features)* first finds the face's bounding box on a 2$\times$-downscaled greyscale frame, then the CNN classifies emotion within the largest face ROI. Two daemon threads decouple capture from inference at $\sim$6.7 Hz (turn-based interaction does not warrant 30 Hz); on Pepper, frames stream over TCP via persistent `ALVideoDevice` instead of per-turn SFTP.
 
@@ -680,7 +680,7 @@ The multi-signal approach transfers to stroke rehabilitation re-engagement (Mata
 
 GAZE's most important limitation is epistemic: Smedegaard's (2019, p. 414, Experiential novelty) novelty-decay claim, central to the architectural rationale, is not herein empirically tested across multiple sessions; the adaptive engine *aims to* sustain engagement beyond novelty instead of demonstrating that it does. Furthermore, thresholds were derived from a single pilot, hence cross-user generalisation is unproven. The voice MLP, for its part, is the weakest channel by design, and may be quietly carrying inference noise that the face-primary rules cannot fully reject.
 
-## 2.6 Task-4 References (5%)
+## 2.6. Task-4 References (5%)
 
 ### 2.6.1 Academic Books
 - Laird, J. E. (2012) *The Soar Cognitive Architecture*. Cambridge, MA: MIT Press. Available at: [https://www.scribd.com/document/264059670/The-Soar-Cognitive-Architecture-The-MIT-Press-2012-John-E-Laird](https://www.scribd.com/document/264059670/The-Soar-Cognitive-Architecture-The-MIT-Press-2012-John-E-Laird) *FREE-TRIAL ACCESSED* (Accessed: 20 March 2026).
@@ -746,9 +746,9 @@ OpenAI API (`gpt-5.4` \& `gpt-4.1`) & Core system functionality allowed via disc
 - [X] I understand that the ownership and responsibility for the academic integrity of this submitted assessment falls with me, the student.
 - [X] I confirm that all details provided above are an accurate description of how AI was used for this assessment.
 
-## 3.3 Novel Python Project: `.env` and `gaze22.1.py`
+## 3.3. Novel Python Project: `.env` and `gaze22.1.py`
 
-*.env*:
+### 3.3.1 *.env*:
 
 ```text
 OPENAI_API_KEY= {get ur own key with: https://platform.openai.com/home}
@@ -757,7 +757,7 @@ GAZE_LOCAL_CAMERA=true # make true if no NAO connection; false is connected to P
 GAZE_LOCAL_MODE=true
 ```
 
-*gaze22.1.py*:
+### 3.3.2 *gaze22.1.py*:
 
 ```python
 """
