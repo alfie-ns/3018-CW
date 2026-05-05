@@ -10,11 +10,11 @@ LOG (VoskAPI:ReadDataFiles():model.cc:213) Decoding params beam=10 max-active=30
 LOG (VoskAPI:ReadDataFiles():model.cc:216) Silence phones 1:2:3:4:5:6:7:8:9:10
 LOG (VoskAPI:RemoveOrphanNodes():nnet-nnet.cc:948) Removed 0 orphan nodes.
 LOG (VoskAPI:RemoveOrphanComponents():nnet-nnet.cc:847) Removing 0 orphan components.
-LOG (VoskAPI:ReadDataFiles():model.cc:248) Loading i-vector extractor from /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/ivector/final.ie
+LOG (VoskAPI:ReadDataFiles():model.cc:248) Loading i-vector extractor from /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/[X]-3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/ivector/final.ie
 LOG (VoskAPI:ComputeDerivedVars():ivector-extractor.cc:183) Computing derived variables for iVector extractor
 LOG (VoskAPI:ComputeDerivedVars():ivector-extractor.cc:204) Done.
-LOG (VoskAPI:ReadDataFiles():model.cc:282) Loading HCL and G from /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/HCLr.fst /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/Gr.fst
-LOG (VoskAPI:ReadDataFiles():model.cc:303) Loading winfo /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/phones/word_boundary.int
+LOG (VoskAPI:ReadDataFiles():model.cc:282) Loading HCL and G from /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/[X]-3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/HCLr.fst /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/[X]-3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/Gr.fst
+LOG (VoskAPI:ReadDataFiles():model.cc:303) Loading winfo /Users/alfienurse/Library/Mobile Documents/com~apple~CloudDocs/Desktop/gitdev/Uni/Undergrad/year-3/Work/1st Year/Semester 2/[X]-3018-cw/assessment/Report/task-4/models/vosk-model-small-en-us-0.15/graph/phones/word_boundary.int
 [booting] vosk wake-word model loaded
 ----------------------------------------
   GAZE: Game-Adaptive Zone of Engagement
@@ -32,41 +32,156 @@ Loading speech emotion model...
 
 Calibrating Mac microphone ambient noise level...
 Calibrating Mac mic (stay quiet for 3s)...
-  Ambient RMS: 62, silence threshold: 122, transcription gate: 488
-  Arousal thresholds: QUIET=200, LOUD=2000
+  Ambient RMS: 6502, silence threshold: 6562, transcription gate: 26248
+  Arousal thresholds: QUIET=13004, LOUD=65020
   Dashboard launched.
 
-Robot: Hi, I’m really glad to be with you right now. We can have a little chat, play a game, or just sit together and hang out—whatever feels best for you.
+Robot: Hi, I’m really glad to spend some time with you. We can have a little chat, play a game, or just relax together—whatever feels nicest for you.
 
 ---------------------------------------- Turn 1 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.44): LOW CONFIDENCE, treating as Neutral
+  Expression: Neutral (0.67)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 85 ░    [0.8s] RMS: 176 ▓    [1.0s] RMS: 379 ▓    [1.2s] RMS: 1489 ▓    [1.5s] RMS: 1178 ▓    [1.8s] RMS: 874 ▓    [2.0s] RMS: 1441 ▓    [2.2s] RMS: 1070 ▓    [2.5s] RMS: 798 ▓    [2.8s] RMS: 775 ▓    [3.0s] RMS: 28 ░    [3.2s] RMS: 15 ░    [3.5s] RMS: 20 ░    [3.8s] RMS: 9 ░    [4.0s] RMS: 10 ░    [4.2s] RMS: 8 ░    [4.5s] RMS: 9 ░    [4.8s] RMS: 8 ░    [5.0s] RMS: 12 ░    [5.2s] RMS: 10 ░    [5.5s] RMS: 8 ░
-  Recording saved (5.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 639
-  Whisper raw text: "Let's just play a numbers game."
-  Whisper diagnostics: no_speech=[0.044630859047174454], avg_logprob=[-0.4285944700241089], compression=[0.7948718070983887]
-  Heard: Let's just play a numbers game.
-  Calling tool generate_game_question({'game_type': 'numbers', 'difficulty': 'MEDIUM'})
-  Tool returned: {"question": "Use the numbers 100, 75, 9, 8, 4, and 2 to make 683. You may use addition, subtraction, multiplication, an
 
-Robot: Great, let’s do a numbers round. Use 100, 75, 9, 8, 4, and 2 to make 683, using each number at most once with plus, minus, times, or divide.
-(Game answer: (8 + 2) * 75 - 9 * (100 - 75 + 4) = 683)
+    [0.5s] RMS: 2784 ░
+    [0.8s] RMS: 4555 ░
+    [1.0s] RMS: 6278 ░
+    [1.2s] RMS: 8898 ▓
+    [1.5s] RMS: 5530 ░
+    [1.8s] RMS: 7908 ▓
+    [2.0s] RMS: 10755 ▓
+    [2.2s] RMS: 5473 ░
+    [2.5s] RMS: 4775 ░
+    [2.8s] RMS: 6866 ▓
+    [3.0s] RMS: 8187 ▓
+    [3.2s] RMS: 5454 ░
+    [3.5s] RMS: 7318 ▓
+    [3.8s] RMS: 7126 ▓
+    [4.0s] RMS: 9703 ▓
+    [4.2s] RMS: 6319 ░
+    [4.5s] RMS: 8753 ▓
+    [4.8s] RMS: 5933 ░
+    [5.0s] RMS: 5955 ░
+    [5.2s] RMS: 6572 ▓
+    [5.5s] RMS: 8022 ▓
+    [5.8s] RMS: 7714 ▓
+    [6.0s] RMS: 10132 ▓
+    [6.2s] RMS: 8257 ▓
+    [6.5s] RMS: 6751 ▓
+    [6.8s] RMS: 5882 ░
+    [7.0s] RMS: 5369 ░
+    [7.2s] RMS: 8200 ▓
+    [7.5s] RMS: 6652 ▓
+    [7.8s] RMS: 9261 ▓
+    [8.0s] RMS: 7351 ▓
+    [8.2s] RMS: 5159 ░
+    [8.5s] RMS: 6150 ░
+    [8.8s] RMS: 5066 ░
+    [9.0s] RMS: 8842 ▓
+    [9.2s] RMS: 6455 ░
+    [9.5s] RMS: 5578 ░
+    [9.8s] RMS: 5076 ░
+    [10.0s] RMS: 5088 ░
+    [10.2s] RMS: 8722 ▓
+    [10.5s] RMS: 4254 ░
+    [10.8s] RMS: 7542 ▓
+    [11.0s] RMS: 6942 ▓
+    [11.2s] RMS: 5493 ░
+    [11.5s] RMS: 4665 ░
+    [11.8s] RMS: 6060 ░
+    [12.0s] RMS: 3905 ░
+    [12.2s] RMS: 5661 ░
+    [12.5s] RMS: 5973 ░
+    [12.8s] RMS: 5865 ░
+    [13.0s] RMS: 5386 ░
+    [13.2s] RMS: 9381 ▓
+    [13.5s] RMS: 6780 ▓
+    [13.8s] RMS: 6636 ▓
+    [14.0s] RMS: 6286 ░
+    [14.2s] RMS: 5454 ░
+    [14.5s] RMS: 8117 ▓
+    [14.8s] RMS: 7180 ▓
+    [15.0s] RMS: 5853 ░
+  Recording saved (15.0s, speech=yes).
+  Vocal emotion: fearful (1.00)
+  Volume RMS: 6829
+  Whisper raw text: "Um, I don't know, what do you think I should do? I just handed in my report, so I'm literally, I've handed in a lot of work."
+  Whisper diagnostics: no_speech=[0.27695587277412415, 0.27695587277412415], avg_logprob=[-0.36514219641685486, -0.36514219641685486], compression=[1.192307710647583, 1.192307710647583]
+  Heard: Um, I don't know, what do you think I should do? I just handed in my report, so I'm literally, I've handed in a lot of work.
+
+Robot: You’ve done a lot, and handing that in is a big moment. I think you’ve earned something gentle now—maybe a breather with me, a light chat, or a simple little game if you want.
 
 ---------------------------------------- Turn 2 ----------------------------------------
 Capturing expression...
-  Expression: Neutral (0.71)
+  Expression: Neutral (0.63)
 Listening...
   Recording from Mac mic (up to 15.0s, stops after silence)...
-    [0.5s] RMS: 6 ░    [0.8s] RMS: 12 ░    [1.0s] RMS: 476 ▓    [1.2s] RMS: 1500 ▓    [1.5s] RMS: 1175 ▓    [1.8s] RMS: 581 ▓    [2.0s] RMS: 990 ▓    [2.2s] RMS: 1704 ▓    [2.5s] RMS: 621 ▓    [2.8s] RMS: 1282 ▓    [3.0s] RMS: 92 ░    [3.2s] RMS: 9 ░    [3.5s] RMS: 8 ░    [3.8s] RMS: 10 ░    [4.0s] RMS: 8 ░    [4.2s] RMS: 8 ░    [4.5s] RMS: 9 ░    [4.8s] RMS: 7 ░    [5.0s] RMS: 9 ░    [5.2s] RMS: 8 ░    [5.5s] RMS: 9 ░
-  Recording saved (5.5s, speech=yes).
-  Vocal emotion: calm (1.00)
-  Volume RMS: 678
-  Whisper raw text: 'Wait, actually I need to go.'
-  Whisper diagnostics: no_speech=[0.1564096212387085], avg_logprob=[-0.6908331513404846], compression=[0.7777777910232544]
-  Heard: Wait, actually I need to go.
+
+    [0.5s] RMS: 4974 ░
+    [0.8s] RMS: 8537 ▓
+    [1.0s] RMS: 3826 ░
+    [1.2s] RMS: 5550 ░
+    [1.5s] RMS: 8999 ▓
+    [1.8s] RMS: 5352 ░
+    [2.0s] RMS: 5638 ░
+    [2.2s] RMS: 5297 ░
+    [2.5s] RMS: 5562 ░
+    [2.8s] RMS: 6641 ▓
+    [3.0s] RMS: 7037 ▓
+    [3.2s] RMS: 7723 ▓
+    [3.5s] RMS: 6699 ▓
+    [3.8s] RMS: 5662 ░
+    [4.0s] RMS: 7789 ▓
+    [4.2s] RMS: 9286 ▓
+    [4.5s] RMS: 7162 ▓
+    [4.8s] RMS: 6550 ░
+    [5.0s] RMS: 7399 ▓
+    [5.2s] RMS: 6530 ░
+    [5.5s] RMS: 6190 ░
+    [5.8s] RMS: 8477 ▓
+    [6.0s] RMS: 7972 ▓
+    [6.2s] RMS: 5539 ░
+    [6.5s] RMS: 4953 ░
+    [6.8s] RMS: 5661 ░
+    [7.0s] RMS: 7988 ▓
+    [7.2s] RMS: 7237 ▓
+    [7.5s] RMS: 5016 ░
+    [7.8s] RMS: 6915 ▓
+    [8.0s] RMS: 8608 ▓
+    [8.2s] RMS: 5922 ░
+    [8.5s] RMS: 6218 ░
+    [8.8s] RMS: 4722 ░
+    [9.0s] RMS: 7938 ▓
+    [9.2s] RMS: 7057 ▓
+    [9.5s] RMS: 3260 ░
+    [9.8s] RMS: 5936 ░
+    [10.0s] RMS: 4833 ░
+    [10.2s] RMS: 6101 ░
+    [10.5s] RMS: 5472 ░
+    [10.8s] RMS: 5738 ░
+    [11.0s] RMS: 6871 ▓
+    [11.2s] RMS: 4510 ░
+    [11.5s] RMS: 7353 ▓
+    [11.8s] RMS: 7208 ▓
+    [12.0s] RMS: 5337 ░
+    [12.2s] RMS: 5888 ░
+    [12.5s] RMS: 6283 ░
+    [12.8s] RMS: 6895 ▓
+    [13.0s] RMS: 5100 ░
+    [13.2s] RMS: 7384 ▓
+    [13.5s] RMS: 5330 ░
+    [13.8s] RMS: 6108 ░
+    [14.0s] RMS: 7229 ▓
+    [14.2s] RMS: 5674 ░
+    [14.5s] RMS: 6309 ░
+    [14.8s] RMS: 7539 ▓
+    [15.0s] RMS: 7077 ▓
+  Recording saved (15.0s, speech=yes).
+  Vocal emotion: fearful (1.00)
+  Volume RMS: 6544
+  Whisper raw text: "I'm just gonna go, see you later."
+  Whisper diagnostics: no_speech=[0.11517585813999176], avg_logprob=[-0.4058081805706024], compression=[0.8461538553237915]
+  Heard: I'm just gonna go, see you later.
 
   [Dashboard] Quit requested.

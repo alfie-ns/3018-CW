@@ -87,7 +87,7 @@ Furthermore, memory is not treated as a single uniform store (monolithic); Laird
 
 The PARO therapeutic seal robot is among the most-widely deployed platforms within socially assistive robotics (Tapus, Matarić and Scassellati, 2007, *.pdf*-p. 1). Wada and Shibata (2007, p. 973) demonstrate that PARO improves mood in patients with dementia, utilising tactile and auditory inputs. Clinical trials report that urinary stress indicators "significantly improved" after PARO's introduction (Wada and Shibata, 2007, p. 978, Table II), therefore the platform has been adopted in care homes.
 
-Notwithstanding these benefits PARO operates at the reactive layer, possessing no theory of mind (cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously). A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts (prospection), recall what calmed the patient (episodic memory), and adapt its strategy (metacognition). PARO's effectiveness plateaus because it cannot personalise; the gap is therefore clinically important. The architectural cost is: without episodic memory, the agent's perception is "limited both spatially and temporally—that is, to the here and now" (Laird, 2012, p. 233). Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy: PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level.
+Notwithstanding these benefits PARO operates at the reactive layer, possessing no theory of mind (cannot infer *why* a patient is agitated (loneliness, pain, confusion) nor episodic memory of *what* calmed the patient previously). A cognitively-equipped therapeutic robot, in contrast, would anticipate mood shifts (prospection), recall what calmed the patient (episodic memory), and adapt its strategy (metacognition). PARO's effectiveness plateaus because it cannot personalise; the gap is therefore clinically important. The architectural cost is: without episodic memory, the agent's perception is "limited both spatially and temporally—that is, to the here and now" (Laird, 2012, p. 233). Fong, Nourbakhsh and Dautenhahn (2003, p. 145) formalise this gap via Breazeal's taxonomy (*an ordered category scheme*): PARO occupies the "social interface" level (human-like cues but "shallow models of social cognition"), whereas Sciutti et al.'s (2023, p. 160) vision of robots "knowing what they are doing and why" demands the *socially intelligent* level.
 
 ### 1.3.2 Medication Adherence and Daily Living Support
 
@@ -115,7 +115,7 @@ Finally, adaptation without exploitation: a robot that runs inference on cogniti
 
 Assistive robots in intimate care spaces (bedrooms, bathrooms, rehabilitation clinics) continuously collect sensitive behavioural data. Facial expressions, vocal patterns, and movement trajectories constitute biometric data, yet regulatory frameworks have not kept pace with deployment. Wachter, Mittelstadt and Floridi (2017, Abstract) argue that even the General Data Protection Regulation provides no enforceable "right to explanation" of automated decisions; a gap particularly concerning in healthcare where recommendations directly affect patient wellbeing.
 
-Moreover, over-reliance on assistive robots risks eroding functional independence. If a robot anticipates and pre-empts needs via prospection, the user may disengage from self-directed activity, contradicting the assistive mandate. Sharkey (2014, *.pdf*-p. 6) frames this via Nordenfelt's 'Dignity of Identity': "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences would also be likely to negatively affect their feelings of dignity." This implies that only cognitively-equipped robots (with episodic memory of individuals) can avoid dignity violations; reactive systems such as PARO, regardless of their therapeutic benefits (Wada and Shibata, 2007, p. 973), risk infantilisation because they cannot personalise. The responsibility gap compounds this further: when a care robot administers incorrect medication, liability falls ambiguously between manufacturer, deployer, and clinician.
+Moreover, over-reliance on assistive robots risks eroding functional independence. If a robot anticipates and pre-empts needs via prospection, the user may disengage from self-directed activity, contradicting the assistive mandate. Sharkey (2014, *.pdf*-p. 6) frames this via Nordenfelt's 'Dignity of Identity': "a robot that dealt impersonally with an older person, without knowing or using their name or their preferences would also be likely to negatively affect their feelings of dignity." This implies that only cognitively-equipped robots (with episodic memory of individuals) can avoid dignity violations; reactive systems such as PARO, regardless of their therapeutic benefits (Wada and Shibata, 2007, p. 973), risk infantilisation (*treating the user as an infant*) because they cannot personalise. The responsibility gap compounds this further: when a care robot administers incorrect medication, liability falls ambiguously between manufacturer, deployer, and clinician.
 
 The ethical watchword is therefore proactive regulation: design-stage ethics anticipating failure modes, not reactive patchwork after harm. Per the embodied cognition thesis, if intelligence indeed requires a body, and that body enters the most intimate spaces of vulnerable persons, then the ethical stakes of assistive cognitive robotics are uniquely high.
 
@@ -678,7 +678,7 @@ Every turn, `decide()` resolves a tone label (encouraging, celebratory, calm, en
 
 The multi-signal approach transfers to stroke rehabilitation re-engagement (Mataric et al., 2007, *.pdf*-p. 1, Abstract *"monitoring, encouragement, and reminders"*), educational tutoring, or neurodivergent support. GAZE sits within Section 1's cognitive trajectory rather than the reactive social layer alone.
 
-GAZE's most important limitation is epistemic: Smedegaard's (2019, p. 414, Experiential novelty) novelty-decay claim, central to the architectural rationale, is not herein empirically tested across multiple sessions; the adaptive engine *aims to* sustain engagement beyond novelty instead of demonstrating that it does. Furthermore, thresholds were derived from a single pilot, hence cross-user generalisation is unproven. The voice MLP, for its part, is the weakest channel by design, and may be quietly carrying inference noise that the face-primary rules cannot fully reject.
+GAZE's most important limitation is epistemic (*claim vs. proof*): Smedegaard's (2019, p. 414, Experiential novelty) novelty-decay claim, central to the architectural rationale, is not herein empirically tested across multiple sessions; the adaptive engine *aims to* sustain engagement beyond novelty instead of demonstrating that it does. Furthermore, thresholds were derived from a single pilot, hence cross-user generalisation is unproven. The voice MLP, for its part, is the weakest channel by design, and may be quietly carrying inference noise that the face-primary rules cannot fully reject.
 
 ## 2.6. Task-4 References (5%)
 
@@ -751,10 +751,9 @@ OpenAI API (`gpt-5.4` \& `gpt-4.1`) & Core system functionality allowed via disc
 ### 3.3.1 *.env*:
 
 ```text
-OPENAI_API_KEY= {get ur own key with: https://platform.openai.com/home}
-NAO_IP=ROBOT_IP # hybridly doesn't need pepper but works with the blue robot we tested in the lab I believe
-GAZE_LOCAL_CAMERA=true # make true if no NAO connection; false is connected to Pepper (NAO)
-GAZE_LOCAL_MODE=true
+OPENAI_API_KEY={get ur own key with: https://platform.openai.com/home}
+NAO_IP=ROBOT_IP
+GAZE_LOCAL_MODE=true # make true if no NAO connection; false is connected to Pepper (NAO)
 ```
 
 ### 3.3.2 *gaze22.1.py*:
