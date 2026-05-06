@@ -1,5 +1,4 @@
 #!/bin/bash
-export PATH="/opt/homebrew/bin:/Library/TeX/texbin:$PATH"
 
 pandoc "COMP_3018_Report.md" -o "COMP_3018_Report.pdf" \
     --pdf-engine=xelatex \
